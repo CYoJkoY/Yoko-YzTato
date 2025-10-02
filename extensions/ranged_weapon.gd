@@ -1,0 +1,266 @@
+extends "res://weapons/ranged/ranged_weapon.gd"
+
+# EFFECT : upgrade_range_killed_enemies
+var effect_kill_count: Dictionary = {}
+var connection_ids = {}
+
+# EFFECT : chimera_weapon_effect
+var current_chimera_projs: Array = []
+var current_chimera_projs_textures_paths: Array = []
+var current_chimera_texture_sets: Array = []
+
+# EFFECT : boomerang_weapon_effect
+var active_boomerangs: Array = []
+var max_damage_mul: float = 0.0
+var is_boomerang: bool = false
+var is_returning: bool = false
+var knockback_only_back: bool = false
+var boomerang_wait: bool = true
+
+# EFFECT : leave_fire
+var _burning_particles_manager = null
+
+# EFFECT : gain_stat_when_killed_scaling_single
+var kill_count: Dictionary = {}
+var effect_single_kill_count: Dictionary = {}
+
+# EFFECT : vine_trap
+onready var _entity_spawner = get_tree().current_scene.get_node("EntitySpawner")
+
+# =========================== Extention =========================== #
+func _ready():
+	_yztato_boomerang_ready()
+	_yztato_leave_fire_ready()
+	_yztato_set_weapon_transparency(ProgressData.settings.yztato_set_weapon_transparency)
+
+func shoot() -> void:
+	if is_boomerang:
+		_yztato_boomerang_shoot()
+		return
+	.shoot()
+
+func init_stats(at_wave_begin:bool = true)-> void :
+	.init_stats(at_wave_begin)
+	_yztato_chimera_init_stats()
+
+func on_projectile_shot(projectile: Node2D)->void :
+	_yztato_upgrade_range_killed_enemies_on_shot(projectile)
+	.on_projectile_shot(projectile)
+	_yztato_boomerang_on_projectile_shot(projectile)
+
+func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox) -> void:
+	.on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
+	if thing_hit._burning != null:
+		_yztato_leave_fire(thing_hit, player_index)
+	_yztato_multi_hit(thing_hit, damage_dealt, player_index)
+	_yztato_vine_trap(thing_hit, player_index)
+	_yztato_chal_on_weapon_hit_something(hitbox)
+
+func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
+	.on_killed_something(_thing_killed, hitbox)
+	_yztato_gain_stat_when_killed_scaling_single()
+
+func should_shoot()->bool:
+	var should_shoot: bool = .should_shoot()
+	should_shoot = _yztato_can_attack_while_moving(should_shoot)
+
+	return should_shoot
+
+# =========================== Custom =========================== #
+func _yztato_upgrade_range_killed_enemies_on_shot(projectile: Node2D)-> void:
+	if RunData.get_player_effect("yztato_upgrade_range_killed_enemies", player_index) and is_instance_valid(projectile):
+		var hitbox = projectile._hitbox
+		var conn_id = hitbox.connect("killed_something", self, "_yztato_upgrade_range_killed_enemies", [hitbox])
+		connection_ids[projectile] = conn_id
+		projectile.connect("tree_exiting", self, "_on_projectile_exiting", [projectile])
+
+func _yztato_chimera_init_stats()-> void:
+	for effect in effects:
+		if effect.get_id() == "chimera_weapon_effect":
+			for proj_stats in effect.chimera_projectile_stats:
+				if proj_stats:
+					if proj_stats.projectile_scene:
+						var projectile_instance = proj_stats.projectile_scene.instance()
+						var sprite_node = projectile_instance.get_node_or_null("Sprite")
+						if sprite_node and sprite_node.texture:
+							current_chimera_projs_textures_paths.push_back(sprite_node.texture.resource_path)
+						projectile_instance.queue_free()
+					current_chimera_projs.push_back(WeaponService.init_ranged_stats(proj_stats, player_index))
+			for proj_texture_set in effect.chimera_texture_sets:
+				current_chimera_texture_sets.append(proj_texture_set)
+
+func _yztato_boomerang_on_projectile_shot(projectile: Node2D)-> void:
+	if is_boomerang:
+		active_boomerangs.append(projectile)
+		_hitbox.damage *= 1 + max_damage_mul
+		if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
+
+		if not projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
+			projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
+
+func _yztato_boomerang_shoot() -> void:
+	_nb_shots_taken += 1
+	var original_stats: RangedWeaponStats
+	for projectile_count in _stats_every_x_shots:
+		
+		if _nb_shots_taken % projectile_count == 0:
+			original_stats = current_stats
+			current_stats = _stats_every_x_shots[projectile_count]
+
+	for effect in effects:
+		if effect.key == "reload_turrets_on_shoot":
+			emit_signal("wanted_to_reset_turrets_cooldown")
+
+	update_current_spread()
+	update_knockback()
+
+	if is_manual_aim() and !is_returning and boomerang_wait:
+		_shooting_behavior.shoot(current_stats.max_range)
+		is_returning = true
+	elif !is_manual_aim() and !is_returning and boomerang_wait:
+		_shooting_behavior.shoot(_current_target[1])
+		is_returning = true
+	elif is_manual_aim() and !boomerang_wait:
+		_shooting_behavior.shoot(current_stats.max_range)
+	elif !is_manual_aim() and !boomerang_wait:
+		_shooting_behavior.shoot(_current_target[1])
+
+	_current_cooldown = 180.0
+
+	if !boomerang_wait:
+		_current_cooldown = get_next_cooldown()
+
+	if (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == - 1) and stats.custom_on_cooldown_sprite != null:
+		update_sprite(stats.custom_on_cooldown_sprite)
+
+	if original_stats:
+		current_stats = original_stats
+
+func _yztato_boomerang_ready() -> void:
+	for effect in effects:
+		if effect is ProgressData.Yztato.Boomerang._Effect:
+			is_boomerang = true
+			max_damage_mul = effect.max_damage_mul
+			knockback_only_back = effect.knockback_only_back
+			boomerang_wait = effect.boomerang_wait
+
+func _yztato_set_weapon_transparency(alpha_value: float) -> void:
+	var clamped_alpha = clamp(alpha_value, 0.0, 1.0)
+	modulate.a = clamped_alpha
+
+func _yztato_leave_fire_ready() -> void:
+	_burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
+	get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
+
+func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
+	for fire in effects:
+		if fire is ProgressData.Yztato.LeaveFire._Effect:
+			var new_fire = _burning_particles_manager.get_burning_particle()
+			if new_fire != null:
+				new_fire.activate(thing_hit.global_position, thing_hit._burning)
+				new_fire.rescale(fire.scale)
+				new_fire.set_duration(fire.duration)
+				return
+
+	var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
+	if !effect_leave_fire.empty():
+		for fire in effect_leave_fire:
+			var new_fire = _burning_particles_manager.get_burning_particle()
+			if new_fire != null:
+				new_fire.activate(thing_hit.global_position, thing_hit._burning)
+				new_fire.rescale(fire[3])
+				new_fire.set_duration(fire[2])
+
+func _yztato_gain_stat_when_killed_scaling_single() -> void:
+	kill_count[weapon_id] = kill_count.get(weapon_id, 0) + 1
+	for effect_index in effects.size():
+		var effect = effects[effect_index]
+		effect_single_kill_count[effect_index] = effect_single_kill_count.get(effect_index, kill_count[weapon_id] - 1) + 1
+		
+		if effect is ProgressData.Yztato.GainStatWhenKilledSingleScaling._Effect and \
+		   effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
+			RunData.add_stat(effect.stat, effect.stat_nb, player_index)
+
+	RunData.emit_signal("stats_updated", player_index)
+
+func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
+	for effect in effects:
+		if effect is ProgressData.Yztato.MultiHit._Effect:
+			for _i in range(effect.value):
+				var args = TakeDamageArgs.new(player_index)
+				thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
+				return
+	
+	var effect_multi_hit = RunData.get_player_effect("yztato_multi_hit", player_index)
+	if !effect_multi_hit.empty():
+		for effect in effect_multi_hit:
+			for _i in range(effect[0]):
+				var args = TakeDamageArgs.new(player_index)
+				thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
+
+func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
+	for effect in effects:
+		if effect is ProgressData.Yztato.VineTrap._Effect:
+			var count = effect.trap_count as int
+			var chance = effect.chance as int
+
+			if randf() <= chance / 100.0:
+				var vine_trap = effect
+				for _i in range(count):
+					var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
+					var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+					queue.push_back([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+
+			return
+
+	var vine_trap_effects = RunData.get_player_effect("yztato_vine_trap", player_index)
+	if !vine_trap_effects.empty():
+		for effect_data in vine_trap_effects:
+			var count = effect_data[0] as int
+			var chance = effect_data[1] as int
+			
+			if randf() <= chance / 100.0:
+				var vine_trap = effect_data[2]
+				for _i in range(count):
+					var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
+					var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+					queue.push_back([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+
+func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
+	if should_shoot: for effect in effects:
+		if effect is ProgressData.Yztato.CanAttackWhileMoving._Effect:
+			should_shoot = false or _parent._current_movement == Vector2.ZERO
+
+	return should_shoot
+
+func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
+	### sudden_misfortune ###
+	if hitbox == null: return 
+	var attack_id: = hitbox.player_attack_id
+	if attack_id < 0: return 
+	var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0)
+	attack_hit_count += 1
+	_hit_count_by_attack_id[attack_id] = attack_hit_count
+	
+	ChallengeService.try_complete_challenge("chal_sudden_misfortune", attack_hit_count)
+
+# =========================== Method =========================== #
+func _yztato_upgrade_range_killed_enemies(_thing_killed: Node, _hitbox: Hitbox)-> void:
+	var upgrade_attack_killed_enemies: int = RunData.get_player_effect("yztato_upgrade_range_killed_enemies", player_index)
+	if upgrade_attack_killed_enemies > 0:
+		effect_kill_count[weapon_id] = effect_kill_count.get(weapon_id, 0) + 1
+		if effect_kill_count[weapon_id] >= upgrade_attack_killed_enemies:
+			effect_kill_count[weapon_id] = -Utils.LARGE_NUMBER
+			var old_weapon_data: WeaponData = ItemService.get_element(ItemService.weapons, weapon_id)
+			if old_weapon_data and old_weapon_data.upgrades_into and old_weapon_data.upgrades_into.weapon_id:
+				var new_weapon_data: WeaponData = ItemService.get_element(ItemService.weapons, old_weapon_data.upgrades_into.weapon_id)
+				new_weapon_data.is_cursed = old_weapon_data.is_cursed
+				var _re: int = RunData.remove_weapon(old_weapon_data, player_index)
+				var _ad: WeaponData = RunData.add_weapon(new_weapon_data, player_index)
+
+func yz_on_projectile_returned(projectile: Node2D) -> void:
+	active_boomerangs.erase(projectile)
+	is_returning = false
+
+	if boomerang_wait:
+		_current_cooldown = get_next_cooldown()

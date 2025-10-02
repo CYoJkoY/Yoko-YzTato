@@ -1,0 +1,21 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/boomerang_weapon/boomerang_weapon_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_YZTATO_BOOMERANG_WEAPON"
+value = 0
+custom_key = "yztato_boomerang_weapon"
+storage_method = 1
+effect_sign = 4
+custom_args = [  ]
+return_speed = 1.0
+min_range = 1.0
+max_damage_mul = 1.5
+min_damage_mul = -0.5
+boomerang_wait = true
+lock_range = false
+lock_speed = false
+knockback_only_back = true

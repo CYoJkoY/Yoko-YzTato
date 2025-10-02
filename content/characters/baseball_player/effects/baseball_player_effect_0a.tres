@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/melee_effect/melee_bounce_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = "yztato_melee_bounce_bullets"
+text_key = "EFFECT_YZTATO_MELEE_BOUNCE_BULLETS"
+value = 270
+custom_key = ""
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]

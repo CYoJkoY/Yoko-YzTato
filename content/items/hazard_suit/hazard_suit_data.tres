@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=6 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/hazard_suit/hazard_suit_effect_1.tres" type="Resource" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/hazard_suit/hazard_suit_effect_0b.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/hazard_suit/hazard_suit_effect_0a.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/hazard_suit/hazard_suit_icon.webp" type="Texture" id=4]
+[ext_resource path="res://items/global/item_data.gd" type="Script" id=5]
+
+[resource]
+script = ExtResource( 5 )
+my_id = "item_yztato_hazard_suit"
+unlocked_by_default = true
+icon = ExtResource( 4 )
+name = "ITEM_YZTATO_HAZARD_SUIT"
+tier = 3
+value = 135
+effects = [ ExtResource( 3 ), ExtResource( 2 ), ExtResource( 1 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+max_nb = 1
+item_appearances = [  ]
+tags = [ "stat_armor" ]

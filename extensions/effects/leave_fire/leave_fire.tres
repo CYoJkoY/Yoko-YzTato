@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/leave_fire_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_YZTATO_LEAVE_FIRE"
+value = 1
+custom_key = ""
+storage_method = 1
+effect_sign = 0
+custom_args = [  ]
+duration = 2.0
+scale = 1.1

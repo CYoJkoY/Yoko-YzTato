@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/special_picked_up_change_stat/special_picked_up_change_stat_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = "consumable_poisoned_fruit"
+text_key = "EFFECT_YZTATO_POISONED_FRUIT_PICKED_UP_COUNT"
+value = 5
+custom_key = "yztato_special_picked_up_change_stat"
+storage_method = 1
+effect_sign = 3
+custom_args = [  ]
+stat = "stat_armor"
+stat_nb = 1

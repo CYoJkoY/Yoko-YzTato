@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/temp_stats_per_interval/temp_stats_per_interval_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_TEMP_STATS_PER_INTERVAL"
+value = 1
+custom_key = "temp_stats_per_interval"
+storage_method = 1
+effect_sign = 3
+custom_args = [  ]
+stat = "hit_protection"
+interval = 24
+reset_on_hit = false

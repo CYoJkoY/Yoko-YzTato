@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=7 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_stats_2.tres" type="Resource" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_texture_3_set_1.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/chimera_weapon/chimera_weapon_effect.gd" type="Script" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_texture_3_set_2.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_stats_3.tres" type="Resource" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_stats_1.tres" type="Resource" id=6]
+
+[resource]
+script = ExtResource( 3 )
+key = ""
+text_key = "EFFECT_YZTATO_CHIMERA_FRONT"
+value = 3
+custom_key = ""
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+chimera_projectile_stats = [ ExtResource( 6 ), ExtResource( 1 ), ExtResource( 5 ) ]
+chimera_texture_sets = [ ExtResource( 2 ), ExtResource( 4 ) ]

@@ -1,0 +1,30 @@
+[gd_resource type="Resource" load_steps=8 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/1/bazhandao_stats.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/bazhandao.tscn" type="PackedScene" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/bazhandao_icon.webp" type="Texture" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/1/bazhandao_effect_1.tres" type="Resource" id=5]
+[ext_resource path="res://items/sets/blade/blade_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/2/bazhandao_2_data.tres" type="Resource" id=7]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_bazhandao_1"
+unlocked_by_default = true
+icon = ExtResource( 4 )
+name = "WEAPON_YZTATO_BAZHANDAO"
+tier = 0
+value = 21
+effects = [ ExtResource( 5 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+weapon_id = "weapon_yztato_bazhandao"
+type = 0
+sets = [ ExtResource( 6 ) ]
+scene = ExtResource( 3 )
+stats = ExtResource( 2 )
+upgrades_into = ExtResource( 7 )
+add_to_chars_as_starting = [  ]

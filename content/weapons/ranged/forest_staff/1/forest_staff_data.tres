@@ -1,0 +1,30 @@
+[gd_resource type="Resource" load_steps=8 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://items/sets/fire/fire_set_data.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/forest_staff.tscn" type="PackedScene" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/1/forest_staff_stats.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/2/forest_staff_2_data.tres" type="Resource" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/1/forest_staff_effect.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/forest_staff_icon.webp" type="Texture" id=8]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_forest_staff_1"
+unlocked_by_default = true
+icon = ExtResource( 8 )
+name = "WEAPON_YZTATO_FOREST_STAFF"
+tier = 0
+value = 25
+effects = [ ExtResource( 6 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+weapon_id = "weapon_yztato_forest_staff"
+type = 1
+sets = [ ExtResource( 2 ) ]
+scene = ExtResource( 3 )
+stats = ExtResource( 4 )
+upgrades_into = ExtResource( 5 )
+add_to_chars_as_starting = [  ]

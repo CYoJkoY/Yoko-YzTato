@@ -1,0 +1,13 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/value_need_plus/value_need_plus_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = "stat_attack_speed"
+text_key = "EFFECT_YZTATO_STAT_ON_HIT"
+value = -10
+custom_key = "yztato_stat_on_hit"
+storage_method = 1
+effect_sign = 1
+custom_args = [  ]

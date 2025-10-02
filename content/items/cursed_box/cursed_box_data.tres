@@ -1,0 +1,23 @@
+[gd_resource type="Resource" load_steps=5 format=2]
+
+[ext_resource path="res://items/global/item_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1a.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_icon.webp" type="Texture" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1b.tres" type="Resource" id=4]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "item_yztato_cursed_box"
+unlocked_by_default = true
+icon = ExtResource( 3 )
+name = "ITEM_YZTATO_CURSED_BOX"
+tier = 1
+value = 35
+effects = [ ExtResource( 2 ), ExtResource( 4 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+max_nb = 4
+item_appearances = [  ]
+tags = [ "stat_curse" ]

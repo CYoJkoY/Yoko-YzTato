@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=2]
+
+[ext_resource path="res://items/global/custom_arg.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/double_value_need_plus/double_value_need_plus_effect.gd" type="Script" id=2]
+
+[sub_resource type="Resource" id=1]
+script = ExtResource( 1 )
+arg_index = 2
+arg_sign = 1
+arg_value = 0
+arg_format = 0
+arg_key = ""
+
+[resource]
+script = ExtResource( 2 )
+key = "stat_max_hp"
+text_key = "EFFECT_YZTATO_STATS_CHANCE_ON_LEVEL_UP"
+value = -1
+custom_key = "yztato_stats_chance_on_level_up"
+storage_method = 1
+effect_sign = 3
+custom_args = [ SubResource( 1 ) ]
+value2 = 5
+sum_strategy = 0

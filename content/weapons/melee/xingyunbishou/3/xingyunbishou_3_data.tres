@@ -1,0 +1,35 @@
+[gd_resource type="Resource" load_steps=13 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_icon.webp" type="Texture" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_stats.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/4/xingyunbishou_4_data.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou.tscn" type="PackedScene" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/luck/luck_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://items/sets/precise/precise_set_data.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_effect_1a.tres" type="Resource" id=9]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_1b.tres" type="Resource" id=10]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0a.tres" type="Resource" id=11]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0b.tres" type="Resource" id=12]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_effect_2.tres" type="Resource" id=13]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_xingyunbishou_3"
+unlocked_by_default = true
+icon = ExtResource( 2 )
+name = "WEAPON_YZTATO_XINGYUNBISHOU"
+tier = 2
+value = 276
+effects = [ ExtResource( 11 ), ExtResource( 12 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 13 ) ]
+tracking_text = "stats_gained"
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+weapon_id = "weapon_yztato_xingyunbishou"
+type = 0
+sets = [ ExtResource( 7 ), ExtResource( 6 ) ]
+scene = ExtResource( 5 )
+stats = ExtResource( 3 )
+upgrades_into = ExtResource( 4 )
+add_to_chars_as_starting = [  ]

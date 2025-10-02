@@ -1,0 +1,34 @@
+[gd_resource type="Resource" load_steps=12 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/8/huangwuwange_8_data.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange.tscn" type="PackedScene" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_1a.tres" type="Resource" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_0a.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_0b.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_icon.webp" type="Texture" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/7/huangwuwange_7_stats_1.tres" type="Resource" id=9]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/7/huangwuwange_7_effect_3a.tres" type="Resource" id=10]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/7/huangwuwange_7_effect_2a.tres" type="Resource" id=11]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_huangwuwange_7"
+unlocked_by_default = false
+icon = ExtResource( 8 )
+name = "WEAPON_YZTATO_HUANGWUWANGE_1"
+tier = 2
+value = 2948
+effects = [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 5 ), ExtResource( 11 ), ExtResource( 10 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 17.0
+weapon_id = "weapon_yztato_huangwuwange_7"
+type = 1
+sets = [ ExtResource( 4 ) ]
+scene = ExtResource( 3 )
+stats = ExtResource( 9 )
+upgrades_into = ExtResource( 2 )
+add_to_chars_as_starting = [  ]

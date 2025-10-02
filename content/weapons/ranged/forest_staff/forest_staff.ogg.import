@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/forest_staff.ogg-efc16cebf765f778cc9e7f1a28164606.oggstr"
+
+[deps]
+
+source_file="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/forest_staff.ogg"
+dest_files=[ "res://.import/forest_staff.ogg-efc16cebf765f778cc9e7f1a28164606.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

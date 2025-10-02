@@ -1,0 +1,31 @@
+[gd_resource type="Resource" load_steps=10 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/4/chuchanyi_4_data.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi.tscn" type="PackedScene" id=4]
+[ext_resource path="res://items/sets/medical/medical_set_data.tres" type="Resource" id=5]
+[ext_resource path="res://items/sets/heavy/heavy_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/3/chuchanyi_3_effect_1.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/emergency/emergency_set_data.tres" type="Resource" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/3/chuchanyi_3_stats.tres" type="Resource" id=9]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi_icon.webp" type="Texture" id=13]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_chuchanyi_3"
+unlocked_by_default = true
+icon = ExtResource( 13 )
+name = "WEAPON_YZTATO_CHUCHANYI"
+tier = 2
+value = 122
+effects = [ ExtResource( 7 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+weapon_id = "weapon_yztato_chuchanyi"
+type = 1
+sets = [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 8 ) ]
+scene = ExtResource( 4 )
+stats = ExtResource( 9 )
+upgrades_into = ExtResource( 2 )
+add_to_chars_as_starting = [  ]

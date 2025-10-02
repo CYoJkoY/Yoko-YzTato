@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/anmouhongyun.ogg-143836eebcc3d9f5958a72e6309aaebb.oggstr"
+
+[deps]
+
+source_file="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/anmouhongyun/anmouhongyun.ogg"
+dest_files=[ "res://.import/anmouhongyun.ogg-143836eebcc3d9f5958a72e6309aaebb.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

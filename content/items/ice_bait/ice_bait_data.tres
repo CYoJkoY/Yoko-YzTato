@@ -1,0 +1,26 @@
+[gd_resource type="Resource" load_steps=8 format=2]
+
+[ext_resource path="res://items/global/item_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_effect_1c.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_effect_2.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_effect_1a.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_effect_1b.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_effect_0.tres" type="Resource" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ice_bait/ice_bait_icon.webp" type="Texture" id=9]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "item_yztato_ice_bait"
+unlocked_by_default = true
+icon = ExtResource( 9 )
+name = "ITEM_YZTATO_ICE_BAIT"
+tier = 2
+value = 98
+effects = [ ExtResource( 8 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 2 ), ExtResource( 3 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+max_nb = 1
+item_appearances = [  ]
+tags = [ "stat_percent_damage", "number_of_enemies", "less_enemy_speed" ]

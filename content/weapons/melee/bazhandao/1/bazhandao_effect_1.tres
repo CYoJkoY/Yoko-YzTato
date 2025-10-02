@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/multi_hit/multi_hit_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_YZTATO_MULTI_HIT"
+value = 1
+custom_key = ""
+storage_method = 1
+effect_sign = 3
+custom_args = [  ]
+damage_percent = 30

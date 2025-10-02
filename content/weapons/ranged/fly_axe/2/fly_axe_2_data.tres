@@ -1,0 +1,31 @@
+[gd_resource type="Resource" load_steps=9 format=2]
+
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
+[ext_resource path="res://items/sets/precise/precise_set_data.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/fly_axe.tscn" type="PackedScene" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/fly_axe_effect_0.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/2/fly_axe_2_stats.tres" type="Resource" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/3/fly_axe_3_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/fly_axe_icon.webp" type="Texture" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/2/fly_axe_2_effect_1.tres" type="Resource" id=8]
+
+[resource]
+script = ExtResource( 1 )
+my_id = "weapon_yztato_fly_axe_2"
+unlocked_by_default = true
+icon = ExtResource( 7 )
+name = "WEAPON_YZTATO_FLY_AXE"
+tier = 1
+value = 40
+effects = [ ExtResource( 4 ), ExtResource( 8 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+weapon_id = "weapon_yztato_fly_axe"
+type = 1
+sets = [ ExtResource( 2 ) ]
+scene = ExtResource( 3 )
+stats = ExtResource( 5 )
+upgrades_into = ExtResource( 6 )
+add_to_chars_as_starting = [  ]

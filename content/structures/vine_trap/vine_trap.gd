@@ -1,0 +1,44 @@
+extends Structure
+
+export (float) var time = 5.0
+export (Resource) var trap_enter_sound
+
+var enemies_in_range: Array = []
+var frame_count: int = 0
+
+# =========================== Extension =========================== #
+func _ready():
+	var timer = Timer.new()
+	timer.wait_time = time
+	timer.one_shot = true
+	timer.connect("timeout", self, "_on_trap_duration_finished")
+	add_child(timer)
+	timer.start()
+
+func _physics_process(_delta: float):
+	print(stats.scaling_stats)
+	frame_count += 1
+	if frame_count >= stats.cooldown \
+	and !enemies_in_range.empty():
+		frame_count = 0
+		for enemy in enemies_in_range:
+			if enemy and not enemy.dead:
+				enemy.add_decaying_speed(enemy.current_stats.speed * stats.speed_percent_modifier / 100)
+				var args = TakeDamageArgs.new(player_index)
+				enemy.take_damage(stats.damage, args)
+
+# =========================== Custom =========================== #
+func _on_trap_area_entered(body: Node):
+	if body is Enemy and not body.dead:
+		if not enemies_in_range.has(body):
+			enemies_in_range.append(body)
+			
+			if trap_enter_sound:
+				SoundManager2D.play(trap_enter_sound, global_position, 0, 0.2)
+
+func _on_trap_area_exited(body: Node):
+	if enemies_in_range.has(body):
+		enemies_in_range.erase(body)
+
+func _on_trap_duration_finished():
+	if not dead: die()

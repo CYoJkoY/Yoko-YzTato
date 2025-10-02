@@ -1,0 +1,164 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/enemies/Yoko002/IceMageSoul_stats.tres" type="Resource" id=1]
+[ext_resource path="res://entities/units/enemies/enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://entities/units/enemies/attack_behaviors/shooting_attack_behavior.gd" type="Script" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/enemies/Yoko002/IceMageSoul_projectile.tscn" type="PackedScene" id=4]
+[ext_resource path="res://entities/units/movement_behaviors/stay_in_range_from_player_movement_behavior.gd" type="Script" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/enemies/Yoko002/IceMageSoul.webp" type="Texture" id=6]
+[ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=7]
+
+[sub_resource type="ShaderMaterial" id=7]
+shader = ExtResource( 7 )
+shader_param/width = 3.0
+shader_param/alpha = 1.0
+shader_param/desaturation = 0.0
+shader_param/texture_size = Vector2( 0, 0 )
+shader_param/outline_color_0 = Color( 0, 0, 0, 0 )
+shader_param/outline_color_1 = Color( 0, 0, 0, 0 )
+shader_param/outline_color_2 = Color( 0, 0, 0, 0 )
+shader_param/outline_color_3 = Color( 0, 0, 0, 0 )
+
+[sub_resource type="CircleShape2D" id=4]
+radius = 32.5576
+
+[sub_resource type="CapsuleShape2D" id=5]
+radius = 22.2487
+height = 49.1244
+
+[sub_resource type="CapsuleShape2D" id=6]
+radius = 21.9449
+height = 40.1961
+
+[sub_resource type="Animation" id=3]
+resource_name = "shoot"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Animation:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 2.73208, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 0, -20 ), Vector2( 0, -32 ), Vector2( 0, -18 ), Vector2( 0, -24 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("Animation:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 0.6, 0.8, 1 ),
+"transitions": PoolRealArray( 1, 2.82843, 1, 1 ),
+"update": 0,
+"values": [ Vector2( 1.1, 0.9 ), Vector2( 0.8, 1.2 ), Vector2( 1.2, 0.8 ), Vector2( 1, 1 ) ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.8 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "shoot"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("Animation/Sprite:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0, 0.6, 0.8 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 1 ), Color( 1, 0, 0, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="Enemy" instance=ExtResource( 2 )]
+outline_material = SubResource( 7 )
+crit_sounds = [  ]
+hurt_sounds = [  ]
+burn_sounds = [  ]
+dodge_sounds = [  ]
+stats = ExtResource( 1 )
+enemy_id = "icemagesoul"
+
+[node name="Sprite" parent="Animation" index="0"]
+texture = ExtResource( 6 )
+
+[node name="Collision" parent="." index="1"]
+position = Vector2( -2, -23 )
+shape = SubResource( 4 )
+
+[node name="Hurtbox" parent="." index="2"]
+position = Vector2( -2, -36 )
+
+[node name="Collision" parent="Hurtbox" index="0"]
+position = Vector2( 1, 16 )
+rotation = 0.523598
+shape = SubResource( 5 )
+
+[node name="Hitbox" parent="." index="3"]
+position = Vector2( -2, -20 )
+
+[node name="Collision" parent="Hitbox" index="0"]
+position = Vector2( 1, 0 )
+rotation = 0.523598
+shape = SubResource( 6 )
+
+[node name="AnimationPlayer" parent="." index="4"]
+anims/shoot = SubResource( 3 )
+
+[node name="MovementBehavior" parent="." index="6"]
+script = ExtResource( 5 )
+target_range = 300
+target_range_randomization = 100
+
+[node name="AttackBehavior" parent="." index="7"]
+script = ExtResource( 3 )
+projectile_scene = ExtResource( 4 )
+projectile_speed = 600
+projectile_speed_randomization = 0
+speed_change_after_each_projectile = 0
+cooldown = 60.0
+initial_cooldown = 0
+max_cd_randomization = 10
+long_cooldown_every_x_shoots = 0
+long_cooldown = 0
+damage = 1
+damage_increase_each_wave = 0.75
+min_range = 0
+max_range = 700
+attack_anim_speed = 1.0
+base_direction_randomization = 0.0
+base_direction_constant_spread = false
+alternate_between_base_direction_spread = false
+random_direction = false
+number_projectiles = 1
+projectile_spread = 0.0
+spawn_projectiles_on_target = false
+projectile_spawn_spread = 0
+projectile_spawn_only_on_borders = false
+specific_degrees_spawns = [  ]
+constant_spread = false
+constant_spread_rand_base_pos = 0.0
+atleast_one_projectile_on_target = false
+shoot_towards_unit = false
+shoot_in_unit_direction = false
+shoot_away_from_unit = false
+shoot_from_proj_pos_towards_player = false
+random_rotation = 0.0
+rotate_projectile = true
+delete_projectile_on_death = false
+
+[editable path="Hurtbox"]
+[editable path="Hitbox"]

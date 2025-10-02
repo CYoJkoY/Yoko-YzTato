@@ -1,0 +1,32 @@
+[gd_resource type="Resource" load_steps=10 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_wrench/ghost_wrench.tscn" type="PackedScene" id=1]
+[ext_resource path="res://items/global/weapon_data.gd" type="Script" id=2]
+[ext_resource path="res://items/sets/ethereal/ethereal_set_data.tres" type="Resource" id=3]
+[ext_resource path="res://items/all/turret_laser/turret_laser_effect_1.tres" type="Resource" id=4]
+[ext_resource path="res://items/sets/tool/tool_set_data.tres" type="Resource" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_wrench/3/ghost_wrench_3_stats.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_wrench/4/ghost_wrench_4_data.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_wrench/3/ghost_wrench_3_effect_0.tres" type="Resource" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_wrench/ghost_wrench_icon.webp" type="Texture" id=9]
+
+[resource]
+script = ExtResource( 2 )
+my_id = "weapon_yztato_ghost_wrench_3"
+unlocked_by_default = true
+icon = ExtResource( 9 )
+name = "WEAPON_YZTATO_GHOST_WRENCH"
+tier = 2
+value = 77
+effects = [ ExtResource( 4 ), ExtResource( 8 ) ]
+tracking_text = "stats_gained"
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+weapon_id = "weapon_yztato_ghost_wrench"
+type = 0
+sets = [ ExtResource( 5 ), ExtResource( 3 ) ]
+scene = ExtResource( 1 )
+stats = ExtResource( 6 )
+upgrades_into = ExtResource( 7 )
+add_to_chars_as_starting = [  ]

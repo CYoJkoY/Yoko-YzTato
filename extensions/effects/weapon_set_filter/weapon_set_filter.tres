@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/weapon_set_filter/weapon_set_filter_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_YZTATO_WEAPON_SET_FILTER"
+value = 0
+custom_key = "yztato_weapon_set_filter"
+storage_method = 1
+effect_sign = 3
+custom_args = [  ]
+set_id = "set_elemental"

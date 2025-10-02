@@ -1,0 +1,43 @@
+[gd_resource type="Resource" load_steps=21 format=2]
+
+[ext_resource path="res://weapons/melee/lightning_shiv/1/lightning_shiv_data.tres" type="Resource" id=1]
+[ext_resource path="res://items/characters/character_data.gd" type="Script" id=2]
+[ext_resource path="res://weapons/melee/knife/1/knife_data.tres" type="Resource" id=4]
+[ext_resource path="res://weapons/melee/stick/1/stick_data.tres" type="Resource" id=5]
+[ext_resource path="res://weapons/melee/scissors/1/scissors_data.tres" type="Resource" id=6]
+[ext_resource path="res://weapons/melee/dagger/1/dagger_data.tres" type="Resource" id=7]
+[ext_resource path="res://weapons/melee/screwdriver/1/screwdriver_data.tres" type="Resource" id=8]
+[ext_resource path="res://weapons/melee/pruner/1/pruner_data.tres" type="Resource" id=9]
+[ext_resource path="res://weapons/melee/chopper/1/chopper_data.tres" type="Resource" id=10]
+[ext_resource path="res://weapons/melee/hatchet/1/hatchet_data.tres" type="Resource" id=11]
+[ext_resource path="res://weapons/melee/fighting_stick/1/fighting_stick_data.tres" type="Resource" id=12]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/effects/chi_sword_wielder_effect_1b.tres" type="Resource" id=13]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/effects/chi_sword_wielder_effect_0.tres" type="Resource" id=14]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/appearances/chi_sword_wielder_icon.webp" type="Texture" id=15]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/appearances/chi_sword_wielder_skin_appearance.tres" type="Resource" id=16]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/appearances/chi_sword_wielder_mouth_appearance.tres" type="Resource" id=17]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/appearances/chi_sword_wielder_eyes_appearance.tres" type="Resource" id=18]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/effects/chi_sword_wielder_effect_1a.tres" type="Resource" id=19]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/effects/chi_sword_wielder_effect_2a.tres" type="Resource" id=20]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/effects/chi_sword_wielder_effect_2b.tres" type="Resource" id=21]
+
+[resource]
+script = ExtResource( 2 )
+my_id = "character_yztato_chi_sword_wielder"
+unlocked_by_default = false
+icon = ExtResource( 15 )
+name = "CHARACTER_YZTATO_CHI_SWORD_WIELDER"
+tier = 0
+value = 1
+effects = [ ExtResource( 14 ), ExtResource( 19 ), ExtResource( 13 ), ExtResource( 20 ), ExtResource( 21 ) ]
+tracking_text = ""
+is_lockable = true
+is_cursed = false
+curse_factor = 0.0
+max_nb = -1
+item_appearances = [ ExtResource( 18 ), ExtResource( 17 ), ExtResource( 16 ) ]
+tags = [  ]
+wanted_tags = [ "stat_melee_damage", "stat_range", "stat_armor" ]
+banned_item_groups = [  ]
+banned_items = [  ]
+starting_weapons = [ ExtResource( 10 ), ExtResource( 7 ), ExtResource( 12 ), ExtResource( 11 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 1 ), ExtResource( 9 ), ExtResource( 6 ), ExtResource( 8 ) ]
