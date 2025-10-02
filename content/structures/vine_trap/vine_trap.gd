@@ -1,7 +1,6 @@
 extends Structure
 
 export (float) var time = 5.0
-export (Resource) var trap_enter_sound
 
 var enemies_in_range: Array = []
 var frame_count: int = 0
@@ -32,9 +31,6 @@ func _on_trap_area_entered(body: Node):
 	if body is Enemy and not body.dead:
 		if not enemies_in_range.has(body):
 			enemies_in_range.append(body)
-			
-			if trap_enter_sound:
-				SoundManager2D.play(trap_enter_sound, global_position, 0, 0.2)
 
 func _on_trap_area_exited(body: Node):
 	if enemies_in_range.has(body):

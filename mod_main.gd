@@ -177,13 +177,13 @@ func YZ_init(_ext_dir: String):
 		# EFFECTS : melee_erase_bullets, melee_bounce_bullets,
 		#           flying_sword, blade_storm[ 4/4 ], leave_fire[ 1/2 ], 
 		#           gain_stat_when_killed_single_scaling[ 2/3 ], multi_hit[ 1/2 ],
-		#           vine_trap
+		#           vine_trap[ 1/2 ]
 		# SETTING : set_weapon_transparency[ 1/2 ]
 		# ACHIEVE : counterattack
 		
 		["ranged_weapon.gd", "res://weapons/ranged/ranged_weapon.gd"],
 		# EFFECTS : upgrade_range_killed_enemies, boomerang_weapon[ 2/2 ], 
-		#           leave_fire[ 2/2 ], multi_hit[ 2/2 ], vine_trap
+		#           leave_fire[ 2/2 ], multi_hit[ 2/2 ], vine_trap[ 2/2 ]
 		#           gain_stat_when_killed_single_scaling[ 3/3 ],
 		# SETTING : set_weapon_transparency[ 2/2 ]
 		# ACHIEVE : sudden_misfortune
