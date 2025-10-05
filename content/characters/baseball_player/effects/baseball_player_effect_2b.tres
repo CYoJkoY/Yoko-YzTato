@@ -1,0 +1,16 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/extra_enemies_next_waves/extra_enemies_next_waves_effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/zones/002_extra/prosperity_ring_group.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+key = "yztato_extra_enemies_next_waves"
+text_key = "EFFECT_PROSPERITY_RING"
+value = 1
+custom_key = ""
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+extra_group_data = ExtResource( 2 )
+waves = 999

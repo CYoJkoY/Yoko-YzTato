@@ -67,8 +67,8 @@ func _yztato_unlock_all_challenges() -> void:
 func _yztato_add_tracked_items() -> void:
 	var yztato_tracked_items: Dictionary = {
 		"item_yztato_insurance_policy": 0,
-		"item_yztato_cursed_box": [0, 0],
-		
+		"character_yztato_baseball_player": 0,
+
 	}
 
 	init_tracked_items.merge(yztato_tracked_items, false)

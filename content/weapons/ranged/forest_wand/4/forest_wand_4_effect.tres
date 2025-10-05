@@ -1,0 +1,24 @@
+[gd_resource type="Resource" load_steps=4 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.tscn" type="PackedScene" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/vine_trap/vine_trap_effect.gd" type="Script" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/4/forest_wand_4_stats_2.tres" type="Resource" id=3]
+
+[resource]
+script = ExtResource( 2 )
+key = ""
+text_key = "EFFECT_YZTATO_VINE_TRAP"
+value = 0
+custom_key = ""
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+spawn_cooldown = -1
+scene = ExtResource( 1 )
+stats = ExtResource( 3 )
+effects = [  ]
+spawn_in_center = -1
+spawn_around_player = -1
+can_be_grouped = true
+trap_count = 4
+chance = 40

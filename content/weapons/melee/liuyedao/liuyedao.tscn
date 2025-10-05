@@ -23,28 +23,27 @@ extents = Vector2( 61, 8 )
 
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
-radius = 64.0703
+radius = 77.0584
 
 [node name="YztatoShaoBingShenShi" instance=ExtResource( 1 )]
 script = ExtResource( 9 )
 outline_shader_mat = SubResource( 3 )
 
 [node name="Sprite" parent="." index="0"]
-position = Vector2( 36, 0 )
+position = Vector2( 38, 0 )
 texture = ExtResource( 2 )
 
 [node name="Collision" parent="Sprite/Hitbox" index="0"]
 shape = SubResource( 1 )
 
 [node name="Muzzle" parent="Sprite" index="1"]
-position = Vector2( 48, 0 )
+position = Vector2( 43, 0 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
-position = Vector2( 36, 0 )
+position = Vector2( 38, 0 )
 shape = SubResource( 2 )
 
 [node name="ShootingBehavior" parent="." index="4"]
-position = Vector2( 2, 1 )
 script = ExtResource( 4 )
 
 [editable path="Sprite/Hitbox"]

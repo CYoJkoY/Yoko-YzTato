@@ -192,7 +192,7 @@ func _yztato_temp_stats_per_interval() -> void:
 			var interval: int = sub_effect[2]
 			
 			if _one_second_timeouts % interval == 0:
-				_hit_protection = int(Utils.get_stat("hit_protection", player_index))
+				_hit_protection = int(_hit_protection + TempStats.get_stat("hit_protection", player_index))
 
 func _yztato_heal_on_damage_taken_ready() -> void:
 	heal_on_damage_taken = RunData.get_player_effect("yztato_heal_on_damage_taken", player_index)

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/prism.ogg-bb9371d16aa4d726bd2725c656addd08.oggstr"
+
+[deps]
+
+source_file="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/prism/prism.ogg"
+dest_files=[ "res://.import/prism.ogg-bb9371d16aa4d726bd2725c656addd08.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

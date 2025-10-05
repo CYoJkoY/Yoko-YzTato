@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=25 format=2]
+[gd_resource type="Resource" load_steps=26 format=2]
 
 [ext_resource path="res://weapons/melee/wrench/1/wrench_data.tres" type="Resource" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/baseball_player/effects/baseball_player_effect_0a.tres" type="Resource" id=2]
@@ -23,6 +23,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/baseball_player/effects/baseball_player_effect_1c.tres" type="Resource" id=21]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/baseball_player/effects/baseball_player_effect_2a.tres" type="Resource" id=22]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/legend_bat/2/legend_bat_2_data.tres" type="Resource" id=23]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/baseball_player/effects/baseball_player_effect_2b.tres" type="Resource" id=24]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/baseball_player/appearences/baseball_player_icon.webp" type="Texture" id=27]
 
 [resource]
@@ -33,8 +34,8 @@ icon = ExtResource( 27 )
 name = "CHARACTER_YZTATO_BASEBALL_PLAYER"
 tier = 0
 value = 1
-effects = [ ExtResource( 2 ), ExtResource( 17 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ) ]
-tracking_text = ""
+effects = [ ExtResource( 2 ), ExtResource( 17 ), ExtResource( 20 ), ExtResource( 21 ), ExtResource( 22 ), ExtResource( 24 ) ]
+tracking_text = "DAMAGE_DEALT"
 is_lockable = true
 is_cursed = false
 curse_factor = 0.0

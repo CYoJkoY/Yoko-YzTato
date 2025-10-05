@@ -5,6 +5,8 @@ export (int) var chance = 100
 
 var col_b: String = "[/color]"
 
+var weapon_pos: int = -1
+
 # =========================== Extension =========================== #
 static func get_id() -> String:
 	return "yztato_vine_trap"

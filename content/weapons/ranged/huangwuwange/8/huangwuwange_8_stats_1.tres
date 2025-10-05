@@ -1,6 +1,7 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" load_steps=4 format=2]
 
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange.ogg" type="AudioStream" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/huangwuwange/huangwuwange_projectile_1.tscn" type="PackedScene" id=6]
 
 [resource]
@@ -19,7 +20,7 @@ can_have_negative_knockback = false
 effect_scale = 1.0
 scaling_stats = [ [ "stat_attack_speed", 0.65 ], [ "stat_engineering", 2.1 ] ]
 lifesteal = 0.0
-shooting_sounds = [  ]
+shooting_sounds = [ ExtResource( 2 ) ]
 sound_db_mod = -5
 is_healing = false
 recoil = 25

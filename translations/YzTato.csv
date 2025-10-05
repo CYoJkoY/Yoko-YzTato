@@ -24,7 +24,7 @@ CHARACTER_YZTATO_GLUTTONY,Gluttony,饕餮
 WEAPON_YZTATO_LEIFU,Thunder Talisman,雷符
 YZTATO_LEIFU_PROJECTILES,Hitting an enemy later spawns {0} [color=#FDDB27]thunderblots[/color] dealing {1} ({3}) damage,击中敌人后产生{0}道[color=#FDDB27]天雷[/color]，造成{1}（{3}）伤害
 ITEM_YZTATO_PROSPERITY_RING,Prosperity Ring,繁荣之戒
-EFFECT_PROSPERITY_RING,[color=#AD5AFF]Blind Necromancer[/color] will appear in {2} future waves,未来 {2} 波次出现[color=#AD5AFF]无眼的死灵法师[/color]
+EFFECT_PROSPERITY_RING,[color=#AD5AFF]Blind Necromancer[/color] will appear in {2} futu	re waves,未来 {2} 波次出现[color=#AD5AFF]无眼的死灵法师[/color]
 WEAPON_YZTATO_BANBOCHANGDI,Mottled Flute,斑驳长笛
 WEAPON_YZTATO_BANBOCHANGDI_1,Mottled Flute △,斑驳长笛 △
 CLASS_YZTATO_UNCANNY_INSTRUMENT,Uncanny Instrument,诡乐
@@ -49,8 +49,8 @@ EFFECT_YZTATO_MELEE_ERASE_BULLETS,Your melee weapon can [color=#FCAB5A]remove en
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
 EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,After killing {3} ({4}) enemies，gain {0} points {1} ({2}),击杀{3}（{4}）名敌人后获得{0}点{1}（{2}）
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
-EFFECT_YZTATO_SWORD_ARRAY,Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color]，which is affected by damage，attack speed，range and player's level,武器攻击方式变为[color=#FF8C00]剑阵模式[/color]，受[color=green]伤害、攻速、范围、角色等级影响[/color]
-EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,Your melee weapon can [color=#FCAB5A]bounce enemy bullets back[/color],你的近战武器可[color=#FCAB5A]反弹敌人子弹[/color]
+EFFECT_YZTATO_SWORD_ARRAY,Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color]，which is affected by damage，attack speed，range and player's level,武器攻击方式变为[color=#FF8C00]剑阵模式[/color]，受[color=#00ff00]伤害、攻速、范围、角色等级[/color]影响
+EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,Your melee weapon can [color=#FCAB5A]bounce enemy bullets back[/color]，its damage affected by weapon's damage and enemy's damage,你的近战武器可[color=#FCAB5A]反弹敌人子弹[/color]，其伤害受[color=#00ff00]武器伤害、敌人伤害[/color]影响
 CHARACTER_YZTATO_BASEBALL_PLAYER,Baseball Player,棒球手
 CHARACTER_YZTATO_BOMBER,Bomber,炸弹人
 EFFECT_YZTATO_BOMBS,A bomb spawns every {1} seconds dealing {2} ({3}) damage in situ,炸弹每{1}秒原地生成一次，并对一个区域造成{2}（{3}）伤害
@@ -61,7 +61,7 @@ EFFECT_YZTATO_FRUIT_PICKED_UP_COUNT,For every {0} picked up normal fruits， {3}
 EFFECT_YZTATO_POISONED_FRUIT_PICKED_UP_COUNT,For every {0} picked up poisoned fruits， {3} ({4}) will be {2},每捡起{0}个有毒的果实，{3}（{4}）将会{2}
 CHARACTER_YZTATO_JIANGCHEN,JiangChen,将臣
 WEAPON_YZTATO_LEGEND_BAT,Legend Bat,传奇球棒
-EFFECT_YZTATO_BLADE_STORM_OP,Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color]，which can [color=#FCAB5A]remove enemy bullets[/color] and its rotation speed is affected by current health，speed，number of weapons and attack speed,你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color]，可以[color=#FCAB5A]消除敌人子弹[/color]，转速受[color=green]当前生命、速度、武器数量、攻速[/color]影响
+EFFECT_YZTATO_BLADE_STORM_OP,Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color]，which can [color=#FCAB5A]remove enemy bullets[/color] and its rotation speed is affected by [color=red]current health，speed，number of weapons[/color] [color=#00ff00]and attack speed[/color],你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color]，可以[color=#FCAB5A]消除敌人子弹[/color]，转速受[color=red]当前生命、速度、武器数量[/color]、[color=#00ff00]攻速[/color]影响
 CHARACTER_YZTATO_BLADE_DANCER,Blade Dancer,剑舞者
 CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
 EFFECT_YZTATO_LEAVE_FIRE,[color=#F94E34]The burning enemy will leave flames on the ground[/color],[color=#F94E34]燃烧的敌人会在地面留下火焰[/color]
@@ -73,7 +73,7 @@ YZ_UNLOCK_ALL,Unlock All,全解锁
 YZ_UNLOCK_ALL_CHARS,Unlock All Characters,全角色解锁
 YZ_UNLOCK_DIFFICULTIES,Unlock All Difficulties,全难度解锁
 YZ_UNLOCK_ALL_CHALLENGES,Unlock All Challenges,全成就解锁
-EFFECT_YZTATO_ATTACK_LIMIT,[color=#FCAB5A]When weapon damage is > {0}，enter Qi mode[/color]，which is affected by the weapon and range，not by attack speed,[color=#FCAB5A]武器伤害 > {0}时，进入御气模式[/color]，受[color=green]伤害、范围、效果[/color]影响，不受攻速影响
+EFFECT_YZTATO_ATTACK_LIMIT,[color=#FCAB5A]When weapon damage is > {0}，enter Qi mode[/color]，which is affected by [color=#00ff00]weapon's damage and range[/color]，not by attack speed,[color=#FCAB5A]武器伤害 > {0}时，进入御气模式[/color]，受[color=#00ff00]武器伤害、范围、效果[/color]影响，不受攻速影响
 CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,气剑师
 EFFECT_YZTATO_WEAPON_SET_DELETE,[color=#3E68DA]weapons of {0} set[/color] will not appear in the shop,商店里面不会出现[color=#3E68DA]{0}系列的武器[/color]
 YZ_WEAPON_TRANSPARENCY,Weapon Transparency,武器不透明度
@@ -132,7 +132,7 @@ EFFECT_YZTATO_PRECEPT_8,[color=#F9C571]Eighth Precept—Contain Enemies[/color],
 EFFECT_YZTATO_PRECEPT_9,[color=#F9C571]Ninth Precept—Ultimate Breakthrough[/color],[color=#F9C571]第九戒律——终极突破[/color]
 EFFECT_YZTATO_MULTI_HIT,Each hit on an enemy will deal {0} additional hits，each dealing {1}% of the original damage,每次命中敌人将多造成{0}次伤害，数值为{1}%原伤害
 WEAPON_YZTATO_BAZHANDAO,Eight Cutting Broadsword,八斩刀
-WEAPON_YZTATO_FOREST_STAFF,Forest Staff,森林法杖
+WEAPON_YZTATO_FOREST_WAND,Forest Wand,森林法杖
 EFFECT_YZTATO_VINE_TRAP_FRONT,There is a [color=#00ff00]{1}%[/color] chance to generate [color=#00ff00]{0}[/color] vines when hitting enemy，causing {3} speed to nearby enemies every [color=#00ff00]{2}[/color] seconds，with damage of,击中敌人 [color=#00ff00]{1}%[/color] 概率生成[color=#00ff00]{0}[/color]根藤曼，每过[color=#00ff00]{2}[/color]秒附近敌人速度 {3} ，造成伤害
 WEAPON_YZTATO_PRISM,Prism,棱镜
 ITEM_YZTATO_GHOST_TREE,Ghost Tree,幽魂树
@@ -155,7 +155,7 @@ ITEM_YZTATO_INSURANCE_POLICY,Insurance Policy,保险单
 EFFECT_YZTATO_HEAL_ON_DAMAGE_TAKEN,When injured，there is {0}% chance to recover {2}% of the damage taken,受到伤害时，有{0}%概率恢复{2}%所受伤害的血量
 WEAPON_YZTATO_SNIPER_GUN,Sniper Gun,狙击枪
 CHAL_ONLY_IN,Only In Not Out,只进不出
-CHAL_ONLY_IN_DESC,Pick up at least 30 consumables in a wave,在一次敌袭中至少捡起30个消耗品
+CHAL_ONLY_IN_DESC,Pick up at least 30 consumables in a wave,在一次敌袭中捡起至少30个消耗品
 CHAL_DARK_FOREST_RULE,Dark Forest Rule,黑暗森林法则
 CHAL_DARK_FOREST_RULE_DESC,There are at least 15 charmed enemies at the same time,同时存在至少15个被魅惑的敌人
 CHAL_SEAMLESS,Seamless,踏雪无痕
@@ -167,3 +167,8 @@ CHAL_BIG_BANG,Big Bang,大爆炸
 CHAL_NOT_STIFF,Not Stiff,不僵
 CHAL_MORE_THAN_ENOUGH,More Than Enough,绰绰有余
 CHAL_MORE_THAN_ENOUGH_DESC,Finish a run with Multitasker and free weapon slots consistently ≥ 4,使用多面手在空闲武器槽始终≥4的情况下完成一场比赛
+CHAL_HELLFIRE,Hellfire,地狱火
+CHAL_HELLFIRE_DESC,Kill at least 100 burning enemies in one wave,在一次敌袭中击杀至少100名燃烧的敌人
+CHAL_ONE_FORCE_SUBDUE_TEN,One Force Subdue Ten,一力降十会
+CHAL_ONE_FORCE_SUBDUE_TEN_DESC,Weapon's damage reaches 2000,武器伤害达到2000
+CHAL_LAST_STAND,Last Stand,背水一战

@@ -32,6 +32,9 @@ texture = ExtResource( 2 )
 [node name="Collision" parent="Sprite/Hitbox" index="0"]
 position = Vector2( 0.5, 0 )
 
+[node name="Muzzle" parent="Sprite" index="1"]
+position = Vector2( 75, 0 )
+
 [node name="CollisionShape2D" parent="Range" index="0"]
 shape = SubResource( 1 )
 

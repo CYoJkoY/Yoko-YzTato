@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=222 format=2]
+[gd_resource type="Resource" load_steps=225 format=2]
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content_data/NewContent.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/minotaur_data.tres" type="Resource" id=2]
@@ -140,7 +140,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/bomber_data.tres" type="Resource" id=138]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/jiangchen_data.tres" type="Resource" id=139]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/bazhandao/1/bazhandao_data.tres" type="Resource" id=140]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/1/forest_staff_data.tres" type="Resource" id=141]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/1/forest_wand_data.tres" type="Resource" id=141]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/prism/4/prism_4_data.tres" type="Resource" id=142]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/ghost_tree/ghost_tree_data.tres" type="Resource" id=143]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/ghost_jousting_lance/3/ghost_jousting_lance_3_data.tres" type="Resource" id=144]
@@ -187,9 +187,9 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_taser/3/ghost_taser_3_data.tres" type="Resource" id=185]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_wand/3/ghost_wand_3_data.tres" type="Resource" id=186]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_wand/1/ghost_wand_data.tres" type="Resource" id=187]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/4/forest_staff_4_data.tres" type="Resource" id=188]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/3/forest_staff_3_data.tres" type="Resource" id=189]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_staff/2/forest_staff_2_data.tres" type="Resource" id=190]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/4/forest_wand_4_data.tres" type="Resource" id=188]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/3/forest_wand_3_data.tres" type="Resource" id=189]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/2/forest_wand_2_data.tres" type="Resource" id=190]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/shield_generator/shield_generator_data.tres" type="Resource" id=191]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_data.tres" type="Resource" id=192]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/insurance_policy/insurance_policy_data.tres" type="Resource" id=193]
@@ -221,6 +221,9 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_sudden_misfortune.tres" type="Resource" id=219]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_counterattack.tres" type="Resource" id=220]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_more_than_enough.tres" type="Resource" id=221]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_hellfire.tres" type="Resource" id=222]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_last_stand.tres" type="Resource" id=223]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/challenges/chal_one_force_subdue_ten.tres" type="Resource" id=224]
 
 [resource]
 script = ExtResource( 1 )
@@ -238,7 +241,7 @@ sets = [ ExtResource( 50 ), ExtResource( 52 ), ExtResource( 35 ) ]
 difficulties = null
 icons = null
 title_screen_backgrounds = null
-challenges = [ ExtResource( 216 ), ExtResource( 217 ), ExtResource( 218 ), ExtResource( 219 ), ExtResource( 220 ), ExtResource( 76 ), ExtResource( 92 ), ExtResource( 221 ) ]
+challenges = [ ExtResource( 216 ), ExtResource( 217 ), ExtResource( 218 ), ExtResource( 219 ), ExtResource( 220 ), ExtResource( 76 ), ExtResource( 92 ), ExtResource( 221 ), ExtResource( 222 ), ExtResource( 224 ), ExtResource( 223 ) ]
 zones = null
 tracked_items = {
 }

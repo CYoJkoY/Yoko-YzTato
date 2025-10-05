@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/huangwuwange.ogg-59cf8a9f0d5e266028b9ea8c180132d1.oggstr"
+
+[deps]
+
+source_file="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange.ogg"
+dest_files=[ "res://.import/huangwuwange.ogg-59cf8a9f0d5e266028b9ea8c180132d1.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

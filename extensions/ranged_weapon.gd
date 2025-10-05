@@ -32,6 +32,7 @@ func _ready():
 	_yztato_boomerang_ready()
 	_yztato_leave_fire_ready()
 	_yztato_set_weapon_transparency(ProgressData.settings.yztato_set_weapon_transparency)
+	_yztato_chal_ready()
 
 func shoot() -> void:
 	if is_boomerang:
@@ -72,7 +73,6 @@ func _yztato_upgrade_range_killed_enemies_on_shot(projectile: Node2D)-> void:
 		var hitbox = projectile._hitbox
 		var conn_id = hitbox.connect("killed_something", self, "_yztato_upgrade_range_killed_enemies", [hitbox])
 		connection_ids[projectile] = conn_id
-		projectile.connect("tree_exiting", self, "_on_projectile_exiting", [projectile])
 
 func _yztato_chimera_init_stats()-> void:
 	for effect in effects:
@@ -157,9 +157,9 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
 		if fire is ProgressData.Yztato.LeaveFire._Effect:
 			var new_fire = _burning_particles_manager.get_burning_particle()
 			if new_fire != null:
-				new_fire.activate(thing_hit.global_position, thing_hit._burning)
-				new_fire.rescale(fire.scale)
-				new_fire.set_duration(fire.duration)
+				call_deferred("yz_activate_burning_particle", new_fire,
+				thing_hit.global_position, thing_hit._burning,
+				fire.scale, fire.duration)
 				return
 
 	var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
@@ -167,9 +167,9 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
 		for fire in effect_leave_fire:
 			var new_fire = _burning_particles_manager.get_burning_particle()
 			if new_fire != null:
-				new_fire.activate(thing_hit.global_position, thing_hit._burning)
-				new_fire.rescale(fire[3])
-				new_fire.set_duration(fire[2])
+				call_deferred("yz_activate_burning_particle", new_fire,
+				thing_hit.global_position, thing_hit._burning,
+				fire[3], fire[2])
 
 func _yztato_gain_stat_when_killed_scaling_single() -> void:
 	kill_count[weapon_id] = kill_count.get(weapon_id, 0) + 1
@@ -209,6 +209,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 				for _i in range(count):
 					var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
 					var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+					vine_trap.weapon_pos = weapon_pos
 					queue.push_back([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
 			return
@@ -244,6 +245,10 @@ func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
 	
 	ChallengeService.try_complete_challenge("chal_sudden_misfortune", attack_hit_count)
 
+func _yztato_chal_ready() -> void:
+	### one_force_subdue_ten ###
+	ChallengeService.try_complete_challenge("chal_one_force_subdue_ten", current_stats.damage)
+
 # =========================== Method =========================== #
 func _yztato_upgrade_range_killed_enemies(_thing_killed: Node, _hitbox: Hitbox)-> void:
 	var upgrade_attack_killed_enemies: int = RunData.get_player_effect("yztato_upgrade_range_killed_enemies", player_index)
@@ -264,3 +269,9 @@ func yz_on_projectile_returned(projectile: Node2D) -> void:
 
 	if boomerang_wait:
 		_current_cooldown = get_next_cooldown()
+
+func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
+	if particle != null and particle.has_method("activate"):
+		particle.activate(position, burning_data)
+		particle.rescale(scale)
+		particle.set_duration(duration)

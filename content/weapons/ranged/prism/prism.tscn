@@ -29,13 +29,10 @@ outline_shader_mat = SubResource( 2 )
 texture = ExtResource( 2 )
 
 [node name="Collision" parent="Sprite/Hitbox" index="0"]
-position = Vector2( 0, 0.500002 )
+position = Vector2( 0, -0.499998 )
 
 [node name="Muzzle" parent="Sprite" index="1"]
-position = Vector2( 32, 0 )
-
-[node name="Attach" parent="." index="1"]
-position = Vector2( 0, 48 )
+position = Vector2( 64, 0 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
 shape = SubResource( 1 )

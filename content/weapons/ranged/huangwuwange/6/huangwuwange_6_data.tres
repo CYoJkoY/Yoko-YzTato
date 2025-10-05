@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=12 format=2]
+[gd_resource type="Resource" load_steps=13 format=2]
 
 [ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_effect_3a.tres" type="Resource" id=2]
@@ -11,6 +11,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_stats_1.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/7/huangwuwange_7_data.tres" type="Resource" id=10]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_effect_2a.tres" type="Resource" id=11]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/6/huangwuwange_6_effect_1b.tres" type="Resource" id=12]
 
 [resource]
 script = ExtResource( 1 )
@@ -20,7 +21,7 @@ icon = ExtResource( 8 )
 name = "WEAPON_YZTATO_HUANGWUWANGE_1"
 tier = 1
 value = 1536
-effects = [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 5 ), ExtResource( 11 ), ExtResource( 2 ) ]
+effects = [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 5 ), ExtResource( 12 ), ExtResource( 11 ), ExtResource( 2 ) ]
 tracking_text = ""
 is_lockable = true
 is_cursed = false

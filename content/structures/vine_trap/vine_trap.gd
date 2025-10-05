@@ -4,6 +4,7 @@ export (float) var time = 5.0
 
 var enemies_in_range: Array = []
 var frame_count: int = 0
+var weapon_pos: int = -1
 
 # =========================== Extension =========================== #
 func _ready():
@@ -15,7 +16,6 @@ func _ready():
 	timer.start()
 
 func _physics_process(_delta: float):
-	print(stats.scaling_stats)
 	frame_count += 1
 	if frame_count >= stats.cooldown \
 	and !enemies_in_range.empty():
@@ -24,7 +24,12 @@ func _physics_process(_delta: float):
 			if enemy and not enemy.dead:
 				enemy.add_decaying_speed(enemy.current_stats.speed * stats.speed_percent_modifier / 100)
 				var args = TakeDamageArgs.new(player_index)
-				enemy.take_damage(stats.damage, args)
+				var damage_taken: Array = enemy.take_damage(stats.damage, args)
+				RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+
+func set_data(data: Resource)->void :
+	.set_data(data)
+	weapon_pos = data.weapon_pos
 
 # =========================== Custom =========================== #
 func _on_trap_area_entered(body: Node):

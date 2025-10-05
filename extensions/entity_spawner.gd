@@ -13,11 +13,15 @@ var primary_stats: Array = [
 	]
 var kill_count_2: Dictionary = {}
 
+### hellfire ###
+var enemies_killed_is_burning: int = 0
+
 # =========================== Extention =========================== #
 func _on_enemy_died(enemy: Node2D, _args: Entity.DieArgs)->void :
 	_yztato_gain_stat_when_killed_single_scaling_on_enemy_died()
 	_yztato_blood_rage_on_enemy_died()
 	_yztato_gain_random_primary_stat_on_enemy_died()
+	_yztato_chal_on_enemy_died(enemy)
 	._on_enemy_died(enemy, _args)
 
 func on_enemy_charmed(enemy: Entity)->void :
@@ -79,3 +83,8 @@ func _yztato_gain_random_primary_stat_on_enemy_died()-> void:
 func _yztato_chal_on_enemy_charmed(charmed_enemies: Array)-> void:
 	### dark_forest_rule ###
 	ChallengeService.try_complete_challenge("chal_dark_forest", charmed_enemies.size())
+
+func _yztato_chal_on_enemy_died(enemy: Entity)-> void:
+	### hellfire ###
+	if enemy._is_burning: enemies_killed_is_burning += 1
+	ChallengeService.try_complete_challenge("chal_hell_fire", enemies_killed_is_burning)

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=2]
 
-[ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap_stats.gd" type="Script" id=1]
 
 [resource]
 script = ExtResource( 1 )
@@ -35,3 +35,4 @@ bounce_dmg_reduction = 0.5
 can_bounce = true
 projectile_speed = 3000
 increase_projectile_speed_with_range = false
+tracking_key = ""
