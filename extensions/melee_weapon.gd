@@ -232,7 +232,8 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
 		if effect is ProgressData.Yztato.MultiHit._Effect:
 			for _i in range(effect.value):
 				var args = TakeDamageArgs.new(player_index)
-				thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
+				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
+				RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 				return
 	
 	var effect_multi_hit = RunData.get_player_effect("yztato_multi_hit", player_index)
@@ -240,7 +241,8 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
 		for effect in effect_multi_hit:
 			for _i in range(effect[0]):
 				var args = TakeDamageArgs.new(player_index)
-				thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
+				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
+				RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 	for effect in effects:

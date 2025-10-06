@@ -1,6 +1,6 @@
 extends "res://singletons/player_run_data.gd"
 
-static func init_stats(all_null_values: bool = false)->Dictionary:
+static func init_stats(all_null_values: bool = false) -> Dictionary:
 
 	if (not Utils == null) :
 		var vanilla_stats = .init_stats(all_null_values)
@@ -16,7 +16,7 @@ static func init_stats(all_null_values: bool = false)->Dictionary:
 	else:
 		return {}
 
-static func init_effects()->Dictionary:
+static func init_effects() -> Dictionary:
 
 	if (not Utils == null) :
 		var vanilla_effects = .init_effects()

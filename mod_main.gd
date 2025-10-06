@@ -57,26 +57,18 @@ func _init():
 		"melee_weapon.gd", 
 		"ranged_weapon.gd",
 		"wave_manager.gd",
-		
-	]
-	
-	var extensions2 = [
-		["player_run_data.gd", "res://singletons/player_run_data.gd"],
+		"player_run_data.gd"
 		
 	]
 	
 	var Test = false
 
-	if !Test: 
-		for path in extensions:
-			ModLoaderMod.install_script_extension(ext_dir + path)
-		for script in extensions2:
-			YZ_extend(script, ext_dir)
+	if !Test: for path in extensions:
+		ModLoaderMod.install_script_extension(ext_dir + path)
 
-	if Test: YZ_init(ext_dir)
+	elif Test: YZ_init(ext_dir)
 
 
-	
 func YZ_init(_ext_dir: String):
 	ModLoaderLog.info("========== Yztato Init ==========", MYMODNAME_LOG)
 	
@@ -202,6 +194,7 @@ func YZ_init(_ext_dir: String):
 	
 	ModLoaderLog.info("========== Yztato Init Done ==========", MYMODNAME_LOG)
 
+
 func YZ_extend(script: Array, _ext_dir: String) -> void:
 	# OrignalFunction -> apply_extension
 	var child_script_path: String = _ext_dir + script[0]
@@ -215,7 +208,9 @@ func YZ_extend(script: Array, _ext_dir: String) -> void:
 	if not ModLoaderStore.saved_scripts.has(parent_script_path):
 		ModLoaderStore.saved_scripts[ parent_script_path ] = []
 
-		ModLoaderStore.saved_scripts[parent_script_path].append(parent_script.duplicate())
+		var duplicated_script = parent_script.new()
+		if duplicated_script != null:
+			ModLoaderStore.saved_scripts[parent_script_path].append(duplicated_script)
 
 	ModLoaderStore.saved_scripts[parent_script_path].append(child_script)
 	
