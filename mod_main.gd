@@ -51,6 +51,7 @@ func _init():
 		"menu_choose_options.gd",
 		"character_selection.gd",
 		"difficulty_selection.gd",
+		"base_shop.gd",
 		"secondary_stat_container.gd",
 		"stats_container.gd",
 		"melee_weapon.gd", 
@@ -147,7 +148,7 @@ func YZ_init(_ext_dir: String):
 		# Sound Fix[ 2/2 ]
 		
 		["weapon_service.gd", "res://singletons/weapon_service.gd"],
-		# EFFECTS : crit
+		# EFFECTS : crit, yztato_damage_scaling
 		
 		["zone_service.gd", "res://singletons/zone_service.gd"],
 		# EFFECTS : wave
@@ -166,6 +167,9 @@ func YZ_init(_ext_dir: String):
 		
 		["difficulty_selection.gd", "res://ui/menus/run/difficulty_selection/difficulty_selection.gd"],
 		# SETTING : unlock_difficulties
+		
+		["base_shop.gd", "res://ui/menus/shop/base_shop.gd"],
+		# EFFECTS : random_curse_on_reroll
 		
 		["secondary_stat_container.gd", "res://ui/menus/shop/secondary_stat_container.gd"],
 		# Secondary Stats' Icons

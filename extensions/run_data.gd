@@ -3,7 +3,6 @@ extends "res://singletons/run_data.gd"
 # =========================== Extention =========================== #
 func _ready():
 	_yztato_unlock_all_challenges()
-	_yztato_add_tracked_items()
 
 func manage_life_steal(weapon_stats:WeaponStats, player_index:int)->void :
 	if _yztato_life_steal(weapon_stats, player_index): return
@@ -63,12 +62,3 @@ func _yztato_unlock_all_challenges() -> void:
 	if ProgressData.settings.yztato_unlock_all_challenges:
 		for chal in ChallengeService.challenges:
 			ChallengeService.complete_challenge(chal.my_id)
-
-func _yztato_add_tracked_items() -> void:
-	var yztato_tracked_items: Dictionary = {
-		"item_yztato_insurance_policy": 0,
-		"character_yztato_baseball_player": 0,
-
-	}
-
-	init_tracked_items.merge(yztato_tracked_items, false)

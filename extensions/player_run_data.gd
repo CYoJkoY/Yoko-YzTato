@@ -62,7 +62,9 @@ static func init_effects()->Dictionary:
 			"yztato_heal_on_damage_taken": [],                              # effect : 受伤时,有value%概率恢复受到的value2%的伤害
 			"yztato_temp_stats_per_interval": [],                           # effect : 一波内，每interval秒，stat属性变化value，每波结束消失 \\\ reset_on_hit -> 变化的属性是否在受伤时归零
 			"yztato_extra_enemies_next_waves": [],                          # effect : 未来waves个波次会出现value个extra_group_data怪物组
-
+			"yztato_damage_scaling": [],                                    # effect : 每拥有a点属性A，则武器伤害会随b%属性B、c%属性C...影响
+			"yztato_random_curse_on_reroll": [],                            # effect : 重新刷新商店时，随机value件物品和武器有value2%的几率被诅咒
+			
 		}
 
 		new_effects.merge(vanilla_effects)
