@@ -28,7 +28,7 @@ func _init():
 	
 	ModLoaderLog.info("========== Add Translation Done ==========", MYMODNAME_LOG)
 
-	var extensions = [
+	var extensions: Array = [
 		"enemy.gd",
 		"weapons_container.gd",
 		"shooting_attack_behavior.gd",
@@ -57,18 +57,26 @@ func _init():
 		"melee_weapon.gd", 
 		"ranged_weapon.gd",
 		"wave_manager.gd",
-		"player_run_data.gd"
 		
+	]
+
+	var extensions2: Array = [
+		["player_run_data.gd","res://singletons/player_run_data.gd"],
+
 	]
 	
 	var Test = false
 
-	if !Test: for path in extensions:
-		ModLoaderMod.install_script_extension(ext_dir + path)
+	if !Test: 
+		for path in extensions:
+			ModLoaderMod.install_script_extension(ext_dir + path)
+		for path2 in extensions2:
+			YZ_extend_script(path2, ext_dir)
 
-	elif Test: YZ_init(ext_dir)
+	if Test: YZ_init(ext_dir)
 
 
+	
 func YZ_init(_ext_dir: String):
 	ModLoaderLog.info("========== Yztato Init ==========", MYMODNAME_LOG)
 	
@@ -190,13 +198,13 @@ func YZ_init(_ext_dir: String):
 	]
 	
 	for script in scripts:
-		YZ_extend(script, ext_dir)
+		if script[0] == "player_run_data.gd": YZ_extend_script(script, ext_dir)
+		else: YZ_extend(script, ext_dir)
 	
 	ModLoaderLog.info("========== Yztato Init Done ==========", MYMODNAME_LOG)
 
-
 func YZ_extend(script: Array, _ext_dir: String) -> void:
-	# OrignalFunction -> apply_extension
+	# OriginalFunction -> apply_extension
 	var child_script_path: String = _ext_dir + script[0]
 	var parent_script_path: String = script[1]
 
@@ -206,14 +214,36 @@ func YZ_extend(script: Array, _ext_dir: String) -> void:
 	var parent_script: Script = load(parent_script_path)
 
 	if not ModLoaderStore.saved_scripts.has(parent_script_path):
-		ModLoaderStore.saved_scripts[ parent_script_path ] = []
-
-		var duplicated_script = parent_script.new()
-		if duplicated_script != null:
-			ModLoaderStore.saved_scripts[parent_script_path].append(duplicated_script)
+		ModLoaderStore.saved_scripts[parent_script_path] = []
+		
+		ModLoaderStore.saved_scripts[parent_script_path].append(parent_script.duplicate())
 
 	ModLoaderStore.saved_scripts[parent_script_path].append(child_script)
 	
 	ModLoaderLog.info("Installing script extension via Yztato: %s <- %s" % [ parent_script_path, child_script_path ], MYMODNAME_LOG)
 
 	child_script.take_over_path(parent_script_path)
+
+func YZ_extend_script(script: Array, _ext_dir: String) -> void:
+	# OriginalFunction -> apply_extension
+	var child_script_path: String = _ext_dir + script[0]
+	var parent_script_path: String = script[1]
+
+	var child_script: Script = load(child_script_path)
+	child_script.set_meta("extension_script_path", child_script_path)
+
+	var parent_script: Script = load(parent_script_path)
+
+	if not ModLoaderStore.saved_scripts.has(parent_script_path):
+		ModLoaderStore.saved_scripts[parent_script_path] = []
+
+		ModLoaderStore.saved_scripts[parent_script_path].append(parent_script)
+
+	ModLoaderStore.saved_scripts[parent_script_path].append(child_script)
+	
+	ModLoaderLog.info("Installing script extension via Yztato: %s <- %s" % [ parent_script_path, child_script_path ], MYMODNAME_LOG)
+
+	child_script.take_over_path(parent_script_path)
+
+
+	

@@ -13,4 +13,4 @@ storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 extra_group_data = ExtResource( 2 )
-waves = 999
+waves = 99999

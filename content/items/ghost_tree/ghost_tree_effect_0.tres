@@ -6,7 +6,7 @@
 script = ExtResource( 1 )
 key = "all"
 text_key = "EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING"
-value = 50
+value = 75
 custom_key = "yztato_gain_stat_when_killed_single_scaling"
 storage_method = 1
 effect_sign = 3
@@ -14,4 +14,4 @@ custom_args = [  ]
 stat = "trees"
 stat_nb = 1
 scaling_stat = "trees"
-scaling_percent = 10.0
+scaling_percent = 15.0

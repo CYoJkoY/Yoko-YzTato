@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "stat_elemental_damage"
-text_key = ""
-value = 10
+key = "weapon_slot"
+text_key = "EFFECT_WEAPON_SLOT_REPLACE"
+value = 3
 custom_key = ""
-storage_method = 0
-effect_sign = 3
+storage_method = 2
+effect_sign = 1
 custom_args = [  ]

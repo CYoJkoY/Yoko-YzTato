@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "stat_elemental_damage"
-text_key = ""
-value = 10
-custom_key = ""
-storage_method = 0
+key = "weapon_yztato_liucaiyaoling"
+text_key = "EFFECT_ONLY_LIUCAIYAOLING"
+value = 1
+custom_key = "yztato_destory_weapons"
+storage_method = 1
 effect_sign = 3
 custom_args = [  ]

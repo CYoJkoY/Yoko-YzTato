@@ -19,6 +19,7 @@ effects = [  ]
 tracking_text = ""
 is_lockable = true
 is_cursed = false
+curse_factor = 0.0
 weapon_id = "weapon_yztato_banbochangdi"
 type = 1
 sets = [ ExtResource( 6 ) ]

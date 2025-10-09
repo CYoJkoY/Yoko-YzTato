@@ -76,7 +76,7 @@ func _yztato_upgrade_range_killed_enemies_on_shot(projectile: Node2D)-> void:
 
 func _yztato_chimera_init_stats()-> void:
 	for effect in effects:
-		if effect.get_id() == "chimera_weapon_effect":
+		if effect.get_id() == "yztato_chimera_weapon":
 			for proj_stats in effect.chimera_projectile_stats:
 				if proj_stats:
 					if proj_stats.projectile_scene:

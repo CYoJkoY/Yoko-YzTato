@@ -1,10 +1,9 @@
-[gd_resource type="Resource" load_steps=10 format=2]
+[gd_resource type="Resource" load_steps=9 format=2]
 
 [ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/3/chuchanyi_3_data.tres" type="Resource" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi.tscn" type="PackedScene" id=4]
 [ext_resource path="res://items/sets/medical/medical_set_data.tres" type="Resource" id=5]
-[ext_resource path="res://items/sets/heavy/heavy_set_data.tres" type="Resource" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/2/chuchanyi_2_effect_1.tres" type="Resource" id=7]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/emergency/emergency_set_data.tres" type="Resource" id=8]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/2/chuchanyi_2_stats.tres" type="Resource" id=9]
@@ -22,9 +21,10 @@ effects = [ ExtResource( 7 ) ]
 tracking_text = ""
 is_lockable = true
 is_cursed = false
+curse_factor = 0.0
 weapon_id = "weapon_yztato_chuchanyi"
 type = 1
-sets = [ ExtResource( 6 ), ExtResource( 5 ), ExtResource( 8 ) ]
+sets = [ ExtResource( 5 ), ExtResource( 8 ) ]
 scene = ExtResource( 4 )
 stats = ExtResource( 9 )
 upgrades_into = ExtResource( 2 )

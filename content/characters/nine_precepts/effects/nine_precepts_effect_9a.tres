@@ -21,4 +21,4 @@ sound_db_mod = -10
 stats = ExtResource( 2 )
 tracking_key = ""
 scale_with_missing_health = false
-hp_threshold = 20
+hp_threshold = 35
