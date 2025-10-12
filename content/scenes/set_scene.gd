@@ -7,16 +7,26 @@ onready var UnlockDifficulties = $"%UnlockDifficulties" as CheckButton
 onready var UnlockAllChars = $"%UnlockAllChars" as CheckButton
 onready var UnlockAllChallenges = $"%UnlockAllChallenges" as CheckButton
 onready var OptimizePickUp = $"%OptimizePickUp" as CheckButton
+onready var StartingWeapons = $"%StartingWeapons" as CheckButton
+
+onready var StartingItems = $"%StartingItems" as CheckButton
+onready var SetStartingItemsTimes = $"%SetStartingItemsTimes" as HBoxContainer
 
 onready var RainbowGold = $"%RainbowGold" as OptionButton
-var colors_names: Array = ["YZ_EMPTY", "YZ_EXLIGHT", "YZ_LIGHT", "YZ_MEDIUM", "YZ_DARK", "YZ_EXDARK"]
+var colors_names: Array = [
 
-onready var SetWeaponTransparency = $"%SetWeaponTransparency"
-onready var SetEnemyTransparency = $"%SetEnemyTransparency"
-onready var SetEnemyProjTransparency = $"%SetEnemyProjTransparency"
-onready var SetGoldTransparency = $"%SetGoldTransparency"
-onready var SetConsumableTransparency = $"%SetConsumableTransparency"
+	"YZ_EMPTY", "YZ_EXLIGHT", "YZ_LIGHT", 
+	"YZ_MEDIUM", "YZ_DARK", "YZ_EXDARK"
+	
+]
 
+onready var SetWeaponTransparency = $"%SetWeaponTransparency" as HBoxContainer
+onready var SetEnemyTransparency = $"%SetEnemyTransparency" as HBoxContainer
+onready var SetEnemyProjTransparency = $"%SetEnemyProjTransparency" as HBoxContainer
+onready var SetGoldTransparency = $"%SetGoldTransparency" as HBoxContainer
+onready var SetConsumableTransparency = $"%SetConsumableTransparency" as HBoxContainer
+
+# =========================== Init =========================== #
 func init()->void :
 	$BackButton.grab_focus()
 	init_values_from_progress_data()
@@ -27,7 +37,11 @@ func init_values_from_progress_data() -> void:
 	UnlockAllChars.pressed = ProgressData.settings.yztato_unlock_all_chars
 	UnlockAllChallenges.pressed = ProgressData.settings.yztato_unlock_all_challenges
 	OptimizePickUp.pressed = ProgressData.settings.yztato_optimize_pickup
-
+	StartingWeapons.pressed = ProgressData.settings.yztato_starting_weapons
+	StartingItems.pressed = ProgressData.settings.yztato_starting_items
+	
+	SetStartingItemsTimes.set_value(ProgressData.settings.yztato_starting_items_times)
+	
 	RainbowGold.select(colors_names.find(ProgressData.settings.yztato_rainbow_gold))
 
 	SetWeaponTransparency.set_value(ProgressData.settings.yztato_set_weapon_transparency)
@@ -43,13 +57,12 @@ func _on_BackButton_pressed():
 func _on_MenuYztatoSetOptions_hide():
 	ProgressData.save()
 
-# =========================== Check =========================== #
+# =========================== Load =========================== #
 func _on_ItemAppearancesHide_toggled(button_pressed: bool):
 	ProgressData.settings.item_appearances_hide = button_pressed
 
 func _on_UnlockDifficulties_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_difficulties = button_pressed
-
 
 func _on_UnlockAllChars_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_all_chars = button_pressed
@@ -60,11 +73,18 @@ func _on_UnlockAllChallenges_toggled(button_pressed: bool):
 func _on_OptimizePickUp_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_optimize_pickup = button_pressed
 
-# =========================== Option =========================== #
+func _on_StartingWeapons_toggled(button_pressed: bool) -> void:
+	ProgressData.settings.yztato_starting_weapons = button_pressed
+
+func _on_StartingItems_toggled(button_pressed: bool) -> void:
+	ProgressData.settings.yztato_starting_items = button_pressed
+
+func _on_SetStartingItemsTimes_value_changed(value) -> void:
+	ProgressData.settings.yztato_starting_items_times = value
+
 func _on_RainbowGold_item_selected(index: int):
 	ProgressData.settings.yztato_rainbow_gold = colors_names[index]
 
-# =========================== Slider =========================== #
 func _on_SetWeaponTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_weapon_transparency = value
 

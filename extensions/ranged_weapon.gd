@@ -138,7 +138,7 @@ func _yztato_boomerang_shoot() -> void:
 
 func _yztato_boomerang_ready() -> void:
 	for effect in effects:
-		if effect is ProgressData.Yztato.Boomerang._Effect:
+		if effect.get_id() == "yztato_boomerang_weapon":
 			is_boomerang = true
 			max_damage_mul = effect.max_damage_mul
 			knockback_only_back = effect.knockback_only_back
@@ -154,13 +154,13 @@ func _yztato_leave_fire_ready() -> void:
 
 func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
 	for fire in effects:
-		if fire is ProgressData.Yztato.LeaveFire._Effect:
-			var new_fire = _burning_particles_manager.get_burning_particle()
-			if new_fire != null:
-				call_deferred("yz_activate_burning_particle", new_fire,
-				thing_hit.global_position, thing_hit._burning,
-				fire.scale, fire.duration)
-				return
+		if fire.get_id() != "yztato_leave_fire": continue
+		var new_fire = _burning_particles_manager.get_burning_particle()
+		if new_fire == null: return
+		call_deferred("yz_activate_burning_particle", new_fire,
+		thing_hit.global_position, thing_hit._burning,
+		fire.scale, fire.duration)
+		return
 
 	var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
 	if !effect_leave_fire.empty():
@@ -177,7 +177,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 		var effect = effects[effect_index]
 		effect_single_kill_count[effect_index] = effect_single_kill_count.get(effect_index, kill_count[weapon_id] - 1) + 1
 		
-		if effect is ProgressData.Yztato.GainStatWhenKilledSingleScaling._Effect and \
+		if effect.get_id() == "yztato_gain_stat_when_killed_single_scaling" and \
 		   effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
 			RunData.add_stat(effect.stat, effect.stat_nb, player_index)
 
@@ -185,7 +185,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
 	for effect in effects:
-		if effect is ProgressData.Yztato.MultiHit._Effect:
+		if effect.get_id() == "yztato_multi_hit":
 			for _i in range(effect.value):
 				var args = TakeDamageArgs.new(player_index)
 				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
@@ -202,7 +202,7 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 	for effect in effects:
-		if effect is ProgressData.Yztato.VineTrap._Effect:
+		if effect.get_id() == "yztato_vine_trap":
 			var count = effect.trap_count as int
 			var chance = effect.chance as int
 
@@ -231,7 +231,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
 	if should_shoot: for effect in effects:
-		if effect is ProgressData.Yztato.CanAttackWhileMoving._Effect:
+		if effect.get_id() == "yztato_can_attack_while_moving":
 			should_shoot = false or _parent._current_movement == Vector2.ZERO
 
 	return should_shoot

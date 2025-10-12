@@ -177,3 +177,7 @@ EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,When refreshing the store，there is a {2}c
 CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
 YZCURSED,Cursed: {0},已诅咒：{0}
+YZ_STARTING_WEAPONS,Any Starting Weapon,开局任选武器
+YZ_STARTING_ITEMS,Any Starting Items,开局任选道具
+YZ_STARTING_ITEMS_TIMES,Starting Items' Number,可选道具数
+ITEM_SELECTION,Item Selection,道具选择

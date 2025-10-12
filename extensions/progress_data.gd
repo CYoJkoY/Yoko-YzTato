@@ -72,9 +72,13 @@ func init_yztato_set_options() -> Dictionary:
 		"yztato_unlock_all_challenges": false,
 		"yztato_optimize_end_waves": true,
 		"yztato_optimize_pickup": true,
+		"yztato_starting_weapons": false,
+		"yztato_starting_items": false,
 		
 		"yztato_rainbow_gold": "YZ_EMPTY",
 		
+		"yztato_starting_items_times": 1,
+
 		"yztato_set_weapon_transparency": 1.0,
 		"yztato_set_enemy_transparency": 1.0,
 		"yztato_set_enemy_proj_transparency": 1.0,

@@ -1,7 +1,7 @@
 extends "res://ui/menus/run/difficulty_selection/difficulty_selection.gd"
 
 # =========================== Extention =========================== #
-func _get_unlocked_elements(_player_index: int)->Array:
+func _get_unlocked_elements(_player_index: int) -> Array:
 	var unlocked_difficulties = ._get_unlocked_elements(_player_index)
 	unlocked_difficulties = _yztato_unlock_difficulties(unlocked_difficulties)
 
@@ -46,7 +46,8 @@ func _yztato_unlock_difficulties(unlocked_difficulties: Array) -> Array:
 						var zone_diff_info = ZoneDifficultyInfo.new(zone.my_id)
 						zone_diff_info.max_selectable_difficulty = ProgressData.MAX_DIFFICULTY
 						existing_char_diff_info.zones_difficulty_info.push_back(zone_diff_info)
-					else: existing_zone_diff_info.max_selectable_difficulty = ProgressData.MAX_DIFFICULTY
+					else: 
+						existing_zone_diff_info.max_selectable_difficulty = ProgressData.MAX_DIFFICULTY
 				
 				# Add all difficulties
 				for diff in ItemService.difficulties:

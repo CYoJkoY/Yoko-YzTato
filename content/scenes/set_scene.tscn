@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/scenes/set_scene.gd" type="Script" id=1]
 [ext_resource path="res://ui/menus/global/my_menu_button.gd" type="Script" id=2]
@@ -7,6 +7,7 @@
 [ext_resource path="res://resources/themes/button_styles/button_hover.tres" type="StyleBox" id=5]
 [ext_resource path="res://ui/menus/global/slider_option.tscn" type="PackedScene" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/scenes/RainbowGoldButton.gd" type="Script" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/scenes/number_slider_option.gd" type="Script" id=8]
 
 [node name="MenuYztatoSetOptions" type="VBoxContainer"]
 anchor_left = 0.031
@@ -88,10 +89,66 @@ custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
 text = "YZ_OPTIMIZE_PICK_UP"
 
-[node name="RainbowGold" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="StartingWeapons" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 419.0
 margin_right = 1800.0
-margin_bottom = 484.0
+margin_bottom = 489.0
+focus_neighbour_top = NodePath("../../../BackButton")
+custom_fonts/font = ExtResource( 4 )
+custom_styles/hover_pressed = ExtResource( 5 )
+text = "YZ_STARTING_WEAPONS"
+
+[node name="StartingItems" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+margin_top = 493.0
+margin_right = 1800.0
+margin_bottom = 563.0
+focus_neighbour_top = NodePath("../../../BackButton")
+custom_fonts/font = ExtResource( 4 )
+custom_styles/hover_pressed = ExtResource( 5 )
+text = "YZ_STARTING_ITEMS"
+
+[node name="SetStartingItemsTimes" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
+unique_name_in_owner = true
+margin_top = 567.0
+margin_right = 1800.0
+margin_bottom = 612.0
+custom_constants/separation = 20
+script = ExtResource( 8 )
+
+[node name="Label" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="0"]
+margin_top = 0.0
+margin_right = 543.0
+margin_bottom = 45.0
+text = "YZ_STARTING_ITEMS_TIMES"
+
+[node name="Control" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="1"]
+margin_left = 563.0
+margin_right = 720.0
+margin_bottom = 45.0
+
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="2"]
+margin_left = 740.0
+margin_right = 1690.0
+margin_bottom = 45.0
+rect_min_size = Vector2( 950, 0 )
+min_value = 1.0
+max_value = 100.0
+step = 1.0
+value = 1.0
+
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="3"]
+margin_left = 1710.0
+margin_top = 0.0
+margin_right = 1800.0
+margin_bottom = 45.0
+text = "1"
+
+[node name="RainbowGold" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+margin_top = 616.0
+margin_right = 1800.0
+margin_bottom = 681.0
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/RainbowGold"]
 margin_top = 10.0
@@ -120,9 +177,9 @@ rect_min_size = Vector2( 100, 0 )
 
 [node name="SetWeaponTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 488.0
+margin_top = 685.0
 margin_right = 1800.0
-margin_bottom = 533.0
+margin_bottom = 730.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="0"]
@@ -152,9 +209,9 @@ margin_bottom = 45.0
 
 [node name="SetEnemyTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 537.0
+margin_top = 734.0
 margin_right = 1800.0
-margin_bottom = 582.0
+margin_bottom = 779.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="0"]
@@ -184,9 +241,9 @@ margin_bottom = 45.0
 
 [node name="SetEnemyProjTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 586.0
+margin_top = 783.0
 margin_right = 1800.0
-margin_bottom = 631.0
+margin_bottom = 828.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="0"]
@@ -216,9 +273,9 @@ margin_bottom = 45.0
 
 [node name="SetGoldTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 635.0
+margin_top = 832.0
 margin_right = 1800.0
-margin_bottom = 680.0
+margin_bottom = 877.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="0"]
@@ -248,9 +305,9 @@ margin_bottom = 45.0
 
 [node name="SetConsumableTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 684.0
+margin_top = 881.0
 margin_right = 1800.0
-margin_bottom = 729.0
+margin_bottom = 926.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="0"]
@@ -293,6 +350,9 @@ script = ExtResource( 2 )
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/UnlockAllChars" to="." method="_on_UnlockAllChars_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/UnlockAllChallenges" to="." method="_on_UnlockAllChallenges_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/OptimizePickUp" to="." method="_on_OptimizePickUp_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/StartingWeapons" to="." method="_on_StartingWeapons_toggled"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/StartingItems" to="." method="_on_StartingItems_toggled"]
+[connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetStartingItemsTimes" to="." method="_on_SetStartingItemsTimes_value_changed"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/RainbowGold/RainbowGold" to="." method="_on_RainbowGold_item_selected"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetWeaponTransparency" to="." method="_on_SetWeaponTransparency_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetEnemyTransparency" to="." method="_on_SetEnemyTransparency_value_changed"]
@@ -301,6 +361,7 @@ script = ExtResource( 2 )
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetConsumableTransparency" to="." method="_on_SetConsumableTransparency_value_changed"]
 [connection signal="pressed" from="BackButton" to="." method="_on_BackButton_pressed"]
 
+[editable path="ScrollContainer/VBoxContainer/SetStartingItemsTimes"]
 [editable path="ScrollContainer/VBoxContainer/SetWeaponTransparency"]
 [editable path="ScrollContainer/VBoxContainer/SetEnemyTransparency"]
 [editable path="ScrollContainer/VBoxContainer/SetEnemyProjTransparency"]

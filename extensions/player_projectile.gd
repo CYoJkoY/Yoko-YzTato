@@ -38,11 +38,11 @@ func _set_ticks_until_max_range() -> void:
 # =========================== Custom =========================== #
 func _yztato_chimera_on_Hitbox_hit_something(effects: Array) -> void:
 	for effect in effects:
-		if !(effect is ProgressData.Yztato.Chimera._Effect): continue
+		if effect.get_id() != "yztato_chimera_weapon": continue
 			
 		var chimera_texture_sets = effect.chimera_texture_sets
 		var texture = sprite_node.texture
-		if not texture: continue
+		if texture == null: return
 			
 		for texture_data in chimera_texture_sets:
 			if texture.resource_path != texture_data.texture.resource_path: continue
@@ -52,7 +52,7 @@ func _yztato_chimera_on_Hitbox_hit_something(effects: Array) -> void:
 
 func _yztato_boomerang_set_ticks_until_max_range(effects: Array) -> bool:
 	for effect in effects:
-		if !(effect is ProgressData.Yztato.Boomerang._Effect): continue
+		if effect.get_id() != "yztato_boomerang_weapon": continue
 
 		_time_until_max_range = Utils.LARGE_NUMBER
 		player_node = _hitbox.from

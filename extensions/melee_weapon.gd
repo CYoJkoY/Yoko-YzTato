@@ -103,7 +103,7 @@ func _yztato_melee_erase()-> void:
 				node_hit_box.connect("area_entered",self,"yz_on_Hitbox_area_entered_erase")
 
 	for effect in effects:
-		if effect is ProgressData.Yztato.MeleeEffect.EraseEffect:
+		if effect.get_id() == "yztato_melee_erase":
 			var node_range = get_node("Range")
 			var node_hit_box = get_node("Sprite").get_node("Hitbox")
 			node_range.collision_mask = Utils.NEUTRAL_BIT + Utils.ENEMIES_BIT + Utils.ENEMY_PROJECTILES_BIT
@@ -133,7 +133,7 @@ func _yztato_melee_bounce()-> void:
 				node_hit_box.connect("area_entered",self,"yz_on_Hitbox_area_entered_bounce", [melee_bounce, node_hit_box, "character"])
 
 	for effect in effects:
-		if effect is ProgressData.Yztato.MeleeEffect.BounceEffect:
+		if effect.get_id() == "yztato_melee_bounce":
 			var node_range = get_node("Range")
 			var node_hit_box = get_node("Sprite").get_node("Hitbox")
 			node_range.collision_mask = Utils.NEUTRAL_BIT + Utils.ENEMIES_BIT + Utils.ENEMY_PROJECTILES_BIT
@@ -198,13 +198,13 @@ func _yztato_leave_fire_ready() -> void:
 
 func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
 	for fire in effects:
-		if fire is ProgressData.Yztato.LeaveFire._Effect:
-			var new_fire = _burning_particles_manager.get_burning_particle()
-			if new_fire != null:
-				call_deferred("yz_activate_burning_particle", new_fire,
-				thing_hit.global_position, thing_hit._burning,
-				fire.scale, fire.duration)
-				return
+		if fire.get_id() != "yztato_leave_fire": continue
+		var new_fire = _burning_particles_manager.get_burning_particle()
+		if new_fire == null: return
+		call_deferred("yz_activate_burning_particle", new_fire,
+		thing_hit.global_position, thing_hit._burning,
+		fire.scale, fire.duration)
+		return
 
 	var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
 	if !effect_leave_fire.empty():
@@ -221,7 +221,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 		var effect = effects[effect_index]
 		effect_single_kill_count[effect_index] = effect_single_kill_count.get(effect_index, kill_count[weapon_id] - 1) + 1
 		
-		if effect is ProgressData.Yztato.GainStatWhenKilledSingleScaling._Effect and \
+		if effect.get_id() == "yztato_gain_stat_when_killed_single_scaling" and \
 		   effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
 			RunData.add_stat(effect.stat, effect.stat_nb, player_index)
 
@@ -229,7 +229,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
 	for effect in effects:
-		if effect is ProgressData.Yztato.MultiHit._Effect:
+		if effect.get_id() == "yztato_multi_hit":
 			for _i in range(effect.value):
 				var args = TakeDamageArgs.new(player_index)
 				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
@@ -246,7 +246,7 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 	for effect in effects:
-		if effect is ProgressData.Yztato.VineTrap._Effect:
+		if effect.get_id() == "yztato_vine_trap":
 			var count = effect.trap_count as int
 			var chance = effect.chance as float / 100.0
 
@@ -275,7 +275,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
 	if should_shoot: for effect in effects:
-		if effect is ProgressData.Yztato.CanAttackWhileMoving._Effect:
+		if effect.get_id() == "yztato_can_attack_while_moving":
 			should_shoot = false or _parent._current_movement == Vector2.ZERO
 
 	return should_shoot
@@ -370,12 +370,11 @@ func yz_delete_projectile(proj: Projectile)->void :
 
 func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
 	var flying_sword: Array = RunData.get_player_effect("yztato_flying_sword", player_index)
-	if flying_sword.size() == 0:
-		return
+	if flying_sword.empty(): return
 
 	for flying in flying_sword:
-		if (flying[0] == "attack_limit" or flying[0] == "sword_array_limit") and current_stats.damage <= flying[1]:
-			return
+		if (flying[0] == "attack_limit" or flying[0] == "sword_array_limit") \
+		and current_stats.damage <= flying[1]: return
 
 	_hitbox.ignored_objects.erase(thing_hit)
 
@@ -438,7 +437,8 @@ func yz_process_sword_array_mode(player_level: int) -> bool:
 		for target in projectiles_to_spawn:
 			yz_create_sword_projectile(target)
 
-		_current_cooldown = current_stats.cooldown * 2
+		_current_cooldown = get_next_cooldown() * 2.5
+		print(_current_cooldown)
 
 	yz_perform_idle_movement()
 	return true
@@ -482,9 +482,18 @@ func yz_move_to_target(target: Node, speed: float):
 
 func yz_return_to_player(target: Node):
 	if global_position.distance_to(target.position) > 4:
+		var direction: Vector2 = (_parent.position - global_position).normalized()
+		var speed: float = 10.0
+		var new_position: Vector2 = global_position + direction * speed
+		
+		if global_position.distance_to(_parent.position) <= 16:
+			has_attacked_target = false
+			yz_perform_idle_movement()
+		else:
+			global_position = new_position
+	else:
 		has_attacked_target = false
-	
-	yz_perform_idle_movement()
+		yz_perform_idle_movement()
 
 func yz_create_sword_projectile(target: Node):
 	var sword_array_stats: Resource = ProgressData.Yztato.YzProjectile.Stats.duplicate()
