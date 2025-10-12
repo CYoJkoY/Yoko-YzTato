@@ -537,7 +537,7 @@ func yz_perform_idle_movement():
 	# The Difference Between PlayerNode And WeaponsNode
 	global_position = Vector2(_parent.position.x + offset_x, _parent.position.y + offset_y - 24)
 
-func _activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
+func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
 	if particle != null and particle.has_method("activate"):
 		particle.activate(position, burning_data)
 		particle.rescale(scale)

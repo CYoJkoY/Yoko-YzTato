@@ -38,12 +38,6 @@ func init_settings()->void :
 	.init_settings()
 	settings.merge(init_yztato_set_options())
 
-func is_manual_aim(player_index: int)-> bool:
-	var Adjust = .is_manual_aim(player_index)
-	Adjust = _yztato_blade_storm_manual_aim(Adjust,player_index)
-
-	return Adjust
-
 # =========================== Custom =========================== #
 func _yztato_ready() -> void:
 	var yztato_data = load("res://mods-unpacked/Yoko-YzTato/content_data/YzTato_content_New.tres")
@@ -57,12 +51,6 @@ func _yztato_ready() -> void:
 	set_max_selectable_difficulty()
 
 	Yztato = get_node("/root/ModLoader/Yoko-YzTato/Yztato")
-
-func _yztato_blade_storm_manual_aim(Adjust: bool, player_index: int)-> bool:
-	var blade_storm = RunData.get_player_effect("yztato_blade_storm",player_index)
-	if blade_storm.size() > 0:
-		return false
-	return Adjust
 
 func init_yztato_set_options() -> Dictionary:
 	return {
@@ -85,10 +73,3 @@ func init_yztato_set_options() -> Dictionary:
 		"yztato_set_gold_transparency": 1.0,
 		"yztato_set_consumable_transparency": 1.0,
 	}
-
-# =========================== Method =========================== #
-func is_string_contained(array_of_strings: Array, target_string: String) -> bool:
-	for s in array_of_strings:
-		if s in target_string:
-			return true
-	return false

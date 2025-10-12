@@ -75,10 +75,12 @@ func _init():
 		"item_service.gd",
 		# EFFECTS : weapon_set_filter, weapon_set_delete, force_curse_items
 		# Weapon Banned
-
+		
+		"utils.gd",
+		# EFFECTS : blade_storm[ 3/4 ]
+		
 		"progress_data.gd",
 		# Mod's Contents
-		# EFFECTS : blade_storm[ 3/4 ]
 		# SETTINGS
 
 		"run_data.gd",
@@ -142,7 +144,7 @@ func _init():
 
 		"wave_manager.gd",
 		# EFFECTS : extra_enemies_next_waves
-
+		
 	]
 
 	var extensions2: Array = [

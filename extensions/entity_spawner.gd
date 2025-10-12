@@ -82,7 +82,8 @@ func _yztato_gain_random_primary_stat_on_enemy_died()-> void:
 
 func _yztato_chal_on_enemy_charmed(charmed_enemies: Array)-> void:
 	### dark_forest_rule ###
-	ChallengeService.try_complete_challenge("chal_dark_forest", charmed_enemies.size())
+	print(charmed_enemies.size())
+	ChallengeService.try_complete_challenge("chal_dark_forest_rule", charmed_enemies.size())
 
 func _yztato_chal_on_enemy_died(enemy: Entity)-> void:
 	### hellfire ###
