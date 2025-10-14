@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "stat_lifesteal"
+key = "number_of_enemies"
 text_key = ""
-value = 20
+value = 200
 custom_key = ""
 storage_method = 0
-effect_sign = 3
+effect_sign = 1
 custom_args = [  ]

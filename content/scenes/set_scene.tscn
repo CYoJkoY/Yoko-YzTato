@@ -39,7 +39,7 @@ rect_min_size = Vector2( 1800, 0 )
 text = "MENU_YZTATO_SET"
 align = 1
 
-[node name="ItemAppearancesHide" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="UnlockDifficulties" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 49.0
 margin_right = 1800.0
@@ -47,9 +47,9 @@ margin_bottom = 119.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_ITEM_APPEARANCES_HIDE"
+text = "YZ_UNLOCK_DIFFICULTIES"
 
-[node name="UnlockDifficulties" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="UnlockAllChars" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 123.0
 margin_right = 1800.0
@@ -57,9 +57,9 @@ margin_bottom = 193.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_UNLOCK_DIFFICULTIES"
+text = "YZ_UNLOCK_ALL_CHARS"
 
-[node name="UnlockAllChars" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="UnlockAllChallenges" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 197.0
 margin_right = 1800.0
@@ -67,9 +67,9 @@ margin_bottom = 267.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_UNLOCK_ALL_CHARS"
+text = "YZ_UNLOCK_ALL_CHALLENGES"
 
-[node name="UnlockAllChallenges" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="OptimizePickUp" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 271.0
 margin_right = 1800.0
@@ -77,9 +77,9 @@ margin_bottom = 341.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_UNLOCK_ALL_CHALLENGES"
+text = "YZ_OPTIMIZE_PICK_UP"
 
-[node name="OptimizePickUp" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="StartingWeapons" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 345.0
 margin_right = 1800.0
@@ -87,9 +87,9 @@ margin_bottom = 415.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_OPTIMIZE_PICK_UP"
+text = "YZ_STARTING_WEAPONS"
 
-[node name="StartingWeapons" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+[node name="StartingItems" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
 unique_name_in_owner = true
 margin_top = 419.0
 margin_right = 1800.0
@@ -97,38 +97,23 @@ margin_bottom = 489.0
 focus_neighbour_top = NodePath("../../../BackButton")
 custom_fonts/font = ExtResource( 4 )
 custom_styles/hover_pressed = ExtResource( 5 )
-text = "YZ_STARTING_WEAPONS"
-
-[node name="StartingItems" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
-unique_name_in_owner = true
-margin_top = 493.0
-margin_right = 1800.0
-margin_bottom = 563.0
-focus_neighbour_top = NodePath("../../../BackButton")
-custom_fonts/font = ExtResource( 4 )
-custom_styles/hover_pressed = ExtResource( 5 )
 text = "YZ_STARTING_ITEMS"
 
 [node name="SetStartingItemsTimes" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 567.0
+margin_top = 493.0
 margin_right = 1800.0
-margin_bottom = 612.0
+margin_bottom = 538.0
 custom_constants/separation = 20
 script = ExtResource( 8 )
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="0"]
 margin_top = 0.0
-margin_right = 543.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_STARTING_ITEMS_TIMES"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="1"]
-margin_left = 563.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -138,7 +123,7 @@ max_value = 100.0
 step = 1.0
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetStartingItemsTimes" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -146,9 +131,9 @@ margin_bottom = 45.0
 text = "1"
 
 [node name="RainbowGold" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
-margin_top = 616.0
+margin_top = 542.0
 margin_right = 1800.0
-margin_bottom = 681.0
+margin_bottom = 607.0
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/RainbowGold"]
 margin_top = 10.0
@@ -158,13 +143,13 @@ text = "YZ_RAINBOW_GOLD"
 
 [node name="EmptySpace" type="Control" parent="ScrollContainer/VBoxContainer/RainbowGold"]
 margin_left = 382.0
-margin_right = 1620.0
+margin_right = 1628.0
 margin_bottom = 65.0
 size_flags_horizontal = 3
 
 [node name="RainbowGold" type="OptionButton" parent="ScrollContainer/VBoxContainer/RainbowGold"]
 unique_name_in_owner = true
-margin_left = 1624.0
+margin_left = 1632.0
 margin_right = 1696.0
 margin_bottom = 65.0
 script = ExtResource( 7 )
@@ -177,23 +162,18 @@ rect_min_size = Vector2( 100, 0 )
 
 [node name="SetWeaponTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 685.0
+margin_top = 611.0
 margin_right = 1800.0
-margin_bottom = 730.0
+margin_bottom = 656.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="0"]
 margin_top = 0.0
-margin_right = 572.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_WEAPON_TRANSPARENCY"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="1"]
-margin_left = 592.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -201,7 +181,7 @@ rect_min_size = Vector2( 950, 0 )
 step = 0.01
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -209,23 +189,18 @@ margin_bottom = 45.0
 
 [node name="SetEnemyTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 734.0
+margin_top = 660.0
 margin_right = 1800.0
-margin_bottom = 779.0
+margin_bottom = 705.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="0"]
 margin_top = 0.0
-margin_right = 537.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_ENEMY_TRANSPARENCY"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="1"]
-margin_left = 557.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -233,7 +208,7 @@ rect_min_size = Vector2( 950, 0 )
 step = 0.01
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -241,23 +216,18 @@ margin_bottom = 45.0
 
 [node name="SetEnemyProjTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 783.0
+margin_top = 709.0
 margin_right = 1800.0
-margin_bottom = 828.0
+margin_bottom = 754.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="0"]
 margin_top = 0.0
-margin_right = 662.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_ENEMY_PROJ_TRANSPARENCY"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="1"]
-margin_left = 682.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -265,7 +235,7 @@ rect_min_size = Vector2( 950, 0 )
 step = 0.01
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -273,23 +243,18 @@ margin_bottom = 45.0
 
 [node name="SetGoldTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 832.0
+margin_top = 758.0
 margin_right = 1800.0
-margin_bottom = 877.0
+margin_bottom = 803.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="0"]
 margin_top = 0.0
-margin_right = 503.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_GOLD_TRANSPARENCY"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="1"]
-margin_left = 523.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -297,7 +262,7 @@ rect_min_size = Vector2( 950, 0 )
 step = 0.01
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -305,23 +270,18 @@ margin_bottom = 45.0
 
 [node name="SetConsumableTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 881.0
+margin_top = 807.0
 margin_right = 1800.0
-margin_bottom = 926.0
+margin_bottom = 852.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="0"]
 margin_top = 0.0
-margin_right = 666.0
+margin_right = 720.0
 margin_bottom = 45.0
 text = "YZ_CONSUMABLE_TRANSPARENCY"
 
-[node name="Control" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="1"]
-margin_left = 686.0
-margin_right = 720.0
-margin_bottom = 45.0
-
-[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="2"]
+[node name="HSlider" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="1"]
 margin_left = 740.0
 margin_right = 1690.0
 margin_bottom = 45.0
@@ -329,7 +289,7 @@ rect_min_size = Vector2( 950, 0 )
 step = 0.01
 value = 1.0
 
-[node name="Value" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="3"]
+[node name="Value" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="2"]
 margin_left = 1710.0
 margin_top = 0.0
 margin_right = 1800.0
@@ -345,7 +305,6 @@ text = "MENU_BACK"
 script = ExtResource( 2 )
 
 [connection signal="hide" from="." to="." method="_on_MenuYztatoSetOptions_hide"]
-[connection signal="toggled" from="ScrollContainer/VBoxContainer/ItemAppearancesHide" to="." method="_on_ItemAppearancesHide_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/UnlockDifficulties" to="." method="_on_UnlockDifficulties_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/UnlockAllChars" to="." method="_on_UnlockAllChars_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/UnlockAllChallenges" to="." method="_on_UnlockAllChallenges_toggled"]

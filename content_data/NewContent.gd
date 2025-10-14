@@ -3,6 +3,7 @@ extends Resource
 # ItemService
 export (Array, Resource) var backgrounds = null
 export (Array, Resource) var characters = null
+export (Array, Resource) var enemies = null
 export (Array, Resource) var elites = null
 export (Array, Resource) var bosses = null
 export (Array, Resource) var stats = null
@@ -23,10 +24,15 @@ export (Array, Resource) var challenges = null
 export (Array, Resource) var zones = null
 
 # RunData
-export (Dictionary) var tracked_items
+export (Dictionary) var tracked_items = null
+
+# Text
+export (Dictionary) var translation_keys_needing_operator = null
+export (Dictionary) var translation_keys_needing_percent = null
 
 func add_resources() -> void:
 	add_if_not_null(ItemService.characters, characters)
+	add_if_not_null(ItemService.enemies, enemies)
 	add_if_not_null(ItemService.elites, elites)
 	add_if_not_null(ItemService.bosses, bosses)
 	add_if_not_null(ItemService.stats, stats)
@@ -61,6 +67,12 @@ func add_resources() -> void:
 
 	if zones != null: 
 		ZoneService.zones.append_array(zones)
+	
+	if translation_keys_needing_operator != null:
+		Text.keys_needing_operator.merge(translation_keys_needing_operator)
+	
+	if translation_keys_needing_percent != null:
+		Text.keys_needing_percent.merge(translation_keys_needing_percent)
 	
 	if tracked_items != null: 
 		RunData.init_tracked_items.merge(tracked_items)

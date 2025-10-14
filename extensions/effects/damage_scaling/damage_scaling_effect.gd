@@ -23,7 +23,7 @@ func get_text(_player_index: int, _colored: bool = true)-> String:
 	var small_icon: Texture = ItemService.get_stat_small_icon(key)
 	var str_key: String = "%s([img=%sx%s]%s[/img])" % [tr(key.to_upper()),w, w, small_icon.resource_path]
 
-	var value_col: String = Utils.POS_COLOR_STR if value > 0 else Utils.NEG_COLOR_STR
+	var value_col: String = ProgressData.settings.color_positive if value > 0 else ProgressData.settings.color_negative
 	var value_text: String = str(value) if value > 0 else "-%s" % [str(value)]
 	var str_value: String = "[color=%s]%s[/color]" % [value_col, value_text]
 
@@ -54,7 +54,7 @@ func yz_get_scaling_stats_icon_text(p_scaling_stats: Array) -> String:
 func yz_get_scaling_stat_icon_text(stat: String, scaling: float = 1.0, show_plus_prefix: bool = true)->String:
 	var w = 15 * ProgressData.settings.font_size
 	var prefix = "+" if show_plus_prefix and scaling > 0.0 else ""
-	var color = Utils.POS_COLOR_STR if scaling > 0.0 else Utils.NEG_COLOR_STR
+	var color = ProgressData.settings.color_positive if scaling > 0.0 else ProgressData.settings.color_negative
 	var scaling_text = "[color=%s]%s%s%%[/color]" % [color, prefix, str(round(scaling * 100.0))]
 
 	var small_icon: Texture = ItemService.get_stat_small_icon(stat)

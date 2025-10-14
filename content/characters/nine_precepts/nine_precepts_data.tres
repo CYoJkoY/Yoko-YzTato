@@ -99,6 +99,7 @@
 script = ExtResource( 3 )
 my_id = "character_yztato_nine_precepts"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 1 )
 name = "CHARACTER_YZTATO_NINE_PRECEPTS"
 tier = 0
@@ -106,6 +107,7 @@ value = 1
 effects = [ ExtResource( 33 ), ExtResource( 31 ), ExtResource( 32 ), ExtResource( 38 ), ExtResource( 37 ), ExtResource( 40 ), ExtResource( 45 ), ExtResource( 44 ), ExtResource( 42 ), ExtResource( 46 ), ExtResource( 47 ), ExtResource( 48 ), ExtResource( 49 ), ExtResource( 52 ), ExtResource( 50 ), ExtResource( 51 ), ExtResource( 43 ), ExtResource( 57 ), ExtResource( 53 ), ExtResource( 54 ), ExtResource( 55 ), ExtResource( 56 ), ExtResource( 58 ), ExtResource( 60 ), ExtResource( 59 ), ExtResource( 61 ), ExtResource( 62 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = -1

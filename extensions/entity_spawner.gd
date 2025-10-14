@@ -88,4 +88,4 @@ func _yztato_chal_on_enemy_charmed(charmed_enemies: Array)-> void:
 func _yztato_chal_on_enemy_died(enemy: Entity)-> void:
 	### hellfire ###
 	if enemy._is_burning: enemies_killed_is_burning += 1
-	ChallengeService.try_complete_challenge("chal_hell_fire", enemies_killed_is_burning)
+	ChallengeService.try_complete_challenge("chal_hellfire", enemies_killed_is_burning)

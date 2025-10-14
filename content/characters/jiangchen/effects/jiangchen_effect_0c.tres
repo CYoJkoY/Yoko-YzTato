@@ -4,9 +4,9 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "number_of_enemies"
+key = "enemy_health"
 text_key = ""
-value = 200
+value = 400
 custom_key = ""
 storage_method = 0
 effect_sign = 1

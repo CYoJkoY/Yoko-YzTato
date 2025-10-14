@@ -29,24 +29,26 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/appearences/jiangchen_icon.webp" type="Texture" id=27]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/famuzhegouzhua/1/famuzhegouzhua_data.tres" type="Resource" id=28]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_2.tres" type="Resource" id=29]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_3d.tres" type="Resource" id=30]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_3c.tres" type="Resource" id=31]
 [ext_resource path="res://dlcs/dlc_1/weapons/melee/brick/1/brick_data.tres" type="Resource" id=34]
 [ext_resource path="res://dlcs/dlc_1/weapons/melee/sickle/1/sickle_data.tres" type="Resource" id=35]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_0c.tres" type="Resource" id=36]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_0d.tres" type="Resource" id=37]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/effects/jiangchen_effect_1b.tres" type="Resource" id=38]
 
 [resource]
 script = ExtResource( 12 )
 my_id = "character_yztato_jiangchen"
 unlocked_by_default = false
+can_be_looted = true
 icon = ExtResource( 27 )
 name = "CHARACTER_YZTATO_JIANGCHEN"
 tier = 0
 value = 1
-effects = [ ExtResource( 13 ), ExtResource( 6 ), ExtResource( 36 ), ExtResource( 37 ), ExtResource( 8 ), ExtResource( 38 ), ExtResource( 29 ), ExtResource( 11 ), ExtResource( 21 ), ExtResource( 31 ), ExtResource( 17 ) ]
+effects = [ ExtResource( 13 ), ExtResource( 6 ), ExtResource( 36 ), ExtResource( 8 ), ExtResource( 38 ), ExtResource( 29 ), ExtResource( 11 ), ExtResource( 21 ), ExtResource( 31 ), ExtResource( 30 ), ExtResource( 17 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = -1

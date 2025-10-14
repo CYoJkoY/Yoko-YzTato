@@ -17,6 +17,7 @@
 script = ExtResource( 1 )
 my_id = "weapon_yztato_huangwuwange_5"
 unlocked_by_default = false
+can_be_looted = true
 icon = ExtResource( 8 )
 name = "WEAPON_YZTATO_HUANGWUWANGE_1"
 tier = 0
@@ -24,6 +25,7 @@ value = 785
 effects = [ ExtResource( 6 ), ExtResource( 7 ), ExtResource( 5 ), ExtResource( 12 ), ExtResource( 11 ), ExtResource( 2 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 13.0
 weapon_id = "weapon_yztato_huangwuwange_5"

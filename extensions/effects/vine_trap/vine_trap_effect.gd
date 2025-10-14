@@ -42,8 +42,8 @@ func _yztato_vine_trap_get_text(player_index: int) -> String:
 	var attack_speed: String = str(round(stats.cooldown / 60.0 * 100.0) / 100.0)
 	var enemy_speed: int = stats.speed_percent_modifier
 	var str_enemy_speed: String = str(enemy_speed)
-	if enemy_speed < 0: str_enemy_speed = "[color="+ Utils.POS_COLOR_STR +"]" + str(enemy_speed) + "%[/color]"
-	elif enemy_speed > 0: str_enemy_speed = "[color="+ Utils.NEG_COLOR_STR +"]" + str(enemy_speed) + "%[/color]"
+	if enemy_speed < 0: str_enemy_speed = "[color="+ ProgressData.settings.color_positive +"]" + str(enemy_speed) + "%[/color]"
+	elif enemy_speed > 0: str_enemy_speed = "[color="+ ProgressData.settings.color_negative +"]" + str(enemy_speed) + "%[/color]"
 	
 	var text = Text.text("EFFECT_YZTATO_VINE_TRAP_FRONT", [str(trap_count), str(chance), attack_speed, str_enemy_speed])
 	text = text + get_trap_damage_text(stats, player_index)
@@ -88,9 +88,9 @@ func get_dmg_text_with_scaling_stats(damage: int, p_scaling_stats: Array, base_d
 	return text
 
 func get_signed_col_a(value: float, base_value: float) -> String:
-	var col_pos_a = "[color="+ Utils.POS_COLOR_STR +"]"
+	var col_pos_a = "[color="+ ProgressData.settings.color_positive +"]"
 	var col_neutral_a = "[color=white]"
-	var col_neg_a = "[color="+ Utils.NEG_COLOR_STR +"]"
+	var col_neg_a = "[color="+ ProgressData.settings.color_negative +"]"
 	if value > base_value: return col_pos_a
 	elif value == base_value: return col_neutral_a
 	else: return col_neg_a

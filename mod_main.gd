@@ -85,7 +85,7 @@ func _init():
 
 		"run_data.gd",
 		# EFFECTS : lifesteal[ 2/2 ]
-		# SETTING : item_appearances_hide, unlock_all_challenges
+		# SETTING : unlock_all_challenges
 		# Tracked Items
 
 		"sound_manager.gd",
@@ -103,10 +103,10 @@ func _init():
 		"upgrades_ui.gd",
 		# EFFECTS : extra_upgrade
 
-		"menus.gd",
+		"title_screen_menus.gd",
 		# SETTINGS[ 1/2 ]
 
-		"menu_choose_options.gd",
+		"main_menu.gd",
 		# SETTINGS[ 2/2 ]
 
 		"character_selection.gd",

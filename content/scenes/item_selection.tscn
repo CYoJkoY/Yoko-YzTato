@@ -184,11 +184,17 @@ margin_bottom = 116.0
 
 [node name="ScrollContainer" parent="MarginContainer/VBoxContainer/DescriptionContainer/CharacterPanel/MarginContainer/VBoxContainer/ItemDescription" index="2"]
 margin_top = 116.0
-margin_bottom = 461.0
+margin_bottom = 462.0
 rect_min_size = Vector2( 0, 345 )
 
 [node name="VBoxContainer" parent="MarginContainer/VBoxContainer/DescriptionContainer/CharacterPanel/MarginContainer/VBoxContainer/ItemDescription/ScrollContainer" index="0"]
-margin_bottom = 345.0
+margin_bottom = 346.0
+
+[node name="Effects_scrolled" parent="MarginContainer/VBoxContainer/DescriptionContainer/CharacterPanel/MarginContainer/VBoxContainer/ItemDescription/ScrollContainer/VBoxContainer" index="2"]
+margin_bottom = 346.0
+
+[node name="random_icon_container" parent="MarginContainer/VBoxContainer/DescriptionContainer/CharacterPanel" index="2"]
+margin_bottom = 495.0
 
 [node name="Panels" type="HBoxContainer" parent="MarginContainer/VBoxContainer/DescriptionContainer"]
 margin_left = 427.0

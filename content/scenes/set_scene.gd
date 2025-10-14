@@ -2,7 +2,8 @@ extends Control
 
 signal back_button_pressed
 
-onready var ItemAppearancesHideButton = $"%ItemAppearancesHide" as CheckButton
+onready var focus_before_created: Control = get_focus_owner()
+
 onready var UnlockDifficulties = $"%UnlockDifficulties" as CheckButton
 onready var UnlockAllChars = $"%UnlockAllChars" as CheckButton
 onready var UnlockAllChallenges = $"%UnlockAllChallenges" as CheckButton
@@ -28,11 +29,17 @@ onready var SetConsumableTransparency = $"%SetConsumableTransparency" as HBoxCon
 
 # =========================== Init =========================== #
 func init()->void :
+	focus_before_created = get_focus_owner()
+
 	$BackButton.grab_focus()
+
 	init_values_from_progress_data()
 
+func _input(event):
+	if self.visible and event.is_action_pressed("ui_cancel"):
+		_on_BackButton_pressed()
+
 func init_values_from_progress_data() -> void:
-	ItemAppearancesHideButton.pressed = ProgressData.settings.item_appearances_hide
 	UnlockDifficulties.pressed = ProgressData.settings.yztato_unlock_difficulties
 	UnlockAllChars.pressed = ProgressData.settings.yztato_unlock_all_chars
 	UnlockAllChallenges.pressed = ProgressData.settings.yztato_unlock_all_challenges
@@ -52,15 +59,13 @@ func init_values_from_progress_data() -> void:
 
 # =========================== Save =========================== #
 func _on_BackButton_pressed():
+	focus_before_created.grab_focus()
 	emit_signal("back_button_pressed")
 
 func _on_MenuYztatoSetOptions_hide():
 	ProgressData.save()
 
 # =========================== Load =========================== #
-func _on_ItemAppearancesHide_toggled(button_pressed: bool):
-	ProgressData.settings.item_appearances_hide = button_pressed
-
 func _on_UnlockDifficulties_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_difficulties = button_pressed
 

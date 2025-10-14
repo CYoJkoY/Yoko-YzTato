@@ -119,8 +119,8 @@ func _on_selections_completed()->void :
 			_change_scene(MenuData.difficulty_selection_scene)
 
 
-func _on_element_focused(element:InventoryElement, inventory_player_index:int)->void :
-	._on_element_focused(element, inventory_player_index)
+func _on_element_focused(element:InventoryElement, inventory_player_index:int, displayPanelData: bool = true)->void :
+	._on_element_focused(element, inventory_player_index, displayPanelData)
 
 	var player_index = FocusEmulatorSignal.get_player_index(element)
 	if player_index >= 0:

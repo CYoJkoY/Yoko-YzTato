@@ -75,9 +75,9 @@ func get_dmg_text_with_scaling_stats(damage: int, p_scaling_stats: Array, base_d
 	return text
 
 func get_signed_col_a(value: float, base_value: float) -> String:
-	var col_pos_a = "[color="+ Utils.POS_COLOR_STR +"]"
+	var col_pos_a = "[color="+ ProgressData.settings.color_positive +"]"
 	var col_neutral_a = "[color=white]"
-	var col_neg_a = "[color="+ Utils.NEG_COLOR_STR +"]"
+	var col_neg_a = "[color="+ ProgressData.settings.color_negative +"]"
 	if value > base_value: return col_pos_a
 	elif value == base_value: return col_neutral_a
 	else: return col_neg_a

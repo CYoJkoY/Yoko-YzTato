@@ -46,6 +46,7 @@
 script = ExtResource( 1 )
 my_id = "character_yztato_berserker"
 unlocked_by_default = false
+can_be_looted = true
 icon = ExtResource( 6 )
 name = "CHARACTER_YZTATO_BERSERKER"
 tier = 0
@@ -53,6 +54,7 @@ value = 1
 effects = [ ExtResource( 7 ), ExtResource( 21 ), ExtResource( 3 ), ExtResource( 38 ), ExtResource( 39 ), ExtResource( 22 ), ExtResource( 40 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = -1

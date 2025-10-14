@@ -25,6 +25,7 @@
 script = ExtResource( 2 )
 my_id = "character_yztato_chi_sword_wielder"
 unlocked_by_default = false
+can_be_looted = true
 icon = ExtResource( 15 )
 name = "CHARACTER_YZTATO_CHI_SWORD_WIELDER"
 tier = 0
@@ -32,6 +33,7 @@ value = 1
 effects = [ ExtResource( 14 ), ExtResource( 19 ), ExtResource( 13 ), ExtResource( 20 ), ExtResource( 21 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = -1

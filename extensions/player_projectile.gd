@@ -27,8 +27,7 @@ func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
 	._on_Hitbox_hit_something(thing_hit, damage_dealt)
 
 func stop() -> void:
-	if is_boomerang:
-		emit_signal("returned_to_player", self)
+	if is_boomerang: emit_signal("returned_to_player", self)
 	.stop()
 
 func _set_ticks_until_max_range() -> void:
