@@ -356,3 +356,23 @@ func _on_random_stat_timer_timeout() -> void:
 		var random_stat = primary_stats[randi() % primary_stats.size()]
 		RunData.remove_stat(random_stat, -effect[0], player_index)
 		RunData.emit_signal("stats_updated", player_index)
+
+func yz_change_weapon(weapon_position: int, new_weapon_id: String) -> void:
+	if weapon_position < 0 or weapon_position >= current_weapons.size(): return
+	
+	var old_weapon = current_weapons[weapon_position]
+	if old_weapon == null: return
+	
+	RunData.remove_weapon_by_index(weapon_position, player_index)
+	
+	current_weapons.erase(old_weapon)
+	
+	old_weapon.queue_free()
+	
+	var weapon_data = ItemService.get_element(ItemService.weapons, new_weapon_id)
+	if weapon_data == null: return
+	
+	RunData.add_weapon(weapon_data, player_index)
+	call_deferred("add_weapon", weapon_data, weapon_position)
+
+	

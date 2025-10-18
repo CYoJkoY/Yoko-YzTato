@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=2 format=2]
 
-[ext_resource path="res://items/global/effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/flying_sword/flying_sword_effect.gd" type="Script" id=1]
 
 [resource]
 script = ExtResource( 1 )
@@ -9,5 +9,5 @@ text_key = "EFFECT_YZTATO_ATTACK_LIMIT"
 value = 20
 custom_key = "yztato_flying_sword"
 storage_method = 1
-effect_sign = 5
+effect_sign = 3
 custom_args = [  ]

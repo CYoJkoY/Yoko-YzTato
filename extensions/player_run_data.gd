@@ -36,7 +36,7 @@ static func init_effects()->Dictionary:
 			"yztato_leave_fire": [],                                        # duration -> 持续秒数 \\\ scale -> 火圈范围
 			"yztato_chimera_weapon": [],                                    # value -> 仅为文本展示, "接下来依次发射value个投掷物" \\\ chimera_projectile_stats -> 接下来要发射的投掷物
 			"yztato_explosion_erase_bullets": 0,                            # value -> 不为0时，爆炸可清除敌人子弹
-			"yztato_upgrade_range_killed_enemies": 0,                       # value -> 达到value杀敌数时，武器升级
+			"yztato_upgrade_when_killed_enemies": [],                       # value -> 达到value杀敌数时，武器升级
 			"yztato_gain_stat_when_killed_single_scaling": [],              # key : "all" -> 作用于所有武器 \\\ value -> 初始需求杀敌数 \\\ stat -> 获得的属性 \\\ stat_nb -> 获得的属性数 \\\ scaling -> 用于增加需要杀敌数的属性 \\\ scaling_percent -> 衡量百分比
 			"yztato_melee_bounce_bullets": 0,                               # value -> 以value%速度将敌人子弹反弹回去
 			"yztato_special_picked_up_change_stat": [],                     # key -> 需要拾取的消耗品名 \\\ value -> 需要拾取的消耗品数 \\\ stat -> 增加的属性名 \\\ stat_nb -> 加的属性数 (负数代表减)

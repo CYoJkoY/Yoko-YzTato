@@ -46,13 +46,13 @@ BG_YZTATO_NETHER,Nether,幽冥
 EFFECT_YZTATO_CHIMERA_FRONT,Launch the following {0} projectiles in sequence,依次发射以下{0}种投射物
 WEAPON_YZTATO_HUANGWUWANGE,Desolate Elegy,荒芜挽歌
 WEAPON_YZTATO_HUANGWUWANGE_1,Desolate Elegy △,荒芜挽歌 △
-EFFECT_YZTATO_UPGRADE_RANGE_KILLED_ENEMIES,The weapon upgrades after killing {0} enemies in a single match\nWithin one wave，a single type of weapon can only be upgraded once,一局内击杀{0}个敌人后该武器升级\n一局内，单类武器只可升级一次
+EFFECT_YZTATO_UPGRADE_WHEN_KILLED_ENEMIES,Weapon upgrades after {0} kills in a single wave,单波次杀敌{0}个后武器升级
 EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can [color=#FCAB5A]erase enemy bullets[/color],近战武器可以[color=#FCAB5A]消除敌人子弹[/color]
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
 EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,After killing {3} ({4}) enemies，gain {0} points {1} ({2}),击杀{3}（{4}）名敌人后获得{0}点{1}（{2}）
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
-EFFECT_YZTATO_SWORD_ARRAY,Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color]，which is affected by damage，attack speed，range and player's level,武器攻击方式变为[color=#FF8C00]剑阵模式[/color]，受[color=#00ff00]伤害、攻速、范围、角色等级[/color]影响
-EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,Your melee weapon can [color=#FCAB5A]bounce enemy bullets back[/color]，its damage affected by weapon's damage and enemy's damage,你的近战武器可[color=#FCAB5A]反弹敌人子弹[/color]，其伤害受[color=#00ff00]武器伤害、敌人伤害[/color]影响
+EFFECT_YZTATO_SWORD_ARRAY,Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color]，which is affected by damage，attack speed，range and player's level,武器攻击方式变为[color=#FF8C00]剑阵模式[/color]，受{2}伤害、攻速、范围、角色等级[/color]影响
+EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,Your melee weapon can [color=#FCAB5A]bounce enemy bullets back[/color]，its damage affected by weapon's damage and enemy's damage,你的近战武器可[color=#FCAB5A]反弹敌人子弹[/color]，其伤害受{2}武器伤害、敌人伤害[/color]影响
 CHARACTER_YZTATO_BASEBALL_PLAYER,Baseball Player,棒球手
 CHARACTER_YZTATO_BOMBER,Bomber,炸弹人
 EFFECT_YZTATO_BOMBS,A bomb spawns every {1} seconds dealing {2} ({3}) damage in situ,炸弹每{1}秒原地生成一次，并对一个区域造成{2}（{3}）伤害
@@ -63,7 +63,7 @@ EFFECT_YZTATO_FRUIT_PICKED_UP_COUNT,For every {0} picked up normal fruits， {3}
 EFFECT_YZTATO_POISONED_FRUIT_PICKED_UP_COUNT,For every {0} picked up poisoned fruits， {3} ({4}) will be {2},每捡起{0}个有毒的果实，{3}（{4}）将会{2}
 CHARACTER_YZTATO_JIANGCHEN,JiangChen,将臣
 WEAPON_YZTATO_LEGEND_BAT,Legend Bat,传奇球棒
-EFFECT_YZTATO_BLADE_STORM_OP,Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color]，which can [color=#FCAB5A]remove enemy bullets[/color] and its rotation speed is affected by [color=red]current health，speed，number of weapons[/color] [color=#00ff00]and attack speed[/color],你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color]，可以[color=#FCAB5A]消除敌人子弹[/color]，转速受[color=red]当前生命、速度、武器数量[/color]、[color=#00ff00]攻速[/color]影响
+EFFECT_YZTATO_BLADE_STORM_OP,Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color]，which can [color=#FCAB5A]remove enemy bullets[/color] and its rotation speed is affected by {3}current health，speed，number of weapons[/color] {2}and attack speed[/color],你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color]，可以[color=#FCAB5A]消除敌人子弹[/color]，转速受{3}当前生命、速度、武器数量[/color]、{2}攻速[/color]影响
 CHARACTER_YZTATO_BLADE_DANCER,Blade Dancer,剑舞者
 CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
 EFFECT_YZTATO_LEAVE_FIRE,[color=#F94E34]The burning enemy will leave flames on the ground[/color],[color=#F94E34]燃烧的敌人会在地面留下火焰[/color]
@@ -74,14 +74,14 @@ YZ_UNLOCK_ALL,Unlock All,全解锁
 YZ_UNLOCK_ALL_CHARS,Unlock All Characters,全角色解锁
 YZ_UNLOCK_DIFFICULTIES,Unlock All Difficulties,全难度解锁
 YZ_UNLOCK_ALL_CHALLENGES,Unlock All Challenges,全成就解锁
-EFFECT_YZTATO_ATTACK_LIMIT,[color=#FCAB5A]When weapon damage is > {0}，enter Qi mode[/color]，which is affected by [color=#00ff00]weapon's damage and range[/color]，not by attack speed,[color=#FCAB5A]武器伤害 > {0}时，进入御气模式[/color]，受[color=#00ff00]武器伤害、范围、效果[/color]影响，不受攻速影响
+EFFECT_YZTATO_ATTACK_LIMIT,[color=#FCAB5A]When weapon damage is > {0}，enter Qi mode[/color]，which is affected by [color=#00ff00]weapon's damage and range[/color]，not by attack speed,[color=#FCAB5A]武器伤害 > {0}时，进入御气模式[/color]，受{2}武器伤害、范围、效果[/color]影响，不受攻速影响
 CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,气剑师
 EFFECT_YZTATO_WEAPON_SET_DELETE,[color=#3E68DA]weapons of {0} set[/color] will not appear in the shop,商店里面不会出现[color=#3E68DA]{0}系列的武器[/color]
 YZ_WEAPON_TRANSPARENCY,Weapon Transparency,武器不透明度
 YZ_ENEMY_TRANSPARENCY,Enemy Transparency,敌人不透明度
 YZ_ENEMY_PROJ_TRANSPARENCY,Enemy Projectile Transparency,敌人子弹不透明度
 YZ_OPTIMIZE_PICK_UP,Optimize Pick Up,拾取优化
-EFFECT_YZTATO_BOOMERANG_WEAPON,[color=#FF8C00]Boomerang Weapon[/color]，{0}，{1}，{2}，damage is [color=#D92635]{4}[/color] ~ [color=#26D944]{3}[/color] bonus depending on distance,[color=#FF8C00]回旋武器[/color]，{0}，{1}，{2}，伤害根据距离得到 [color=#D92635]{4}[/color] ~ [color=#26D944]{3}[/color] 的加成
+EFFECT_YZTATO_BOOMERANG_WEAPON,[color=#FF8C00]Boomerang Weapon[/color]，{0}，{1}，{2}，damage is {4} ~ {3} bonus depending on distance,[color=#FF8C00]回旋武器[/color]，{0}，{1}，{2}，伤害根据距离得到 {4} ~ {3} 的加成
 YZTATO_BOOMERANG_WAIT,Must wait boomerang,需等待回旋
 YZTATO_BOOMERANG_WAIT_NO,No Boomerang Wait,无回旋等待
 YZTATO_LOCK_RANGE,Lock Range,锁定回旋范围
@@ -133,7 +133,7 @@ EFFECT_YZTATO_PRECEPT_9,[color=#F9C571]Ninth Precept—Ultimate Breakthrough[/co
 EFFECT_YZTATO_MULTI_HIT,Each hit on an enemy will deal {0} additional hits，each dealing {1} of the original damage,每次命中敌人将多造成{0}次伤害，数值为{1}原伤害
 WEAPON_YZTATO_BAZHANDAO,Eight Cutting Broadsword,八斩刀
 WEAPON_YZTATO_FOREST_WAND,Forest Wand,森林法杖
-EFFECT_YZTATO_VINE_TRAP_FRONT,There is a [color=#00ff00]{1}%[/color] chance to generate [color=#00ff00]{0}[/color] vines when hitting enemy，causing {3} speed to nearby enemies every [color=#00ff00]{2}[/color] seconds，with damage of,击中敌人 [color=#00ff00]{1}%[/color] 概率生成[color=#00ff00]{0}[/color]根藤曼，每过[color=#00ff00]{2}[/color]秒附近敌人速度 {3} ，造成伤害
+EFFECT_YZTATO_VINE_TRAP_FRONT,There is a {1} chance to generate {0} vines when hitting enemy，causing {3} speed to nearby enemies every {2} seconds，with damage of,击中敌人 {1} 概率生成{0}根藤曼，每过{2}秒附近敌人速度 {3} ，造成伤害
 WEAPON_YZTATO_PRISM,Prism,棱镜
 ITEM_YZTATO_GHOST_TREE,Ghost Tree,幽魂树
 WEAPON_YZTATO_GHOST_PRUNER,Ghost Pruner,幽魂修剪

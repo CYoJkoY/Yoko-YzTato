@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=26 format=2]
+[gd_resource type="Resource" load_steps=27 format=2]
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/fanatic/appearances/fanatic_eyes_appearance.tres" type="Resource" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/fanatic/appearances/fanatic_mouth_appearance.tres" type="Resource" id=2]
@@ -25,6 +25,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_wand/1/ghost_wand_data.tres" type="Resource" id=23]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/forest_wand/1/forest_wand_data.tres" type="Resource" id=24]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/fanatic/appearances/fanatic_icon.webp" type="Texture" id=25]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/fanatic/effects/fanatic_effect_5.tres" type="Resource" id=26]
 
 [resource]
 script = ExtResource( 12 )
@@ -35,7 +36,7 @@ icon = ExtResource( 25 )
 name = "CHARACTER_YZTATO_FANATIC"
 tier = 0
 value = 1
-effects = [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 9 ) ]
+effects = [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 5 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 26 ) ]
 tracking_text = "YZCURSED"
 is_lockable = true
 unlock_codex_descr_after_get_it = 1

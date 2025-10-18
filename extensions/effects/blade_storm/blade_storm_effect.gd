@@ -2,7 +2,7 @@ extends Effect
 
 # =========================== Extension =========================== #
 static func get_id() -> String:
-	return "yztato_melee_bounce"
+	return "yztato_blade_storm"
 	
 func get_args(_player_index: int) -> Array:
 	var args: Array = .get_args(_player_index)

@@ -1,8 +1,9 @@
-extends "res://weapons/ranged/ranged_weapon.gd"
+extends RangedWeapon
 
-# EFFECT : upgrade_range_killed_enemies
+# EFFECT : upgrade_killed_enemies
 var effect_kill_count: Dictionary = {}
 var connection_ids = {}
+var old_projectiles: Array = []
 
 # EFFECT : chimera_weapon_effect
 var current_chimera_projs: Array = []
@@ -38,21 +39,21 @@ func shoot() -> void:
 	if is_boomerang:
 		_yztato_boomerang_shoot()
 		return
+
 	.shoot()
 
 func init_stats(at_wave_begin:bool = true)-> void :
 	.init_stats(at_wave_begin)
 	_yztato_chimera_init_stats()
 
-func on_projectile_shot(projectile: Node2D)->void :
-	_yztato_upgrade_range_killed_enemies_on_shot(projectile)
+func on_projectile_shot(projectile: Node2D) -> void :
 	.on_projectile_shot(projectile)
 	_yztato_boomerang_on_projectile_shot(projectile)
+	_yztato_upgrade_on_projectile_shot(projectile)
 
 func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox) -> void:
 	.on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
-	if thing_hit._burning != null:
-		_yztato_leave_fire(thing_hit, player_index)
+	if thing_hit._burning != null: _yztato_leave_fire(thing_hit, player_index)
 	_yztato_multi_hit(thing_hit, damage_dealt, player_index)
 	_yztato_vine_trap(thing_hit, player_index)
 	_yztato_chal_on_weapon_hit_something(hitbox)
@@ -60,34 +61,51 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
 	.on_killed_something(_thing_killed, hitbox)
 	_yztato_gain_stat_when_killed_scaling_single()
+	_yztato_upgrade_when_killed_enemies()
 
 func should_shoot()->bool:
 	var should_shoot: bool = .should_shoot()
 	should_shoot = _yztato_can_attack_while_moving(should_shoot)
-
+	
 	return should_shoot
 
 # =========================== Custom =========================== #
-func _yztato_upgrade_range_killed_enemies_on_shot(projectile: Node2D)-> void:
-	if RunData.get_player_effect("yztato_upgrade_range_killed_enemies", player_index) and is_instance_valid(projectile):
-		var hitbox = projectile._hitbox
-		var conn_id = hitbox.connect("killed_something", self, "_yztato_upgrade_range_killed_enemies", [hitbox])
-		connection_ids[projectile] = conn_id
+func _yztato_upgrade_when_killed_enemies() -> void:
+	for effect in effects:
+		if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+		if _enemies_killed_this_wave_count % effect.value != 0: return
+		
+		var target_weapon_id: String = effect.key
+
+		if !old_projectiles.empty():
+			for projectile in old_projectiles:
+				if is_instance_valid(projectile):
+					projectile.queue_free()
+
+		_parent.yz_change_weapon(weapon_pos, target_weapon_id)
+
+func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
+	for effect in effects:
+		if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+
+		old_projectiles.push_back(projectile)
+
+		if not projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
+			projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
 
 func _yztato_chimera_init_stats()-> void:
 	for effect in effects:
-		if effect.get_id() == "yztato_chimera_weapon":
-			for proj_stats in effect.chimera_projectile_stats:
-				if proj_stats:
-					if proj_stats.projectile_scene:
-						var projectile_instance = proj_stats.projectile_scene.instance()
-						var sprite_node = projectile_instance.get_node_or_null("Sprite")
-						if sprite_node and sprite_node.texture:
-							current_chimera_projs_textures_paths.push_back(sprite_node.texture.resource_path)
-						projectile_instance.queue_free()
-					current_chimera_projs.push_back(WeaponService.init_ranged_stats(proj_stats, player_index))
-			for proj_texture_set in effect.chimera_texture_sets:
-				current_chimera_texture_sets.append(proj_texture_set)
+		if effect.get_id() != "yztato_chimera_weapon": continue
+		
+		for proj_stats in effect.chimera_projectile_stats:
+			var projectile_instance = proj_stats.projectile_scene.instance()
+			var sprite_node = projectile_instance.get_node_or_null("Sprite")
+			current_chimera_projs_textures_paths.push_back(sprite_node.texture.resource_path)
+			projectile_instance.queue_free()
+			current_chimera_projs.push_back(WeaponService.init_ranged_stats(proj_stats, player_index))
+		
+		for proj_texture_set in effect.chimera_texture_sets:
+			current_chimera_texture_sets.append(proj_texture_set)
 
 func _yztato_boomerang_on_projectile_shot(projectile: Node2D)-> void:
 	if is_boomerang:
@@ -114,16 +132,13 @@ func _yztato_boomerang_shoot() -> void:
 	update_current_spread()
 	update_knockback()
 
-	if is_manual_aim() and !is_returning and boomerang_wait:
-		_shooting_behavior.shoot(current_stats.max_range)
+	var target = current_stats.max_range if is_manual_aim() else _current_target[1]
+	
+	if boomerang_wait and !is_returning:
+		_shooting_behavior.shoot(target)
 		is_returning = true
-	elif !is_manual_aim() and !is_returning and boomerang_wait:
-		_shooting_behavior.shoot(_current_target[1])
-		is_returning = true
-	elif is_manual_aim() and !boomerang_wait:
-		_shooting_behavior.shoot(current_stats.max_range)
-	elif !is_manual_aim() and !boomerang_wait:
-		_shooting_behavior.shoot(_current_target[1])
+	elif !boomerang_wait:
+		_shooting_behavior.shoot(target)
 
 	_current_cooldown = 180.0
 
@@ -252,19 +267,6 @@ func _yztato_chal_ready() -> void:
 	ChallengeService.try_complete_challenge("chal_one_force_subdue_ten", current_stats.damage)
 
 # =========================== Method =========================== #
-func _yztato_upgrade_range_killed_enemies(_thing_killed: Node, _hitbox: Hitbox)-> void:
-	var upgrade_attack_killed_enemies: int = RunData.get_player_effect("yztato_upgrade_range_killed_enemies", player_index)
-	if upgrade_attack_killed_enemies > 0:
-		effect_kill_count[weapon_id] = effect_kill_count.get(weapon_id, 0) + 1
-		if effect_kill_count[weapon_id] >= upgrade_attack_killed_enemies:
-			effect_kill_count[weapon_id] = -Utils.LARGE_NUMBER
-			var old_weapon_data: WeaponData = ItemService.get_element(ItemService.weapons, weapon_id)
-			if old_weapon_data and old_weapon_data.upgrades_into and old_weapon_data.upgrades_into.weapon_id:
-				var new_weapon_data: WeaponData = ItemService.get_element(ItemService.weapons, old_weapon_data.upgrades_into.weapon_id)
-				new_weapon_data.is_cursed = old_weapon_data.is_cursed
-				var _re: int = RunData.remove_weapon(old_weapon_data, player_index)
-				var _ad: WeaponData = RunData.add_weapon(new_weapon_data, player_index)
-
 func yz_on_projectile_returned(projectile: Node2D) -> void:
 	active_boomerangs.erase(projectile)
 	is_returning = false
@@ -277,3 +279,6 @@ func yz_activate_burning_particle(particle, position: Vector2, burning_data, sca
 		particle.activate(position, burning_data)
 		particle.rescale(scale)
 		particle.set_duration(duration)
+
+func yz_on_projectile_stopped(projectile: Node2D) -> void:
+	old_projectiles.erase(projectile)

@@ -7,29 +7,21 @@
 script = ExtResource( 1 )
 texture = ExtResource( 2 )
 damage = 1
-accuracy = 1.0
-knockback = 0
-knockback_piercing = 0.0
-can_have_positive_knockback = true
-can_have_negative_knockback = false
-lifesteal = 0.0
-projectile_speed = 3000
-increase_projectile_speed_with_range = false
-piercing = 4
-piercing_dmg_reduction = 0.0
+knockback = 10
+knockback_piercing = 1.0
+piercing = 2
+piercing_dmg_reduction = 0.1
 bounce = 0
 bounce_dmg_reduction = 0.5
 can_bounce = false
 effects = [  ]
 enable_flags = {
-"modify_accuracy": false,
 "modify_bounce": true,
 "modify_bounce_dmg_reduction": true,
 "modify_damage": false,
 "modify_effects": false,
 "modify_knockback": false,
 "modify_knockback_piercing": false,
-"modify_lifesteal": false,
 "modify_piercing": true,
 "modify_piercing_dmg_reduction": true,
 "modify_projectile_speed": false

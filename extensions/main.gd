@@ -39,8 +39,8 @@ func _yztato_destory_weapons()-> void:
 		if yztato_destory_weapon.size() > 0:
 			for weapon_id in yztato_destory_weapon:
 				for i in weapon_id[1]:
-					var old_weapons = RunData.players_data[player_index].weapons
-					var new_weapons : Array = []
+					var old_weapons: Array = RunData.get_player_weapons(player_index)
+					var new_weapons: Array = []
 					for new_weapon in old_weapons:
 						if new_weapon.weapon_id == weapon_id[0]:
 							new_weapons.append(new_weapon)

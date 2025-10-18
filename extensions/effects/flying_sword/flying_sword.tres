@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "sword_array"
-text_key = "EFFECT_YZTATO_SWORD_ARRAY"
-value = 0
+key = "sword_array_set"
+text_key = ""
+value = -100
 custom_key = "yztato_flying_sword"
 storage_method = 1
-effect_sign = 0
+effect_sign = 3
 custom_args = [  ]

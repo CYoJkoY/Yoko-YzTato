@@ -12,4 +12,4 @@ storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 stat = "explosion_size"
-stat_nb = 1
+stat_nb = 3

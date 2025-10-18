@@ -9,7 +9,6 @@ onready var UnlockAllChars = $"%UnlockAllChars" as CheckButton
 onready var UnlockAllChallenges = $"%UnlockAllChallenges" as CheckButton
 onready var OptimizePickUp = $"%OptimizePickUp" as CheckButton
 onready var StartingWeapons = $"%StartingWeapons" as CheckButton
-
 onready var StartingItems = $"%StartingItems" as CheckButton
 onready var SetStartingItemsTimes = $"%SetStartingItemsTimes" as HBoxContainer
 
@@ -46,7 +45,6 @@ func init_values_from_progress_data() -> void:
 	OptimizePickUp.pressed = ProgressData.settings.yztato_optimize_pickup
 	StartingWeapons.pressed = ProgressData.settings.yztato_starting_weapons
 	StartingItems.pressed = ProgressData.settings.yztato_starting_items
-	
 	SetStartingItemsTimes.set_value(ProgressData.settings.yztato_starting_items_times)
 	
 	RainbowGold.select(colors_names.find(ProgressData.settings.yztato_rainbow_gold))
@@ -63,7 +61,7 @@ func _on_BackButton_pressed():
 	emit_signal("back_button_pressed")
 
 func _on_MenuYztatoSetOptions_hide():
-	ProgressData.save()
+	ProgressData.save_settings()
 
 # =========================== Load =========================== #
 func _on_UnlockDifficulties_toggled(button_pressed: bool):

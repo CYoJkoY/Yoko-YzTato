@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BG_Red_Snails_Icon.webp-9d33066e940748d3b06b0e737deb6745.stex"
+path="res://.import/bg_red_snails_icon.webp-d3061b90f564db2bd2520dd1c3a3f006.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/BG_Red_Snails_Icon.webp"
-dest_files=[ "res://.import/BG_Red_Snails_Icon.webp-9d33066e940748d3b06b0e737deb6745.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/bg_red_snails_icon.webp"
+dest_files=[ "res://.import/bg_red_snails_icon.webp-d3061b90f564db2bd2520dd1c3a3f006.stex" ]
 
 [params]
 

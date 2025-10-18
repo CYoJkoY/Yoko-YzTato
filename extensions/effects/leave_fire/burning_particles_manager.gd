@@ -17,7 +17,7 @@ func get_burning_particle():
 	
 	if burning_particles_pool.size() < max_pool_size:
 		var new_particle = ProgressData.Yztato.LeaveFire.Tscn.instance()
-		add_child(new_particle)
+		call_deferred("add_child", new_particle)
 		burning_particles_pool.append(new_particle)
 		return new_particle
 	

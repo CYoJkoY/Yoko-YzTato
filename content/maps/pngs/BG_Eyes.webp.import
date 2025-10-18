@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BG_Eyes.webp-7d93b4bc446d8c09fbfbaf70d21c3c0f.stex"
+path="res://.import/bg_eyes.webp-b6aa7cecfd720ac2cb701cbc400389a1.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/BG_Eyes.webp"
-dest_files=[ "res://.import/BG_Eyes.webp-7d93b4bc446d8c09fbfbaf70d21c3c0f.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/bg_eyes.webp"
+dest_files=[ "res://.import/bg_eyes.webp-b6aa7cecfd720ac2cb701cbc400389a1.stex" ]
 
 [params]
 

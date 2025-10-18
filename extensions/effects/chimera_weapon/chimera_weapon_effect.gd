@@ -46,13 +46,13 @@ func _yztato_chimera_deserialize_and_merge(serialized)-> void:
 
 # =========================== Method =========================== #
 func get_projectile_text(stats: Resource, player_index : int)->String:
-		var percent_dmg_bonus = (1 + (Utils.get_stat("stat_percent_damage", player_index) / 100.0))
-		var damage = max(1, round(percent_dmg_bonus * (get_scaling_stats_dmg(stats.scaling_stats, player_index) + stats.damage))) as int
-		var text = get_dmg_text_with_scaling_stats(damage, stats.scaling_stats, stats.damage)
+		var percent_dmg_bonus: float = (1 + (Utils.get_stat("stat_percent_damage", player_index) / 100.0))
+		var damage: int = int(max(1, round(percent_dmg_bonus * (get_scaling_stats_dmg(stats.scaling_stats, player_index) + stats.damage))))
+		var text: String = get_dmg_text_with_scaling_stats(damage, stats.scaling_stats, stats.damage)
 		return text
 
 func get_scaling_stats_dmg(p_scaling_stats: Array, player_index : int) -> int:
-	var bonus_dmg = 0
+	var bonus_dmg: int = 0
 
 	for scaling_stat in p_scaling_stats:
 		bonus_dmg += (Utils.get_stat(scaling_stat[0], player_index) * scaling_stat[1]) as int
@@ -61,13 +61,13 @@ func get_scaling_stats_dmg(p_scaling_stats: Array, player_index : int) -> int:
 
 func get_dmg_text_with_scaling_stats(damage: int, p_scaling_stats: Array, base_damage) -> String:
 
-	var a = get_signed_col_a(damage, base_damage)
-	var dmg_text = a + str(damage) + col_b
+	var a: String = get_signed_col_a(damage, base_damage)
+	var dmg_text: String = a + str(damage) + col_b
 
-	var text = dmg_text
+	var text: String = dmg_text
 
 	if damage != base_damage:
-		var initial_dmg_text = str(base_damage)
+		var initial_dmg_text: String = str(base_damage)
 		text += get_init_a() + initial_dmg_text + col_b
 
 	text += " (" + WeaponService.get_scaling_stats_icon_text(p_scaling_stats) + ")"
@@ -75,15 +75,12 @@ func get_dmg_text_with_scaling_stats(damage: int, p_scaling_stats: Array, base_d
 	return text
 
 func get_signed_col_a(value: float, base_value: float) -> String:
-	var col_pos_a = "[color="+ ProgressData.settings.color_positive +"]"
-	var col_neutral_a = "[color=white]"
-	var col_neg_a = "[color="+ ProgressData.settings.color_negative +"]"
+	var col_pos_a: String = "[color=#"+ ProgressData.settings.color_positive +"]"
+	var col_neutral_a: String = "[color=white]"
+	var col_neg_a: String = "[color=#"+ ProgressData.settings.color_negative +"]"
 	if value > base_value: return col_pos_a
 	elif value == base_value: return col_neutral_a
 	else: return col_neg_a
-
-func get_col_a() -> String:
-	return "[color=#" +Utils.SECONDARY_FONT_COLOR.to_html()+"]"
 
 func get_init_a() -> String:
 	return " [color=" + Utils.GRAY_COLOR_STR + "]| "

@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/BG_Grass.webp-fd2f2636926ad3c6671ccf452d3a802c.stex"
+path="res://.import/bg_grass.webp-c16224038356279ff0d1cefe00e36f30.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/BG_Grass.webp"
-dest_files=[ "res://.import/BG_Grass.webp-fd2f2636926ad3c6671ccf452d3a802c.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/bg_grass.webp"
+dest_files=[ "res://.import/bg_grass.webp-c16224038356279ff0d1cefe00e36f30.stex" ]
 
 [params]
 

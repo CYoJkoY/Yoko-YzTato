@@ -49,7 +49,7 @@ func _init():
 		# EFFECTS : blade_storm[ 2/4 ], lifesteal[ 1/2 ], blood_rage[ 2/3 ],
 		#           stat_on_hit, invincible_on_hit_duration, random_primary_stat_on_hit
 		#           random_primary_stat_over_time, temp_stat_per_interval[ hit_protection ]
-		#           heal_on_damage_taken
+		#           heal_on_damage_taken, upgrade_when_killed_enemies[ 1/4 ]
 		# ACHIEVE : only_in, more_than_enough
 
 		"gold.gd",
@@ -68,9 +68,6 @@ func _init():
 
 		"player_explosion.gd",
 		# EFFECTS : explosion_erase_bullets
-
-		"player_projectile.gd",
-		# EFFECTS : chimera_weapon, boomerang_weapon[ 1/2 ]
 
 		"item_service.gd",
 		# EFFECTS : weapon_set_filter, weapon_set_delete, force_curse_items
@@ -131,12 +128,12 @@ func _init():
 		# EFFECTS : melee_erase_bullets, melee_bounce_bullets,
 		#           flying_sword, blade_storm[ 4/4 ], leave_fire[ 1/2 ], 
 		#           gain_stat_when_killed_single_scaling[ 2/3 ], multi_hit[ 1/2 ],
-		#           vine_trap[ 1/2 ]
+		#           vine_trap[ 1/2 ], upgrade_when_killed_enemies[ 2/4 ]
 		# SETTING : set_weapon_transparency[ 1/2 ]
 		# ACHIEVE : counterattack 
 
 		"ranged_weapon.gd",
-		# EFFECTS : upgrade_range_killed_enemies, boomerang_weapon[ 2/2 ], 
+		# EFFECTS : upgrade_when_killed_enemies[ 3/4 ], boomerang_weapon, 
 		#           leave_fire[ 2/2 ], multi_hit[ 2/2 ], vine_trap[ 2/2 ]
 		#           gain_stat_when_killed_single_scaling[ 3/3 ],
 		# SETTING : set_weapon_transparency[ 2/2 ]
@@ -144,6 +141,9 @@ func _init():
 
 		"wave_manager.gd",
 		# EFFECTS : extra_enemies_next_waves
+
+		"player_projectile.gd",
+		# EFFECTS : upgrade_when_killed_enemies[ 4/4 ]
 		
 	]
 

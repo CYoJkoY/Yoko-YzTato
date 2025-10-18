@@ -18,8 +18,8 @@ func get_args(_player_index: int) -> Array:
 	var boomerang_wait_arg: String = "YZTATO_BOOMERANG_WAIT" if boomerang_wait else "YZTATO_BOOMERANG_WAIT_NO"
 	var lock_range_arg: String = "YZTATO_LOCK_RANGE" if lock_range else "YZTATO_LOCK_RANGE_NO"
 	var knockback_only_back_arg: String = "YZTATO_KNOCKBACK_ONLY_BACK" if knockback_only_back else "[EMPTY]"
-	var max_damage_mul_arg: String = str(max_damage_mul * 100) + "%"
-	var min_damage_mul_arg: String = str(min_damage_mul * 100) + "%"
+	var max_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(max_damage_mul * 100) + "%[/color]"
+	var min_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_negative +"]" + str(min_damage_mul * 100) + "%[/color]"
 	
 	return [tr(boomerang_wait_arg), tr(lock_range_arg),tr(knockback_only_back_arg),
 	str(max_damage_mul_arg), str(min_damage_mul_arg)]

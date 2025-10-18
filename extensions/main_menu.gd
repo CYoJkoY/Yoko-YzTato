@@ -5,11 +5,13 @@ signal yztato_set_button_pressed
 onready var buttons_right = $MarginContainer/VBoxContainer/HBoxContainer/ButtonsRight
 
 # =========================== Extention =========================== #
-func init()->void :
-	_yztato_set_button_init()
+func _ready()->void :
+	# After init and avoid .init()
+	# Equals to init() + .init()
+	_yztato_set_button_ready()
 
 # =========================== Custom =========================== #
-func _yztato_set_button_init() -> void:
+func _yztato_set_button_ready() -> void:
 	if buttons_right.has_node("YztatoSetButton"):
 		return
 

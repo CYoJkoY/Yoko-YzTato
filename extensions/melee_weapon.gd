@@ -37,7 +37,6 @@ func _physics_process(_delta: float) -> void:
 func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
 	._on_Hitbox_hit_something(thing_hit, damage_dealt)
 	_yztato_flying_sword_erase(thing_hit, player_index)
-	
 
 func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox):
 	.on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
@@ -57,7 +56,6 @@ func update_idle_angle() -> void:
 		return
 	.update_idle_angle()
 
-
 func get_direction() -> float:
 	var direction = .get_direction()
 	direction = _yztato_blade_storm_direction(direction)
@@ -73,19 +71,30 @@ func get_direction_and_calculate_target() -> float:
 
 func shoot() -> void:
 	if YZ_is_flying_sword or YZ_is_blade_storm: return
+	
 	.shoot()
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
 	.on_killed_something(_thing_killed, hitbox)
 	_yztato_gain_stat_when_killed_scaling_single()
+	_yztato_upgrade_when_killed_enemies()
 
 func should_shoot()->bool:
 	var should_shoot: bool = .should_shoot()
 	should_shoot = _yztato_can_attack_while_moving(should_shoot)
-
+	
 	return should_shoot
 
 # =========================== Custom =========================== #
+func _yztato_upgrade_when_killed_enemies() -> void:
+	for effect in effects:
+		if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+		if _enemies_killed_this_wave_count % effect.value != 0: return
+		
+		var target_weapon_id: String = effect.key
+
+		_parent.yz_change_weapon(weapon_pos, target_weapon_id)
+
 func _yztato_melee_erase()-> void:
 	for player_index in RunData.players_data.size():
 		var melee_erase = RunData.get_player_effect("yztato_melee_erase_bullets",player_index)
