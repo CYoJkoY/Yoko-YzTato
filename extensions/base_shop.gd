@@ -4,7 +4,7 @@ extends "res://ui/menus/shop/base_shop.gd"
 func _on_RerollButton_pressed(player_index: int) -> void :
 	._on_RerollButton_pressed(player_index)
 	apply_random_curse(player_index)
-	
+
 # =========================== Custom =========================== #
 func apply_random_curse(player_index: int) -> void:
 	var random_curse: Array = RunData.get_player_effect("yztato_random_curse_on_reroll", player_index)

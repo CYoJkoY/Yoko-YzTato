@@ -4,7 +4,7 @@ var _player_items: = []
 var _player_items_max_count: int = ProgressData.settings.yztato_starting_items_times
 
 onready var _back_button: Button = $"%BackButton"
-onready var _character_panel: ItemPanelUI = $MarginContainer / VBoxContainer / DescriptionContainer / CharacterPanel
+onready var _character_panel: ItemPanelUI = $"%CharacterPanelUI"
 
 func _ready()->void :
 	_player_items.resize(RunData.get_player_count())
@@ -82,8 +82,8 @@ func _on_element_pressed(element:InventoryElement, inventory_player_index:int)->
 			if not element.is_locked:
 				available_elements.push_back(element)
 		var item = Utils.get_rand_element(available_elements)
-		_player_items[inventory_player_index] = item
-		_set_selected_element(inventory_player_index)
+		_player_items[inventory_player_index].append(item)
+		_add_number_to_item(element)
 	elif element.is_special:
 		return
 	else :

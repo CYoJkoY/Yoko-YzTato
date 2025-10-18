@@ -181,3 +181,5 @@ YZ_STARTING_WEAPONS,Any Starting Weapon,开局任选武器
 YZ_STARTING_ITEMS,Any Starting Items,开局任选道具
 YZ_STARTING_ITEMS_TIMES,Starting Items' Number,可选道具数
 ITEM_SELECTION,Item Selection,道具选择
+YZCURSESTRENGTH,Curse: {0}%,诅咒：{0}%
+YZ_CURSE_STRENGTH,Curse Strength Display,诅咒强度显示

@@ -1,12 +1,31 @@
 extends "res://singletons/run_data.gd"
 
+
+
 # =========================== Extention =========================== #
+func _init() -> void:
+	init_tracked_items = init_tracked_effects()
+
 func _ready():
 	_yztato_unlock_all_challenges()
 
 func manage_life_steal(weapon_stats:WeaponStats, player_index:int)->void :
 	if _yztato_life_steal(weapon_stats, player_index): return
 	.manage_life_steal(weapon_stats, player_index)
+
+func init_tracked_effects()->Dictionary:
+	var vanilla_tracked: Dictionary = .init_tracked_effects()
+
+	var new_tracked: Dictionary = {
+		
+		"item_yztato_cursed_box": [0, 0],
+
+	}
+
+	new_tracked.merge(vanilla_tracked)
+
+	return new_tracked
+
 
 # =========================== Custom =========================== #
 func _yztato_life_steal(weapon_stats:WeaponStats, player_index:int)-> bool:

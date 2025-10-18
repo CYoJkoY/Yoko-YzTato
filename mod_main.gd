@@ -152,6 +152,9 @@ func _init():
 		["player_run_data.gd","res://singletons/player_run_data.gd"],
 		# EFFECTS' NAMES
 
+		["item_description.gd", "res://ui/menus/shop/item_description.gd"]
+		# SETTING : curse_strength
+
 	]
 	
 
@@ -162,7 +165,6 @@ func _init():
 
 func YZ_extend_script(script: Array, _ext_dir: String) -> void:
 	# OriginalFunction -> apply_extension
-	# For player_run_data.gd
 	var child_script_path: String = _ext_dir + script[0]
 	var parent_script_path: String = script[1]
 

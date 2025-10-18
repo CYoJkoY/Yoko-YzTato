@@ -1,23 +1,26 @@
-[gd_resource type="Resource" load_steps=5 format=2]
+[gd_resource type="Resource" load_steps=6 format=2]
 
-[ext_resource path="res://items/global/item_data.gd" type="Script" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1a.tres" type="Resource" id=2]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_icon.webp" type="Texture" id=3]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1b.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_data.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_0.tres" type="Resource" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1b.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_effect_1a.tres" type="Resource" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/cursed_box/cursed_box_icon.webp" type="Texture" id=5]
 
 [resource]
 script = ExtResource( 1 )
 my_id = "item_yztato_cursed_box"
 unlocked_by_default = true
-icon = ExtResource( 3 )
+can_be_looted = true
+icon = ExtResource( 5 )
 name = "ITEM_YZTATO_CURSED_BOX"
 tier = 1
 value = 35
-effects = [ ExtResource( 2 ), ExtResource( 4 ) ]
-tracking_text = ""
+effects = [ ExtResource( 2 ), ExtResource( 4 ), ExtResource( 3 ) ]
+tracking_text = "stats_gained"
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
-max_nb = 4
+max_nb = -1
 item_appearances = [  ]
-tags = [ "stat_curse" ]
+tags = [  ]

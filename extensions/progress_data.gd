@@ -63,6 +63,8 @@ func init_yztato_set_options() -> Dictionary:
 
 		"yztato_starting_items": false,
 		"yztato_starting_items_times": 1,
+		
+		"yztato_curse_strength": true,
 
 		"yztato_rainbow_gold": "YZ_EMPTY",
 		

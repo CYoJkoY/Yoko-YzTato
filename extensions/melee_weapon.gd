@@ -447,7 +447,6 @@ func yz_process_sword_array_mode(player_level: int) -> bool:
 			yz_create_sword_projectile(target)
 
 		_current_cooldown = get_next_cooldown() * 2.5
-		print(_current_cooldown)
 
 	yz_perform_idle_movement()
 	return true

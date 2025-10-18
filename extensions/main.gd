@@ -82,7 +82,7 @@ func _yztato_stats_chance_on_level_up(player_index: int) -> void:
 		if Utils.get_chance_success(chance / 100.0):
 			RunData.add_stat(stat, stat_increase, player_index)
 
-		if stat_increase > 0:
-			RunData.add_tracked_value(player_index, "item_yztato_cursed_box", stat_increase, 0)
-		elif stat_increase < 0:
-			RunData.add_tracked_value(player_index, "item_yztato_cursed_box", abs(stat_increase) as int, 1)
+			if stat_increase > 0:
+				RunData.add_tracked_value(player_index, "item_yztato_cursed_box", stat_increase, 0)
+			elif stat_increase < 0:
+				RunData.add_tracked_value(player_index, "item_yztato_cursed_box", abs(stat_increase) as int, 1)

@@ -6,11 +6,6 @@ func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetR
 	item = _yztato_weapon_set_filter(item, player_index, type, wave, args)
 	item = _yztato_weapon_set_delete(item, player_index, type, wave, args)
 	item = _yztato_weapons_banned(item, player_index, type, wave, args)
-
-	return item
-
-func apply_item_effect_modifications(item: ItemParentData, player_index: int)->ItemParentData:
-	item = .apply_item_effect_modifications(item, player_index)
 	item = _yztato_force_curse_items(item, player_index)
 
 	return item
@@ -101,7 +96,8 @@ func _yztato_weapons_banned(item: ItemParentData, player_index: int, type: int, 
 
 func _yztato_force_curse_items(item: ItemParentData, player_index: int) -> ItemParentData:
 	var force_curse = RunData.get_player_effect("yztato_force_curse_items", player_index)
-	if force_curse != 0:
-		var DLCData1: DLCData = ProgressData.available_dlcs[0]
-		return DLCData1.curse_item(item, player_index)
-	return item
+	if item in characters: return item
+	if force_curse == 0 or item.is_cursed: return item
+	
+	var DLCData1: DLCData = ProgressData.available_dlcs[0]
+	return DLCData1.curse_item(item, player_index)

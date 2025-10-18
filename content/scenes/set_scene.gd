@@ -9,8 +9,11 @@ onready var UnlockAllChars = $"%UnlockAllChars" as CheckButton
 onready var UnlockAllChallenges = $"%UnlockAllChallenges" as CheckButton
 onready var OptimizePickUp = $"%OptimizePickUp" as CheckButton
 onready var StartingWeapons = $"%StartingWeapons" as CheckButton
+
 onready var StartingItems = $"%StartingItems" as CheckButton
 onready var SetStartingItemsTimes = $"%SetStartingItemsTimes" as HBoxContainer
+
+onready var CurseStrength = $"%CurseStrength" as CheckButton
 
 onready var RainbowGold = $"%RainbowGold" as OptionButton
 var colors_names: Array = [
@@ -46,6 +49,7 @@ func init_values_from_progress_data() -> void:
 	StartingWeapons.pressed = ProgressData.settings.yztato_starting_weapons
 	StartingItems.pressed = ProgressData.settings.yztato_starting_items
 	SetStartingItemsTimes.set_value(ProgressData.settings.yztato_starting_items_times)
+	CurseStrength.pressed = ProgressData.settings.yztato_curse_strength
 	
 	RainbowGold.select(colors_names.find(ProgressData.settings.yztato_rainbow_gold))
 
@@ -66,39 +70,33 @@ func _on_MenuYztatoSetOptions_hide():
 # =========================== Load =========================== #
 func _on_UnlockDifficulties_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_difficulties = button_pressed
-
 func _on_UnlockAllChars_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_all_chars = button_pressed
-
 func _on_UnlockAllChallenges_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_unlock_all_challenges = button_pressed
-
 func _on_OptimizePickUp_toggled(button_pressed: bool):
 	ProgressData.settings.yztato_optimize_pickup = button_pressed
-
 func _on_StartingWeapons_toggled(button_pressed: bool) -> void:
 	ProgressData.settings.yztato_starting_weapons = button_pressed
 
 func _on_StartingItems_toggled(button_pressed: bool) -> void:
 	ProgressData.settings.yztato_starting_items = button_pressed
-
 func _on_SetStartingItemsTimes_value_changed(value) -> void:
 	ProgressData.settings.yztato_starting_items_times = value
+
+func _on_CurseStrength_toggled(button_pressed: bool) -> void:
+	ProgressData.settings.yztato_curse_strength = button_pressed
 
 func _on_RainbowGold_item_selected(index: int):
 	ProgressData.settings.yztato_rainbow_gold = colors_names[index]
 
 func _on_SetWeaponTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_weapon_transparency = value
-
 func _on_SetEnemyTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_enemy_transparency = value
-
 func _on_SetEnemyProjTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_enemy_proj_transparency = value
-
 func _on_SetGoldTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_gold_transparency = value
-
 func _on_SetConsumableTransparency_value_changed(value: float):
 	ProgressData.settings.yztato_set_consumable_transparency = value

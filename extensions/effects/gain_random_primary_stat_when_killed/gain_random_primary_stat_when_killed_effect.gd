@@ -31,5 +31,4 @@ func serialize()->Dictionary:
 
 func deserialize_and_merge(serialized: Dictionary)->void :
 	.deserialize_and_merge(serialized)
-	print(serialized)
 	need_num = serialized.need_num as int

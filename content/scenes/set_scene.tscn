@@ -125,10 +125,19 @@ margin_right = 1800.0
 margin_bottom = 45.0
 text = "1"
 
-[node name="RainbowGold" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+[node name="CurseStrength" type="CheckButton" parent="ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 margin_top = 542.0
 margin_right = 1800.0
-margin_bottom = 607.0
+margin_bottom = 612.0
+custom_fonts/font = ExtResource( 4 )
+custom_styles/hover_pressed = ExtResource( 5 )
+text = "YZ_CURSE_STRENGTH"
+
+[node name="RainbowGold" type="HBoxContainer" parent="ScrollContainer/VBoxContainer"]
+margin_top = 616.0
+margin_right = 1800.0
+margin_bottom = 681.0
 
 [node name="Label" type="Label" parent="ScrollContainer/VBoxContainer/RainbowGold"]
 margin_top = 10.0
@@ -157,9 +166,9 @@ rect_min_size = Vector2( 100, 0 )
 
 [node name="SetWeaponTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 611.0
+margin_top = 685.0
 margin_right = 1800.0
-margin_bottom = 656.0
+margin_bottom = 730.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetWeaponTransparency" index="0"]
@@ -184,9 +193,9 @@ margin_bottom = 45.0
 
 [node name="SetEnemyTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 660.0
+margin_top = 734.0
 margin_right = 1800.0
-margin_bottom = 705.0
+margin_bottom = 779.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyTransparency" index="0"]
@@ -211,9 +220,9 @@ margin_bottom = 45.0
 
 [node name="SetEnemyProjTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 709.0
+margin_top = 783.0
 margin_right = 1800.0
-margin_bottom = 754.0
+margin_bottom = 828.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetEnemyProjTransparency" index="0"]
@@ -238,9 +247,9 @@ margin_bottom = 45.0
 
 [node name="SetGoldTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 758.0
+margin_top = 832.0
 margin_right = 1800.0
-margin_bottom = 803.0
+margin_bottom = 877.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetGoldTransparency" index="0"]
@@ -265,9 +274,9 @@ margin_bottom = 45.0
 
 [node name="SetConsumableTransparency" parent="ScrollContainer/VBoxContainer" instance=ExtResource( 6 )]
 unique_name_in_owner = true
-margin_top = 807.0
+margin_top = 881.0
 margin_right = 1800.0
-margin_bottom = 852.0
+margin_bottom = 926.0
 custom_constants/separation = 20
 
 [node name="Label" parent="ScrollContainer/VBoxContainer/SetConsumableTransparency" index="0"]
@@ -308,6 +317,7 @@ script = ExtResource( 2 )
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/StartingWeapons" to="." method="_on_StartingWeapons_toggled"]
 [connection signal="toggled" from="ScrollContainer/VBoxContainer/StartingItems" to="." method="_on_StartingItems_toggled"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetStartingItemsTimes" to="." method="_on_SetStartingItemsTimes_value_changed"]
+[connection signal="toggled" from="ScrollContainer/VBoxContainer/CurseStrength" to="." method="_on_CurseStrength_toggled"]
 [connection signal="item_selected" from="ScrollContainer/VBoxContainer/RainbowGold/RainbowGold" to="." method="_on_RainbowGold_item_selected"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetWeaponTransparency" to="." method="_on_SetWeaponTransparency_value_changed"]
 [connection signal="value_changed" from="ScrollContainer/VBoxContainer/SetEnemyTransparency" to="." method="_on_SetEnemyTransparency_value_changed"]
