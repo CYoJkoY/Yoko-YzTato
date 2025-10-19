@@ -19,7 +19,9 @@ func _create_curse_strength_label() -> void:
 	var small_font = preload("res://resources/fonts/actual/base/font_smallest_text.tres")
 	_curse_strength_label.set("custom_fonts/font", small_font)
 	
-	var VContainer: VBoxContainer = $HBoxContainer/ScrollContainer/VBoxContainer as VBoxContainer
+	var VContainer: VBoxContainer = get_node_or_null("HBoxContainer/ScrollContainer/VBoxContainer") as VBoxContainer
+	# ↓↓↓ codex_item_description ↓↓↓ #
+	if !VContainer or !is_instance_valid(VContainer): VContainer = get_node_or_null("HBoxContainer/VBoxContainer")
 	VContainer.add_child(_curse_strength_label)
 	
 	_curse_strength_label.owner = self

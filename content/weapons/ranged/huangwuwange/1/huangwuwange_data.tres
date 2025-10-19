@@ -16,7 +16,7 @@
 script = ExtResource( 1 )
 my_id = "weapon_yztato_huangwuwange_1"
 unlocked_by_default = true
-can_be_looted = true
+can_be_looted = false
 icon = ExtResource( 9 )
 name = "WEAPON_YZTATO_HUANGWUWANGE"
 tier = 0

@@ -54,11 +54,10 @@ func _yztato_ready() -> void:
 
 func init_yztato_set_options() -> Dictionary:
 	return {
-		"item_appearances_hide": false,
 		"yztato_unlock_difficulties": false,
 		"yztato_unlock_all_chars": false,
 		"yztato_unlock_all_challenges": false,
-		"yztato_optimize_pickup": true,
+		"yztato_optimize_pickup": false,
 		"yztato_starting_weapons": false,
 
 		"yztato_starting_items": false,

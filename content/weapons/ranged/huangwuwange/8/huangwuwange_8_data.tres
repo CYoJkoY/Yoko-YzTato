@@ -14,8 +14,8 @@
 [resource]
 script = ExtResource( 1 )
 my_id = "weapon_yztato_huangwuwange_8"
-unlocked_by_default = false
-can_be_looted = true
+unlocked_by_default = true
+can_be_looted = false
 icon = ExtResource( 8 )
 name = "WEAPON_YZTATO_HUANGWUWANGE_1"
 tier = 3

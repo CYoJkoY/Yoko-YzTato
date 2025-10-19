@@ -96,7 +96,6 @@ func _yztato_weapons_banned(item: ItemParentData, player_index: int, type: int, 
 
 func _yztato_force_curse_items(item: ItemParentData, player_index: int) -> ItemParentData:
 	var force_curse = RunData.get_player_effect("yztato_force_curse_items", player_index)
-	if item in characters: return item
 	if force_curse == 0 or item.is_cursed: return item
 	
 	var DLCData1: DLCData = ProgressData.available_dlcs[0]
