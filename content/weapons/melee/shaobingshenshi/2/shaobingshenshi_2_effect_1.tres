@@ -7,10 +7,10 @@
 script = ExtResource( 1 )
 key = "effect_projectiles_on_hit"
 text_key = ""
-value = 1
+value = 2
 custom_key = ""
 storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 weapon_stats = ExtResource( 2 )
-auto_target_enemy = false
+auto_target_enemy = true

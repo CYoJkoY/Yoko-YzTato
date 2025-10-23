@@ -10,7 +10,7 @@
 
 [resource]
 script = ExtResource( 1 )
-cooldown = 65
+cooldown = 50
 damage = 15
 accuracy = 1.0
 crit_chance = 0.1
@@ -18,6 +18,9 @@ crit_damage = 1.33
 min_range = 0
 max_range = 125
 knockback = 3
+knockback_piercing = 0.0
+can_have_positive_knockback = true
+can_have_negative_knockback = false
 effect_scale = 1.0
 scaling_stats = [ [ "stat_melee_damage", 0.8 ] ]
 lifesteal = 0.0
@@ -29,6 +32,7 @@ recoil = 25
 recoil_duration = 0.1
 additional_cooldown_every_x_shots = -1
 additional_cooldown_multiplier = -1.0
+speed_percent_modifier = 0
 deal_dmg_on_return = false
 attack_type = 0
 alternate_attack_type = false

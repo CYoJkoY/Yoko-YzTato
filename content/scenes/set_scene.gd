@@ -33,6 +33,7 @@ onready var SetConsumableTransparency = $"%SetConsumableTransparency" as HBoxCon
 func init()->void :
 	focus_before_created = get_focus_owner()
 
+	yield(self, "ready")
 	$BackButton.grab_focus()
 
 	init_values_from_progress_data()
@@ -61,7 +62,8 @@ func init_values_from_progress_data() -> void:
 
 # =========================== Save =========================== #
 func _on_BackButton_pressed():
-	focus_before_created.grab_focus()
+	if focus_before_created != null and focus_before_created.is_inside_tree():
+		focus_before_created.grab_focus()
 	emit_signal("back_button_pressed")
 
 func _on_MenuYztatoSetOptions_hide():

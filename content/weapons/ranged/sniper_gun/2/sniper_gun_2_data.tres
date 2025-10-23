@@ -13,6 +13,7 @@
 script = ExtResource( 2 )
 my_id = "weapon_yztato_sniper_gun_2"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 1 )
 name = "WEAPON_YZTATO_SNIPER_GUN"
 tier = 1
@@ -20,6 +21,7 @@ value = 43
 effects = [ ExtResource( 4 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 weapon_id = "weapon_yztato_sniper_gun"

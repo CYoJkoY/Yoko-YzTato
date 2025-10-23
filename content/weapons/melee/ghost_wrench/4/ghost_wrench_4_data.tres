@@ -13,6 +13,7 @@
 script = ExtResource( 2 )
 my_id = "weapon_yztato_ghost_wrench_4"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 8 )
 name = "WEAPON_YZTATO_GHOST_WRENCH"
 tier = 3
@@ -20,6 +21,7 @@ value = 151
 effects = [ ExtResource( 5 ), ExtResource( 6 ) ]
 tracking_text = "stats_gained"
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 weapon_id = "weapon_yztato_ghost_wrench"

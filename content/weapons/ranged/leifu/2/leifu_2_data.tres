@@ -12,6 +12,7 @@
 script = ExtResource( 1 )
 my_id = "weapon_yztato_leifu_2"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 6 )
 name = "WEAPON_YZTATO_LEIFU"
 tier = 1
@@ -19,7 +20,9 @@ value = 74
 effects = [ ExtResource( 4 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
+curse_factor = 0.0
 weapon_id = "weapon_yztato_leifu"
 type = 1
 sets = [ ExtResource( 7 ) ]

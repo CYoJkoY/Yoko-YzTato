@@ -17,6 +17,7 @@
 script = ExtResource( 1 )
 my_id = "weapon_yztato_xingyunbishou_1"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 4 )
 name = "WEAPON_YZTATO_XINGYUNBISHOU"
 tier = 0
@@ -24,6 +25,7 @@ value = 57
 effects = [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 6 ), ExtResource( 13 ) ]
 tracking_text = "stats_gained"
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 weapon_id = "weapon_yztato_xingyunbishou"

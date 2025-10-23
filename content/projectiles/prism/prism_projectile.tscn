@@ -117,7 +117,7 @@ centered = false
 [node name="EndContainer" type="Node2D" parent="."]
 position = Vector2( 100, 0 )
 
-[node name="EndProjecitle" type="Sprite" parent="EndContainer"]
+[node name="EndProjectile" type="Sprite" parent="EndContainer"]
 position = Vector2( 0, -16 )
 texture = ExtResource( 5 )
 centered = false
