@@ -30,17 +30,17 @@ onready var SetGoldTransparency = $"%SetGoldTransparency" as HBoxContainer
 onready var SetConsumableTransparency = $"%SetConsumableTransparency" as HBoxContainer
 
 # =========================== Init =========================== #
-func init()->void :
-	focus_before_created = get_focus_owner()
-
-	yield(self, "ready")
-	$BackButton.grab_focus()
-
-	init_values_from_progress_data()
-
 func _input(event):
 	if self.visible and event.is_action_pressed("ui_cancel"):
 		_on_BackButton_pressed()
+		get_tree().set_input_as_handled()
+
+func init()->void :
+	focus_before_created = get_focus_owner()
+
+	$BackButton.grab_focus()
+
+	init_values_from_progress_data()
 
 func init_values_from_progress_data() -> void:
 	UnlockDifficulties.pressed = ProgressData.settings.yztato_unlock_difficulties
@@ -48,8 +48,10 @@ func init_values_from_progress_data() -> void:
 	UnlockAllChallenges.pressed = ProgressData.settings.yztato_unlock_all_challenges
 	OptimizePickUp.pressed = ProgressData.settings.yztato_optimize_pickup
 	StartingWeapons.pressed = ProgressData.settings.yztato_starting_weapons
+	
 	StartingItems.pressed = ProgressData.settings.yztato_starting_items
 	SetStartingItemsTimes.set_value(ProgressData.settings.yztato_starting_items_times)
+	
 	CurseStrength.pressed = ProgressData.settings.yztato_curse_strength
 	
 	RainbowGold.select(colors_names.find(ProgressData.settings.yztato_rainbow_gold))
