@@ -85,13 +85,12 @@ func _yztato_blade_storm_attack_speed(delta: float)-> void:
 	if dead: return
 
 	if blade_storm.size() > 0:
-		var _storm_duration = 0
-		_storm_duration = 0.0
+		var _storm_duration = 0.0
 		for weapon in current_weapons:
 			_storm_duration += weapon.current_stats.cooldown
 		_storm_duration *= max(0.1, current_stats.health * 1.0 / max_stats.health) * 0.07 / current_weapons.size()
-		_storm_duration /= max( 1.0, current_stats.speed / 10000 / current_weapons.size() )
-		_storm_duration /= max(0.01, 1.0 + Utils.get_stat("stat_attack_speed", player_index) / 100)
+		_storm_duration /= max( 1.0, current_stats.speed / 10000.0 / current_weapons.size() )
+		_storm_duration /= max(0.01, 1.0 + Utils.get_stat("stat_attack_speed", player_index) / 100.0)
 		_storm_duration = max(_storm_duration, 0.04)
 		_weapons_container.rotation += delta / _storm_duration * TAU
 
@@ -326,13 +325,16 @@ func _restore_original_color() -> void:
 		_is_invincible = false
 		modulate = _original_color
 
+func _stop_all_timers_with_prefix(prefix: String) -> void:
+	for child in get_children():
+		if child is Timer and child.name.begins_with(prefix):
+			child.stop()
+
 func _on_blood_rage_timer_timeout() -> void:
 	if blood_rage_effects.empty(): return
 
 	if timer_stop:
-		for child in get_children():
-			if child is Timer and child.name.begins_with("BloodRageTimer_"):
-				child.stop()
+		_stop_all_timers_with_prefix("BloodRageTimer_")
 		return
 	else: 
 		timer_stop = true
@@ -345,9 +347,7 @@ func _on_random_stat_timer_timeout() -> void:
 	if stat_change.empty(): return
 
 	if timer_stop:
-		for child in get_children():
-			if child is Timer and child.name.begins_with("RandomStatTimer_"):
-				child.stop()
+		_stop_all_timers_with_prefix("RandomStatTimer_")
 		return
 	else: 
 		timer_stop = true
@@ -374,5 +374,3 @@ func yz_change_weapon(weapon_position: int, new_weapon_id: String) -> void:
 	
 	RunData.add_weapon(weapon_data, player_index)
 	call_deferred("add_weapon", weapon_data, weapon_position)
-
-	

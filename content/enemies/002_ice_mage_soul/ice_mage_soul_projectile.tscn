@@ -16,6 +16,7 @@ position = Vector2( 0, 0 )
 texture = ExtResource( 2 )
 
 [node name="Hitbox" parent="." index="1"]
+visible = false
 collision_layer = 16
 
 [node name="Collision" parent="Hitbox" index="0"]

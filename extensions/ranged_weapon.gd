@@ -16,7 +16,7 @@ var max_damage_mul: float = 0.0
 var is_boomerang: bool = false
 var is_returning: bool = false
 var knockback_only_back: bool = false
-var boomerang_wait: bool = true
+var wait_until_return: bool = true
 
 # EFFECT : leave_fire
 var _burning_particles_manager = null
@@ -73,7 +73,7 @@ func should_shoot()->bool:
 func _yztato_upgrade_when_killed_enemies() -> void:
 	for effect in effects:
 		if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
-		if _enemies_killed_this_wave_count % effect.value != 0: return
+		if _enemies_killed_this_wave_count % effect.value != 0: continue
 		
 		var target_weapon_id: String = effect.key
 
@@ -83,6 +83,7 @@ func _yztato_upgrade_when_killed_enemies() -> void:
 					projectile.queue_free()
 
 		_parent.yz_change_weapon(weapon_pos, target_weapon_id)
+		break
 
 func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
 	for effect in effects:
@@ -92,6 +93,8 @@ func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
 
 		if not projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
 			projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
+
+	return
 
 func _yztato_chimera_init_stats()-> void:
 	for effect in effects:
@@ -134,15 +137,15 @@ func _yztato_boomerang_shoot() -> void:
 
 	var target = current_stats.max_range if is_manual_aim() else _current_target[1]
 	
-	if boomerang_wait and !is_returning:
+	if wait_until_return and !is_returning:
 		_shooting_behavior.shoot(target)
 		is_returning = true
-	elif !boomerang_wait:
+	elif !wait_until_return:
 		_shooting_behavior.shoot(target)
 
-	_current_cooldown = 180.0
-
-	if !boomerang_wait:
+	if wait_until_return:
+		_current_cooldown = Utils.LARGE_NUMBER
+	else:
 		_current_cooldown = get_next_cooldown()
 
 	if (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == - 1) and stats.custom_on_cooldown_sprite != null:
@@ -157,7 +160,7 @@ func _yztato_boomerang_ready() -> void:
 			is_boomerang = true
 			max_damage_mul = effect.max_damage_mul
 			knockback_only_back = effect.knockback_only_back
-			boomerang_wait = effect.boomerang_wait
+			wait_until_return = effect.boomerang_wait
 
 func _yztato_set_weapon_transparency(alpha_value: float) -> void:
 	var clamped_alpha = clamp(alpha_value, 0.0, 1.0)
@@ -198,22 +201,29 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 
 	RunData.emit_signal("stats_updated", player_index)
 
+func _apply_multi_hit_effect(thing_hit: Node, damage_dealt: int, effect_data: Array, player_index: int) -> void:
+	for _i in range(effect_data[0]):
+		var args = TakeDamageArgs.new(player_index)
+		var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect_data[1] / 100, args)
+		RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
 	for effect in effects:
 		if effect.get_id() == "yztato_multi_hit":
-			for _i in range(effect.value):
-				var args = TakeDamageArgs.new(player_index)
-				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
-				RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
-				return
+			_apply_multi_hit_effect(thing_hit, damage_dealt, [effect.value, effect[1]], player_index)
+			return
 	
 	var effect_multi_hit = RunData.get_player_effect("yztato_multi_hit", player_index)
 	if !effect_multi_hit.empty():
 		for effect in effect_multi_hit:
-			for _i in range(effect[0]):
-				var args = TakeDamageArgs.new(player_index)
-				var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
-				RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+			_apply_multi_hit_effect(thing_hit, damage_dealt, effect, player_index)
+
+func _spawn_vine_traps(thing_hit: Node, trap_count: int, player_index: int, trap_data) -> void:
+	for _i in range(trap_count):
+		var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
+		var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+		if trap_data.has("weapon_pos"):
+			queue.push_back([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 	for effect in effects:
@@ -222,12 +232,8 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 			var chance = effect.chance as int
 
 			if randf() <= chance / 100.0:
-				var vine_trap = effect
-				for _i in range(count):
-					var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-					var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-					vine_trap.weapon_pos = weapon_pos
-					queue.push_back([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+				effect.weapon_pos = weapon_pos
+				_spawn_vine_traps(thing_hit, count, player_index, effect)
 
 			return
 
@@ -238,16 +244,13 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 			var chance = effect_data[1] as int
 			
 			if randf() <= chance / 100.0:
-				var vine_trap = effect_data[2]
-				for _i in range(count):
-					var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-					var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-					queue.push_back([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+				_spawn_vine_traps(thing_hit, count, player_index, effect_data[2])
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-	if should_shoot: for effect in effects:
-		if effect.get_id() == "yztato_can_attack_while_moving":
-			should_shoot = false or _parent._current_movement == Vector2.ZERO
+	if should_shoot: 
+		for effect in effects:
+			if effect.get_id() == "yztato_can_attack_while_moving":
+				return _parent._current_movement == Vector2.ZERO
 
 	return should_shoot
 
@@ -271,7 +274,7 @@ func yz_on_projectile_returned(projectile: Node2D) -> void:
 	active_boomerangs.erase(projectile)
 	is_returning = false
 
-	if boomerang_wait:
+	if wait_until_return:
 		_current_cooldown = get_next_cooldown()
 
 func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
