@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "yztato_bounce_erase_bullets"
+key = "yztato_melee_erase_bullets"
 text_key = ""
 value = 300
 custom_key = ""

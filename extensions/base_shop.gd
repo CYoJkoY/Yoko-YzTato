@@ -2,8 +2,12 @@ extends "res://ui/menus/shop/base_shop.gd"
 
 # =========================== Extention =========================== #
 func _on_RerollButton_pressed(player_index: int) -> void :
+	var prev_shop_items = _shop_items[player_index].duplicate(true)
+	
 	._on_RerollButton_pressed(player_index)
-	apply_random_curse(player_index)
+	
+	if prev_shop_items != _shop_items[player_index]:
+		apply_random_curse(player_index)
 
 # =========================== Custom =========================== #
 func apply_random_curse(player_index: int) -> void:

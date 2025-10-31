@@ -123,11 +123,11 @@ func _connect_melee_signals(effect_type: String) -> void:
 				node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_erase")
 		"bounce":
 			if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"):
-				# We need to determine what type of bounce this is for the connection
-				var bounce_value = 1  # default value
+				var bounce_value = RunData.get_player_effect("yztato_melee_bounce_bullets", player_index)
+				
 				for effect in effects:
 					if effect.get_id() == "yztato_melee_bounce":
-						bounce_value = effect.value
+						bounce_value += effect.value
 				node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_bounce", [bounce_value, node_hit_box, "weapon"])
 
 func _yztato_set_weapon_transparency(alpha_value: float) -> void:
@@ -295,7 +295,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
 		var projectile_stats: Resource = ProgressData.Yztato.YzProjectile.Stats().duplicate()
 		var projectile_scene: PackedScene = ProgressData.Yztato.YzProjectile.Tscn().duplicate()
 
-		projectile_stats.damage = int((area.damage + current_stats.damage/2) * melee_bounce/100)
+		projectile_stats.damage = (area.damage + current_stats.damage / 2.0) * melee_bounce / 100.0
 		projectile_stats.can_bounce = false
 		projectile_stats.piercing = 99
 		projectile_stats.max_range = Utils.LARGE_NUMBER

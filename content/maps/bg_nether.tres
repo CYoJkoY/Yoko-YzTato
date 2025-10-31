@@ -8,5 +8,5 @@
 script = ExtResource( 1 )
 name = "BG_YZTATO_NETHER"
 icon = ExtResource( 2 )
-outline_color = Color( 0.239216, 0.239216, 0.239216, 1 )
+outline_color = Color( 0.392157, 0.396078, 0.396078, 1 )
 tiles_sprite = ExtResource( 3 )

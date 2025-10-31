@@ -1,15 +1,10 @@
-[gd_resource type="Resource" load_steps=223 format=2]
+[gd_resource type="Resource" load_steps=218 format=2]
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content_data/NewContent.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/minotaur_data.tres" type="Resource" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/blade_dancer_data.tres" type="Resource" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/arsonist/arsonist_data.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/gluttony/gluttony_data.tres" type="Resource" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_weeds.tres" type="Resource" id=6]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_eyes.tres" type="Resource" id=7]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_grass.tres" type="Resource" id=8]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_holes.tres" type="Resource" id=9]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_red_snails.tres" type="Resource" id=10]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_nether.tres" type="Resource" id=11]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/3/chisefengbao_3_data.tres" type="Resource" id=12]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/1/chisefengbao_data.tres" type="Resource" id=13]
@@ -225,7 +220,7 @@
 
 [resource]
 script = ExtResource( 1 )
-backgrounds = [ ExtResource( 7 ), ExtResource( 6 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 8 ), ExtResource( 11 ) ]
+backgrounds = [ ExtResource( 11 ) ]
 characters = [ ExtResource( 5 ), ExtResource( 2 ), ExtResource( 108 ), ExtResource( 136 ), ExtResource( 137 ), ExtResource( 138 ), ExtResource( 139 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 17 ), ExtResource( 88 ), ExtResource( 89 ), ExtResource( 225 ) ]
 enemies = [ ExtResource( 209 ), ExtResource( 212 ) ]
 elites = null
