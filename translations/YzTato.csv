@@ -37,11 +37,6 @@ WEAPON_YZTATO_LIUCAIYAOLING,Flowing Colors Rattle,流彩摇铃
 EFFECT_WEAPON_SLOT_REPLACE,You will own {0} Weapon Slot(s),你将拥有{0}个武器栏
 EFFECT_ONLY_LIUCAIYAOLING,"At the end of each wave, only the [color=#D29AC7]Flowing Colors Rattle[/color] remains","每波结束时, 只保留[color=#D29AC7]流彩摇铃[/color]"
 EFFECT_ONLY_HUANGWUWANGE,"At the end of each wave, only the [color=#758A99]Desolate Elegy[/color] remains","每波结束时, 只保留[color=#758A99]荒芜挽歌[/color]"
-BG_YZTATO_EYES,Eyes,眼球
-BG_YZTATO_WEEDS,Weeds,海草
-BG_YZTATO_HOLES,Craters,陨石坑
-BG_YZTATO_RED_SNAILS,Red Snails,红色蜗牛
-BG_YZTATO_GRASS,Grass,草地
 BG_YZTATO_NETHER,Nether,幽冥
 EFFECT_YZTATO_CHIMERA_FRONT,Launch the following {0} projectiles in sequence,依次发射以下{0}种投射物
 WEAPON_YZTATO_HUANGWUWANGE,Desolate Elegy,荒芜挽歌
@@ -69,40 +64,15 @@ CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
 EFFECT_YZTATO_LEAVE_FIRE,[color=#F94E34]The burning enemy will leave flames on the ground[/color],[color=#F94E34]燃烧的敌人会在地面留下火焰[/color]
 EFFECT_YZTATO_WEAPON_SET_FILTER,Only [color=#3E68DA]weapons of {0} set[/color] will appear in the shop,商店里面只会出现[color=#3E68DA]{0}系列的武器[/color]
 EFFECT_YZTATO_EXTRUSION_ATTACK,Monsters can cause [color=#894369]compression damage[/color],怪物间会产生[color=#894369]挤压伤害[/color]
-MENU_YZTATO_SET,Yztato's Settings,Yztato设置
-YZ_UNLOCK_ALL,Unlock All,全解锁
-YZ_UNLOCK_ALL_CHARS,Unlock All Characters,全角色解锁
-YZ_UNLOCK_DIFFICULTIES,Unlock All Difficulties,全难度解锁
-YZ_UNLOCK_ALL_CHALLENGES,Unlock All Challenges,全成就解锁
 EFFECT_YZTATO_ATTACK_LIMIT,"[color=#FCAB5A]When weapon damage is > {0}, enter Qi mode[/color], which is affected by [color=#00ff00]weapon's damage and range[/color], not by attack speed","[color=#FCAB5A]武器伤害 > {0}时, 进入御气模式[/color], 受{2}武器伤害、范围、效果[/color]影响, 不受攻速影响"
 CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,气剑师
 EFFECT_YZTATO_WEAPON_SET_DELETE,[color=#3E68DA]weapons of {0} set[/color] will not appear in the shop,商店里面不会出现[color=#3E68DA]{0}系列的武器[/color]
-YZ_WEAPON_TRANSPARENCY,Weapon Transparency,武器不透明度
-YZ_ENEMY_TRANSPARENCY,Enemy Transparency,敌人不透明度
-YZ_ENEMY_PROJ_TRANSPARENCY,Enemy Projectile Transparency,敌人子弹不透明度
-YZ_OPTIMIZE_PICK_UP,Optimize Pick Up,拾取优化
 EFFECT_YZTATO_BOOMERANG_WEAPON,"[color=#FF8C00]Boomerang Weapon[/color], {0}, {1}, {2}, damage is {4} ~ {3} bonus depending on distance","[color=#FF8C00]回旋武器[/color], {0}, {1}, {2}, 伤害根据距离得到 {4} ~ {3} 的加成"
 YZTATO_BOOMERANG_WAIT,Must wait boomerang,需等待回旋
 YZTATO_BOOMERANG_WAIT_NO,No Boomerang Wait,无回旋等待
 YZTATO_LOCK_RANGE,Lock Range,锁定回旋范围
 YZTATO_LOCK_RANGE_NO,No Lock Range,回旋范围受范围影响
 YZTATO_KNOCKBACK_ONLY_BACK,Knockback Only Back,仅返回时击退
-YZ_GOLD_TRANSPARENCY,Material Transparency,材料不透明度
-YZ_CONSUMABLE_TRANSPARENCY,Consumable Transparency,消耗品不透明度
-YZ_RAINBOW_GOLD,Rainbow Material,彩虹材料
-YZ_EMPTY,Empty,空
-YZ_EXLIGHT,Extreme Light,极浅
-YZ_LIGHT,Light,浅色
-YZ_MEDIUM,Medium,中等
-YZ_DARK,Dark,深色
-YZ_EXDARK,Extreme Dark,极深
-TERTIARY,Tertiary,第三
-HIT_PROTECTION,Nullify Damage,伤害无效
-ENEMY_GOLD_DROPS,%Material Drops,%掉落材料
-INCREASE_MATERIAL_VALUE,%Material Value,%材料价值
-LOSE_HP_PER_SECOND,Hp Lose Per Second,每秒损失生命
-RECYCLING_GAINS,%Recycling Gain,%回收增益
-GAIN_PCT_GOLD_START_WAVE,%Material Per Wave,%每波增益
 ITEM_YZTATO_HAZARD_SUIT,Hazard Suit,危险防护服
 WEAPON_YZTATO_FLY_AXE,Fly Axe,飞斧
 EFFECT_YZTATO_ONE_SHOT_LOOT,Loot Enemies Die In One Hit,战利品敌人能被一击毙命
@@ -177,9 +147,3 @@ EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store, there is a {2}
 CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
 YZCURSED,Cursed: {0},已诅咒：{0}
-YZ_STARTING_WEAPONS,Any Starting Weapon,开局任选武器
-YZ_STARTING_ITEMS,Any Starting Items,开局任选道具
-YZ_STARTING_ITEMS_TIMES,Starting Items' Number,可选道具数
-ITEM_SELECTION,Item Selection,道具选择
-YZCURSESTRENGTH,Curse: {0}%,诅咒：{0}%
-YZ_CURSE_STRENGTH,Curse Strength Display,诅咒强度显示

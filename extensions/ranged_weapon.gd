@@ -32,7 +32,6 @@ onready var _entity_spawner = get_tree().current_scene.get_node("EntitySpawner")
 func _ready():
 	_yztato_boomerang_ready()
 	_yztato_leave_fire_ready()
-	_yztato_set_weapon_transparency(ProgressData.settings.yztato_set_weapon_transparency)
 	_yztato_chal_ready()
 
 func shoot() -> void:
@@ -161,10 +160,6 @@ func _yztato_boomerang_ready() -> void:
 			max_damage_mul = effect.max_damage_mul
 			knockback_only_back = effect.knockback_only_back
 			wait_until_return = effect.boomerang_wait
-
-func _yztato_set_weapon_transparency(alpha_value: float) -> void:
-	var clamped_alpha = clamp(alpha_value, 0.0, 1.0)
-	modulate.a = clamped_alpha
 
 func _yztato_leave_fire_ready() -> void:
 	_burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()

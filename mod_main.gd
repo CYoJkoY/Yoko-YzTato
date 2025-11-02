@@ -32,13 +32,9 @@ func _init():
 
 		"enemy.gd",
 		# EFFECTS : extrusion_attack, damage_against_not_boss
-		# SETTING : set_enemy_transparency
 
 		"weapons_container.gd",
 		# EFFECTS : blade_storm[ 1/4 ]
-
-		"shooting_attack_behavior.gd",
-		# SETTING : set_enemy_proj_transparency
 
 		"entity_spawner.gd",
 		# EFFECTS : gain_stat_when_killed_single_scaling[ 1/3 ], blood_rage[ 1/3 ],
@@ -52,19 +48,9 @@ func _init():
 		#           heal_on_damage_taken, upgrade_when_killed_enemies[ 1/4 ]
 		# ACHIEVE : only_in, more_than_enough
 
-		"gold.gd",
-		# SETTING : set_gold_transparency, rainbow_gold,
-		#           optimize_pickup[ 2/2 ]
-
 		"main.gd",
 		# EFFECTS : end of wave, level up, special_picked_up_change_stat,
 		#           blood_rage[ 3/3 ], stats_chance_on_level_up
-
-		"menu_data.gd",
-		# SETTING : starting_items
-
-		"consumable.gd",
-		# SETTING : set_consumable_transparency, optimize_pickup[ 1/2 ]
 
 		"player_explosion.gd",
 		# EFFECTS : explosion_erase_bullets
@@ -78,11 +64,9 @@ func _init():
 		
 		"progress_data.gd",
 		# Mod's Contents
-		# SETTINGS
 
 		"run_data.gd",
 		# EFFECTS : lifesteal[ 2/2 ]
-		# SETTING : unlock_all_challenges
 		# Tracked Items
 
 		"sound_manager.gd",
@@ -100,43 +84,20 @@ func _init():
 		"upgrades_ui.gd",
 		# EFFECTS : extra_upgrade
 
-		"title_screen_menus.gd",
-		# SETTINGS[ 1/2 ]
-
-		"main_menu.gd",
-		# SETTINGS[ 2/2 ]
-
-		"character_selection.gd",
-		# SETTING : unlock_all_chars, starting_items
-
-		"difficulty_selection.gd",
-		# SETTING : unlock_difficulties
-
-		"weapon_selection.gd",
-		# SETTING : starting_weapons
-
 		"base_shop.gd",
 		# EFFECTS : random_curse_on_reroll
-
-		"secondary_stat_container.gd",
-		# Secondary Stats' Icons
-
-		"stats_container.gd",
-		# SETTING : tertiary_stats
 
 		"melee_weapon.gd",
 		# EFFECTS : melee_erase_bullets, melee_bounce_bullets,
 		#           flying_sword, blade_storm[ 4/4 ], leave_fire[ 1/2 ], 
 		#           gain_stat_when_killed_single_scaling[ 2/3 ], multi_hit[ 1/2 ],
 		#           vine_trap[ 1/2 ], upgrade_when_killed_enemies[ 2/4 ]
-		# SETTING : set_weapon_transparency[ 1/2 ]
 		# ACHIEVE : counterattack 
 
 		"ranged_weapon.gd",
 		# EFFECTS : upgrade_when_killed_enemies[ 3/4 ], boomerang_weapon, 
 		#           leave_fire[ 2/2 ], multi_hit[ 2/2 ], vine_trap[ 2/2 ]
 		#           gain_stat_when_killed_single_scaling[ 3/3 ],
-		# SETTING : set_weapon_transparency[ 2/2 ]
 		# ACHIEVE : sudden_misfortune
 
 		"wave_manager.gd",
@@ -151,9 +112,6 @@ func _init():
 		
 		["player_run_data.gd", "res://singletons/player_run_data.gd"],
 		# EFFECTS' NAMES
-		
-		["item_description.gd", "res://ui/menus/shop/item_description.gd"],
-		# SETTING : curse_strength
 		
 	]
 

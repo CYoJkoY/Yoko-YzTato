@@ -5,11 +5,6 @@ onready var NodeHurbox = $Hurtbox
 # =========================== Extension =========================== #
 func _ready():
 	_yztato_extrusion_attack_ready()
-	_yztato_set_enemy_transparency(ProgressData.settings.yztato_set_enemy_transparency)
-
-func respawn() -> void:
-	.respawn()
-	_yztato_set_enemy_transparency(ProgressData.settings.yztato_set_enemy_transparency)
 
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
 	value = _yztato_damage_against_not_boss(value)
@@ -27,10 +22,6 @@ func _yztato_extrusion_attack_ready() -> void:
 										Utils.PLAYER_PROJECTILES_BIT + \
 										Utils.ENEMY_PROJECTILES_BIT + \
 										Utils.PET_PROJECTILES_BIT
-
-func _yztato_set_enemy_transparency(alpha_value: float) -> void:
-	var clamped_alpha = clamp(alpha_value, 0.0, 1.0)
-	modulate.a = clamped_alpha
 
 func yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
 	if dead: return

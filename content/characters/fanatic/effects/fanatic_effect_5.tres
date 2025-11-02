@@ -6,7 +6,7 @@
 script = ExtResource( 1 )
 key = "item_yztato_cursed_box"
 text_key = "effect_starting_item"
-value = 1
+value = 5
 custom_key = "starting_item"
 storage_method = 1
 effect_sign = 3

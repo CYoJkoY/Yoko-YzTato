@@ -26,7 +26,6 @@ func _ready()->void :
 	_yztato_melee_setup("erase")
 	_yztato_melee_setup("bounce")
 	_yztato_leave_fire_ready()
-	_yztato_set_weapon_transparency(ProgressData.settings.yztato_set_weapon_transparency)
 
 func _physics_process(_delta: float) -> void:
 	if YZ_is_flying_sword:
@@ -129,10 +128,6 @@ func _connect_melee_signals(effect_type: String) -> void:
 					if effect.get_id() == "yztato_melee_bounce":
 						bounce_value += effect.value
 				node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_bounce", [bounce_value, node_hit_box, "weapon"])
-
-func _yztato_set_weapon_transparency(alpha_value: float) -> void:
-	var clamped_alpha = clamp(alpha_value, 0.0, 1.0)
-	modulate.a = clamped_alpha
 
 func _yztato_flying_sword(player_index: int) -> bool:
 	var flying_sword = RunData.get_player_effect("yztato_flying_sword", player_index)
