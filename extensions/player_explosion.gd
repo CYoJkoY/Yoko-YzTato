@@ -14,7 +14,7 @@ func _yztato_explosion_erase(player_index : int)-> void:
 
 # =========================== Custom =========================== #
 func yz_on_Hitbox_area_entered(area: Area2D)-> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		yz_delete_projectile(area.get_parent())
 
 # Avoid Assertion failed Caused By Function Stop

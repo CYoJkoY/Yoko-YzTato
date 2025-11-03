@@ -269,15 +269,15 @@ func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
 
 # =========================== Method =========================== #
 func yz_on_Range_area_entered(area: Area2D)-> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		_targets_in_range.push_back(area)
 
 func yz_on_Range_area_exited(area: Area2D)-> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		_targets_in_range.erase(area)
 
 func yz_on_Hitbox_area_entered_erase(area: Area2D)-> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		var enemy_projectile: Projectile = area.get_parent()
 		area.active = false
 		area.disable()
@@ -285,7 +285,7 @@ func yz_on_Hitbox_area_entered_erase(area: Area2D)-> void:
 		yz_delete_projectile(enemy_projectile)
 
 func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: Hitbox, symbol: String)-> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		var enemy_projectile: Projectile = area.get_parent()
 		var projectile_stats: Resource = ProgressData.Yztato.YzProjectile.Stats().duplicate()
 		var projectile_scene: PackedScene = ProgressData.Yztato.YzProjectile.Tscn().duplicate()
@@ -368,7 +368,7 @@ func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
 
 
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
-	if area.get_parent().name.count("EnemyProjectile"):
+	if area.get_parent() is EnemyProjectile:
 		yz_delete_projectile(area.get_parent())
 
 func _yztato_blade_storm_direction(direction: float) -> float:
