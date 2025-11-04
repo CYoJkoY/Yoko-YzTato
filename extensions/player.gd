@@ -188,10 +188,12 @@ func _yztato_temp_stats_per_interval() -> void:
 	for sub_effect in effect:
 		var stat_key: String = sub_effect[0]
 		if stat_key == "hit_protection":
+			var stat_value: int = sub_effect[1]
 			var interval: int = sub_effect[2]
 			
 			if _one_second_timeouts % interval == 0:
 				_hit_protection = int(_hit_protection + TempStats.get_stat("hit_protection", player_index))
+				TempStats.remove_stat("hit_protection", stat_value, player_index)
 
 func _yztato_heal_on_damage_taken_ready() -> void:
 	heal_on_damage_taken = RunData.get_player_effect("yztato_heal_on_damage_taken", player_index)

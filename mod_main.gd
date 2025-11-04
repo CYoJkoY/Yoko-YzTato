@@ -106,6 +106,8 @@ func _init():
 		"player_projectile.gd",
 		# EFFECTS : upgrade_when_killed_enemies[ 4/4 ]
 		
+		"dlc_1_data.gd"
+		
 	]
 
 	var extensions2: Array = [
