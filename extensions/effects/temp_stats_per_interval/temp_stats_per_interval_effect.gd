@@ -6,7 +6,7 @@ export var reset_on_hit: bool = false
 
 
 static func get_id() -> String:
-	return "temp_stats_per_interval"
+	return "yztato_temp_stats_per_interval"
 
 
 func apply(player_index: int) -> void:

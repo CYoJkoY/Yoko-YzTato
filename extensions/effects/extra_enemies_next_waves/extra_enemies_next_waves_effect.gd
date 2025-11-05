@@ -1,7 +1,7 @@
 extends Effect
 
-export (Resource) var extra_group_data
-export (int) var waves
+export (Resource) var extra_group_data: Resource
+export (int) var waves: int
 
 # =========================== Extention =========================== #
 static func get_id() -> String:

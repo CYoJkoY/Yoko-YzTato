@@ -1,6 +1,6 @@
 extends NullEffect
 
-export (Array, Array) var scaling_stats = [["stat_max_hp", 0.5]]
+export (Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 
 # =========================== Extension =========================== #
 static func get_id()-> String:

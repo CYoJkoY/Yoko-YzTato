@@ -1,14 +1,14 @@
 extends NullEffect
 
-export (float) var return_speed = 1.0
-export (bool) var boomerang_wait = true
+export (float) var return_speed: float = 1.0
+export (bool) var boomerang_wait: bool = true
 
-export (float) var min_range = 1.0
-export (float) var max_damage_mul = 1.0
-export (float) var min_damage_mul = 1.0
-export (bool) var lock_range = false
-export (bool) var lock_speed = false
-export (bool) var knockback_only_back = true
+export (float) var min_range: float = 1.0
+export (float) var max_damage_mul: float = 1.0
+export (float) var min_damage_mul: float = 1.0
+export (bool) var lock_range: bool = false
+export (bool) var lock_speed: bool = false
+export (bool) var knockback_only_back: bool = true
 
 # =========================== Extension =========================== #
 static func get_id() -> String:
@@ -37,8 +37,21 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
 func yztato_serialize_boomerang(serialized) -> Dictionary:
 	serialized.return_speed = return_speed
 	serialized.boomerang_wait = boomerang_wait
+	serialized.min_range = min_range
+	serialized.max_damage_mul = max_damage_mul
+	serialized.min_damage_mul = min_damage_mul
+	serialized.lock_range = lock_range
+	serialized.lock_speed = lock_speed
+	serialized.knockback_only_back = knockback_only_back
+	
 	return serialized
 
 func yztato_deserialize_boomerang(serialized) -> void:
-		return_speed = serialized.return_speed as float
-		boomerang_wait = serialized.boomerang_wait as bool
+	return_speed = serialized.return_speed as float
+	boomerang_wait = serialized.boomerang_wait as bool
+	min_range = serialized.min_range as float
+	max_damage_mul = serialized.max_damage_mul as float
+	min_damage_mul = serialized.min_damage_mul as float
+	lock_range = serialized.lock_range as bool
+	lock_speed = serialized.lock_speed as bool
+	knockback_only_back = serialized.knockback_only_back as bool

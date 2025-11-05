@@ -1,6 +1,6 @@
 extends NullEffect
 
-export (int) var damage_percent = 50
+export (int) var damage_percent: int = 50
 
 # =========================== Extension =========================== #
 static func get_id()-> String:

@@ -1,7 +1,7 @@
 extends NullEffect
 
-export (float) var duration = 1.0
-export (float) var scale = 1.0
+export (float) var duration: float = 1.0
+export (float) var scale: float = 1.0
 
 # =========================== Extension =========================== #
 static func get_id() -> String:

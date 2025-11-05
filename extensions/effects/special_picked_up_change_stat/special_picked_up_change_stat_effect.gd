@@ -1,7 +1,7 @@
 extends NullEffect
 
-export (String) var stat = "stat_lifesteal"
-export (int) var stat_nb = 1
+export (String) var stat: String = "stat_lifesteal"
+export (int) var stat_nb: int = 1
 
 # =========================== Extension =========================== #
 static func get_id()->String:

@@ -64,6 +64,7 @@ func _init():
 		
 		"progress_data.gd",
 		# Mod's Contents
+		# Extensions After DLC
 
 		"run_data.gd",
 		# EFFECTS : lifesteal[ 2/2 ]
@@ -105,8 +106,6 @@ func _init():
 
 		"player_projectile.gd",
 		# EFFECTS : upgrade_when_killed_enemies[ 4/4 ]
-		
-		"dlc_1_data.gd"
 		
 	]
 

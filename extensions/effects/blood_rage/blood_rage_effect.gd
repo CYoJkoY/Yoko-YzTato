@@ -1,11 +1,11 @@
 extends NullEffect
 
-export (int) var interval = 3  # 触发间隔（秒）
-export (int) var percent_damage_bonus = 15  # 伤害加成
-export (int) var attack_speed_bonus = 12  # 攻击速度加成
-export (int) var dodge_bonus = -6  # 闪避率加成
-export (int) var armor_bonus = -5  # 护甲加成
-export (float) var duration = 1.5  # 效果持续时间（秒）
+export (int) var interval: int = 3
+export (int) var percent_damage_bonus: int = 15
+export (int) var attack_speed_bonus: int = 12
+export (int) var dodge_bonus: int = -6
+export (int) var armor_bonus: int = -5
+export (float) var duration: float = 1.5
 
 var current_timer: int = 0
 var is_active: bool = false

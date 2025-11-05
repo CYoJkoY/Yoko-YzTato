@@ -217,8 +217,7 @@ func _spawn_vine_traps(thing_hit: Node, trap_count: int, player_index: int, trap
 	for _i in range(trap_count):
 		var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
 		var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-		if trap_data.has("weapon_pos"):
-			queue.push_back([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
+		queue.push_back([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 	for effect in effects:

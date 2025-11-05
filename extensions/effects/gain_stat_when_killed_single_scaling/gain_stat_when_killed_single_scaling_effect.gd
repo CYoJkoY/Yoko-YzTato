@@ -1,9 +1,9 @@
 extends NullEffect
 
-export (String) var stat = ""
-export (int) var stat_nb = 1
-export (String) var scaling_stat = ""
-export (float) var scaling_percent = 0.1
+export (String) var stat: String = ""
+export (int) var stat_nb: int = 1
+export (String) var scaling_stat: String = ""
+export (float) var scaling_percent: float = 0.1
 
 # =========================== Extention =========================== #
 static func get_id()->String:
@@ -12,6 +12,7 @@ static func get_id()->String:
 func apply(player_index: int)->void :
 	var effects = RunData.get_player_effects(player_index)
 	if custom_key == "": return
+	
 	effects[custom_key].push_back([key, value, stat, stat_nb, scaling_stat, scaling_percent])
 	Utils.reset_stat_cache(player_index)
 

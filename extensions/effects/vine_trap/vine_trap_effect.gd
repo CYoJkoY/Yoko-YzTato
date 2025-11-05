@@ -1,7 +1,7 @@
-extends StructureEffect
+	extends StructureEffect
 
-export (int) var trap_count = 1
-export (int) var chance = 100
+export (int) var trap_count: int = 1
+export (int) var chance: int = 100
 
 var col_b: String = "[/color]"
 

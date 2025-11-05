@@ -1,6 +1,6 @@
 extends NullEffect
 
-export (String) var set_id = ""
+export (String) var set_id: String = ""
 
 # =========================== Extension =========================== #
 static func get_id() -> String:

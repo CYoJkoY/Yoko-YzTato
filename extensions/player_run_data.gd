@@ -56,7 +56,6 @@ static func init_effects()->Dictionary:
 			"yztato_damage_against_not_boss": 0,                            # effect : 对非boss敌人的伤害倍率
 			"yztato_random_primary_stat_over_time": [],                     # effect : 每经过interval秒，随机主属性变化value
 			"yztato_multi_hit": [],                                         # effect : 每次命中敌人将多造成value次伤害，数值为damage_percent%原伤害
-			"yztato_combo_hit": [],                                         # effect : time_window秒内命中同一敌人，造成的伤害会增加value%
 			"yztato_vine_trap": [],                                         # effect : 击中敌人有chance概率生成trap_count数量藤曼
 			"yztato_stats_chance_on_level_up": [],                          # effect : 升级时，有value2%概率获得value点key属性
 			"yztato_heal_on_damage_taken": [],                              # effect : 受伤时,有value%概率恢复受到的value2%的伤害

@@ -1,6 +1,6 @@
 extends NullEffect
 
-export (int) var interval = 1
+export (int) var interval: int = 1
 
 # =========================== Extention =========================== #
 static func get_id()->String:

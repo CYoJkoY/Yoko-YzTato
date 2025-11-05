@@ -1,7 +1,7 @@
 extends NullEffect
 
-export(Array, Resource) var chimera_projectile_stats = []
-export(Array, Resource) var chimera_texture_sets = []
+export(Array, Resource) var chimera_projectile_stats: Array = []
+export(Array, Resource) var chimera_texture_sets: Array = []
 
 var col_b = "[/color]"
 
