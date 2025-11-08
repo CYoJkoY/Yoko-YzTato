@@ -9,7 +9,7 @@ func _ready():
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
 	value = _yztato_damage_against_not_boss(value)
 	var damage_taken = .take_damage(value, args)
-	yztato_one_shot_loot_take_damage(args)
+	_yztato_one_shot_loot_take_damage(args)
 
 	return damage_taken
 
@@ -23,7 +23,7 @@ func _yztato_extrusion_attack_ready() -> void:
 										Utils.ENEMY_PROJECTILES_BIT + \
 										Utils.PET_PROJECTILES_BIT
 
-func yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
+func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
 	if dead: return
 	
 	if args.hitbox and \

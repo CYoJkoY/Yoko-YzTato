@@ -1,4 +1,4 @@
-	extends StructureEffect
+extends StructureEffect
 
 export (int) var trap_count: int = 1
 export (int) var chance: int = 100

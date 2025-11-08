@@ -15,3 +15,4 @@ stat = "trees"
 stat_nb = 1
 scaling_stat = "trees"
 scaling_percent = 50.0
+tracking_key = "item_ghost_tree"

@@ -205,6 +205,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
 		if effect.get_id() == "yztato_gain_stat_when_killed_single_scaling" and \
 		   effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
 			RunData.add_stat(effect.stat, effect.stat_nb, player_index)
+			RunData.yz_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
 
 	RunData.emit_signal("stats_updated", player_index)
 

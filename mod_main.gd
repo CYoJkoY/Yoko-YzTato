@@ -79,9 +79,6 @@ func _init():
 		"weapon_service.gd",
 		# EFFECTS : crit, yztato_damage_scaling
 
-		"zone_service.gd",
-		# EFFECTS : wave
-
 		"upgrades_ui.gd",
 		# EFFECTS : extra_upgrade
 

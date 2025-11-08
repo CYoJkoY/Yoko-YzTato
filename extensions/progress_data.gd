@@ -13,7 +13,7 @@ func _ready() -> void:
 
 func load_dlc_pcks()->void :
 	.load_dlc_pcks()
-	install_extensions()
+	yz_install_extensions()
 
 # =========================== Custom =========================== #
 func _yztato_ready() -> void:
@@ -29,7 +29,7 @@ func _yztato_ready() -> void:
 
 	Yztato = get_node("/root/ModLoader/Yoko-YzTato/Yztato")
 
-func install_extensions() -> void:
+func yz_install_extensions() -> void:
 	var extensions: Array = [
 		
 		"dlc_1_data.gd",

@@ -44,7 +44,7 @@ WEAPON_YZTATO_HUANGWUWANGE_1,Desolate Elegy △,荒芜挽歌 △
 EFFECT_YZTATO_UPGRADE_WHEN_KILLED_ENEMIES,Weapon upgrades after {0} kills in a single wave,单波次杀敌{0}个后武器升级
 EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can [color=#FCAB5A]erase enemy bullets[/color],近战武器可以[color=#FCAB5A]消除敌人子弹[/color]
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
-EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})",击杀{3}（{4}）名敌人后获得{0}点{1}（{2}）
+EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n[{5}]",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n[{5}]
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
 EFFECT_YZTATO_SWORD_ARRAY,"Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color], which is affected by damage, attack speed, range and player's level","武器攻击方式变为[color=#FF8C00]剑阵模式[/color], 受{2}伤害、攻速、范围、角色等级[/color]影响"
 EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can [color=#FCAB5A]bounce enemy bullets back[/color], its damage affected by weapon's damage and enemy's damage","你的近战武器可[color=#FCAB5A]反弹敌人子弹[/color], 其伤害受{2}武器伤害、敌人伤害[/color]影响"
@@ -146,4 +146,4 @@ EFFECT_YZTATO_DAMAGE_SCALING_FRONT,"For every {1} {0} you have, weapon damage ad
 EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store, there is a {2}chance to curse {0} random owned items and weapons","刷新商店时, 有{2}的几率诅咒随机{0}件已拥有的道具和武器"
 CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
-YZCURSED,Cursed: {0},已诅咒：{0}
+TRACKING_RANDOMCURSED,RandomCursed: {0},已随机诅咒：{0}

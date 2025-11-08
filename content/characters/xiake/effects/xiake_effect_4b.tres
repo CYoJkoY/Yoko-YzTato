@@ -15,3 +15,4 @@ stat = "stat_attack_speed"
 stat_nb = 4
 scaling_stat = "stat_speed"
 scaling_percent = 0.4
+tracking_key = "character_xiake_2"

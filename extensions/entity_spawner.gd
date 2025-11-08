@@ -5,12 +5,7 @@ var kill_count: Dictionary = {}
 var effect_single_kill_count: Dictionary = {}
 
 # EFFECT : gain_random_primary_stat
-var primary_stats: Array = [
-	"stat_max_hp", "stat_hp_regeneration", "stat_lifesteal", "stat_percent_damage",
-	"stat_melee_damage", "stat_ranged_damage", "stat_elemental_damage", "stat_attack_speed",
-	"stat_crit_chance", "stat_engineering", "stat_range", "stat_armor", "stat_dodge",
-	"stat_speed", "stat_luck", "stat_harvesting"
-	]
+var primary_stats: Array = RunData.primary_stats_list
 var kill_count_2: Dictionary = {}
 
 ### hellfire ###
@@ -39,7 +34,7 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died()-> void:
 		if !gain_stat_when_killed_single_scaling.empty():
 			var stats_updated: bool = false
 			
-			# key, value, stat, stat_nb, scaling_stat, scaling_percent
+			# key, value, stat, stat_nb, scaling_stat, scaling_percent, tracking_key
 			for effect_index in gain_stat_when_killed_single_scaling.size():
 				var effect = gain_stat_when_killed_single_scaling[effect_index]
 
@@ -53,6 +48,7 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died()-> void:
 					if scaling_value > 0 and current_effect_count % int(scaling_value) == 0:
 						effect_single_kill_count[effect_index] = 0
 						RunData.add_stat(effect[2], effect[3], player_index)
+						RunData.yz_add_effect_tracking_value(effect[6], effect[3], player_index)
 						stats_updated = true
 						
 			if stats_updated:
@@ -61,7 +57,7 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died()-> void:
 func _yztato_blood_rage_on_enemy_died()-> void:
 	for player_index in RunData.players_data.size():
 		if _players[player_index] and is_instance_valid(_players[player_index]):
-			_players[player_index].on_enemy_killed_reset_blood_rage()
+			_players[player_index].yz_on_enemy_killed_reset_blood_rage()
 
 func _yztato_gain_random_primary_stat_on_enemy_died()-> void:
 	for player_index in RunData.players_data.size():

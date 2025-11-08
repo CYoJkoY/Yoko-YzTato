@@ -63,7 +63,7 @@ func take_damage(value: int, args: TakeDamageArgs)->Array:
 
 func _on_InvincibilityTimer_timeout() -> void:
 	._on_InvincibilityTimer_timeout()
-	_restore_original_color()
+	yz_restore_original_color()
 
 func _on_OneSecondTimer_timeout()->void :
 	._on_OneSecondTimer_timeout()
@@ -174,7 +174,7 @@ func _yztato_random_primary_stat_over_time_ready() -> void:
 			random_stat_timer.one_shot = false
 			random_stat_timer.autostart = false
 			add_child(random_stat_timer)
-			random_stat_timer.connect("timeout", self, "_on_random_stat_timer_timeout")
+			random_stat_timer.connect("timeout", self, "yz_on_random_stat_timer_timeout")
 
 			var interval = effect[1]
 			random_stat_timer.wait_time = interval
@@ -234,7 +234,7 @@ func _yztato_chal_on_consumable_picked_up()->void :
 	ChallengeService.try_complete_challenge("chal_only_in", consumables_picked_up_this_wave)
 
 # =========================== Method =========================== #
-func _on_lifesteal_effect(value: int, player_index: int) -> void:
+func yz_on_lifesteal_effect(value: int, player_index: int) -> void:
 	if self.player_index == player_index and not dead and is_instance_valid(self):
 		var life_steal = RunData.get_player_effect("yztato_life_steal", player_index)
 		if !life_steal.empty():
@@ -243,12 +243,12 @@ func _on_lifesteal_effect(value: int, player_index: int) -> void:
 	.on_lifesteal_effect(value)
 
 
-func on_enemy_killed_reset_blood_rage() -> void:
+func yz_on_enemy_killed_reset_blood_rage() -> void:
 	if !blood_rage_effects.empty():
 		for effect in blood_rage_effects:
-			_trigger_blood_rage(effect[2], effect[3], effect[4], effect[5], effect[6])
+			yz_trigger_blood_rage(effect[2], effect[3], effect[4], effect[5], effect[6])
 
-func _trigger_blood_rage(percent_damage_bonus: int, attack_speed_bonus: int, dodge_bonus: int, armor_bonus: int, duration: float)->void :
+func yz_trigger_blood_rage(percent_damage_bonus: int, attack_speed_bonus: int, dodge_bonus: int, armor_bonus: int, duration: float)->void :
 	if _blood_rage_screen:
 		_blood_rage_screen.start_blood_rage(0.4)
 	
@@ -266,7 +266,7 @@ func _trigger_blood_rage(percent_damage_bonus: int, attack_speed_bonus: int, dod
 	var timer = RunData.get_tree().create_timer(duration, false)
 	timer.connect("timeout", self, "_on_blood_rage_timeout", [[percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus]])
 
-func _clean_up_blood_rage_effects() -> void:
+func yz_clean_up_blood_rage_effects() -> void:
 	for effect_data in _active_blood_rage_effects:
 		var percent_damage_bonus = effect_data[0]
 		var attack_speed_bonus = effect_data[1]
@@ -284,7 +284,7 @@ func _clean_up_blood_rage_effects() -> void:
 	if _blood_rage_screen:
 		_blood_rage_screen.stop_blood_rage()
 
-func _on_blood_rage_timeout(effect_data: Array) -> void:
+func yz_on_blood_rage_timeout(effect_data: Array) -> void:
 	if _active_blood_rage_effects.size() == 0: return
 	var percent_damage_bonus = effect_data[0]
 	var attack_speed_bonus = effect_data[1]
@@ -322,34 +322,34 @@ func yz_apply_gold_color() -> void:
 		_is_invincible = true
 		modulate = Color(1.2, 1.0, 0.3, 1.0)
 
-func _restore_original_color() -> void:
+func yz_restore_original_color() -> void:
 	if _is_invincible:
 		_is_invincible = false
 		modulate = _original_color
 
-func _stop_all_timers_with_prefix(prefix: String) -> void:
+func yz_stop_all_timers_with_prefix(prefix: String) -> void:
 	for child in get_children():
 		if child is Timer and child.name.begins_with(prefix):
 			child.stop()
 
-func _on_blood_rage_timer_timeout() -> void:
+func yz_on_blood_rage_timer_timeout() -> void:
 	if blood_rage_effects.empty(): return
 
 	if timer_stop:
-		_stop_all_timers_with_prefix("BloodRageTimer_")
+		yz_stop_all_timers_with_prefix("BloodRageTimer_")
 		return
 	else: 
 		timer_stop = true
 
 	for effect in blood_rage_effects:
 		for i in effect[1]:
-			_trigger_blood_rage(effect[2], effect[3], effect[4], effect[5], effect[6])
+			yz_trigger_blood_rage(effect[2], effect[3], effect[4], effect[5], effect[6])
 
-func _on_random_stat_timer_timeout() -> void:
+func yz_on_random_stat_timer_timeout() -> void:
 	if stat_change.empty(): return
 
 	if timer_stop:
-		_stop_all_timers_with_prefix("RandomStatTimer_")
+		yz_stop_all_timers_with_prefix("RandomStatTimer_")
 		return
 	else: 
 		timer_stop = true
