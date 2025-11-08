@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的个人Wiki</title>
+    <!-- 引入Font Awesome图标 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* 基础样式 */
+        body { font-family: sans-serif; margin: 0; padding: 20px; }
+        .wiki-title { text-align: center; margin-bottom: 30px; }
+
+        /* 导航按钮样式 */
+        .nav-buttons { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin-bottom: 30px;
+        }
+        .nav-btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 5px; 
+            background: #f0f0f0; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px;
+        }
+        .nav-btn:hover { background: #e0e0e0; }
+
+        /* 内容区域样式 */
+        .content-page { display: none; } /* 默认隐藏所有页面 */
+        .content-page.active { display: block; } /* 显示活动页面 */
+
+        /* 圆方框样式 */
+        .content-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 20px; 
+        }
+        .content-box {
+            border: 1px solid #ddd;
+            border-radius: 15px; /* 圆角 */
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .box-icon { font-size: 2em; color: #555; } /* 图标样式 */
+        .box-text { flex-grow: 1; }
+        .box-name { font-weight: bold; margin-bottom: 5px; }
+        .box-desc { color: #666; font-size: 0.9em; }
+    </style>
+</head>
+<body>
+    <h1 class="wiki-title">我的知识库</h1>
+
+    <nav class="nav-buttons">
+        <button class="nav-btn" onclick="showPage('page1')"><i class="fas fa-home"></i> 首页</button>
+        <button class="nav-btn" onclick="showPage('page2')"><i class="fas fa-code"></i> 编程</button>
+        <button class="nav-btn" onclick="showPage('page3')"><i class="fas fa-book"></i> 读书笔记</button>
+        <!-- 添加更多按钮... -->
+    </nav>
+
+    <section id="page1" class="content-page active">
+        <div class="content-grid">
+            <!-- 单个内容框 -->
+            <div class="content-box">
+                <div class="box-icon"><i class="fab fa-python"></i></div>
+                <div class="box-text">
+                    <div class="box-name">Python学习笔记</div>
+                    <div class="box-desc">记录了Python从基础到进阶的关键知识点和常见问题。</div>
+                </div>
+            </div>
+            <div class="content-box">
+                <div class="box-icon"><i class="fas fa-tools"></i></div>
+                <div class="box-text">
+                    <div class="box-name">工具推荐</div>
+                    <div class="box-desc">一些能提升开发效率的软件和在线工具。</div>
+                </div>
+            </div>
+            <!-- 添加更多内容框... -->
+        </div>
+    </section>
+
+    <section id="page2" class="content-page">
+        <div class="content-grid">
+            <!-- 编程页面的内容框 -->
+            <div class="content-box">
+                <div class="box-icon"><i class="fas fa-bug"></i></div>
+                <div class="box-text">
+                    <div class="box-name">调试技巧</div>
+                    <div class="box-desc">高效定位和解决代码中的Bug。</div>
+                </div>
+            </div>
+            <!-- ... -->
+        </div>
+    </section>
+
+    <!-- 更多内容区域... -->
+
+    <script>
+        function showPage(pageId) {
+            // 隐藏所有页面
+            document.querySelectorAll('.content-page').forEach(page => {
+                page.classList.remove('active');
+            });
+            // 显示选中的页面
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+</body>
+</html>
