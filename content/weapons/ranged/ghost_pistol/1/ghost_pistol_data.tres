@@ -30,4 +30,4 @@ sets = [ ExtResource( 2 ), ExtResource( 3 ) ]
 scene = ExtResource( 7 )
 stats = ExtResource( 6 )
 upgrades_into = ExtResource( 4 )
-add_to_chars_as_starting = [  ]
+add_to_chars_as_starting = [ "character_ghost" ]

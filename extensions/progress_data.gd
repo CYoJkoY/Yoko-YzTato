@@ -3,9 +3,9 @@ extends "res://singletons/progress_data.gd"
 var yztato_data
 var Yztato = null
 
-const MYMODNAME_MOD_DIR: String = "Yoko-YzTato/"
-var dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
-var ext_dir: String = dir + "extensions/"
+const YZMODNAME_MOD_DIR: String = "Yoko-YzTato/"
+var yz_dir = ModLoaderMod.get_unpacked_dir() + YZMODNAME_MOD_DIR
+var yz_ext_dir: String = yz_dir + "extensions/"
 
 # =========================== Extention =========================== #
 func _ready() -> void:
@@ -38,4 +38,4 @@ func yz_install_extensions() -> void:
 	]
 	
 	for path in extensions:
-		ModLoaderMod.install_script_extension(ext_dir + path)
+		ModLoaderMod.install_script_extension(yz_ext_dir + path)
