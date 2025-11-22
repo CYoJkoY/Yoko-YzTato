@@ -12,13 +12,13 @@ export(bool) var can_bounce = true
 export(Array, Resource) var effects
 
 export(Dictionary) var enable_flags = {
-	"modify_damage": false,
-	"modify_knockback": false,
-	"modify_knockback_piercing": false,
-	"modify_projectile_speed": false,
-	"modify_piercing": true,
-	"modify_piercing_dmg_reduction": true,
-	"modify_bounce": true,
-	"modify_bounce_dmg_reduction": true,
-	"modify_effects": false,
+    "modify_damage": false,
+    "modify_knockback": false,
+    "modify_knockback_piercing": false,
+    "modify_projectile_speed": false,
+    "modify_piercing": true,
+    "modify_piercing_dmg_reduction": true,
+    "modify_bounce": true,
+    "modify_bounce_dmg_reduction": true,
+    "modify_effects": false,
 }

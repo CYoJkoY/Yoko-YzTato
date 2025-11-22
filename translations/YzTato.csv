@@ -140,7 +140,7 @@ CHAL_MORE_THAN_ENOUGH_DESC,Finish a run with Multitasker and free weapon slots c
 CHAL_HELLFIRE,Hellfire,地狱火
 CHAL_HELLFIRE_DESC,Kill at least 100 burning enemies in one wave,在一次敌袭中击杀至少100名燃烧的敌人
 CHAL_ONE_FORCE_SUBDUE_TEN,One Force Subdue Ten,一力降十会
-CHAL_ONE_FORCE_SUBDUE_TEN_DESC,Weapon's damage reaches 2000,武器伤害达到2000
+CHAL_ONE_FORCE_SUBDUE_TEN_DESC,Ranged Weapon's damage reaches 2000,远程武器伤害达到2000
 CHAL_LAST_STAND,Last Stand,背水一战
 EFFECT_YZTATO_DAMAGE_SCALING_FRONT,"For every {1} {0} you have, weapon damage additionally scales with: ","每拥有{1}{0}, 武器伤害会随下列属性变化: "
 EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store, there is a {2}chance to curse {0} random owned items and weapons","刷新商店时, 有{2}的几率诅咒随机{0}件已拥有的道具和武器"

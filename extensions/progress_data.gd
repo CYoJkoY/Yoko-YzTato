@@ -9,33 +9,33 @@ var yz_ext_dir: String = yz_dir + "extensions/"
 
 # =========================== Extention =========================== #
 func _ready() -> void:
-	_yztato_ready()
+    _yztato_ready()
 
 func load_dlc_pcks()->void :
-	.load_dlc_pcks()
-	yz_install_extensions()
+    .load_dlc_pcks()
+    yz_install_extensions()
 
 # =========================== Custom =========================== #
 func _yztato_ready() -> void:
-	yztato_data = load("res://mods-unpacked/Yoko-YzTato/content_data/YzTato_content_New.tres")
-	yztato_data.add_resources()
+    yztato_data = load("res://mods-unpacked/Yoko-YzTato/content_data/YzTato_content_New.tres")
+    yztato_data.add_resources()
 
-	RunData.reset()
+    RunData.reset()
 
-	load_game_file()
-	add_unlocked_by_default()
+    load_game_file()
+    add_unlocked_by_default()
 
-	set_max_selectable_difficulty()
+    set_max_selectable_difficulty()
 
-	Yztato = get_node("/root/ModLoader/Yoko-YzTato/Yztato")
+    Yztato = get_node("/root/ModLoader/Yoko-YzTato/Yztato")
 
 func yz_install_extensions() -> void:
-	var extensions: Array = [
-		
-		"dlc_1_data.gd",
-		# Curse My Effects
-		
-	]
-	
-	for path in extensions:
-		ModLoaderMod.install_script_extension(yz_ext_dir + path)
+    var extensions: Array = [
+        
+        "dlc_1_data.gd",
+        # Curse My Effects
+        
+    ]
+    
+    for path in extensions:
+        ModLoaderMod.install_script_extension(yz_ext_dir + path)

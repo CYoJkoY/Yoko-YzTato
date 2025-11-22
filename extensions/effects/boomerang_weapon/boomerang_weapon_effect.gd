@@ -12,46 +12,46 @@ export (bool) var knockback_only_back: bool = true
 
 # =========================== Extension =========================== #
 static func get_id() -> String:
-	return "yztato_boomerang_weapon"
+    return "yztato_boomerang_weapon"
 
 func get_args(_player_index: int) -> Array:
-	var boomerang_wait_arg: String = "YZTATO_BOOMERANG_WAIT" if boomerang_wait else "YZTATO_BOOMERANG_WAIT_NO"
-	var lock_range_arg: String = "YZTATO_LOCK_RANGE" if lock_range else "YZTATO_LOCK_RANGE_NO"
-	var knockback_only_back_arg: String = "YZTATO_KNOCKBACK_ONLY_BACK" if knockback_only_back else "[EMPTY]"
-	var max_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(max_damage_mul * 100) + "%[/color]"
-	var min_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_negative +"]" + str(min_damage_mul * 100) + "%[/color]"
-	
-	return [tr(boomerang_wait_arg), tr(lock_range_arg),tr(knockback_only_back_arg),
-	str(max_damage_mul_arg), str(min_damage_mul_arg)]
+    var boomerang_wait_arg: String = "YZTATO_BOOMERANG_WAIT" if boomerang_wait else "YZTATO_BOOMERANG_WAIT_NO"
+    var lock_range_arg: String = "YZTATO_LOCK_RANGE" if lock_range else "YZTATO_LOCK_RANGE_NO"
+    var knockback_only_back_arg: String = "YZTATO_KNOCKBACK_ONLY_BACK" if knockback_only_back else "[EMPTY]"
+    var max_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(max_damage_mul * 100) + "%[/color]"
+    var min_damage_mul_arg: String = "[color=#"+ ProgressData.settings.color_negative +"]" + str(min_damage_mul * 100) + "%[/color]"
+    
+    return [tr(boomerang_wait_arg), tr(lock_range_arg),tr(knockback_only_back_arg),
+    str(max_damage_mul_arg), str(min_damage_mul_arg)]
 
 func serialize() -> Dictionary:
-	var serialized = .serialize()
-	serialized = yztato_serialize_boomerang(serialized)
-	return serialized
+    var serialized = .serialize()
+    serialized = yztato_serialize_boomerang(serialized)
+    return serialized
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
-	.deserialize_and_merge(serialized)
-	yztato_deserialize_boomerang(serialized)
+    .deserialize_and_merge(serialized)
+    yztato_deserialize_boomerang(serialized)
 
 # =========================== Custom =========================== #
 func yztato_serialize_boomerang(serialized) -> Dictionary:
-	serialized.return_speed = return_speed
-	serialized.boomerang_wait = boomerang_wait
-	serialized.min_range = min_range
-	serialized.max_damage_mul = max_damage_mul
-	serialized.min_damage_mul = min_damage_mul
-	serialized.lock_range = lock_range
-	serialized.lock_speed = lock_speed
-	serialized.knockback_only_back = knockback_only_back
-	
-	return serialized
+    serialized.return_speed = return_speed
+    serialized.boomerang_wait = boomerang_wait
+    serialized.min_range = min_range
+    serialized.max_damage_mul = max_damage_mul
+    serialized.min_damage_mul = min_damage_mul
+    serialized.lock_range = lock_range
+    serialized.lock_speed = lock_speed
+    serialized.knockback_only_back = knockback_only_back
+    
+    return serialized
 
 func yztato_deserialize_boomerang(serialized) -> void:
-	return_speed = serialized.return_speed as float
-	boomerang_wait = serialized.boomerang_wait as bool
-	min_range = serialized.min_range as float
-	max_damage_mul = serialized.max_damage_mul as float
-	min_damage_mul = serialized.min_damage_mul as float
-	lock_range = serialized.lock_range as bool
-	lock_speed = serialized.lock_speed as bool
-	knockback_only_back = serialized.knockback_only_back as bool
+    return_speed = serialized.return_speed as float
+    boomerang_wait = serialized.boomerang_wait as bool
+    min_range = serialized.min_range as float
+    max_damage_mul = serialized.max_damage_mul as float
+    min_damage_mul = serialized.min_damage_mul as float
+    lock_range = serialized.lock_range as bool
+    lock_speed = serialized.lock_speed as bool
+    knockback_only_back = serialized.knockback_only_back as bool
