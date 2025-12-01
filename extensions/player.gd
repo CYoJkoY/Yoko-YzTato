@@ -133,7 +133,7 @@ func _yztato_blood_rage_ready() -> void:
             blood_rage_timer.one_shot = false
             blood_rage_timer.autostart = false
             add_child(blood_rage_timer)
-            blood_rage_timer.connect("timeout", self, "_on_blood_rage_timer_timeout")
+            blood_rage_timer.connect("timeout", self, "yz_on_blood_rage_timer_timeout")
 
             var interval = effect[0]
             blood_rage_timer.wait_time = interval
@@ -264,7 +264,7 @@ func yz_trigger_blood_rage(percent_damage_bonus: int, attack_speed_bonus: int, d
     _active_blood_rage_effects.append([percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus])
 
     var timer = RunData.get_tree().create_timer(duration, false)
-    timer.connect("timeout", self, "_on_blood_rage_timeout", [[percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus]])
+    timer.connect("timeout", self, "yz_on_blood_rage_timeout", [[percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus]])
 
 func yz_clean_up_blood_rage_effects() -> void:
     for effect_data in _active_blood_rage_effects:

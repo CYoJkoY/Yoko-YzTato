@@ -71,7 +71,7 @@ func _yztato_blood_rage_clean() -> void:
         var blood_rage_effects = RunData.get_player_effect("yztato_blood_rage", player_index)
         if blood_rage_effects.size() > 0 and \
         _players[player_index] and is_instance_valid(_players[player_index]):
-            _players[player_index]._clean_up_blood_rage_effects()
+            _players[player_index].yz_clean_up_blood_rage_effects()
 
 func _yztato_stats_chance_on_level_up(player_index: int) -> void:
     for chance_effect in RunData.get_player_effect("yztato_stats_chance_on_level_up", player_index):
