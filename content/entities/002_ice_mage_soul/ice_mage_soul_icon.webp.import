@@ -1,0 +1,35 @@
+[remap]
+
+importer="texture"
+type="StreamTexture"
+path="res://.import/ice_mage_soul_icon.webp-960f694f72d87e96c2280a6ae007d89a.stex"
+metadata={
+"vram_texture": false
+}
+
+[deps]
+
+source_file="res://mods-unpacked/Yoko-YzTato/content/entities/002_ice_mage_soul/ice_mage_soul_icon.webp"
+dest_files=[ "res://.import/ice_mage_soul_icon.webp-960f694f72d87e96c2280a6ae007d89a.stex" ]
+
+[params]
+
+compress/mode=0
+compress/lossy_quality=0.7
+compress/hdr_mode=0
+compress/bptc_ldr=0
+compress/normal_map=0
+flags/repeat=0
+flags/filter=true
+flags/mipmaps=false
+flags/anisotropic=false
+flags/srgb=2
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/HDR_as_SRGB=false
+process/invert_color=false
+process/normal_map_invert_y=false
+stream=false
+size_limit=0
+detect_3d=true
+svg/scale=1.0

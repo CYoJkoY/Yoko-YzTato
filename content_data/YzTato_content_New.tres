@@ -6,6 +6,8 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/arsonist/arsonist_data.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/gluttony/gluttony_data.tres" type="Resource" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/upgrade_when_killed_enemies/upgrade_when_killed_enemies.gd" type="Script" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/001_blind_necromancer/blind_necromancer_item.tres" type="Resource" id=7]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/002_ice_mage_soul/ice_mage_soul_item.tres" type="Resource" id=8]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/maps/bg_nether.tres" type="Resource" id=11]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/3/chisefengbao_3_data.tres" type="Resource" id=12]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/1/chisefengbao_data.tres" type="Resource" id=13]
@@ -163,10 +165,8 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/special_picked_up_change_stat/special_picked_up_change_stat_effect.gd" type="Script" id=206]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/random_primary_stat_over_time/random_primary_stat_over_time_effect.gd" type="Script" id=207]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/gain_random_primary_stat_when_killed/gain_random_primary_stat_when_killed_effect.gd" type="Script" id=208]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/enemies/001_blind_necromancer/blind_necromancer_item.tres" type="Resource" id=209]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/blood_rage/blood_rage_effect.gd" type="Script" id=210]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/temp_stats_per_interval/temp_stats_per_interval_effect.gd" type="Script" id=211]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/enemies/002_ice_mage_soul/ice_mage_soul_item.tres" type="Resource" id=212]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/weapon_set_delete/weapon_set_delete_effect.gd" type="Script" id=213]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/weapon_set_filter/weapon_set_filter_effect.gd" type="Script" id=214]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/gain_stat_when_killed_single_scaling/gain_stat_when_killed_single_scaling_effect.gd" type="Script" id=215]
@@ -189,7 +189,7 @@
 script = ExtResource( 1 )
 backgrounds = [ ExtResource( 11 ) ]
 characters = [ ExtResource( 5 ), ExtResource( 2 ), ExtResource( 108 ), ExtResource( 136 ), ExtResource( 137 ), ExtResource( 138 ), ExtResource( 139 ), ExtResource( 3 ), ExtResource( 4 ), ExtResource( 17 ), ExtResource( 88 ), ExtResource( 89 ), ExtResource( 225 ) ]
-enemies = [ ExtResource( 209 ), ExtResource( 212 ) ]
+entities = [ ExtResource( 7 ), ExtResource( 8 ) ]
 elites = null
 bosses = null
 stats = null

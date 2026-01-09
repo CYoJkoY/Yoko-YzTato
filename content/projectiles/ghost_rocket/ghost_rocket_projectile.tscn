@@ -1,14 +1,32 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://projectiles/player_projectile.tscn" type="PackedScene" id=1]
+[ext_resource path="res://overlap/hitbox.tscn" type="PackedScene" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/ghost_rocket/ghost_rocket_projectile.webp" type="Texture" id=2]
+[ext_resource path="res://projectiles/player_projectile.gd" type="Script" id=3]
 
-[node name="RocketProjectile" instance=ExtResource( 1 )]
+[sub_resource type="CircleShape2D" id=1]
+radius = 44.0
 
-[node name="Sprite" parent="." index="0"]
+[node name="RocketProjectile" type="Node2D"]
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="."]
+unique_name_in_owner = true
+position = Vector2( 24, 0 )
 texture = ExtResource( 2 )
+
+[node name="Hitbox" parent="." instance=ExtResource( 1 )]
+unique_name_in_owner = true
+collision_layer = 8
 
 [node name="Collision" parent="Hitbox" index="0"]
 position = Vector2( 21, 0 )
+shape = SubResource( 1 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+unique_name_in_owner = true
+
+[connection signal="critically_hit_something" from="Hitbox" to="." method="_on_Hitbox_critically_hit_something"]
+[connection signal="hit_something" from="Hitbox" to="." method="_on_Hitbox_hit_something"]
 
 [editable path="Hitbox"]

@@ -3,7 +3,7 @@
 [ext_resource path="res://weapons/weapon.tscn" type="PackedScene" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_rocket_launcher/ghost_rocket_launcher.webp" type="Texture" id=2]
 [ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=3]
-[ext_resource path="res://weapons/ranged/ranged_weapon.gd" type="Script" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/ghost_rocket_launcher/ghost_rocket_launcher.gd" type="Script" id=4]
 
 [sub_resource type="ShaderMaterial" id=2]
 resource_local_to_scene = true
@@ -22,7 +22,7 @@ resource_local_to_scene = true
 radius = 72.4431
 
 [node name="RocketLauncher" instance=ExtResource( 1 )]
-script = ExtResource( 5 )
+script = ExtResource( 4 )
 outline_shader_mat = SubResource( 2 )
 
 [node name="Sprite" parent="." index="0"]
@@ -31,9 +31,6 @@ texture = ExtResource( 2 )
 
 [node name="Muzzle" parent="Sprite" index="1"]
 position = Vector2( 56, -2 )
-
-[node name="Attach" parent="." index="1"]
-position = Vector2( 0, 9 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
 shape = SubResource( 1 )
