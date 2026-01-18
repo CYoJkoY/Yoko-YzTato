@@ -9,6 +9,7 @@
 script = ExtResource( 5 )
 my_id = "item_yztato_destiny_dice"
 unlocked_by_default = true
+can_be_looted = true
 icon = ExtResource( 3 )
 name = "ITEM_YZTATO_DESTINY_DICE"
 tier = 1
@@ -16,6 +17,7 @@ value = 65
 effects = [ ExtResource( 1 ), ExtResource( 2 ) ]
 tracking_text = ""
 is_lockable = true
+unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
 max_nb = 5
