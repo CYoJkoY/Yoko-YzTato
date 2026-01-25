@@ -12,33 +12,6 @@ static func get_id() -> String:
     return "yztato_vine_trap"
 
 func get_text(player_index: int, _colored: bool = true) -> String:
-    var text = _yztato_vine_trap_get_text(player_index)
-    return text
-
-func apply(player_index: int) -> void:
-    var effects = RunData.get_player_effects(player_index)
-    if custom_key == "": return
-    effects[custom_key].append([trap_count, chance, self])
-    Utils.reset_stat_cache(player_index)
-
-func unapply(player_index: int) -> void:
-    var effects = RunData.get_player_effects(player_index)
-    if custom_key == "": return
-    effects[custom_key].erase([trap_count, chance, self])
-    Utils.reset_stat_cache(player_index)
-
-func serialize() -> Dictionary:
-    var serialized = .serialize()
-    serialized = _yztato_vine_trap_serialize(serialized)
-    
-    return serialized
-
-func deserialize_and_merge(serialized: Dictionary) -> void:
-    .deserialize_and_merge(serialized)
-    _yztato_vine_trap_deserialize_and_merge(serialized)
-
-# =========================== Custom =========================== #
-func _yztato_vine_trap_get_text(player_index: int) -> String:
     var str_trap_count: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(trap_count) + "[/color]"
     var str_chance: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(chance) + "%[/color]"
     var attack_speed: String = "[color=#"+ ProgressData.settings.color_positive +"]" + str(round(stats.cooldown / 60.0 * 100.0) / 100.0) + "[/color]"
@@ -52,18 +25,31 @@ func _yztato_vine_trap_get_text(player_index: int) -> String:
     text = text + get_trap_damage_text(stats, player_index)
     return text
 
-func _yztato_vine_trap_serialize(serialized: Dictionary) -> Dictionary:
+func apply(player_index: int) -> void:
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
+    effect_items.append([trap_count, chance, self])
+    Utils.reset_stat_cache(player_index)
+
+func unapply(player_index: int) -> void:
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
+    effect_items.erase([trap_count, chance, self])
+    Utils.reset_stat_cache(player_index)
+
+func serialize() -> Dictionary:
+    var serialized = .serialize()
     serialized.trap_count = trap_count
     serialized.chance = chance
+    
     return serialized
 
-func _yztato_vine_trap_deserialize_and_merge(serialized: Dictionary) -> void:
+func deserialize_and_merge(serialized: Dictionary) -> void:
+    .deserialize_and_merge(serialized)
     trap_count = serialized.trap_count as int
     chance = serialized.chance as int
 
 # =========================== Method =========================== #
 func get_trap_damage_text(stats: Resource, player_index: int) -> String:
-    var percent_dmg_bonus: float = (1 + (Utils.get_stat("stat_percent_damage", player_index) / 100.0))
+    var percent_dmg_bonus: float = (1 + (Utils.get_stat(Keys.stat_percent_damage_hash, player_index) / 100.0))
     var damage: int = int(max(1, round(percent_dmg_bonus * (get_scaling_stats_dmg(stats.scaling_stats, player_index) + stats.damage))))
     var text: String = get_dmg_text_with_scaling_stats(damage, stats.scaling_stats, stats.damage)
     return text

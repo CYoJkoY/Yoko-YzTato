@@ -3,7 +3,7 @@ extends "res://entities/units/player/player.gd"
 var timer_stop: bool = false
 
 # blade_storm
-var blade_storm: Array = []
+var blade_storm: int = 0
 
 # blood_rage
 var blood_rage_effects: Array = []
@@ -17,12 +17,6 @@ var _original_color: Color = Color(1.0, 1.0, 1.0, 1.0)
 var _is_invincible: bool = false
 
 # random_primary_stat_on_hit, random_primary_stat_over_time
-var primary_stats: Array = [
-    "stat_max_hp", "stat_hp_regeneration", "stat_lifesteal", "stat_percent_damage",
-    "stat_melee_damage", "stat_ranged_damage", "stat_elemental_damage", "stat_attack_speed",
-    "stat_crit_chance", "stat_engineering", "stat_range", "stat_armor", "stat_dodge",
-    "stat_speed", "stat_luck", "stat_harvesting"
-    ]
 var stat_change: Array = []
 var random_primary_stat_over_time_timer: int = 0
 
@@ -75,7 +69,7 @@ func on_consumable_picked_up(consumable_data: ConsumableData)->void :
 
 # =========================== Custom =========================== #
 func _yztato_blade_storm_ready() -> void:
-    blade_storm = RunData.get_player_effect("yztato_blade_storm",player_index)
+    blade_storm = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
 
 func _yztato_lifesteal_ready() -> void:
     if not RunData.is_connected("lifesteal_effect", self, "_on_lifesteal_effect"):
@@ -84,13 +78,13 @@ func _yztato_lifesteal_ready() -> void:
 func _yztato_blade_storm_attack_speed(delta: float)-> void:
     if dead: return
 
-    if blade_storm.size() > 0:
+    if blade_storm != 0:
         var _storm_duration = 0.0
         for weapon in current_weapons:
             _storm_duration += weapon.current_stats.cooldown
         _storm_duration *= max(0.1, current_stats.health * 1.0 / max_stats.health) * 0.07 / current_weapons.size()
         _storm_duration /= max( 1.0, current_stats.speed / 10000.0 / current_weapons.size() )
-        _storm_duration /= max(0.01, 1.0 + Utils.get_stat("stat_attack_speed", player_index) / 100.0)
+        _storm_duration /= max(0.01, 1.0 + Utils.get_stat(Keys.stat_attack_speed_hash, player_index) / 100.0)
         _storm_duration = max(_storm_duration, 0.04)
         _weapons_container.rotation += delta / _storm_duration * TAU
 
@@ -104,7 +98,7 @@ func _yztato_blade_storm_attack_speed(delta: float)-> void:
                 _weapons_container.rotation -= TAU
 
 func _yztato_blood_rage_ready() -> void:
-    blood_rage_effects = RunData.get_player_effect("yztato_blood_rage", player_index)
+    blood_rage_effects = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
     
     if not has_node("BloodRageScreen"):
         _blood_rage_screen = ColorRect.new()
@@ -143,7 +137,7 @@ func _yztato_invincible_on_hit_duration_ready() -> void:
     _original_color = modulate
 
 func _yztato_invincible_on_hit_duration() -> void:
-    var invincible_duration = RunData.get_player_effect("yztato_invincible_on_hit_duration", player_index)
+    var invincible_duration: int = RunData.get_player_effect(Utils.yztato_invincible_on_hit_duration_hash, player_index)
     if invincible_duration > 0:
         _invincibility_timer.wait_time = invincible_duration
         _invincibility_timer.start()
@@ -151,20 +145,20 @@ func _yztato_invincible_on_hit_duration() -> void:
         yz_apply_gold_color()
 
 func _yztato_stat_on_hit() -> void:
-    var stat_penalty = RunData.get_player_effect("yztato_stat_on_hit", player_index)
+    var stat_penalty: Array = RunData.get_player_effect(Utils.yztato_stat_on_hit_hash, player_index)
     if stat_penalty.size() > 0:
         for stat in stat_penalty:
-            yz_remove_stat(stat[0], -stat[1], player_index)
+            yz_change_stat(stat[0], stat[1], player_index)
 
 func _yztato_random_primary_stat_on_hit() -> void:
-    var stat_penalty = RunData.get_player_effect("yztato_random_primary_stat_on_hit", player_index)
+    var stat_penalty: int = RunData.get_player_effect(Utils.yztato_random_primary_stat_on_hit_hash, player_index)
     if stat_penalty != 0:
-        var random_stat = primary_stats[randi() % primary_stats.size()]
-        RunData.remove_stat(random_stat, -stat_penalty, player_index)
+        var random_stat = RunData.primary_stats_list.pick_random()
+        yz_change_stat(random_stat, stat_penalty, player_index)
         RunData.emit_signal("stats_updated", player_index)
 
 func _yztato_random_primary_stat_over_time_ready() -> void:
-    stat_change = RunData.get_player_effect("yztato_random_primary_stat_over_time", player_index)
+    stat_change = RunData.get_player_effect(Utils.yztato_random_primary_stat_over_time_hash, player_index)
 
     if not stat_change.empty():
         for i in range(stat_change.size()):
@@ -184,19 +178,19 @@ func _yztato_timer_process() -> void:
     if timer_stop: timer_stop = false
 
 func _yztato_temp_stats_per_interval() -> void:
-    var effect: Array = RunData.get_player_effect("temp_stats_per_interval", player_index)
+    var effect: Array = RunData.get_player_effect(Keys.temp_stats_per_interval_hash, player_index)
     for sub_effect in effect:
-        var stat_key: String = sub_effect[0]
-        if stat_key == "hit_protection":
+        var stat_key_hash: int = sub_effect[0]
+        if stat_key_hash == Keys.hit_protection_hash:
             var stat_value: int = sub_effect[1]
             var interval: int = sub_effect[2]
             
             if _one_second_timeouts % interval == 0:
-                _hit_protection = int(_hit_protection + TempStats.get_stat("hit_protection", player_index))
-                TempStats.remove_stat("hit_protection", stat_value, player_index)
+                _hit_protection = int(_hit_protection + TempStats.get_stat(Keys.hit_protection_hash, player_index))
+                TempStats.remove_stat(Keys.hit_protection_hash, stat_value, player_index)
 
 func _yztato_heal_on_damage_taken_ready() -> void:
-    heal_on_damage_taken = RunData.get_player_effect("yztato_heal_on_damage_taken", player_index)
+    heal_on_damage_taken = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)
 
 func _yztato_heal_on_damage_taken(result: Array) -> void:
     _last_damage_taken = result[1]
@@ -209,7 +203,7 @@ func _yztato_heal_on_damage_taken(result: Array) -> void:
             var last_damage: int = _last_damage_taken
             var heal_amount: int = int(max(1, int(last_damage * (percent / 100.0))))
             if heal_amount > 0:
-                var _healed = on_healing_effect(heal_amount, "item_yztato_insurance_policy")
+                var _healed = on_healing_effect(heal_amount, Keys.item_yztato_insurance_policy_hash)
 
 func _yztato_chal_ready() -> void:
     ### only_in ###
@@ -225,21 +219,22 @@ func _yztato_chal_ready() -> void:
     if RunData.current_wave == 20 and \
     RunData.get_player_character(player_index).my_id == "character_multitasker" and \
     less_than_four_throught:
-        ChallengeService.try_complete_challenge("chal_more_than_enough", RunData.get_free_weapon_slots(player_index))
+        ChallengeService.try_complete_challenge(Utils.chal_more_than_enough_hash, RunData.get_free_weapon_slots(player_index))
 
 func _yztato_chal_on_consumable_picked_up()->void :
     ### only_in ###
     var player_data = RunData.players_data[player_index]
     consumables_picked_up_this_wave = player_data.consumables_picked_up_this_run - consumables_picked_up_last_wave
-    ChallengeService.try_complete_challenge("chal_only_in", consumables_picked_up_this_wave)
+    ChallengeService.try_complete_challenge(Utils.chal_only_in_hash, consumables_picked_up_this_wave)
 
 # =========================== Method =========================== #
 func yz_on_lifesteal_effect(value: int, player_index: int) -> void:
     if self.player_index == player_index and not dead and is_instance_valid(self):
-        var life_steal = RunData.get_player_effect("yztato_life_steal", player_index)
-        if !life_steal.empty():
+        var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
+        if life_steal != 0:
             on_healing_effect(value)
             return
+        
     .on_lifesteal_effect(value)
 
 
@@ -256,10 +251,10 @@ func yz_trigger_blood_rage(percent_damage_bonus: int, attack_speed_bonus: int, d
         _blood_rage_particles.global_position = global_position
         _blood_rage_particles.restart()
     
-    if percent_damage_bonus != 0: yz_add_stat("stat_percent_damage", percent_damage_bonus, player_index)
-    if attack_speed_bonus != 0: yz_add_stat("stat_attack_speed", attack_speed_bonus, player_index)
-    if dodge_bonus != 0: yz_add_stat("stat_dodge", dodge_bonus, player_index)
-    if armor_bonus != 0: yz_add_stat("stat_armor", armor_bonus, player_index)
+    if percent_damage_bonus != 0: yz_change_stat(Keys.stat_percent_damage_hash, percent_damage_bonus, player_index)
+    if attack_speed_bonus != 0: yz_change_stat(Keys.stat_attack_speed_hash, attack_speed_bonus, player_index)
+    if dodge_bonus != 0: yz_change_stat(Keys.stat_dodge_hash, dodge_bonus, player_index)
+    if armor_bonus != 0: yz_change_stat(Keys.stat_armor_hash, armor_bonus, player_index)
 
     _active_blood_rage_effects.append([percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus])
 
@@ -273,10 +268,10 @@ func yz_clean_up_blood_rage_effects() -> void:
         var dodge_bonus = effect_data[2]
         var armor_bonus = effect_data[3]
         
-        if percent_damage_bonus != 0: yz_remove_stat("stat_percent_damage", percent_damage_bonus, player_index)
-        if attack_speed_bonus != 0: yz_remove_stat("stat_attack_speed", attack_speed_bonus, player_index)
-        if dodge_bonus != 0: yz_remove_stat("stat_dodge", dodge_bonus, player_index)
-        if armor_bonus != 0: yz_remove_stat("stat_armor", armor_bonus, player_index)
+        if percent_damage_bonus != 0: yz_change_stat(Keys.stat_percent_damage_hash, percent_damage_bonus, player_index)
+        if attack_speed_bonus != 0: yz_change_stat(Keys.stat_attack_speed_hash, attack_speed_bonus, player_index)
+        if dodge_bonus != 0: yz_change_stat(Keys.stat_dodge_hash, dodge_bonus, player_index)
+        if armor_bonus != 0: yz_change_stat(Keys.stat_armor_hash, armor_bonus, player_index)
     
     _active_blood_rage_effects.clear()
     
@@ -291,28 +286,19 @@ func yz_on_blood_rage_timeout(effect_data: Array) -> void:
     var dodge_bonus = effect_data[2]
     var armor_bonus = effect_data[3]
     
-    if percent_damage_bonus != 0: yz_remove_stat("stat_percent_damage", percent_damage_bonus, player_index)
-    if attack_speed_bonus != 0: yz_remove_stat("stat_attack_speed", attack_speed_bonus, player_index)
-    if dodge_bonus != 0: yz_remove_stat("stat_dodge", dodge_bonus, player_index)
-    if armor_bonus != 0: yz_remove_stat("stat_armor", armor_bonus, player_index)
+    if percent_damage_bonus != 0: yz_change_stat(Keys.stat_percent_damage_hash, -percent_damage_bonus, player_index)
+    if attack_speed_bonus != 0: yz_change_stat(Keys.stat_attack_speed_hash, -attack_speed_bonus, player_index)
+    if dodge_bonus != 0: yz_change_stat(Keys.stat_dodge_hash, -dodge_bonus, player_index)
+    if armor_bonus != 0: yz_change_stat(Keys.stat_armor_hash, -armor_bonus, player_index)
     
     _active_blood_rage_effects.erase(effect_data)
 
     if _blood_rage_screen:
         _blood_rage_screen.stop_blood_rage()
 
-func yz_add_stat(stat_name: String, value: int, player_index: int) -> void:
-    assert (Utils.is_stat_key(stat_name), "%s is not a stat key" % stat_name)
-    var effects = RunData.get_player_effects(player_index)
-    effects[stat_name] += value
-    RunData._are_player_stats_dirty[player_index] = true
-    Utils.reset_stat_cache(player_index)
-    RunData._emit_stats_updated()
-
-func yz_remove_stat(stat_name: String, value: int, player_index: int) -> void:
-    assert (Utils.is_stat_key(stat_name), "%s is not a stat key" % stat_name)
-    var effects = RunData.get_player_effects(player_index)
-    effects[stat_name] -= value
+func yz_change_stat(stat_hash: int, value: int, player_index: int) -> void:
+    var _stat = RunData.get_player_effect(stat_hash, player_index)
+    _stat += value
     RunData._are_player_stats_dirty[player_index] = true
     Utils.reset_stat_cache(player_index)
     RunData._emit_stats_updated()
@@ -355,11 +341,11 @@ func yz_on_random_stat_timer_timeout() -> void:
         timer_stop = true
 
     for effect in stat_change:
-        var random_stat = primary_stats[randi() % primary_stats.size()]
-        RunData.remove_stat(random_stat, -effect[0], player_index)
+        var random_stat = RunData.primary_stats_list.pcik_random()
+        yz_change_stat(random_stat, effect[0], player_index)
         RunData.emit_signal("stats_updated", player_index)
 
-func yz_change_weapon(weapon_position: int, new_weapon_id: String) -> void:
+func yz_change_weapon(weapon_position: int, new_weapon_id_hash: int) -> void:
     if weapon_position < 0 or weapon_position >= current_weapons.size(): return
     
     var old_weapon = current_weapons[weapon_position]
@@ -371,7 +357,7 @@ func yz_change_weapon(weapon_position: int, new_weapon_id: String) -> void:
     
     old_weapon.queue_free()
     
-    var weapon_data = ItemService.get_element(ItemService.weapons, new_weapon_id)
+    var weapon_data = ItemService.get_element(ItemService.weapons, new_weapon_id_hash)
     if weapon_data == null: return
     
     RunData.add_weapon(weapon_data, player_index)

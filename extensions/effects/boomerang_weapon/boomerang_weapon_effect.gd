@@ -26,15 +26,6 @@ func get_args(_player_index: int) -> Array:
 
 func serialize() -> Dictionary:
     var serialized = .serialize()
-    serialized = yztato_serialize_boomerang(serialized)
-    return serialized
-
-func deserialize_and_merge(serialized: Dictionary) -> void:
-    .deserialize_and_merge(serialized)
-    yztato_deserialize_boomerang(serialized)
-
-# =========================== Custom =========================== #
-func yztato_serialize_boomerang(serialized) -> Dictionary:
     serialized.return_speed = return_speed
     serialized.boomerang_wait = boomerang_wait
     serialized.min_range = min_range
@@ -43,10 +34,11 @@ func yztato_serialize_boomerang(serialized) -> Dictionary:
     serialized.lock_range = lock_range
     serialized.lock_speed = lock_speed
     serialized.knockback_only_back = knockback_only_back
-    
+
     return serialized
 
-func yztato_deserialize_boomerang(serialized) -> void:
+func deserialize_and_merge(serialized: Dictionary) -> void:
+    .deserialize_and_merge(serialized)
     return_speed = serialized.return_speed as float
     boomerang_wait = serialized.boomerang_wait as bool
     min_range = serialized.min_range as float
@@ -55,3 +47,4 @@ func yztato_deserialize_boomerang(serialized) -> void:
     lock_range = serialized.lock_range as bool
     lock_speed = serialized.lock_speed as bool
     knockback_only_back = serialized.knockback_only_back as bool
+

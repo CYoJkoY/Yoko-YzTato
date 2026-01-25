@@ -2,16 +2,14 @@ extends "res://ui/menus/shop/base_shop.gd"
 
 # =========================== Extention =========================== #
 func _on_RerollButton_pressed(player_index: int) -> void :
-    var prev_shop_items = _shop_items[player_index].duplicate(true)
-    
     ._on_RerollButton_pressed(player_index)
     
-    if prev_shop_items != _shop_items[player_index]:
+    if RunData.get_player_gold(player_index) >= _reroll_price[player_index]:
         _yztato_apply_random_curse(player_index)
 
 # =========================== Custom =========================== #
 func _yztato_apply_random_curse(player_index: int) -> void:
-    var random_curse: Array = RunData.get_player_effect("yztato_random_curse_on_reroll", player_index)
+    var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
     if random_curse.empty(): return
     
     var dlc_data: DLCData = ProgressData.available_dlcs[0]
@@ -38,7 +36,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
         var gear_count := min(count, all_gears.size())
         if gear_count <= 0: continue
         
-        RunData.add_tracked_value(player_index, "character_yztato_fanatic", gear_count)
+        RunData.add_tracked_value(player_index, Keys.character_yztato_fanatic_hash, gear_count)
         
         var gears_to_curse = []
         for _i in range(gear_count):

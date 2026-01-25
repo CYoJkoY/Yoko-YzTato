@@ -8,8 +8,8 @@ func update_weapons_positions(weapons: Array)-> void :
 # =========================== Custom =========================== #
 func _yztato_blade_storm_positions(weapons: Array)-> bool :
     for player_index in RunData.players_data.size():
-        var blade_storm = RunData.get_player_effect("yztato_blade_storm",player_index)
-        if blade_storm.size() > 0:
+        var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
+        if blade_storm != 0:
             var attack_range = 0
             for weapon in weapons:
                 attack_range += weapon.current_stats.max_range

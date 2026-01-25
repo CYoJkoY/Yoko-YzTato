@@ -4,10 +4,11 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "attack_limit"
-text_key = "EFFECT_YZTATO_ATTACK_LIMIT"
+key = "yztato_flying_sword"
+text_key = "EFFECT_YZTATO_FLYING_SWORD_QI"
 value = 20
-custom_key = "yztato_flying_sword"
+custom_key = ""
 storage_method = 1
 effect_sign = 3
 custom_args = [  ]
+mode_type = 0

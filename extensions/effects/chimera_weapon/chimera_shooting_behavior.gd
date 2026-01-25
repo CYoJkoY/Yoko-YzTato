@@ -31,7 +31,7 @@ func _yztato_chimera_shoot_projectile(rotation:float = _parent.rotation, knockba
         _parent,
         args
     )
-    projectile.set_damage_tracking_key("")
+    projectile.set_damage_tracking_key(Keys.empty_hash)
 
     emit_signal("projectile_shot", projectile)
 

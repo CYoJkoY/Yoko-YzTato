@@ -16,28 +16,14 @@ static func get_id() -> String:
     return "yztato_blood_rage"
 
 func apply(player_index: int) -> void:
-    var effects = RunData.get_player_effects(player_index)
-    if custom_key == "": return
-    var blood_rage_effects = RunData.get_player_effect("yztato_blood_rage", player_index)
-    for existing_effect in blood_rage_effects:
-        if existing_effect[0] == interval:
-            existing_effect[1] += 1
-            return
-    effects[custom_key].push_back([interval, 1, percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus, duration])
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
+    effect_items.push_back([interval, 1, percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus, duration])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
-    var effects = RunData.get_player_effects(player_index)
-    if custom_key == "": return
-    var blood_rage_effects = RunData.get_player_effect("yztato_blood_rage", player_index)
-    for i in blood_rage_effects.size():
-        var existing_effect = blood_rage_effects[i]
-        if existing_effect[0] == interval:
-            existing_effect[1] -= 1
-            if existing_effect[1] == 0:
-                effects[custom_key].remove(i)
-                Utils.reset_stat_cache(player_index)
-            return
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
+    effect_items.erase([interval, 1, percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus, duration])
+    Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
     var str_percent_damage_bonus: String = str(percent_damage_bonus) if percent_damage_bonus < 0 else "+" + str(percent_damage_bonus)

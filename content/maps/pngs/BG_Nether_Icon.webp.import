@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/bg_nether_icon.webp-0b04d667559a6cc819d85b4a8ff7fcae.stex"
+path="res://.import/BG_Nether_Icon.webp-d4eddcb5351f9e6fccfbc275ef67ca78.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/bg_nether_icon.webp"
-dest_files=[ "res://.import/bg_nether_icon.webp-0b04d667559a6cc819d85b4a8ff7fcae.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/BG_Nether_Icon.webp"
+dest_files=[ "res://.import/BG_Nether_Icon.webp-d4eddcb5351f9e6fccfbc275ef67ca78.stex" ]
 
 [params]
 

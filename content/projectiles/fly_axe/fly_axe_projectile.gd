@@ -23,13 +23,12 @@ func stop() -> void:
     emit_signal("returned_to_player", self)
     .stop()
 
-func _set_ticks_until_max_range() -> void:
-    ._set_ticks_until_max_range()
-    _yztato_boomerang_set_ticks_until_max_range(_hitbox.effects)
+func _set_time_until_max_range() -> void:
+    ._set_time_until_max_range()
+    _yztato_boomerang_set_time_until_max_range(_hitbox.effects)
     
-
 # =========================== Custom =========================== #
-func _yztato_boomerang_set_ticks_until_max_range(effects: Array) -> void:
+func _yztato_boomerang_set_time_until_max_range(effects: Array) -> void:
     for effect in effects:
         if effect.get_id() != "yztato_boomerang_weapon": continue
 

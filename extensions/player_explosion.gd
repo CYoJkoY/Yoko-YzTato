@@ -1,13 +1,15 @@
 extends "res://projectiles/player_explosion.gd"
 
 # =========================== Extention =========================== #
-func _ready()-> void:
+func start_explosion() -> void :
     _yztato_explosion_erase(player_index)
+    .start_explosion()
 
 # =========================== Custom =========================== #
 func _yztato_explosion_erase(player_index : int)-> void:
-    var explosion_erase = RunData.get_player_effect("yztato_explosion_erase_bullets", player_index)
-    if explosion_erase and explosion_erase != 0:
+    if not is_inside_tree(): return
+    var explosion_erase: int = RunData.get_player_effect(Utils.yztato_explosion_erase_bullets_hash, player_index)
+    if explosion_erase != 0:
         _hitbox.monitoring = true
         _hitbox.collision_mask = Utils.ENEMY_PROJECTILES_BIT
         var _bullets_entered: int = _hitbox.connect("area_entered", self, "yz_on_Hitbox_area_entered")

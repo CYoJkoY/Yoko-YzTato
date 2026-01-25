@@ -20,5 +20,6 @@ effects = [  ]
 spawn_in_center = -1
 spawn_around_player = -1
 can_be_grouped = true
+is_pet = false
 trap_count = 1
 chance = 100

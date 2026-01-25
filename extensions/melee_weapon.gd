@@ -6,14 +6,18 @@ onready var YZ_is_blade_storm: bool = _yztato_blade_storm(player_index)
 
 # EFFECT : flying_sword
 onready var YZ_is_flying_sword: bool = _yztato_flying_sword(player_index)
-var YZ_rng := RandomNumberGenerator.new()
 var idle_angle: float = 0.0
 var has_attacked_target: bool = false
 var _current_locked_target: Node = null
 
+var _cached_projectile_scene: PackedScene = null
+var _cached_base_stats: Resource = null
+
 # EFFECT : gain_stat_when_killed_scaling_single
 var kill_count: Dictionary = {}
 var effect_single_kill_count: Dictionary = {}
+var _projectile_pool: Array = []
+var _max_pool_size: int = 50
 
 # EFFECT : leave_fire
 var _burning_particles_manager = null
@@ -28,7 +32,7 @@ func _ready()->void :
     _yztato_leave_fire_ready()
 
 func _physics_process(_delta: float) -> void:
-    if YZ_is_flying_sword:
+    if YZ_is_flying_sword: 
         _yztato_flying_sword(player_index)
 
 func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
@@ -85,19 +89,21 @@ func should_shoot()->bool:
 # =========================== Custom =========================== #
 func _yztato_upgrade_when_killed_enemies() -> void:
     for effect in effects:
-        if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
         if _enemies_killed_this_wave_count % effect.value != 0: return
         
-        var target_weapon_id: String = effect.key
+        var target_weapon_id_hash: int = effect.key_hash
 
-        _parent.yz_change_weapon(weapon_pos, target_weapon_id)
+        _parent.yz_change_weapon(weapon_pos, target_weapon_id_hash)
 
 func _yztato_melee_setup(effect_type: String) -> void:
+    # Player
     for player_index in RunData.players_data.size():
-        var has_player_effect = RunData.get_player_effect("yztato_melee_" + effect_type + "_bullets", player_index)
+        var has_player_effect = RunData.get_player_effect(Keys.generate_hash("yztato_melee_" + effect_type + "_bullets"), player_index)
         if has_player_effect:
             _connect_melee_signals(effect_type)
 
+    # Only Weapon
     for effect in effects:
         if effect.get_id() == "yztato_melee_" + effect_type:
             _connect_melee_signals(effect_type)
@@ -106,7 +112,9 @@ func _connect_melee_signals(effect_type: String) -> void:
     var node_range = get_node("Range")
     var node_hit_box = get_node("Sprite").get_node("Hitbox")
     
-    node_range.collision_mask = Utils.NEUTRAL_BIT + Utils.ENEMIES_BIT + Utils.ENEMY_PROJECTILES_BIT
+    node_range.collision_mask = Utils.NEUTRAL_BIT + \
+                                Utils.ENEMIES_BIT + \
+                                Utils.ENEMY_PROJECTILES_BIT
     
     if !node_range.is_connected("area_entered", self, "yz_on_Range_area_entered"):
         node_range.connect("area_entered", self, "yz_on_Range_area_entered")
@@ -122,7 +130,7 @@ func _connect_melee_signals(effect_type: String) -> void:
                 node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_erase")
         "bounce":
             if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"):
-                var bounce_value = RunData.get_player_effect("yztato_melee_bounce_bullets", player_index)
+                var bounce_value: int = RunData.get_player_effect(Utils.yztato_melee_bounce_bullets_hash, player_index)
                 
                 for effect in effects:
                     if effect.get_id() == "yztato_melee_bounce":
@@ -130,27 +138,24 @@ func _connect_melee_signals(effect_type: String) -> void:
                 node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_bounce", [bounce_value, node_hit_box, "weapon"])
 
 func _yztato_flying_sword(player_index: int) -> bool:
-    var flying_sword = RunData.get_player_effect("yztato_flying_sword", player_index)
-    if flying_sword.size() == 0:
+    var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    if flying_sword.empty():
         return false
 
-    YZ_rng.randomize()
-    var player_level = RunData.players_data[player_index].current_level
+    var player_level: int = RunData.players_data[player_index].current_level
 
     for mode in flying_sword:
-        match mode[0]:
-            "attack", "attack_limit":
-                if yz_meets_condition(mode, current_stats.damage):
-                    return yz_process_attack_mode()
-            "sword_array", "sword_array_limit":
-                if yz_meets_condition(mode, current_stats.damage):
-                    return yz_process_sword_array_mode(player_level)
+        match mode[1]:
+            0: if mode[0] < current_stats.damage:
+                return yz_process_attack_mode()
+            1: if mode[0] < current_stats.damage:
+                return yz_process_sword_array_mode(player_level)
 
     return false
 
 func _yztato_blade_storm(player_index: int) -> bool:
-    var blade_storm = RunData.get_player_effect("yztato_blade_storm", player_index)
-    if blade_storm.size() == 0:
+    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
+    if blade_storm == 0:
         return false
 
     for blade in blade_storm:
@@ -159,15 +164,12 @@ func _yztato_blade_storm(player_index: int) -> bool:
         _collision.position.x *= 0.5
         _collision.position.x += offset
 
-        if blade[0] == "Normal":
-            return true
-        elif blade[0] == "OP":
-            var node_hit_box = get_node("Sprite").get_node("Hitbox")
-            node_hit_box.monitoring = true
-            node_hit_box.collision_mask = Utils.ENEMY_PROJECTILES_BIT
-            if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered"):
-                node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered")
-            return true
+        var node_hit_box = get_node("Sprite").get_node("Hitbox")
+        node_hit_box.monitoring = true
+        node_hit_box.collision_mask = Utils.ENEMY_PROJECTILES_BIT
+        if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered"):
+            node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered")
+        return true
 
     return false
 
@@ -187,7 +189,7 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
         return
 
     # Check player effects
-    var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
+    var effect_leave_fire = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
     if !effect_leave_fire.empty():
         for fire in effect_leave_fire:
             var new_fire = _burning_particles_manager.get_burning_particle()
@@ -220,7 +222,7 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
             return
     
     # Check player effects
-    var effect_multi_hit = RunData.get_player_effect("yztato_multi_hit", player_index)
+    var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
     if !effect_multi_hit.empty():
         for effect in effect_multi_hit:
             for _i in range(effect[0]):
@@ -245,7 +247,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
             return
 
     # Check player effects
-    var vine_trap_effects = RunData.get_player_effect("yztato_vine_trap", player_index)
+    var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
     if !vine_trap_effects.empty():
         for effect_data in vine_trap_effects:
             var count = effect_data[0] as int
@@ -303,7 +305,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         var args: WeaponServiceSpawnProjectileArgs = WeaponServiceSpawnProjectileArgs.new()
         args.from_player_index = player_index
         args.deferred = true
-        args.damage_tracking_key = "character_yztato_baseball_player"
+        args.damage_tracking_key_hash = Keys.character_yztato_baseball_player_hash
 
         var direction: float = enemy_projectile.velocity.angle() + PI
 
@@ -327,7 +329,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         attack_hit_count += 1
         _hit_count_by_attack_id[attack_id] = attack_hit_count
         
-        ChallengeService.try_complete_challenge("chal_counterattack", attack_hit_count)
+        ChallengeService.try_complete_challenge(Utils.chal_counterattack_hash, attack_hit_count)
 
 func yz_set_new_projectile_stat(new_projectile: Node, symbol: String):
     var projectile_shader: ShaderMaterial = ProgressData.Yztato.YzProjectile.Shader()
@@ -358,12 +360,11 @@ func yz_delete_projectile(proj: Projectile)->void :
     proj.queue_free()
 
 func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
-    var flying_sword: Array = RunData.get_player_effect("yztato_flying_sword", player_index)
+    var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
     if flying_sword.empty(): return
 
     for flying in flying_sword:
-        if (flying[0] == "attack_limit" or flying[0] == "sword_array_limit") \
-        and current_stats.damage <= flying[1]: return
+        if current_stats.damage <= flying[0]: return
 
     _hitbox.ignored_objects.erase(thing_hit)
 
@@ -406,36 +407,27 @@ func yz_process_attack_mode() -> bool:
 
 func yz_process_sword_array_mode(player_level: int) -> bool:
     if _current_cooldown <= 0:
-        var sword_count: int = int(clamp(1 + player_level / 2, 1, 16))
-        var targets: Array = _targets_in_range.duplicate()
-        targets.shuffle()
-        var target_count: int = targets.size()
+        var sword_count: int = int(clamp(player_level / 2, 1, 16))
+        _targets_in_range.shuffle()
+        var target_count: int = _targets_in_range.size()
         var projectiles_to_spawn: Array = []
-
-        if target_count >= sword_count:
-            projectiles_to_spawn = targets.slice(0, sword_count)
+        
+        if target_count == 0: pass
+        elif target_count >= sword_count:
+            projectiles_to_spawn = _targets_in_range.slice(0, sword_count)
         else:
             var index: int = 0
             while projectiles_to_spawn.size() < sword_count:
-                if targets.size() > 0:
-                    projectiles_to_spawn.append(targets[index % targets.size()])
-                    index += 1
-                else:
-                    break
+                projectiles_to_spawn.append(_targets_in_range[index % target_count])
+                index += 1
+        
+        if not projectiles_to_spawn.empty():
+            for target in projectiles_to_spawn:
+                yz_create_sword_projectile(target)
 
-        for target in projectiles_to_spawn:
-            yz_create_sword_projectile(target)
-
-        _current_cooldown = get_next_cooldown() * 2.5
+            _current_cooldown = get_next_cooldown() * 2.5
 
     yz_perform_idle_movement()
-    return true
-
-func yz_meets_condition(mode: Array, current_damage: float) -> bool:
-    if mode[0].ends_with("_limit") and current_damage > mode[1]:
-        return true
-    elif mode[0].ends_with("_limit") and current_damage <= mode[1]:
-        return false
     return true
 
 func yz_select_target() -> Node:
@@ -447,15 +439,10 @@ func yz_select_target() -> Node:
             _current_locked_target = null
 
     if _targets_in_range.size() > 0:
-        _current_locked_target = _targets_in_range[YZ_rng.randi() % _targets_in_range.size()]
+        _current_locked_target = _targets_in_range.pick_random()
         return _current_locked_target
     
     return null
-
-func yz_select_multiple_targets(count: int) -> Array:
-    var targets: Array = _targets_in_range.duplicate()
-    targets.shuffle()
-    return targets.slice(0, int(min(count, targets.size())))
 
 func yz_move_to_target(target: Node, speed: float):
     var direction: Vector2 = (target.position - global_position).normalized()
@@ -483,13 +470,33 @@ func yz_return_to_player(target: Node):
         has_attacked_target = false
         yz_perform_idle_movement()
 
+func yz_initialize_cached_resources():
+    if _cached_projectile_scene == null:
+        _cached_projectile_scene = ProgressData.Yztato.YzProjectile.Tscn()
+    if _cached_base_stats == null:
+        _cached_base_stats = ProgressData.Yztato.YzProjectile.Stats()
+
+func yz_get_projectile_from_pool() -> Resource:
+    if _projectile_pool.size() > 0:
+        return _projectile_pool.pop_back()
+    else:
+        yz_initialize_cached_resources()
+        return _cached_base_stats.duplicate()
+
+func yz_return_projectile_to_pool(stats: Resource):
+    if _projectile_pool.size() < _max_pool_size:
+        stats.piercing = 99
+        stats.max_range = 300
+        stats.can_bounce = false
+        _projectile_pool.append(stats)
+
 func yz_create_sword_projectile(target: Node):
-    var sword_array_stats: Resource = ProgressData.Yztato.YzProjectile.Stats().duplicate()
-    var projectile_scene: PackedScene = ProgressData.Yztato.YzProjectile.Tscn().duplicate()
-    var project_position: Vector2 = target.position - Vector2(
-                        YZ_rng.randi_range(-200, 200),
-                        YZ_rng.randi_range(-200, 200)
-                    )
+    yz_initialize_cached_resources()
+    var sword_array_stats: Resource = yz_get_projectile_from_pool()
+
+    var offset_x = Utils._rng.randi_range(-200, 200)
+    var offset_y = Utils._rng.randi_range(-200, 200)
+    var project_position: Vector2 = target.position - Vector2(offset_x, offset_y)
     var direction_to_target: float = (target.position - project_position).angle()
 
     sword_array_stats.damage = current_stats.damage
@@ -500,18 +507,23 @@ func yz_create_sword_projectile(target: Node):
     sword_array_stats.max_range = 300
     sword_array_stats.can_bounce = false
 
-    projectile_scene._bundled["variants"][2] = ProgressData.Yztato.YzProjectile.SwordArray()
-    sword_array_stats.projectile_scene = projectile_scene
-    var sword_array_projectile: Node = WeaponService.spawn_projectile(
-                        project_position,
-                        sword_array_stats,
-                        direction_to_target,
-                        self,
-                        WeaponServiceSpawnProjectileArgs.new()
-                    )
+    var modified_scene: PackedScene = _cached_projectile_scene.duplicate()
+    modified_scene._bundled["variants"][2] = ProgressData.Yztato.YzProjectile.SwordArray()
+    sword_array_stats.projectile_scene = modified_scene
 
-    if !sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
+    var sword_array_projectile: Node = WeaponService.spawn_projectile(
+        project_position,
+        sword_array_stats,
+        direction_to_target,
+        self,
+        WeaponServiceSpawnProjectileArgs.new()
+    )
+
+    if not sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
         sword_array_projectile.connect("hit_something", self, "on_weapon_hit_something", [sword_array_projectile._hitbox])
+    
+    if sword_array_projectile.has_method("set_meta"):
+        sword_array_projectile.set_meta("pool_owner", self)
 
 func yz_perform_idle_movement():
     var weapon_count: int = int(max(1, _parent.get_nb_weapons()))
@@ -523,6 +535,7 @@ func yz_perform_idle_movement():
     var offset_y: float = sin(idle_angle + weapon_offset_angle) * radius
     
     # The Difference Between PlayerNode And WeaponsNode
+    _is_shooting = false
     global_position = Vector2(_parent.position.x + offset_x, _parent.position.y + offset_y - 24)
 
 func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:

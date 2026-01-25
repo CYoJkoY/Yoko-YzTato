@@ -49,7 +49,7 @@ func _on_Area2D_body_exited(_body: Node)->void :
     args.burning_data = stats.burning_data
     args.scaling_stats = stats.scaling_stats
     args.from_player_index = player_index
-    args.damage_tracking_key = explosion_effect.tracking_key
+    args.damage_tracking_key_hash = explosion_effect.tracking_key_hash
     args.from = self
     var _inst = WeaponService.explode(explosion_effect, args)
     die()

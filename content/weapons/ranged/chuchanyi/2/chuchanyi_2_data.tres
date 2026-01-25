@@ -5,7 +5,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi.tscn" type="PackedScene" id=4]
 [ext_resource path="res://items/sets/medical/medical_set_data.tres" type="Resource" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/2/chuchanyi_2_effect_1.tres" type="Resource" id=7]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/emergency/emergency_set_data.tres" type="Resource" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/emergency/emergency_set_data.tres" type="Resource" id=8]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/2/chuchanyi_2_stats.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi_icon.webp" type="Texture" id=13]
 

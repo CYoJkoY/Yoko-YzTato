@@ -13,7 +13,7 @@ func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetR
 
 # =========================== Custom =========================== #
 func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: int, wave: int, args: GetRandItemForWaveArgs) -> ItemParentData:
-    var weapon_set_filters = RunData.get_player_effect("yztato_weapon_set_filter", player_index)
+    var weapon_set_filters: Array = RunData.get_player_effect(Utils.yztato_weapon_set_filter_hash, player_index)
     if weapon_set_filters.size() == 0 or type != TierData.WEAPONS: return item
 
     # Check Weapon Match Set
@@ -40,7 +40,7 @@ func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: in
     return item
 
 func _yztato_weapon_set_delete(item: ItemParentData, player_index: int, type: int, wave: int, args: GetRandItemForWaveArgs) -> ItemParentData:
-    var weapon_set_deletes = RunData.get_player_effect("yztato_weapon_set_delete", player_index)
+    var weapon_set_deletes: Array = RunData.get_player_effect(Utils.yztato_weapon_set_delete_hash, player_index)
     if weapon_set_deletes.size() == 0 or type != TierData.WEAPONS: return item
 
     # Check Weapon No Forbidden Set
@@ -95,7 +95,7 @@ func _yztato_weapons_banned(item: ItemParentData, player_index: int, type: int, 
     return item
 
 func _yztato_force_curse_items(item: ItemParentData, player_index: int) -> ItemParentData:
-    var force_curse = RunData.get_player_effect("yztato_force_curse_items", player_index)
+    var force_curse: int = RunData.get_player_effect(Utils.yztato_force_curse_items_hash, player_index)
     if force_curse == 0 or item.is_cursed: return item
     
     var DLCData1: DLCData = ProgressData.available_dlcs[0]

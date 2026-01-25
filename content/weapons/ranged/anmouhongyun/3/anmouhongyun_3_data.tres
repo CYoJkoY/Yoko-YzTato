@@ -5,8 +5,9 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/anmouhongyun/anmouhongyun_icon.webp" type="Texture" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/anmouhongyun/3/anmouhongyun_3_stats.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/anmouhongyun/3/anmouhongyun_3_effect.tres" type="Resource" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/anmouhongyun/4/anmouhongyun_4_data.tres" type="Resource" id=7]
+
 
 [resource]
 script = ExtResource( 1 )

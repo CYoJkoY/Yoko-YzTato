@@ -8,9 +8,9 @@ func init(p_wave_timer: Timer, zone_data: ZoneData, wave_data: Resource)->void :
 # =========================== Custom =========================== #
 func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
     for player_index in RunData.get_player_count():
-        var effects = RunData.get_player_effects(player_index)
+        var effects: Array = RunData.get_player_effect(Utils.yztato_extra_enemies_next_waves_hash, player_index)
         var remaining_effects = []
-        for effect in effects["yztato_extra_enemies_next_waves"]:
+        for effect in effects:
             var group_data = load(effect[0])
             var group_count = effect[1]
             var waves_remaining = effect[2]
@@ -26,4 +26,4 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
                 var new_effect = [effect[0], group_count, waves_remaining]
                 remaining_effects.push_back(new_effect)
         
-        effects["yztato_extra_enemies_next_waves"] = remaining_effects
+        effects = remaining_effects

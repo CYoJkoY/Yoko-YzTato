@@ -4,15 +4,16 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "all"
+key = "yztato_gain_stat_when_killed_single_scaling"
 text_key = "EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING"
 value = 150
-custom_key = "yztato_gain_stat_when_killed_single_scaling"
-storage_method = 1
+custom_key = ""
+storage_method = 0
 effect_sign = 3
 custom_args = [  ]
+scope = 0
 stat = "trees"
 stat_nb = 1
 scaling_stat = "trees"
 scaling_percent = 50.0
-tracking_key = "item_ghost_tree"
+tracking_key = "yztato_item_ghost_tree"

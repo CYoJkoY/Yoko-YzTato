@@ -70,22 +70,22 @@ func should_shoot()->bool:
 # =========================== Custom =========================== #
 func _yztato_upgrade_when_killed_enemies() -> void:
     for effect in effects:
-        if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
         if _enemies_killed_this_wave_count % effect.value != 0: continue
-        
-        var target_weapon_id: String = effect.key
+    
+        var target_weapon_id_hash: int = effect.key_hash
 
         if !old_projectiles.empty():
             for projectile in old_projectiles:
                 if is_instance_valid(projectile):
                     projectile.queue_free()
 
-        _parent.yz_change_weapon(weapon_pos, target_weapon_id)
+        _parent.yz_change_weapon(weapon_pos, target_weapon_id_hash)
         break
 
 func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
     for effect in effects:
-        if effect.custom_key != "yztato_upgrade_when_killed_enemies": continue
+        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
 
         old_projectiles.push_back(projectile)
 
@@ -127,7 +127,7 @@ func _yztato_boomerang_shoot() -> void:
             current_stats = _stats_every_x_shots[projectile_count]
 
     for effect in effects:
-        if effect.key == "reload_turrets_on_shoot":
+        if effect.key_hash == Keys.reload_turrets_on_shoot_hash:
             emit_signal("wanted_to_reset_turrets_cooldown")
 
     update_current_spread()
@@ -174,7 +174,7 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
         fire.scale, fire.duration)
         return
 
-    var effect_leave_fire = RunData.get_player_effect("yztato_leave_fire", player_index)
+    var effect_leave_fire: Array = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
     if !effect_leave_fire.empty():
         for fire in effect_leave_fire:
             var new_fire = _burning_particles_manager.get_burning_particle()
@@ -208,7 +208,7 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
             _apply_multi_hit_effect(thing_hit, damage_dealt, [effect.value, effect[1]], player_index)
             return
     
-    var effect_multi_hit = RunData.get_player_effect("yztato_multi_hit", player_index)
+    var effect_multi_hit: Array = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
     if !effect_multi_hit.empty():
         for effect in effect_multi_hit:
             _apply_multi_hit_effect(thing_hit, damage_dealt, effect, player_index)
@@ -231,7 +231,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
 
             return
 
-    var vine_trap_effects = RunData.get_player_effect("yztato_vine_trap", player_index)
+    var vine_trap_effects: Array = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
     if !vine_trap_effects.empty():
         for effect_data in vine_trap_effects:
             var count = effect_data[0] as int
@@ -256,11 +256,10 @@ func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
     var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0)
     attack_hit_count += 1
     _hit_count_by_attack_id[attack_id] = attack_hit_count
-    
-    ChallengeService.try_complete_challenge("chal_sudden_misfortune", attack_hit_count)
+    ChallengeService.try_complete_challenge(Utils.chal_sudden_misfortune_hash, attack_hit_count)
 
     ### one_force_subdue_ten ###
-    ChallengeService.try_complete_challenge("chal_one_force_subdue_ten", hitbox.damage)
+    ChallengeService.try_complete_challenge(Utils.chal_one_force_subdue_ten_hash, hitbox.damage)
 
 # =========================== Method =========================== #
 func yz_on_projectile_returned(projectile: Node2D) -> void:

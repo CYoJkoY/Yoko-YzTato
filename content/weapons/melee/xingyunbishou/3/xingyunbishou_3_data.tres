@@ -5,13 +5,14 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_stats.tres" type="Resource" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/4/xingyunbishou_4_data.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou.tscn" type="PackedScene" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/luck/luck_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/luck/luck_set_data.tres" type="Resource" id=6]
 [ext_resource path="res://items/sets/precise/precise_set_data.tres" type="Resource" id=7]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_effect_1a.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_1b.tres" type="Resource" id=10]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0a.tres" type="Resource" id=11]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0b.tres" type="Resource" id=12]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_effect_2.tres" type="Resource" id=13]
+
 
 [resource]
 script = ExtResource( 1 )

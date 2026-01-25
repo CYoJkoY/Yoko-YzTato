@@ -6,7 +6,6 @@ export(Array, Resource) var chimera_texture_sets: Array = []
 var col_b = "[/color]"
 
 # =========================== Extension =========================== #
-
 static func get_id()-> String:
     return "yztato_chimera_weapon"
 
@@ -17,13 +16,17 @@ func get_text(player_index: int, _colored: bool = true)-> String:
 
 func serialize()-> Dictionary:
     var serialized = .serialize()
-    serialized = _yztato_chimera_serialize(serialized)
+    serialized.chimera_projectile_stats = []
+    for projectile_stats in chimera_projectile_stats:
+        serialized.chimera_projectile_stats.push_back(projectile_stats.resource_path)
 
     return serialized
 
 func deserialize_and_merge(serialized:Dictionary)-> void:
     .deserialize_and_merge(serialized)
-    _yztato_chimera_deserialize_and_merge(serialized)
+    if serialized.has("chimera_projectile_stats"):
+        for projectile_stats_path in serialized.chimera_projectile_stats:
+            chimera_projectile_stats.push_back(load(projectile_stats_path))
 
 
 # =========================== Custom =========================== #
@@ -33,20 +36,9 @@ func _yztato_chimera_get_text(player_index : int)-> String:
         text = text + ", " + get_projectile_text(stats, player_index)
     return text
 
-func _yztato_chimera_serialize(serialized)-> Dictionary:
-    serialized.chimera_projectile_stats = []
-    for projectile_stats in chimera_projectile_stats:
-        serialized.chimera_projectile_stats.push_back(projectile_stats.resource_path)
-    return serialized
-
-func _yztato_chimera_deserialize_and_merge(serialized)-> void:
-    if serialized.has("chimera_projectile_stats"):
-        for projectile_stats_path in serialized.chimera_projectile_stats:
-            chimera_projectile_stats.push_back(load(projectile_stats_path))
-
 # =========================== Method =========================== #
 func get_projectile_text(stats: Resource, player_index : int)->String:
-        var percent_dmg_bonus: float = (1 + (Utils.get_stat("stat_percent_damage", player_index) / 100.0))
+        var percent_dmg_bonus: float = (1 + (Utils.get_stat(Keys.stat_percent_damage_hash, player_index) / 100.0))
         var damage: int = int(max(1, round(percent_dmg_bonus * (get_scaling_stats_dmg(stats.scaling_stats, player_index) + stats.damage))))
         var text: String = get_dmg_text_with_scaling_stats(damage, stats.scaling_stats, stats.damage)
         return text

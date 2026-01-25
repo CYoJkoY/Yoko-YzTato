@@ -2,9 +2,9 @@ extends "res://singletons/run_data.gd"
 
 var yz_init_tracked_effects: Dictionary = {
 
-    "item_ghost_tree": 0,
-    "character_xiake_1": 0,
-    "character_xiake_2": 0,
+    Utils.yztato_item_ghost_tree_hash: 0,
+    Utils.yztato_character_xiake_1_hash: 0,
+    Utils.yztato_character_xiake_2_hash: 0,
 
 }
 
@@ -26,7 +26,7 @@ func init_tracked_effects()->Dictionary:
 
     var new_tracked: Dictionary = {
         
-        "item_yztato_cursed_box": [0, 0],
+        Utils.item_yztato_cursed_box_hash: [0, 0],
 
     }
 
@@ -51,48 +51,37 @@ func resume_from_state(state: Dictionary)->void :
 
 # =========================== Custom =========================== #
 func _yztato_life_steal(weapon_stats:WeaponStats, player_index:int)-> bool:
-    var life_steal = RunData.get_player_effect("yztato_life_steal",player_index)
-    if life_steal.size() > 0 :
-        for steal in life_steal :
-            if steal[0] == "better":
-                var weapon_lifesteal_chance : float = weapon_stats.lifesteal
-                var true_lifesteal : float = max(weapon_lifesteal_chance, 1.0)
-                if randf() < weapon_stats.lifesteal:
-                    emit_signal("lifesteal_effect", true_lifesteal, player_index)
-
-            elif steal[0] == "val":
-                var true_lifesteal : float = max(weapon_stats.damage * (steal[1] / 100), 1.0)
-                if randf() < weapon_stats.lifesteal:
-                    emit_signal("lifesteal_effect", true_lifesteal, player_index)
+    var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
+    if life_steal != 0:
+        var true_lifesteal : float = max(weapon_stats.damage * (life_steal / 100), 1.0)
+        if randf() < weapon_stats.lifesteal:
+            emit_signal("lifesteal_effect", true_lifesteal, player_index)
         return true
     return false
 
 func _yztato_unlock_all_challenges() -> void:
     if ProgressData.settings.yztato_unlock_all_challenges:
         for chal in ChallengeService.challenges:
-            ChallengeService.complete_challenge(chal.my_id)
+            ChallengeService.complete_challenge(chal.my_id_hash)
 
 # =========================== Methods =========================== #
 func yz_init_tracking_effects()->Dictionary:
     return yz_init_tracked_effects.duplicate(true)
 
-func yz_add_effect_tracking_value(tracking_key: String, value: float, player_index: int) -> void:
-    if not yz_tracked_effects[player_index].has(tracking_key):
-        print("yz tracking key %s does not exist" % tracking_key)
+func yz_add_effect_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void:
+    if not yz_tracked_effects[player_index].has(tracking_key_hash):
         return 
 
-    yz_tracked_effects[player_index][tracking_key] += value as int
+    yz_tracked_effects[player_index][tracking_key_hash] += value as int
 
-func yz_get_effect_tracking_value(tracking_key: String, player_index: int) -> float:
-    if not yz_tracked_effects[player_index].has(tracking_key):
-        print("yz tracking key %s does not exist" % tracking_key)
+func yz_get_effect_tracking_value(tracking_key_hash: int, player_index: int) -> float:
+    if not yz_tracked_effects[player_index].has(tracking_key_hash):
         return 0.0
 
-    return yz_tracked_effects[player_index][tracking_key]
+    return yz_tracked_effects[player_index][tracking_key_hash]
 
-func yz_set_tracking_value(tracking_key: String, value: float, player_index: int) -> void :
-    if not yz_tracked_effects[player_index].has(tracking_key):
-        print("yz tracking key %s does not exist" % tracking_key)
+func yz_set_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void :
+    if not yz_tracked_effects[player_index].has(tracking_key_hash):
         return 
 
-    yz_tracked_effects[player_index][tracking_key] = value as int
+    yz_tracked_effects[player_index][tracking_key_hash] = value as int

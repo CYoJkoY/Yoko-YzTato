@@ -4,15 +4,15 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "all"
+key = "yztato_gain_stat_when_killed_single_scaling"
 text_key = "EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING"
 value = 3
-custom_key = "yztato_gain_stat_when_killed_single_scaling"
-storage_method = 1
+custom_key = ""
+storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 stat = "stat_attack_speed"
 stat_nb = 4
 scaling_stat = "stat_speed"
 scaling_percent = 0.4
-tracking_key = "character_xiake_2"
+tracking_key = "yztato_character_xiake_2"

@@ -8,20 +8,20 @@ static func get_id() -> String:
     return "extra_enemy_next_waves"
 
 func apply(player_index: int) -> void:
-
-    var effect_items = RunData.get_player_effects(player_index)[key]
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
     for existing_item in effect_items:
         if existing_item[0] == extra_group_data.resource_path:
             existing_item[1] += value
             existing_item[2] += waves
+            Utils.reset_stat_cache(player_index)
             return
 
     effect_items.append([extra_group_data.resource_path, value, waves])
+    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
-    var effects = RunData.get_player_effects(player_index)
-    var effect_items = effects[key]
-    for i in effects[key].size():
+    var effect_items = RunData.get_player_effect(key_hash, player_index)
+    for i in effect_items.size():
         var effect_item = effect_items[i]
         if effect_item[0] == extra_group_data.resource_path:
             effect_item[1] -= value
@@ -30,6 +30,7 @@ func unapply(player_index: int) -> void:
             if effect_item[1] == 0:
                 effect_items.remove(i)
 
+            Utils.reset_stat_cache(player_index)
             return
 
 func get_args(_player_index: int) -> Array:

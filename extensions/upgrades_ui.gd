@@ -7,7 +7,7 @@ func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int)->vo
 
 # =========================== Custom =========================== #
 func _yztato_extra_upgrade(player_index: int)->void :
-    var extra_upgrade_chance: float = RunData.get_player_effect("yztato_extra_upgrade", player_index)
+    var extra_upgrade_chance: int = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
     if extra_upgrade_chance > 0 \
     and randf() <= clamp(extra_upgrade_chance, 0.0, 95.0) / 100.0:
         var current_option = _showing_option[player_index]

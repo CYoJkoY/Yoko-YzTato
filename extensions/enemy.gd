@@ -16,8 +16,8 @@ func take_damage(value: int, args: TakeDamageArgs) -> Array:
 # =========================== Custom =========================== #
 func _yztato_extrusion_attack_ready() -> void:
     for player_index in RunData.get_player_count():
-        var extrusion_attack = RunData.get_player_effect("yztato_extrusion_attack", player_index)
-        if extrusion_attack.size() > 0:
+        var extrusion_attack: int = RunData.get_player_effect(Utils.yztato_extrusion_attack_hash, player_index)
+        if extrusion_attack != 0:
             NodeHurbox.collision_mask = Utils.ENEMIES_BIT + \
                                         Utils.PLAYER_PROJECTILES_BIT + \
                                         Utils.ENEMY_PROJECTILES_BIT + \
@@ -35,13 +35,13 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     ): return
     
     if (args.hitbox and is_instance_valid(args.hitbox) and is_loot and \
-    RunData.get_player_effect_bool("yztato_one_shot_loot", args.hitbox.from.player_index)):
+    RunData.get_player_effect_bool(Utils.yztato_one_shot_loot_hash, args.hitbox.from.player_index)):
         die()
 
 func _yztato_damage_against_not_boss(value: int) -> int:
     for player_index in RunData.get_player_count():
-        var damage_against_not_boss = RunData.get_player_effect("yztato_damage_against_not_boss", player_index)
+        var damage_against_not_boss: int = RunData.get_player_effect(Utils.yztato_damage_against_not_boss_hash, player_index)
         if damage_against_not_boss != 0 and name != "Boss":
-            value *= 1 + damage_against_not_boss / 100.0
+            value = int(value * (1 + damage_against_not_boss / 100.0))
 
     return value

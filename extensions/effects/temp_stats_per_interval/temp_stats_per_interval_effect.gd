@@ -1,33 +1,36 @@
-extends Effect
+extends NullEffect
 
 export var stat: String = "hit_protection"
+var stat_hash: int = Keys.empty_hash
 export var interval: int = 1
 export var reset_on_hit: bool = false
 
+# =========================== Extension =========================== #
+func duplicate(subresources := false) -> Resource:
+    var duplication = .duplicate(subresources)
+    if stat_hash == Keys.empty_hash and stat != "":
+        stat_hash = Keys.generate_hash(stat)
+
+    duplication.stat_hash = stat_hash
+
+    return duplication
 
 static func get_id() -> String:
     return "yztato_temp_stats_per_interval"
 
+func _generate_hashes() -> void:
+    ._generate_hashes()
+    stat_hash = Keys.generate_hash(stat)
 
 func apply(player_index: int) -> void:
-    var gain_stat_effects = RunData.get_player_effect(custom_key, player_index)
-    for existing_effect in gain_stat_effects:
-        if existing_effect[0] == stat and existing_effect[2] == interval and existing_effect[3] == reset_on_hit:
-            existing_effect[1] += value
-            return
-    gain_stat_effects.push_back([stat, value, interval, reset_on_hit])
-
+    var gain_stat_effects = RunData.get_player_effect(custom_key_hash, player_index)
+    gain_stat_effects.push_back([stat_hash, value, interval, reset_on_hit])
+    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
-    var gain_stat_effects = RunData.get_player_effect(custom_key, player_index)
-    for i in gain_stat_effects.size():
-        var existing_effect = gain_stat_effects[i]
-        if existing_effect[0] == stat and existing_effect[2] == interval and existing_effect[3] == reset_on_hit:
-            existing_effect[1] -= value
-            if existing_effect[1] == 0:
-                gain_stat_effects.remove(i)
-            return
-
+    var gain_stat_effects = RunData.get_player_effect(custom_key_hash, player_index)
+    gain_stat_effects.erase([stat_hash, value, interval, reset_on_hit])
+    Utils.reset_stat_cache(player_index)
 
 func _add_custom_args() -> void:
     var interval_as_neutral := CustomArg.new()
@@ -48,6 +51,7 @@ func get_args(_player_index: int) -> Array:
 
 func serialize() -> Dictionary:
     var serialized = .serialize()
+    serialized.stat = stat
     serialized.interval = interval
     serialized.reset_on_hit = reset_on_hit
     return serialized
@@ -55,5 +59,7 @@ func serialize() -> Dictionary:
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
+    stat = serialized.stat as String
+    stat_hash = Keys.generate_hash(stat)
     interval = serialized.interval as int
     reset_on_hit = serialized.reset_on_hit as bool

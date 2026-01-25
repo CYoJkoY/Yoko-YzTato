@@ -4,14 +4,15 @@
 
 [resource]
 script = ExtResource( 1 )
-key = ""
+key = "yztato_gain_stat_when_killed_single_scaling"
 text_key = "EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING"
 value = 2
-custom_key = "yztato_gain_stat_when_killed_single_scaling"
-storage_method = 1
+custom_key = ""
+storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 stat = "stat_percent_damage"
 stat_nb = 1
 scaling_stat = "stat_percent_damage"
 scaling_percent = 1.2
+tracking_key = ""

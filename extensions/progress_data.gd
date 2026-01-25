@@ -1,11 +1,8 @@
 extends "res://singletons/progress_data.gd"
 
-var yztato_data
-var Yztato = null
-
-const YZMODNAME_MOD_DIR: String = "Yoko-YzTato/"
-var yz_dir = ModLoaderMod.get_unpacked_dir() + YZMODNAME_MOD_DIR
-var yz_ext_dir: String = yz_dir + "extensions/"
+var yztato_data: Resource = null
+var Yztato: Node = null
+var yz_dir: String = ModLoaderMod.get_unpacked_dir() + "Yoko-YzTato/"
 
 # =========================== Extention =========================== #
 func _ready() -> void:
@@ -17,7 +14,7 @@ func load_dlc_pcks()->void :
 
 # =========================== Custom =========================== #
 func _yztato_ready() -> void:
-    yztato_data = load("res://mods-unpacked/Yoko-YzTato/content_data/YzTato_content_New.tres")
+    yztato_data = load(yz_dir + "content_data/YzTato_content_New.tres")
     yztato_data.add_resources()
 
     RunData.reset()
@@ -38,4 +35,4 @@ func yz_install_extensions() -> void:
     ]
     
     for path in extensions:
-        ModLoaderMod.install_script_extension(yz_ext_dir + path)
+        ModLoaderMod.install_script_extension(yz_dir + "extensions/" + path)

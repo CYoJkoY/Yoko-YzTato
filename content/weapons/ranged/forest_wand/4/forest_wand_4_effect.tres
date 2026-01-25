@@ -6,7 +6,7 @@
 
 [resource]
 script = ExtResource( 2 )
-key = ""
+key = "yztato_vine_trap"
 text_key = "EFFECT_YZTATO_VINE_TRAP"
 value = 0
 custom_key = ""

@@ -7,10 +7,11 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_0b.tres" type="Resource" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_0a.tres" type="Resource" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_effect_1a.tres" type="Resource" id=7]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=8]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=8]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange_icon.webp" type="Texture" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/1/huangwuwange_1_effect_2a.tres" type="Resource" id=11]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/1/huangwuwange_1_effect_1b.tres" type="Resource" id=12]
+
 
 [resource]
 script = ExtResource( 1 )

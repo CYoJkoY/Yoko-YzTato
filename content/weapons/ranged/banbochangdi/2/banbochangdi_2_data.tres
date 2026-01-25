@@ -5,7 +5,8 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/banbochangdi.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/3/banbochangdi_3_data.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/2/banbochangdi_2_stats.tres" type="Resource" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=6]
+
 
 [resource]
 script = ExtResource( 1 )
