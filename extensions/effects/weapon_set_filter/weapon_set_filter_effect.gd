@@ -21,11 +21,15 @@ func _generate_hashes() -> void:
     set_id_hash = Keys.generate_hash(set_id)
 
 func apply(player_index: int) -> void:
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
     effect_items.append(set_id_hash)
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
     effect_items.erase(set_id_hash)
     Utils.reset_stat_cache(player_index)

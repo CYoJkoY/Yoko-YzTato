@@ -3,7 +3,6 @@
 [ext_resource path="res://zones/wave_group_data.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/zones/002_extra/prosperity_ring_unit.tres" type="Resource" id=2]
 
-
 [resource]
 script = ExtResource( 1 )
 spawn_chance = 1.0

@@ -15,7 +15,6 @@ var enemies_killed_is_burning: int = 0
 func _on_enemy_died(enemy: Node2D, _args: Entity.DieArgs)->void :
     _yztato_gain_stat_when_killed_single_scaling_on_enemy_died()
     _yztato_blood_rage_on_enemy_died()
-    _yztato_gain_random_primary_stat_on_enemy_died()
     _yztato_chal_on_enemy_died(enemy)
     ._on_enemy_died(enemy, _args)
 
@@ -57,25 +56,6 @@ func _yztato_blood_rage_on_enemy_died()-> void:
     for player_index in RunData.players_data.size():
         if _players[player_index] and is_instance_valid(_players[player_index]):
             _players[player_index].yz_on_enemy_killed_reset_blood_rage()
-
-func _yztato_gain_random_primary_stat_on_enemy_died()-> void:
-    for player_index in RunData.players_data.size():
-        var current_kill_count_2: int = kill_count_2.get(player_index, 0) + 1
-        kill_count_2[player_index] = current_kill_count_2
-
-        var gain_random_primary_stat_when_killed: Array = RunData.get_player_effect(Utils.yztato_gain_random_primary_stat_when_killed_hash, player_index)
-        if gain_random_primary_stat_when_killed.empty(): return
-
-        for effect_index in gain_random_primary_stat_when_killed.size():
-            var effect = gain_random_primary_stat_when_killed[effect_index]
-            var stat_num: int = effect[0]
-            var enemy_num: int = effect[1]
-            var add_times: int = effect[2]
-            if current_kill_count_2 % enemy_num == 0:
-                for _i in range(add_times):
-                    var random_stat = primary_stats.pick_random()
-                    RunData.add_stat(random_stat, stat_num, player_index)
-                    RunData.emit_signal("stats_updated", player_index)
 
 func _yztato_chal_on_enemy_charmed(charmed_enemies: Array)-> void:
     ### dark_forest_rule ###

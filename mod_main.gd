@@ -31,21 +31,19 @@ func _init():
     var extensions: Array = [
 
         "enemy.gd",
-        # EFFECTS : extrusion_attack, damage_against_not_boss
+        # EFFECTS : extrusion_attack
 
         "weapons_container.gd",
         # EFFECTS : blade_storm[ 1/4 ]
 
         "entity_spawner.gd",
         # EFFECTS : gain_stat_when_killed_single_scaling[ 1/3 ], blood_rage[ 1/3 ],
-        #           gain_random_primary_stat_when_killed
         # ACHIEVE : dark_forest_rule
 
         "player.gd",
         # EFFECTS : blade_storm[ 2/4 ], lifesteal[ 1/2 ], blood_rage[ 2/3 ],
-        #           stat_on_hit, invincible_on_hit_duration, random_primary_stat_on_hit
-        #           random_primary_stat_over_time, temp_stat_per_interval[ hit_protection ]
-        #           heal_on_damage_taken, upgrade_when_killed_enemies[ 1/4 ]
+        #           temp_stat_per_interval[ hit_protection ], heal_on_damage_taken,
+        #           upgrade_when_killed_enemies[ 1/4 ]    
         # ACHIEVE : only_in, more_than_enough
 
         "main.gd",
@@ -56,7 +54,7 @@ func _init():
         # EFFECTS : explosion_erase_bullets
 
         "item_service.gd",
-        # EFFECTS : weapon_set_filter, weapon_set_delete, force_curse_items
+        # EFFECTS : weapon_set_filter, weapon_set_delete
         # Weapon Banned
         
         "utils.gd",
@@ -78,7 +76,7 @@ func _init():
         # Sound Fix[ 2/2 ]
 
         "weapon_service.gd",
-        # EFFECTS : yztato_damage_scaling
+        # EFFECTS : damage_scaling, crit_damage
 
         "upgrades_ui.gd",
         # EFFECTS : extra_upgrade

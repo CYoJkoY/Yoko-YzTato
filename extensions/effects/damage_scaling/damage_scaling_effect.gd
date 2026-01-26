@@ -20,11 +20,15 @@ func _generate_hashes() -> void:
     scaling_stats = Utils.convert_to_hash_array(scaling_stats)
 
 func apply(player_index: int) -> void:
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effects = RunData.get_player_effects(player_index)
     effects[custom_key_hash].push_back([key_hash, value, scaling_stats])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effects = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, scaling_stats])
     Utils.reset_stat_cache(player_index)

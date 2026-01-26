@@ -1,7 +1,6 @@
 extends "res://singletons/utils.gd"
 
 # Effects
-var yztato_gain_items_end_of_wave_hash: int = Keys.generate_hash("yztato_gain_items_end_of_wave")
 var yztato_destory_weapons_hash: int = Keys.generate_hash("yztato_destory_weapons")
 var yztato_set_stat_hash: int = Keys.generate_hash("yztato_set_stat")
 var yztato_life_steal_hash: int = Keys.generate_hash("yztato_life_steal")
@@ -13,7 +12,6 @@ var yztato_chimera_weapon_hash: int = Keys.generate_hash("yztato_chimera_weapon"
 var yztato_explosion_erase_bullets_hash: int = Keys.generate_hash("yztato_explosion_erase_bullets")
 var yztato_upgrade_when_killed_enemies_hash: int = Keys.generate_hash("yztato_upgrade_when_killed_enemies")
 var yztato_gain_stat_when_killed_single_scaling_hash: int = Keys.generate_hash("yztato_gain_stat_when_killed_single_scaling")
-var yztato_gain_stat_when_killed_single_scaling_global_hash: int = Keys.generate_hash("yztato_gain_stat_when_killed_single_scaling_global")
 var yztato_melee_bounce_bullets_hash: int = Keys.generate_hash("yztato_melee_bounce_bullets")
 var yztato_special_picked_up_change_stat_hash: int = Keys.generate_hash("yztato_special_picked_up_change_stat")
 var yztato_weapon_set_filter_hash: int = Keys.generate_hash("yztato_weapon_set_filter")
@@ -22,13 +20,6 @@ var yztato_boomerang_weapon_hash: int = Keys.generate_hash("yztato_boomerang_wea
 var yztato_one_shot_loot_hash: int = Keys.generate_hash("yztato_one_shot_loot")
 var yztato_extra_upgrade_hash: int = Keys.generate_hash("yztato_extra_upgrade")
 var yztato_blood_rage_hash: int = Keys.generate_hash("yztato_blood_rage")
-var yztato_invincible_on_hit_duration_hash: int = Keys.generate_hash("yztato_invincible_on_hit_duration")
-var yztato_crit_damage_hash: int = Keys.generate_hash("yztato_crit_damage")
-var yztato_force_curse_items_hash: int = Keys.generate_hash("yztato_force_curse_items")
-var yztato_gain_random_primary_stat_when_killed_hash: int = Keys.generate_hash("yztato_gain_random_primary_stat_when_killed")
-var yztato_random_primary_stat_on_hit_hash: int = Keys.generate_hash("yztato_random_primary_stat_on_hit")
-var yztato_damage_against_not_boss_hash: int = Keys.generate_hash("yztato_damage_against_not_boss")
-var yztato_random_primary_stat_over_time_hash: int = Keys.generate_hash("yztato_random_primary_stat_over_time")
 var yztato_multi_hit_hash: int = Keys.generate_hash("yztato_multi_hit")
 var yztato_vine_trap_hash: int = Keys.generate_hash("yztato_vine_trap")
 var yztato_stats_chance_on_level_up_hash: int = Keys.generate_hash("yztato_stats_chance_on_level_up")
@@ -38,7 +29,6 @@ var yztato_extra_enemies_next_waves_hash: int = Keys.generate_hash("yztato_extra
 var yztato_damage_scaling_hash: int = Keys.generate_hash("yztato_damage_scaling")
 var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_curse_on_reroll")
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
-var yztato_stat_on_hit_hash: int = Keys.generate_hash("yztato_stat_on_hit")
 
 # Tracking Effects
 var yztato_item_ghost_tree_hash: int = Keys.generate_hash("yztato_item_ghost_tree")
@@ -71,5 +61,5 @@ func is_manual_aim(player_index: int)-> bool:
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int)-> bool:
     var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
     if blade_storm != 0:
-        return false
+        is_manual = false
     return is_manual

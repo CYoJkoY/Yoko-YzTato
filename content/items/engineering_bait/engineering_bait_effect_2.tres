@@ -3,15 +3,15 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/zones/001_extra/engineering_bait_group.tres" type="Resource" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/extra_enemies_next_waves/extra_enemies_next_waves_effect.gd" type="Script" id=2]
 
-
 [resource]
 script = ExtResource( 2 )
 key = "yztato_extra_enemies_next_waves"
-text_key = "EFFECT_ENGINEERING_BAIT"
+text_key = "EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES"
 value = 1
 custom_key = ""
 storage_method = 0
 effect_sign = 3
 custom_args = [  ]
+name = "CORRUPTED_TREE_NAME"
 extra_group_data = ExtResource( 1 )
 waves = 99999

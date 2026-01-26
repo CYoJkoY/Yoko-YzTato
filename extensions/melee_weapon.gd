@@ -97,13 +97,13 @@ func _yztato_upgrade_when_killed_enemies() -> void:
         _parent.yz_change_weapon(weapon_pos, target_weapon_id_hash)
 
 func _yztato_melee_setup(effect_type: String) -> void:
-    # Player
+    # Check Player Effects
     for player_index in RunData.players_data.size():
         var has_player_effect = RunData.get_player_effect(Keys.generate_hash("yztato_melee_" + effect_type + "_bullets"), player_index)
         if has_player_effect:
             _connect_melee_signals(effect_type)
 
-    # Only Weapon
+    # Check Weapon Effects
     for effect in effects:
         if effect.get_id() == "yztato_melee_" + effect_type:
             _connect_melee_signals(effect_type)
@@ -285,31 +285,33 @@ func yz_on_Hitbox_area_entered_erase(area: Area2D)-> void:
         area.active = false
         area.disable()
         area.ignored_objects.clear()
-        yz_delete_projectile(enemy_projectile)
+        ProgressData.Yztato.Methods.yz_delete_projectile(enemy_projectile)
 
 func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: Hitbox, symbol: String)-> void:
     if area.get_parent() is EnemyProjectile:
         var enemy_projectile: Projectile = area.get_parent()
-        var projectile_stats: Resource = ProgressData.Yztato.YzProjectile.Stats().duplicate()
-        var projectile_scene: PackedScene = ProgressData.Yztato.YzProjectile.Tscn().duplicate()
+        
+        yz_initialize_cached_resources()
+        var projectile_stats: Resource = yz_get_projectile_from_pool()
+
+        var projectile_scene: PackedScene = _cached_projectile_scene.duplicate()
+        projectile_scene._bundled["variants"][2] = enemy_projectile._sprite.texture
+        projectile_stats.projectile_scene = projectile_scene
 
         projectile_stats.damage = (area.damage + current_stats.damage / 2.0) * melee_bounce / 100.0
         projectile_stats.can_bounce = false
         projectile_stats.piercing = 99
         projectile_stats.max_range = Utils.LARGE_NUMBER
-        projectile_stats.projectile_speed = 2000
-
-        projectile_scene._bundled["variants"][2] = enemy_projectile._sprite.texture
-        projectile_stats.projectile_scene = projectile_scene
+        projectile_stats.projectile_speed = 2000  
 
         var args: WeaponServiceSpawnProjectileArgs = WeaponServiceSpawnProjectileArgs.new()
         args.from_player_index = player_index
         args.deferred = true
-        args.damage_tracking_key_hash = Keys.character_yztato_baseball_player_hash
+        args.damage_tracking_key_hash = Utils.character_yztato_baseball_player_hash
 
         var direction: float = enemy_projectile.velocity.angle() + PI
 
-        yz_delete_projectile(enemy_projectile)
+        ProgressData.Yztato.Methods.yz_delete_projectile(enemy_projectile)
 
         var new_projectile: Node = WeaponService.spawn_projectile(
             enemy_projectile.global_position,
@@ -340,25 +342,6 @@ func yz_set_new_projectile_stat(new_projectile: Node, symbol: String):
     if symbol == "weapon" and !new_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
         new_projectile.connect("hit_something", self, "on_weapon_hit_something", [new_projectile._hitbox])
 
-# Avoid Assertion failed Caused By Function Stop
-func yz_delete_projectile(proj: Projectile)->void :
-    proj.hide()
-    proj.velocity = Vector2.ZERO
-    proj._hitbox.collision_layer = proj._original_collision_layer
-    proj._enable_stop_delay = false
-    proj._elapsed_delay = 0
-    proj._sprite.material = null
-    proj._animation_player.stop()
-    proj.set_physics_process(false)
-
-    Utils.disconnect_all_signal_connections(proj, "hit_something")
-    Utils.disconnect_all_signal_connections(proj._hitbox, "killed_something")
-
-    if is_instance_valid(proj._hitbox.from) and proj._hitbox.from.has_signal("died") and proj._hitbox.from.is_connected("died", proj, "on_entity_died"):
-        proj._hitbox.from.disconnect("died", proj, "on_entity_died")
-    
-    proj.queue_free()
-
 func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
     var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
     if flying_sword.empty(): return
@@ -371,7 +354,7 @@ func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
 
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
-        yz_delete_projectile(area.get_parent())
+        ProgressData.Yztato.Methods.yz_delete_projectile(area.get_parent())
 
 func _yztato_blade_storm_direction(direction: float) -> float:
     if YZ_is_blade_storm:

@@ -8,11 +8,15 @@ static func get_id()->String:
     return "yztato_gain_random_primary_stat_when_killed"
 
 func apply(player_index: int)->void :
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items: Array = RunData.get_player_effect(key_hash, player_index)
     effect_items.push_back([value, need_num, times])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int)->void :
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items: Array = RunData.get_player_effect(key_hash, player_index)
     effect_items.erase([value, need_num, times])
     Utils.reset_stat_cache(player_index)

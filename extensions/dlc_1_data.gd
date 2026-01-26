@@ -39,9 +39,6 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
                     scaling[1] = _curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
                     new_scaling_stats.append(scaling)
                 new_effect.scaling_stats = new_scaling_stats
-            
-            "yztato_gain_random_primary_stat_when_killed":
-                new_effect.need_num = _curse_effect_value(new_effect.need_num, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
 
             "yztato_gain_stat_when_killed_single_scaling":
                 new_effect.scaling_percent = _curse_effect_value(new_effect.scaling_percent, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
@@ -50,10 +47,6 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
             "yztato_multi_hit":
                 new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
                 new_effect.damage_percent = _curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
-
-            "yztato_random_primary_stat_over_time":
-                new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
-                new_effect.interval = _curse_effect_value(new_effect.interval, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
 
             "yztato_special_picked_up_change_stat", \
             "yztato_upgrade_when_killed_enemies":
@@ -86,24 +79,16 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
 
 func yz_process_other_effect(effect: Resource, modifier: float):
     match effect.key:
-        "yztato_damage_against_not_boss", \
-        "yztato_random_primary_stat_on_hit":
-            effect.value = _curse_effect_value(effect.value, modifier)
-            return effect
-
         "yztato_heal_on_damage_taken", \
         "yztato_random_curse_on_reroll":
             effect.value = _curse_effect_value(effect.value, modifier, {"process_negative": false})
-            effect.value2 = _curse_effect_value(effect.value, modifier, {"step": 1, "process_negative": false})
+            effect.value2 = _curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
 
     match effect.custom_key:
-        "yztato_stat_on_hit":
-            effect.value = _curse_effect_value(effect.value, modifier)
-            return effect
         "yztato_stats_chance_on_level_up":
             effect.value = _curse_effect_value(effect.value, modifier)
-            effect.value2 = _curse_effect_value(effect.value, modifier, {"step": 1, "process_negative": false})
+            effect.value2 = _curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
     
     effect.value = _curse_effect_value(effect.value, modifier, {"process_negative": false})

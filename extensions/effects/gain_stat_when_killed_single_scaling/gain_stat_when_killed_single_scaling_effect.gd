@@ -38,11 +38,15 @@ func _generate_hashes() -> void:
     tracking_key_hash = Keys.generate_hash(tracking_key)
 
 func apply(player_index: int)->void :
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
     effect_items.push_back([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int)->void :
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
     effect_items.erase([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
     Utils.reset_stat_cache(player_index)

@@ -7,7 +7,6 @@ func _ready():
     _yztato_extrusion_attack_ready()
 
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
-    value = _yztato_damage_against_not_boss(value)
     var damage_taken = .take_damage(value, args)
     _yztato_one_shot_loot_take_damage(args)
 
@@ -37,11 +36,3 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     if (args.hitbox and is_instance_valid(args.hitbox) and is_loot and \
     RunData.get_player_effect_bool(Utils.yztato_one_shot_loot_hash, args.hitbox.from.player_index)):
         die()
-
-func _yztato_damage_against_not_boss(value: int) -> int:
-    for player_index in RunData.get_player_count():
-        var damage_against_not_boss: int = RunData.get_player_effect(Utils.yztato_damage_against_not_boss_hash, player_index)
-        if damage_against_not_boss != 0 and name != "Boss":
-            value = int(value * (1 + damage_against_not_boss / 100.0))
-
-    return value

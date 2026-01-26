@@ -45,7 +45,7 @@ func _yztato_modify_projectile(projectile_stats: RangedWeaponStats, args: Weapon
             var chimera_texture_sets = _parent.current_chimera_texture_sets
             if projectile_index >= _parent.current_chimera_projs_textures_paths.size():
                 projectile_index = projectile_index % _parent.current_chimera_projs_textures_paths.size()
-            if _parent.current_chimera_projs_textures_paths.size() == 0:
+            if _parent.current_chimera_projs_textures_paths.empty():
                 return [projectile_stats, args]
             var texture_path = _parent.current_chimera_projs_textures_paths[projectile_index]
             for texture_data in chimera_texture_sets:

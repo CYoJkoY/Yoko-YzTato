@@ -7,13 +7,9 @@ var special_picked_up_count: Dictionary = {}
 # When the wave ends
 func _on_WaveTimer_timeout()->void:
     ._on_WaveTimer_timeout()
-    _yztato_gain_items_end_of_wave()
     _yztato_destory_weapons()
     _yztato_set_stat()
-
-func _on_EndWaveTimer_timeout()->void:
     _yztato_blood_rage_clean()
-    ._on_EndWaveTimer_timeout()
 
 func on_consumable_picked_up(consumable: Node, player_index: int)->void :
     .on_consumable_picked_up(consumable, player_index)
@@ -24,15 +20,6 @@ func on_levelled_up(player_index: int)->void :
     _yztato_stats_chance_on_level_up(player_index)
 
 # =========================== Custom =========================== #
-func _yztato_gain_items_end_of_wave()-> void:
-    for player_index in RunData.players_data.size():
-        var gain_items: Array = RunData.get_player_effect(Utils.yztato_gain_items_end_of_wave_hash,player_index)
-        if gain_items.size() > 0:
-            for gain_item in gain_items:
-                for i in gain_item[1]:
-                    var item = ItemService.get_element(ItemService.items, gain_item[0])
-                    RunData.add_item(item, player_index)
-
 func _yztato_destory_weapons()-> void:
     for player_index in RunData.players_data.size():
         var yztato_destory_weapon: Array = RunData.get_player_effect(Utils.yztato_destory_weapons_hash,player_index)
@@ -68,7 +55,7 @@ func _yztato_special_picked_up_change_stat(consumable: Node, player_index: int)-
 func _yztato_blood_rage_clean() -> void:
     for player_index in RunData.players_data.size():
         var blood_rage_effects: Array = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
-        if blood_rage_effects.size() > 0 and \
+        if not blood_rage_effects.empty() and \
         _players[player_index] and is_instance_valid(_players[player_index]):
             _players[player_index].yz_clean_up_blood_rage_effects()
 
@@ -82,6 +69,6 @@ func _yztato_stats_chance_on_level_up(player_index: int) -> void:
             RunData.add_stat(stat_hash, stat_increase, player_index)
 
             if stat_increase > 0:
-                RunData.add_tracked_value(player_index, Keys.item_yztato_cursed_box_hash, stat_increase, 0)
+                RunData.add_tracked_value(player_index, Utils.item_yztato_cursed_box_hash, stat_increase, 0)
             elif stat_increase < 0:
-                RunData.add_tracked_value(player_index, Keys.item_yztato_cursed_box_hash, abs(stat_increase) as int, 1)
+                RunData.add_tracked_value(player_index, Utils.item_yztato_cursed_box_hash, abs(stat_increase) as int, 1)

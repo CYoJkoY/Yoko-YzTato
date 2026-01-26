@@ -26,11 +26,15 @@ func get_text(player_index: int, _colored: bool = true) -> String:
     return text
 
 func apply(player_index: int) -> void:
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
     effect_items.append([trap_count, chance, self])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
     effect_items.erase([trap_count, chance, self])
     Utils.reset_stat_cache(player_index)

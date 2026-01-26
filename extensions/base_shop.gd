@@ -36,7 +36,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
         var gear_count := min(count, all_gears.size())
         if gear_count <= 0: continue
         
-        RunData.add_tracked_value(player_index, Keys.character_yztato_fanatic_hash, gear_count)
+        RunData.add_tracked_value(player_index, Utils.character_yztato_fanatic_hash, gear_count)
         
         var gears_to_curse = []
         for _i in range(gear_count):

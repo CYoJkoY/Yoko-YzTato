@@ -7,19 +7,36 @@ func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int)->vo
 
 # =========================== Custom =========================== #
 func _yztato_extra_upgrade(player_index: int)->void :
-    var extra_upgrade_chance: int = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
-    if extra_upgrade_chance > 0 \
-    and randf() <= clamp(extra_upgrade_chance, 0.0, 95.0) / 100.0:
-        var current_option = _showing_option[player_index]
-        if current_option != null:
-            _upgrades_to_process[player_index].push_front(current_option)
-            var popup_text = tr("YZTATO_EXTRA_UPGRADE_CHANCE")
+    var extra_upgrades: Array = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
+    if extra_upgrades.empty(): return
+
+    for extra_upgrade in extra_upgrades:
+        var extra_upgrade_chance: float = extra_upgrade[1] / 100.0
+        
+        if Utils.get_chance_success(extra_upgrade_chance):
+            var level = RunData.get_player_level(player_index)
             var main = Utils.get_scene_node()
-            if main.has_node("FloatingTextManager"):
-                var floating_text_manager = main.get_node("FloatingTextManager")
-                var player_position = floating_text_manager.players[player_index].global_position
-                floating_text_manager.display(popup_text,
-                                            player_position,
-                                            Color.gold, null, 2.0, true,
-                                            Vector2(0, -100), true)
-            _show_next_player_options()
+
+            main._things_to_process_player_containers[player_index].upgrades.add_element(ItemService.get_icon(Keys.icon_upgrade_to_process_hash), level)
+            
+            var upgrade_to_process = UpgradeToProcess.new()
+            upgrade_to_process.level = level
+            upgrade_to_process.player_index = player_index
+            _upgrades_to_process[player_index].push_front(upgrade_to_process)
+
+            main._players_ui[player_index].update_level_label()
+
+            var floating_text_manager = main._floating_text_manager
+            var rect_size = main._hud.rect_size
+            var center_top_pos = Vector2(rect_size.x * 0.5, rect_size.y * 0.3)
+            var popup_text: String = tr("YZTATO_EXTRA_UPGRADE_CHANCE")
+            floating_text_manager.display(
+                popup_text,
+                center_top_pos,
+                Color.gold, 
+                null, 
+                2.0, 
+                true,
+                Vector2(0, -50), 
+                true
+            )

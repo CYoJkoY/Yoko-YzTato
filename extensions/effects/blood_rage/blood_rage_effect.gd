@@ -1,53 +1,73 @@
 extends NullEffect
 
 export (int) var interval: int = 3
-export (int) var percent_damage_bonus: int = 15
-export (int) var attack_speed_bonus: int = 12
-export (int) var dodge_bonus: int = -6
-export (int) var armor_bonus: int = -5
 export (float) var duration: float = 1.5
-
-var current_timer: int = 0
-var is_active: bool = false
-var active_effects: Array = []
+export (Array, Array) var stats_change: Array = [
+    ["stat_percent_damage", 15],
+    ["stat_attack_speed", 12],
+    ["stat_dodge", -6],
+    ["stat_armor", -5]
+]
+var stats_change_hashes: Array = []
 
 # =========================== Extension =========================== #
+func duplicate(subresources := false) -> Resource:
+    var duplication = .duplicate(subresources)
+    if stats_change_hashes.empty() and not stats_change.empty():
+        stats_change_hashes = Utils.convert_to_hash_array(stats_change)
+    
+    duplication.stats_change_hashes = stats_change_hashes
+    
+    return duplication
+
 static func get_id() -> String:
     return "yztato_blood_rage"
 
+func _generate_hashes() -> void:
+    ._generate_hashes()
+    stats_change_hashes = Utils.convert_to_hash_array(stats_change)
+
 func apply(player_index: int) -> void:
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.push_back([interval, 1, percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus, duration])
+    effect_items.push_back([interval, duration, stats_change_hashes])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
+    if key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.erase([interval, 1, percent_damage_bonus, attack_speed_bonus, dodge_bonus, armor_bonus, duration])
+    effect_items.erase([interval, duration, stats_change_hashes])
     Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
-    var str_percent_damage_bonus: String = str(percent_damage_bonus) if percent_damage_bonus < 0 else "+" + str(percent_damage_bonus)
-    var str_attack_speed_bonus: String = str(attack_speed_bonus) if attack_speed_bonus < 0 else "+" + str(attack_speed_bonus)
-    var str_dodge_bonus: String = str(dodge_bonus) if dodge_bonus < 0 else "+" + str(dodge_bonus)
-    var str_armor_bonus: String = str(armor_bonus) if armor_bonus < 0 else "+" + str(armor_bonus)
-
-    return [str(interval), str_percent_damage_bonus, str_attack_speed_bonus, str_dodge_bonus, str_armor_bonus, str(duration)]
+    var args: Array = []
+    var stats_arg: String = ""
+    
+    for stat_change in stats_change:
+        var val: int = stat_change[1]
+        var name: String = tr(stat_change[0].to_upper())
+        var str_val: String = str(val) if val < 0 else "+{0}".format([val])
+        stats_arg += "{1}{0},".format([name, str_val])
+    
+    args.append(str(interval))
+    args.append(str(duration))
+    args.append(stats_arg)
+    
+    return args
 
 func serialize() -> Dictionary:
     var serialized = .serialize()
     serialized.interval = interval
-    serialized.percent_damage_bonus = percent_damage_bonus
-    serialized.attack_speed_bonus = attack_speed_bonus
-    serialized.dodge_bonus = dodge_bonus
-    serialized.armor_bonus = armor_bonus
     serialized.duration = duration
+    serialized.stats_change = stats_change
+    
     return serialized
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
     interval = serialized.interval as int
-    percent_damage_bonus = serialized.percent_damage_bonus as int
-    attack_speed_bonus = serialized.attack_speed_bonus as int
-    dodge_bonus = serialized.dodge_bonus as int
-    armor_bonus = serialized.armor_bonus as int
     duration = serialized.duration as float
+    stats_change = serialized.stats_change as Array
+    stats_change_hashes = Utils.convert_to_hash_array(serialized.stats_change)

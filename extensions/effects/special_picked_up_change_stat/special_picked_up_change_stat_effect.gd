@@ -22,10 +22,14 @@ func _generate_hashes() -> void:
     stat_hash = Keys.generate_hash(stat)
 
 func apply(player_index: int)->void :
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
     effect_items.push_back([key_hash, value, stat_hash, stat_nb])
 
 func unapply(player_index: int)->void :
+    if custom_key_hash == Keys.empty_hash: return
+    
     var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
     effect_items.erase([key_hash, value, stat_hash, stat_nb])
 

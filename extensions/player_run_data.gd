@@ -22,7 +22,6 @@ static func init_effects()->Dictionary:
         var vanilla_effects = .init_effects()
 
         var new_effects: = {
-            Utils.yztato_gain_items_end_of_wave_hash: [],
             Utils.yztato_destory_weapons_hash: [],
             Utils.yztato_set_stat_hash: [],
             Utils.yztato_life_steal_hash: 0,
@@ -40,15 +39,8 @@ static func init_effects()->Dictionary:
             Utils.yztato_weapon_set_delete_hash: [],
             Utils.yztato_boomerang_weapon_hash: [],
             Utils.yztato_one_shot_loot_hash: 0,
-            Utils.yztato_extra_upgrade_hash: 0,
+            Utils.yztato_extra_upgrade_hash: [],
             Utils.yztato_blood_rage_hash: [],
-            Utils.yztato_invincible_on_hit_duration_hash: 0,
-            Utils.yztato_crit_damage_hash: 0,
-            Utils.yztato_force_curse_items_hash: 0,
-            Utils.yztato_gain_random_primary_stat_when_killed_hash: [],
-            Utils.yztato_random_primary_stat_on_hit_hash: 0,
-            Utils.yztato_damage_against_not_boss_hash: 0,
-            Utils.yztato_random_primary_stat_over_time_hash: [],
             Utils.yztato_multi_hit_hash: [],
             Utils.yztato_vine_trap_hash: [],
             Utils.yztato_stats_chance_on_level_up_hash: [],
@@ -58,7 +50,6 @@ static func init_effects()->Dictionary:
             Utils.yztato_damage_scaling_hash: [],
             Utils.yztato_random_curse_on_reroll_hash: [],
             Utils.yztato_extrusion_attack_hash: 0,
-            Utils.yztato_stat_on_hit_hash: [],
             
         }
 
