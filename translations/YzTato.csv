@@ -23,7 +23,7 @@ ITEM_YZTATO_PROSPERITY_RING,Prosperity Ring,繁荣之戒
 YZTATO_BLIND_NECROMANCER_NAME,Blind Necromancer,盲·死灵法师
 YZTATO_BLIND_NECROMANCER_BEHAVIOUR_DESCRIPTION,Stay as far away from the player as possible and summon Ice Mage Souls,"尽可能远离玩家, 且会召唤出冰法魂"
 YZTATO_ICE_MAGE_SOUL_NAME,Ice Mage Soul,冰法魂
-YZTATO_ICE_MAGE_SOUL_BEHAVIOUR_DESCRIPTION,A summon of the Blind Necromancer that fires fast-moving red ice shards,"盲·死灵法师的召唤物, 发射速度较快的红色冰棱"
+YZTATO_ICE_MAGE_SOUL_BEHAVIOUR_DESCRIPTION,A summon of the Blind Necromancer that fires fast-moving red ice shards,"盲·死灵法师的召唤物,发射速度较快的红色冰棱"
 WEAPON_YZTATO_BANBOCHANGDI,Mottled Flute,斑驳长笛
 WEAPON_YZTATO_BANBOCHANGDI_1,Mottled Flute △,斑驳长笛 △
 CLASS_YZTATO_UNCANNY_INSTRUMENT,Uncanny Instrument,诡乐
@@ -40,14 +40,14 @@ EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can erase enemy bullets,近战武
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
 EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n[{5}]",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n[{5}]
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
-EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by damage,attack speed,range and player's level","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color], 受{1}伤害、攻速、范围、角色等级[/color]影响"
-EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by weapon's damage and enemy's damage","你的近战武器可反弹敌人子弹, 其伤害受{2}武器伤害、敌人伤害[/color]影响"
+EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by damage,attack speed,range and player's level","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color],受{1}伤害、攻速、范围、角色等级[/color]影响"
+EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by weapon's damage and enemy's damage","你的近战武器可反弹敌人子弹,其伤害受{2}武器伤害、敌人伤害[/color]影响"
 CHARACTER_YZTATO_BASEBALL_PLAYER,Baseball Player,棒球手
 CHARACTER_YZTATO_BOMBER,Bomber,炸弹人
 EFFECT_YZTATO_BOMBS,A bomb spawns every {1} seconds dealing {2} ({3}) damage in situ,"炸弹每{1}秒原地生成一次,并对一个区域造成{2}({3})伤害"
 EFFECT_YZTATO_EXPLOSION_ERASE_BULLETS,Explosion can eliminate enemy bullets,爆炸可以消除敌人子弹
 EFFECT_YZTATO_LIFESTEAL_VAL,The maximum value of lifesteal is the weapon's damage x {0},吸血量最高为武器伤害 x {0}
-EFFECT_YZTATO_SET_STAT,"At the end of each wave,{1} becomes {0}","每波结束时, {1}变为{0}"
+EFFECT_YZTATO_SET_STAT,"At the end of each wave,{1} becomes {0}","每波结束时,{1}变为{0}"
 EFFECT_YZTATO_FRUIT_PICKED_UP_COUNT,"For every {0} picked up normal fruits,{3} ({4}) will be {2}","每捡起{0}个正常的果实,{3} ({4}) 将会{2}"
 EFFECT_YZTATO_POISONED_FRUIT_PICKED_UP_COUNT,"For every {0} picked up poisoned fruits,{3} ({4}) will be {2}","每捡起{0}个有毒的果实,{3} ({4}) 将会{2}"
 CHARACTER_YZTATO_JIANGCHEN,JiangChen,将臣
@@ -57,7 +57,7 @@ CHARACTER_YZTATO_BLADE_DANCER,Blade Dancer,剑舞者
 CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
 EFFECT_YZTATO_LEAVE_FIRE,[color=#F94E34]The burning enemy will leave flames on the ground[/color],[color=#F94E34]燃烧的敌人会在地面留下火焰[/color]
 EFFECT_YZTATO_WEAPON_SET_FILTER,Only [color=#3E68DA]weapons of {0} set[/color] will appear in the shop,商店里面只会出现[color=#3E68DA]{0}系列的武器[/color]
-EFFECT_YZTATO_EXTRUSION_ATTACK,Monsters can hurt each other, 怪物可以互相伤害
+EFFECT_YZTATO_EXTRUSION_ATTACK,Monsters can hurt each other,怪物可以互相伤害
 YZTATO_WEAPON_DAMAGE_LIMIT,"When weapon's damage>{0},","当武器伤害>{0}时,"
 EFFECT_YZTATO_FLYING_SWORD_QI,"{0}Weapon attack mode changes to [color=#FF8C00]Qi mode[/color],which is affected by {2}weapon's damage and range[/color],not by attack speed","{0}武器攻击方式变为[color=#FF8C00]御气模式[/color],受{1}武器伤害、范围、效果[/color]影响,不受攻速影响"
 CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,气剑师
@@ -77,10 +77,10 @@ ITEM_YZTATO_DESTINY_DICE,Destiny Dice,命运骰子
 EFFECT_YZTATO_EXTRA_UPGRADE,{0} chance to get an additional upgrade option,{0} 概率获得额外升级选择机会
 EFFECT_YZTATO_BLOOD_RAGE,"Trigger [color=#c9171e]blood rage[/color] every {0} seconds,{2}lasts {1} seconds,[color=#c9171e]defeating enemies resets cooldown[/color]","每{0}秒触发一次[color=#c9171e]血怒[/color],{2}持续{1}秒,[color=#c9171e]击败敌人重置冷却[/color]"
 CHARACTER_YZTATO_BERSERKER,Berserker,狂战士
-EFFECT_YZTATO_MULTI_HIT,"Each hit on an enemy will deal {0} additional hits, each dealing {1} of the original damage","每次命中敌人将多造成{0}次伤害, 数值为{1}原伤害"
+EFFECT_YZTATO_MULTI_HIT,"Each hit on an enemy will deal {0} additional hits,each dealing {1} of the original damage","每次命中敌人将多造成{0}次伤害,数值为{1}原伤害"
 WEAPON_YZTATO_BAZHANDAO,Eight Cutting Broadsword,八斩刀
 WEAPON_YZTATO_FOREST_WAND,Forest Wand,森林法杖
-EFFECT_YZTATO_VINE_TRAP_FRONT,"There is a {1} chance to generate {0} vines when hitting enemy, causing {3} speed to nearby enemies every {2} seconds, with damage","击中敌人 {1} 概率生成{0}根藤曼, 每过{2}秒附近敌人速度 {3}, 造成伤害"
+EFFECT_YZTATO_VINE_TRAP_FRONT,"There is a {1} chance to generate {0} vines when hitting enemy,causing {3} speed to nearby enemies every {2} seconds,with damage","击中敌人 {1} 概率生成{0}根藤曼,每过{2}秒附近敌人速度 {3},造成伤害"
 WEAPON_YZTATO_PRISM,Prism,棱镜
 ITEM_YZTATO_GHOST_TREE,Ghost Tree,幽魂树
 WEAPON_YZTATO_GHOST_PRUNER,Ghost Pruner,幽魂修剪
@@ -99,7 +99,7 @@ ITEM_YZTATO_SHIELD_GENERATOR,Shield Generator,护盾生成器
 ITEM_YZTATO_CURSED_BOX,Cursed Box,诅咒盒子
 EFFECT_YZTATO_STATS_CHANCE_ON_LEVEL_UP,{2} chance to {0} {1} when level up,升级时{2}概率{0}{1}
 ITEM_YZTATO_INSURANCE_POLICY,Insurance Policy,保险单
-EFFECT_YZTATO_HEAL_ON_DAMAGE_TAKEN,"When injured, there is {0} chance to recover {2} of the damage taken","受到伤害时, 有{0}概率恢复{2}所受伤害的血量"
+EFFECT_YZTATO_HEAL_ON_DAMAGE_TAKEN,"When injured,there is {0} chance to recover {2} of the damage taken","受到伤害时,有{0}概率恢复{2}所受伤害的血量"
 WEAPON_YZTATO_SNIPER_GUN,Sniper Gun,狙击枪
 CHAL_ONLY_IN,Only In Not Out,只进不出
 CHAL_ONLY_IN_DESC,Pick up at least 30 consumables in a wave,在一次敌袭中捡起至少30个消耗品
@@ -119,8 +119,8 @@ CHAL_HELLFIRE_DESC,Kill at least 100 burning enemies in one wave,在一次敌袭
 CHAL_ONE_FORCE_SUBDUE_TEN,One Force Subdue Ten,一力降十会
 CHAL_ONE_FORCE_SUBDUE_TEN_DESC,Ranged Weapon's damage reaches 2000,远程武器伤害达到2000
 CHAL_LAST_STAND,Last Stand,背水一战
-EFFECT_YZTATO_DAMAGE_SCALING_FRONT,"For every {1} {0} you have, weapon damage additionally scales with: ","每拥有{1}{0}, 武器伤害会随下列属性变化: "
-EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store, there is a {2}chance to curse {0} random owned items and weapons","刷新商店时, 有{2}的几率诅咒随机{0}件已拥有的道具和武器"
+EFFECT_YZTATO_DAMAGE_SCALING_FRONT,"For every {1} {0} you have, weapon damage additionally scales with: ","每拥有{1}{0}, 武器伤害会随下列属性变化:"
+EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store,there is a {2}chance to curse {0} random owned items and weapons","刷新商店时,有{2}的几率诅咒随机{0}件已拥有的道具和武器"
 CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
 TRACKING_RANDOMCURSED,RandomCursed: {0},已随机诅咒：{0}

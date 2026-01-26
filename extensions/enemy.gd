@@ -29,7 +29,11 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     args.hitbox.from and \
     ( 
         not (args.hitbox.from is Object) or \
-        (args.hitbox.from is Object and not "player_index" in args.hitbox.from)
+        (
+            args.hitbox.from is Object and \
+            (not "player_index" in args.hitbox.from) or \
+            args.hitbox.from.player_index == -1
+        )
     
     ): return
     

@@ -23,8 +23,8 @@ func _init():
     #######################################
     ########## Add translations ##########
     #####################################
-    ModLoaderMod.add_translation(trans_dir + "YzTato.en.translation")
-    ModLoaderMod.add_translation(trans_dir + "YzTato.zh_Hans_CN.translation")
+    ModLoaderMod.add_translation(trans_dir + "Yztato.en.translation")
+    ModLoaderMod.add_translation(trans_dir + "Yztato.zh_Hans_CN.translation")
     
     ModLoaderLog.info("========== Add Translation Done ==========", MYMODNAME_LOG)
 

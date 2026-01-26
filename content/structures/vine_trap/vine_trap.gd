@@ -2,18 +2,16 @@ extends Structure
 
 export (float) var time = 5.0
 
+onready var _timer: Timer = $Timer
+
 var enemies_in_range: Array = []
 var frame_count: int = 0
 var weapon_pos: int = -1
 
 # =========================== Extension =========================== #
 func _ready():
-    var timer = Timer.new()
-    timer.wait_time = time
-    timer.one_shot = true
-    timer.connect("timeout", self, "_on_trap_duration_finished")
-    add_child(timer)
-    timer.start()
+    _timer.wait_time = time
+    _timer.start()
 
 func _physics_process(_delta: float):
     frame_count += 1
@@ -32,14 +30,14 @@ func set_data(data: Resource)->void :
     weapon_pos = data.weapon_pos
 
 # =========================== Custom =========================== #
-func _on_trap_area_entered(body: Node):
+func yztato_on_trap_area_entered(body: Node):
     if body is Enemy and not body.dead:
         if not enemies_in_range.has(body):
             enemies_in_range.append(body)
 
-func _on_trap_area_exited(body: Node):
+func yztato_on_trap_area_exited(body: Node):
     if enemies_in_range.has(body):
         enemies_in_range.erase(body)
 
-func _on_trap_duration_finished():
+func yztato_on_trap_duration_finished():
     if not dead: die()

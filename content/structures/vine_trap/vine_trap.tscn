@@ -221,5 +221,9 @@ monitorable = false
 rotation = 1.5708
 shape = SubResource( 12 )
 
-[connection signal="body_entered" from="Area2D" to="." method="_on_trap_area_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="_on_trap_area_exited"]
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="body_entered" from="Area2D" to="." method="yztato_on_trap_area_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="yztato_on_trap_area_exited"]
+[connection signal="timeout" from="Timer" to="." method="yztato_on_trap_duration_finished"]

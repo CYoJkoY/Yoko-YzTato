@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/bomb/bomb_stats.tres" type="Resource" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/effects/bomb_stats_0a.tres" type="Resource" id=1]
 [ext_resource path="res://effects/items/item_exploding_effect.gd" type="Script" id=2]
 [ext_resource path="res://projectiles/explosion.tscn" type="PackedScene" id=3]
 

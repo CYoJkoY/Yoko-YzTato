@@ -5,10 +5,10 @@ type="Translation"
 
 [deps]
 
-files=[ "res://mods-unpacked/Yoko-YzTato/translations/YzTato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh_Hans_CN.translation" ]
+files=[ "res://mods-unpacked/Yoko-YzTato/translations/Yztato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/Yztato.zh_Hans_CN.translation" ]
 
-source_file="res://mods-unpacked/Yoko-YzTato/translations/YzTato.csv"
-dest_files=[ "res://mods-unpacked/Yoko-YzTato/translations/YzTato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh_Hans_CN.translation" ]
+source_file="res://mods-unpacked/Yoko-YzTato/translations/Yztato.csv"
+dest_files=[ "res://mods-unpacked/Yoko-YzTato/translations/Yztato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/Yztato.zh_Hans_CN.translation" ]
 
 [params]
 
