@@ -6,7 +6,7 @@ var yz_dir: String = ModLoaderMod.get_unpacked_dir() + "Yoko-YzTato/"
 
 # =========================== Extention =========================== #
 func _ready() -> void:
-    _yztato_ready()
+    call_deferred("_yztato_ready")
 
 func load_dlc_pcks()->void :
     .load_dlc_pcks()
