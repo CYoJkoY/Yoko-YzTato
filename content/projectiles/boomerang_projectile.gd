@@ -1,12 +1,10 @@
 extends PlayerProjectile
 
-signal returned_to_player
-
-const DISTANCE_THRESHOLD_SQ: float = 900.0
+signal returned_to_player(projectile)
 
 var distance_sq: float = 0.0
 var is_returning: bool = false
-var player_node = null
+var weapon_node = null
 var return_speed: float = 0.0
 var min_range: float = 0.0
 var max_damage_mul: float = 0.0
@@ -17,10 +15,11 @@ var knockback_only_back: bool = false
 
 # =========================== Extension =========================== #
 func _physics_process(_delta: float):
-    _yztato_boomerang_physics_process(_delta)
+    _yztato_boomerang_physics_process()
 
 func stop() -> void:
     emit_signal("returned_to_player", self)
+    is_returning = false
     .stop()
 
 func _set_time_until_max_range() -> void:
@@ -33,7 +32,7 @@ func _yztato_boomerang_set_time_until_max_range(effects: Array) -> void:
         if effect.get_id() != "yztato_boomerang_weapon": continue
 
         _time_until_max_range = Utils.LARGE_NUMBER
-        player_node = _hitbox.from
+        weapon_node = _hitbox.from
         return_speed = effect.return_speed
         min_range = effect.min_range
         max_damage_mul = effect.max_damage_mul
@@ -42,14 +41,16 @@ func _yztato_boomerang_set_time_until_max_range(effects: Array) -> void:
         lock_speed = effect.lock_speed
         knockback_only_back = effect.knockback_only_back
 
-func _yztato_boomerang_physics_process(delta: float) -> void:
-    var player_pos = player_node.global_position
+func _yztato_boomerang_physics_process() -> void:
+    var weapon_pos = weapon_node.global_position
     var self_pos = global_position
     
-    var dx: float = player_pos.x - self_pos.x
-    var dy: float = player_pos.y - self_pos.y
-    distance_sq = pow(dx, 2) + pow(dy, 2)
-    var distance: float = sqrt(distance_sq)
+    var direction_to_weapon = weapon_pos - self_pos
+    var distance = direction_to_weapon.length()
+    var direction_normalized = Vector2.ZERO
+    if distance > 0:
+        direction_normalized = direction_to_weapon / distance
+
     var boomerang_range: float = min_range if lock_range else max(_weapon_stats.max_range, min_range)
     var range_factor: float = distance / boomerang_range if boomerang_range > 0.0 else 0.0
     
@@ -62,24 +63,18 @@ func _yztato_boomerang_physics_process(delta: float) -> void:
     if !is_returning:
         if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
 
-        is_returning = distance_sq > pow(boomerang_range, 2)
+        is_returning = distance > boomerang_range
 
     else:
-        var length = distance_sq
-        if length > 0.0:
-            length = 1.0 / distance
-            dx *= length
-            dy *= length
-        
-        if knockback_only_back: _hitbox.set_knockback(Vector2(dx, dy).normalized(),
-                                                            -_weapon_stats.knockback, 
-                                                            _weapon_stats.knockback_piercing)
+        if knockback_only_back:
+            _hitbox.set_knockback(direction_normalized,
+                                -_weapon_stats.knockback, 
+                                _weapon_stats.knockback_piercing)
 
         var speed = return_speed if lock_speed else _weapon_stats.projectile_speed
         
-        position.x += (dx * speed - velocity.x) * delta
-        position.y += (dy * speed - velocity.y) * delta
+        var target_velocity = direction_normalized * speed
+        velocity = target_velocity
         
-        if distance_sq <= DISTANCE_THRESHOLD_SQ:
-            is_returning = false
-            stop()
+        if distance < 30: 
+            _time_until_max_range = 0

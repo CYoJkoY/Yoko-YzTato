@@ -89,7 +89,7 @@ func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
 
         old_projectiles.push_back(projectile)
 
-        if not projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
+        if !projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
             projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
 
     return
@@ -108,13 +108,21 @@ func _yztato_chimera_init_stats()-> void:
         for proj_texture_set in effect.chimera_texture_sets:
             current_chimera_texture_sets.append(proj_texture_set)
 
+func _yztato_boomerang_ready() -> void:
+    for effect in effects:
+        if effect.get_id() == "yztato_boomerang_weapon":
+            is_boomerang = true
+            max_damage_mul = effect.max_damage_mul
+            knockback_only_back = effect.knockback_only_back
+            wait_until_return = effect.boomerang_wait
+
 func _yztato_boomerang_on_projectile_shot(projectile: Node2D)-> void:
     if is_boomerang:
         active_boomerangs.append(projectile)
         _hitbox.damage *= 1 + max_damage_mul
         if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
 
-        if not projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
+        if !projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
             projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
 
 func _yztato_boomerang_shoot() -> void:
@@ -132,33 +140,30 @@ func _yztato_boomerang_shoot() -> void:
 
     update_current_spread()
     update_knockback()
-
-    var target = current_stats.max_range if is_manual_aim() else _current_target[1]
+    
+    var target: float = 0.0
+    if _manual_aim:
+        target = current_stats.max_range
+    else:
+        if _current_target.size() == 0 or not is_instance_valid(_current_target[0]):
+            target = current_stats.max_range
+        else:
+            target = _current_target[1]
     
     if wait_until_return and !is_returning:
         _shooting_behavior.shoot(target)
-        is_returning = true
-    elif !wait_until_return:
-        _shooting_behavior.shoot(target)
-
-    if wait_until_return:
         _current_cooldown = Utils.LARGE_NUMBER
     else:
+        _shooting_behavior.shoot(target)
         _current_cooldown = get_next_cooldown()
 
-    if (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == - 1) and stats.custom_on_cooldown_sprite != null:
+    is_returning = true
+
+    if stats.custom_on_cooldown_sprite != null and (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == - 1):
         update_sprite(stats.custom_on_cooldown_sprite)
 
     if original_stats:
         current_stats = original_stats
-
-func _yztato_boomerang_ready() -> void:
-    for effect in effects:
-        if effect.get_id() == "yztato_boomerang_weapon":
-            is_boomerang = true
-            max_damage_mul = effect.max_damage_mul
-            knockback_only_back = effect.knockback_only_back
-            wait_until_return = effect.boomerang_wait
 
 func _yztato_leave_fire_ready() -> void:
     _burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
@@ -264,7 +269,8 @@ func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
 # =========================== Method =========================== #
 func yz_on_projectile_returned(projectile: Node2D) -> void:
     active_boomerangs.erase(projectile)
-    is_returning = false
+    if active_boomerangs.empty():
+        is_returning = false
 
     if wait_until_return:
         _current_cooldown = get_next_cooldown()

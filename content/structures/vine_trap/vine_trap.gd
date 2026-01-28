@@ -32,7 +32,7 @@ func set_data(data: Resource)->void :
 # =========================== Custom =========================== #
 func yztato_on_trap_area_entered(body: Node):
     if body is Enemy and not body.dead:
-        if not enemies_in_range.has(body):
+        if !enemies_in_range.has(body):
             enemies_in_range.append(body)
 
 func yztato_on_trap_area_exited(body: Node):
@@ -40,4 +40,4 @@ func yztato_on_trap_area_exited(body: Node):
         enemies_in_range.erase(body)
 
 func yztato_on_trap_duration_finished():
-    if not dead: die()
+    if !dead: die()

@@ -52,7 +52,7 @@ func _yztato_blade_storm_ready() -> void:
     blade_storm = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
 
 func _yztato_lifesteal_ready() -> void:
-    if not RunData.is_connected("lifesteal_effect", self, "_on_lifesteal_effect"):
+    if !RunData.is_connected("lifesteal_effect", self, "_on_lifesteal_effect"):
         RunData.connect("lifesteal_effect", self, "_on_lifesteal_effect")
 
 func _yztato_blade_storm_attack_speed(delta: float)-> void:
@@ -80,7 +80,7 @@ func _yztato_blade_storm_attack_speed(delta: float)-> void:
 func _yztato_blood_rage_ready() -> void:
     blood_rage_effects = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
     
-    if not has_node("BloodRageScreen"):
+    if !has_node("BloodRageScreen"):
         _blood_rage_screen = ColorRect.new()
         _blood_rage_screen.name = "BloodRageScreen"
         _blood_rage_screen.set_script(preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/blood_rage/blood_rage_screen.gd"))
@@ -88,7 +88,7 @@ func _yztato_blood_rage_ready() -> void:
     else:
         _blood_rage_screen = $BloodRageScreen
     
-    if not has_node("BloodRageParticles"):
+    if !has_node("BloodRageParticles"):
         var particles_scene = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/blood_rage/blood_rage_particles.tscn")
         _blood_rage_particles = particles_scene.instance()
         _blood_rage_particles.name = "BloodRageParticles"
@@ -175,7 +175,7 @@ func yz_on_lifesteal_effect(value: int, player_index: int) -> void:
 
 
 func yz_on_enemy_killed_reset_blood_rage() -> void:
-    if not blood_rage_effects.empty():
+    if !blood_rage_effects.empty():
         for effect in blood_rage_effects:
             yz_trigger_blood_rage(effect[2], effect[1])
 

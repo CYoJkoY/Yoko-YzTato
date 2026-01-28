@@ -404,7 +404,7 @@ func yz_process_sword_array_mode(player_level: int) -> bool:
                 projectiles_to_spawn.append(_targets_in_range[index % target_count])
                 index += 1
         
-        if not projectiles_to_spawn.empty():
+        if !projectiles_to_spawn.empty():
             for target in projectiles_to_spawn:
                 yz_create_sword_projectile(target)
 
@@ -502,7 +502,7 @@ func yz_create_sword_projectile(target: Node):
         WeaponServiceSpawnProjectileArgs.new()
     )
 
-    if not sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
+    if !sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
         sword_array_projectile.connect("hit_something", self, "on_weapon_hit_something", [sword_array_projectile._hitbox])
     
     if sword_array_projectile.has_method("set_meta"):

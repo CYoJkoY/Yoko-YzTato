@@ -69,19 +69,19 @@ func yz_init_tracking_effects()->Dictionary:
     return yz_init_tracked_effects.duplicate(true)
 
 func yz_add_effect_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void:
-    if not yz_tracked_effects[player_index].has(tracking_key_hash):
+    if !yz_tracked_effects[player_index].has(tracking_key_hash):
         return 
 
     yz_tracked_effects[player_index][tracking_key_hash] += value as int
 
 func yz_get_effect_tracking_value(tracking_key_hash: int, player_index: int) -> float:
-    if not yz_tracked_effects[player_index].has(tracking_key_hash):
+    if !yz_tracked_effects[player_index].has(tracking_key_hash):
         return 0.0
 
     return yz_tracked_effects[player_index][tracking_key_hash]
 
 func yz_set_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void :
-    if not yz_tracked_effects[player_index].has(tracking_key_hash):
+    if !yz_tracked_effects[player_index].has(tracking_key_hash):
         return 
 
     yz_tracked_effects[player_index][tracking_key_hash] = value as int

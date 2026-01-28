@@ -13,7 +13,7 @@ func _ready():
 
 func get_burning_particle():
     for particle in burning_particles_pool:
-        if not particle.is_active:
+        if !particle.is_active:
             return particle
     
     if burning_particles_pool.size() < MAX_POOL_SIZE:

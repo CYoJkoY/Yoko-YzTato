@@ -10,7 +10,7 @@ func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int)
 # =========================== Custom =========================== #
 func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
     var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
-    if not damage_scaling_effects.empty():
+    if !damage_scaling_effects.empty():
         for effect in damage_scaling_effects:
             var stat: float = Utils.get_stat(effect[0], player_index)
             var value: float = effect[1]

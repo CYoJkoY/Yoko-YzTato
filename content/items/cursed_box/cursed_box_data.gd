@@ -6,7 +6,7 @@ func _get_tracking_text(player_index: int) -> String:
     !RunData.tracked_item_effects[player_index].has(my_id) or \
     tracking_text == "[EMPTY]": return text
     
-    if not RunData.tracked_item_effects[player_index][my_id] is Array: return text
+    if !RunData.tracked_item_effects[player_index][my_id] is Array: return text
     
     for i in RunData.tracked_item_effects[player_index][my_id].size():
         var tracked_count = RunData.tracked_item_effects[player_index][my_id][i]

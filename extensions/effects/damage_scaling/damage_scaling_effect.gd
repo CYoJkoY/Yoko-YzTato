@@ -5,7 +5,7 @@ export (Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
     var duplication: Resource = .duplicate(subresources)
-    if not scaling_stats.empty():
+    if !scaling_stats.empty():
         scaling_stats = Utils.convert_to_hash_array(scaling_stats)
 
     duplication.scaling_stats = scaling_stats

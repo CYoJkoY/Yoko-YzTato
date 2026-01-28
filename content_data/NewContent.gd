@@ -56,7 +56,7 @@ func add_resources() -> void:
                         has_weapon = true
                         break
 
-                if not has_weapon:
+                if !has_weapon:
                     character_data.starting_weapons.push_back(weapon)
     
     if challenges != null: 

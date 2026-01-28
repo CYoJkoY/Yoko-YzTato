@@ -4,9 +4,8 @@ extends "res://main.gd"
 var special_picked_up_count: Dictionary = {}
 
 # =========================== Extention =========================== #
-# When the wave ends
-func _on_WaveTimer_timeout()->void:
-    ._on_WaveTimer_timeout()
+func _on_EndWaveTimer_timeout()->void:
+    ._on_EndWaveTimer_timeout()
     _yztato_destory_weapons()
     _yztato_set_stat()
     _yztato_blood_rage_clean()
@@ -55,7 +54,7 @@ func _yztato_special_picked_up_change_stat(consumable: Node, player_index: int)-
 func _yztato_blood_rage_clean() -> void:
     for player_index in RunData.players_data.size():
         var blood_rage_effects: Array = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
-        if not blood_rage_effects.empty() and \
+        if !blood_rage_effects.empty() and \
         _players[player_index] and is_instance_valid(_players[player_index]):
             _players[player_index].yz_clean_up_blood_rage_effects()
 

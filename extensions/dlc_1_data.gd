@@ -63,7 +63,7 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
 
         new_effects.append(new_effect)
 
-    if not curse_effect_modified:
+    if !curse_effect_modified:
         var curse_effect = Effect.new()
         curse_effect.key = "stat_curse"
         curse_effect.value = round(max(1.0, curse_per_item_value * item_data.value * (1.0 + max_effect_modifier))) as int

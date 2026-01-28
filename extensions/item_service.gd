@@ -50,7 +50,7 @@ func _yztato_weapon_set_delete(item: ItemParentData, player_index: int, type: in
             if weapon_set_deletes.has(set.my_id_hash):
                 has_forbidden_set = true
                 break
-        if not has_forbidden_set:
+        if !has_forbidden_set:
             has_valid_weapons = true
             break
 
