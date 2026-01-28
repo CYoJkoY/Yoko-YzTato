@@ -2,15 +2,15 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/blind_necromancer.webp-3123626bc3038a4221c7b11bfe1fe029.stex"
+path="res://.import/ice_mage_soul.webp-e0f392985be083053e709d008401184a.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/001_blind_necromancer/blind_necromancer.webp"
-dest_files=[ "res://.import/blind_necromancer.webp-3123626bc3038a4221c7b11bfe1fe029.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul.webp"
+dest_files=[ "res://.import/ice_mage_soul.webp-e0f392985be083053e709d008401184a.stex" ]
 
 [params]
 

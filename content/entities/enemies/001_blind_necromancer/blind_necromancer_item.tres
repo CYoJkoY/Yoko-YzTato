@@ -1,8 +1,8 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/001_blind_necromancer/blind_necromancer_stats.tres" type="Resource" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/001_blind_necromancer/blind_necromancer_stats.tres" type="Resource" id=1]
 [ext_resource path="res://entities/units/enemies/ItemEnemy.gd" type="Script" id=2]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/001_blind_necromancer/blind_necromancer_icon.webp" type="Texture" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/001_blind_necromancer/blind_necromancer_icon.webp" type="Texture" id=3]
 
 
 [resource]

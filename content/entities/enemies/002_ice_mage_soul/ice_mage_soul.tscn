@@ -1,11 +1,11 @@
 [gd_scene load_steps=13 format=2]
 
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/002_ice_mage_soul/ice_mage_soul_stats.tres" type="Resource" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul_stats.tres" type="Resource" id=1]
 [ext_resource path="res://entities/units/enemies/enemy.tscn" type="PackedScene" id=2]
 [ext_resource path="res://entities/units/enemies/attack_behaviors/shooting_attack_behavior.gd" type="Script" id=3]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/002_ice_mage_soul/ice_mage_soul_projectile.tscn" type="PackedScene" id=4]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul_projectile.tscn" type="PackedScene" id=4]
 [ext_resource path="res://entities/units/movement_behaviors/stay_in_range_from_player_movement_behavior.gd" type="Script" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/002_ice_mage_soul/ice_mage_soul.webp" type="Texture" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul.webp" type="Texture" id=6]
 [ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=7]
 
 

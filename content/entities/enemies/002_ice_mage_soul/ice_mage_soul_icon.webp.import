@@ -2,20 +2,20 @@
 
 importer="texture"
 type="StreamTexture"
-path="res://.import/ice_mage_soul_projectile.webp-76c9cdb7025d504741631e8a6314f37b.stex"
+path="res://.import/ice_mage_soul_icon.webp-0952c6db56bb63698fd480b7040777b5.stex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/002_ice_mage_soul/ice_mage_soul_projectile.webp"
-dest_files=[ "res://.import/ice_mage_soul_projectile.webp-76c9cdb7025d504741631e8a6314f37b.stex" ]
+source_file="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul_icon.webp"
+dest_files=[ "res://.import/ice_mage_soul_icon.webp-0952c6db56bb63698fd480b7040777b5.stex" ]
 
 [params]
 
-compress/mode=1
-compress/lossy_quality=0.8
+compress/mode=0
+compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=false
+detect_3d=true
 svg/scale=1.0

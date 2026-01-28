@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://projectiles/projectile.tscn" type="PackedScene" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemy/002_ice_mage_soul/ice_mage_soul_projectile.webp" type="Texture" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul_projectile.webp" type="Texture" id=2]
 [ext_resource path="res://projectiles/bullet_enemy/enemy_projectile.gd" type="Script" id=3]
 
 
