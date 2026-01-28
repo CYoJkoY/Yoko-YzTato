@@ -37,18 +37,18 @@ func _init():
         # EFFECTS : blade_storm[ 1/4 ]
 
         "entity_spawner.gd",
-        # EFFECTS : gain_stat_when_killed_single_scaling[ 1/3 ], blood_rage[ 1/3 ],
+        # EFFECTS : gain_stat_when_killed_single_scaling[ 1/3 ], blood_rage[ 1/2 ],
         # ACHIEVE : dark_forest_rule
 
         "player.gd",
-        # EFFECTS : blade_storm[ 2/4 ], lifesteal[ 1/2 ], blood_rage[ 2/3 ],
+        # EFFECTS : blade_storm[ 2/4 ], lifesteal[ 1/2 ], blood_rage[ 2/2 ],
         #           temp_stat_per_interval[ hit_protection ], heal_on_damage_taken,
         #           upgrade_when_killed_enemies[ 1/4 ]    
         # ACHIEVE : only_in, more_than_enough
 
         "main.gd",
         # EFFECTS : end of wave, level up, special_picked_up_change_stat,
-        #           blood_rage[ 3/3 ], stats_chance_on_level_up
+        #           stats_chance_on_level_up
 
         "player_explosion.gd",
         # EFFECTS : explosion_erase_bullets

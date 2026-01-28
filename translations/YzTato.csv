@@ -113,7 +113,7 @@ CHAL_COUNTATTACK_DESC,A single melee attack deflects at least 5 enemy bullets,�
 CHAL_BIG_BANG,Big Bang,大爆炸
 CHAL_NOT_STIFF,Not Stiff,不僵
 CHAL_MORE_THAN_ENOUGH,More Than Enough,绰绰有余
-CHAL_MORE_THAN_ENOUGH_DESC,Finish a run with Multitasker and free weapon slots consistently ≥ 4,使用多面手在空闲武器槽始终≥4的情况下完成一场比赛
+CHAL_MORE_THAN_ENOUGH_DESC,Finish a run with Multitasker and free weapon slots ≥ 4,使用多面手在空闲武器槽≥4的情况下完成一场比赛
 CHAL_HELLFIRE,Hellfire,地狱火
 CHAL_HELLFIRE_DESC,Kill at least 100 burning enemies in one wave,在一次敌袭中击杀至少100名燃烧的敌人
 CHAL_ONE_FORCE_SUBDUE_TEN,One Force Subdue Ten,一力降十会

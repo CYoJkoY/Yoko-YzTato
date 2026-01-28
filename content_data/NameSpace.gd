@@ -19,7 +19,6 @@ class YzProjectile:
         return load("res://mods-unpacked/Yoko-YzTato/content/projectiles/sword_array/sword_array.webp")
 
 class Methods:
-    # Avoid Assertion failed Caused By Function Stop
     static func yz_delete_projectile(proj: Projectile)->void :
         proj.hide()
         proj.velocity = Vector2.ZERO

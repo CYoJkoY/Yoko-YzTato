@@ -8,7 +8,6 @@ func _on_EndWaveTimer_timeout()->void:
     ._on_EndWaveTimer_timeout()
     _yztato_destory_weapons()
     _yztato_set_stat()
-    _yztato_blood_rage_clean()
 
 func on_consumable_picked_up(consumable: Node, player_index: int)->void :
     .on_consumable_picked_up(consumable, player_index)
@@ -50,13 +49,6 @@ func _yztato_special_picked_up_change_stat(consumable: Node, player_index: int)-
                 special_picked_up_count[change[0]] = special_picked_up_count.get(change[0], 0) + 1
                 if special_picked_up_count[change[0]] % int(change[1]) == 0:
                     RunData.add_stat(change[2], change[3], player_index)
-
-func _yztato_blood_rage_clean() -> void:
-    for player_index in RunData.players_data.size():
-        var blood_rage_effects: Array = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
-        if !blood_rage_effects.empty() and \
-        _players[player_index] and is_instance_valid(_players[player_index]):
-            _players[player_index].yz_clean_up_blood_rage_effects()
 
 func _yztato_stats_chance_on_level_up(player_index: int) -> void:
     for chance_effect in RunData.get_player_effect(Utils.yztato_stats_chance_on_level_up_hash, player_index):

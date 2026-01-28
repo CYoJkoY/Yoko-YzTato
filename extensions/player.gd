@@ -8,7 +8,6 @@ var blood_rage_effects: Array = []
 onready var _blood_rage_screen: ColorRect = null
 onready var _blood_rage_particles: CPUParticles2D = null
 var blood_rage_timeout: int = 0
-var _active_blood_rage_effects: Array = []
 
 # heal_on_damage_taken
 var heal_on_damage_taken: Array = []
@@ -18,9 +17,6 @@ var _last_damage_taken: int = 0
 ### only_in ###
 var consumables_picked_up_last_wave: int = 0
 var consumables_picked_up_this_wave: int = 0
-
-### more_than_enough ###
-var less_than_four_throught: bool = true
 
 # =========================== Extention =========================== #
 func _ready() -> void:
@@ -146,15 +142,10 @@ func _yztato_chal_ready() -> void:
     var player_data = RunData.players_data[player_index]
     consumables_picked_up_last_wave = player_data.consumables_picked_up_this_run
 
-    ### more_than_enough ###
-    if RunData.current_wave <= 20 and \
-    RunData.get_player_character(player_index).my_id == "character_multitasker" and \
-    RunData.get_free_weapon_slots(player_index) < 4:
-        less_than_four_throught = false
-        
+    ### more_than_enough ###    
     if RunData.current_wave == 20 and \
     RunData.get_player_character(player_index).my_id == "character_multitasker" and \
-    less_than_four_throught:
+    RunData.get_free_weapon_slots(player_index) < 4:
         ChallengeService.try_complete_challenge(Utils.chal_more_than_enough_hash, RunData.get_free_weapon_slots(player_index))
 
 func _yztato_chal_on_consumable_picked_up()->void :
@@ -189,19 +180,15 @@ func yz_trigger_blood_rage(stats_change: Array, duration: float)->void :
     
     for stat_change in stats_change:
         if stat_change[1] != 0:
-            yz_change_stat(stat_change[0], stat_change[1], player_index)
-            _active_blood_rage_effects.append([stat_change[0], stat_change[1]])
+            TempStats.add_stat(stat_change[0], stat_change[1], player_index)
 
     var timer = RunData.get_tree().create_timer(duration, false)
     timer.connect("timeout", self, "yz_on_blood_rage_timeout", [stats_change])
 
 func yz_on_blood_rage_timeout(stats_change: Array) -> void:
-    if _active_blood_rage_effects.empty(): return
-    
     for stat_change in stats_change:
         if stat_change[1] != 0:
-            yz_change_stat(stat_change[0], -stat_change[1], player_index)
-            _active_blood_rage_effects.erase([stat_change[0], stat_change[1]])
+            TempStats.remove_stat(stat_change[0], stat_change[1], player_index)
 
     if _blood_rage_screen:
         _blood_rage_screen.stop_blood_rage()
@@ -211,26 +198,6 @@ func yz_on_blood_rage_timer_timeout() -> void:
 
     for effect in blood_rage_effects:
         yz_trigger_blood_rage(effect[2], effect[1])
-
-func yz_clean_up_blood_rage_effects() -> void:
-    for stat_change in _active_blood_rage_effects:
-        yz_change_stat(stat_change[0], -stat_change[1], player_index)
-    _active_blood_rage_effects.clear()
-    
-    if _blood_rage_screen:
-        _blood_rage_screen.stop_blood_rage()
-
-func yz_change_stat(stat_hash: int, value: int, player_index: int) -> void:
-    var effects: Dictionary = RunData.get_player_effects(player_index)
-    effects[stat_hash] += value
-    RunData._are_player_stats_dirty[player_index] = true
-    Utils.reset_stat_cache(player_index)
-    RunData._emit_stats_updated()
-
-func yz_stop_all_timers_with_prefix(prefix: String) -> void:
-    for child in get_children():
-        if child is Timer and child.name.begins_with(prefix):
-            child.stop()
 
 func yz_change_weapon(weapon_position: int, new_weapon_id_hash: int) -> void:
     if weapon_position < 0 or weapon_position >= current_weapons.size(): return
