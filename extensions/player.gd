@@ -132,12 +132,12 @@ func _yztato_heal_on_damage_taken(result: Array) -> void:
     _last_damage_taken = result[1]
 
     for effect in heal_on_damage_taken:
-        var chance = effect[0]
-        var percent = effect[1]
+        var chance: float = effect[0] / 100.0
+        var percent: float = effect[1] / 100.0
         
-        if randf() < chance / 100.0:
+        if Utils.get_chance_success(chance):
             var last_damage: int = _last_damage_taken
-            var heal_amount: int = int(max(1, int(last_damage * (percent / 100.0))))
+            var heal_amount: int = int(max(1, int(last_damage * percent)))
             if heal_amount > 0:
                 var _healed = on_healing_effect(heal_amount, Utils.item_yztato_insurance_policy_hash)
 

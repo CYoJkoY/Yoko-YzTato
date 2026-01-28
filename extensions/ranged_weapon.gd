@@ -222,10 +222,10 @@ func _spawn_vine_traps(thing_hit: Node, trap_count: int, player_index: int, trap
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
     for effect in effects:
         if effect.get_id() == "yztato_vine_trap":
-            var count = effect.trap_count as int
-            var chance = effect.chance as int
+            var count: int = effect.trap_count
+            var chance: float = effect.chance / 100.0
 
-            if randf() <= chance / 100.0:
+            if Utils.get_chance_success(chance):
                 effect.weapon_pos = weapon_pos
                 _spawn_vine_traps(thing_hit, count, player_index, effect)
 
@@ -234,10 +234,10 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
     var vine_trap_effects: Array = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
     if !vine_trap_effects.empty():
         for effect_data in vine_trap_effects:
-            var count = effect_data[0] as int
-            var chance = effect_data[1] as int
+            var count: int = effect_data[0]
+            var chance: float = effect_data[1] / 100.0
             
-            if randf() <= chance / 100.0:
+            if Utils.get_chance_success(chance):
                 _spawn_vine_traps(thing_hit, count, player_index, effect_data[2])
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:

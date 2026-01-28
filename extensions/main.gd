@@ -47,7 +47,7 @@ func _yztato_special_picked_up_change_stat(consumable: Node, player_index: int)-
     var special_picked_up_change_stat: Array = RunData.get_player_effect(Utils.yztato_special_picked_up_change_stat_hash,player_index)
     if special_picked_up_change_stat.size() > 0:
         for change in special_picked_up_change_stat:
-            if consumable.consumable_data.my_id == change[0]:
+            if consumable.consumable_data.my_id_hash == change[0]:
                 special_picked_up_count[change[0]] = special_picked_up_count.get(change[0], 0) + 1
                 if special_picked_up_count[change[0]] % int(change[1]) == 0:
                     RunData.add_stat(change[2], change[3], player_index)
