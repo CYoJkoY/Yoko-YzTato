@@ -30,11 +30,6 @@ var yztato_damage_scaling_hash: int = Keys.generate_hash("yztato_damage_scaling"
 var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_curse_on_reroll")
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
 
-# Tracking Effects
-var yztato_item_ghost_tree_hash: int = Keys.generate_hash("yztato_item_ghost_tree")
-var yztato_character_xiake_1_hash: int = Keys.generate_hash("yztato_character_xiake_1")
-var yztato_character_xiake_2_hash: int = Keys.generate_hash("yztato_character_xiake_2")
-
 # Tracking Items
 var item_yztato_cursed_box_hash: int = Keys.generate_hash("item_yztato_cursed_box")
 var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")
@@ -51,15 +46,15 @@ var chal_sudden_misfortune_hash: int = Keys.generate_hash("chal_sudden_misfortun
 var chal_one_force_subdue_ten_hash: int = Keys.generate_hash("chal_one_force_subdue_ten")
 
 # =========================== Extension =========================== #
-func is_manual_aim(player_index: int)-> bool:
-    var is_manual: bool = .is_manual_aim(player_index) || false
+func is_manual_aim(player_index: int) -> bool:
+    var is_manual: bool =.is_manual_aim(player_index) || false
     is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
 
     return is_manual
 
 # =========================== Custom =========================== #
-func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int)-> bool:
-    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
+func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
+    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
     if blade_storm != 0:
         is_manual = false
     return is_manual

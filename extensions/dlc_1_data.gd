@@ -30,34 +30,34 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
 
         match new_effect.get_id():
             "yztato_boomerang_weapon":
-                new_effect.min_damage_mul = _curse_effect_value(new_effect.min_damage_mul, effect_modifier)
-                new_effect.max_damage_mul = _curse_effect_value(new_effect.max_damage_mul, effect_modifier)
+                new_effect.min_damage_mul = yz_curse_effect_value(new_effect.min_damage_mul, effect_modifier)
+                new_effect.max_damage_mul = yz_curse_effect_value(new_effect.max_damage_mul, effect_modifier)
             
             "yztato_damage_scaling":
                 var new_scaling_stats: Array = []
                 for scaling in new_effect.scaling_stats:
-                    scaling[1] = _curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
+                    scaling[1] = yz_curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
                     new_scaling_stats.append(scaling)
                 new_effect.scaling_stats = new_scaling_stats
 
             "yztato_gain_stat_when_killed_single_scaling":
-                new_effect.scaling_percent = _curse_effect_value(new_effect.scaling_percent, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
-                new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.scaling_percent = yz_curse_effect_value(new_effect.scaling_percent, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
 
             "yztato_multi_hit":
-                new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
-                new_effect.damage_percent = _curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
+                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
+                new_effect.damage_percent = yz_curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
 
             "yztato_special_picked_up_change_stat", \
             "yztato_upgrade_when_killed_enemies":
-                new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
             
             "yztato_temp_stats_per_interval":
-                new_effect.value = _curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false, "has_min": true, "min_num": new_effect.value + 1})
+                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false, "has_min": true, "min_num": new_effect.value + 1})
                 
             "yztato_vine_trap":
-                new_effect.trap_count = _curse_effect_value(new_effect.trap_count, effect_modifier, {"process_negative": false})
-                new_effect.chance = _curse_effect_value(new_effect.chance, effect_modifier, {"process_negative": false})
+                new_effect.trap_count = yz_curse_effect_value(new_effect.trap_count, effect_modifier, {"process_negative": false})
+                new_effect.chance = yz_curse_effect_value(new_effect.chance, effect_modifier, {"process_negative": false})
                 
             _: new_effect = yz_process_other_effect(new_effect, effect_modifier)
 
@@ -81,17 +81,17 @@ func yz_process_other_effect(effect: Resource, modifier: float):
     match effect.key:
         "yztato_heal_on_damage_taken", \
         "yztato_random_curse_on_reroll":
-            effect.value = _curse_effect_value(effect.value, modifier, {"process_negative": false})
-            effect.value2 = _curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
+            effect.value = yz_curse_effect_value(effect.value, modifier, {"process_negative": false})
+            effect.value2 = yz_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
 
     match effect.custom_key:
         "yztato_stats_chance_on_level_up":
-            effect.value = _curse_effect_value(effect.value, modifier)
-            effect.value2 = _curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
+            effect.value = yz_curse_effect_value(effect.value, modifier)
+            effect.value2 = yz_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
     
-    effect.value = _curse_effect_value(effect.value, modifier, {"process_negative": false})
+    effect.value = yz_curse_effect_value(effect.value, modifier, {"process_negative": false})
     return effect
 
 # =========================== Method =========================== #
@@ -103,7 +103,7 @@ func yz_has_yztato_effect(effects: Array) -> bool:
             return true
     return false
 
-func _curse_effect_value(
+func yz_curse_effect_value(
     value: float, modifier: float, options: Dictionary = {}
 ) -> float:
     var step: float = options.get("step", 0.01)

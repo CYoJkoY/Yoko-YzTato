@@ -66,7 +66,7 @@ func _init():
 
         "run_data.gd",
         # EFFECTS : lifesteal[ 2/2 ]
-        # Tracked Items
+        # Tracked Effects
 
         "sound_manager.gd",
         # Sound Fix[ 1/2 ]
@@ -80,8 +80,11 @@ func _init():
         "upgrades_ui.gd",
         # EFFECTS : extra_upgrade
 
-        "base_shop.gd",
-        # EFFECTS : random_curse_on_reroll
+        "shop.gd",
+        # EFFECTS : random_curse_on_reroll[ 1/2 ]
+
+        "coop_shop.gd",
+        # EFFECTS : random_curse_on_reroll[ 2/2 ]
 
         "melee_weapon.gd",
         # EFFECTS : melee_erase_bullets, melee_bounce_bullets,

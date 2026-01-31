@@ -1,4 +1,4 @@
-extends "res://ui/menus/shop/base_shop.gd"
+extends "res://ui/menus/shop/shop.gd"
 
 # =========================== Extension =========================== #
 func _on_RerollButton_pressed(player_index: int) -> void:

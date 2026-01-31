@@ -21,37 +21,40 @@ var consumables_picked_up_this_wave: int = 0
 # =========================== Extension =========================== #
 func _ready() -> void:
     _yztato_blade_storm_ready()
-    _yztato_lifesteal_ready()
     _yztato_blood_rage_ready()
     _yztato_heal_on_damage_taken_ready()
     _yztato_chal_ready()
 
-func _physics_process(delta: float)->void :
+func _physics_process(delta: float) -> void:
     _yztato_blade_storm_attack_speed(delta)
 
-func take_damage(value: int, args: TakeDamageArgs)->Array:
-    var result = .take_damage(value, args)
+func on_lifesteal_effect(value: int) -> void:
+    var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
+    if life_steal != 0:
+        on_healing_effect(value)
+        return
+
+    .on_lifesteal_effect(value)
+
+func take_damage(value: int, args: TakeDamageArgs) -> Array:
+    var result =.take_damage(value, args)
     _yztato_heal_on_damage_taken(result)
     
     return result
 
-func _on_OneSecondTimer_timeout()->void :
+func _on_OneSecondTimer_timeout() -> void:
     ._on_OneSecondTimer_timeout()
     _yztato_temp_stats_per_interval()
 
-func on_consumable_picked_up(consumable_data: ConsumableData)->void :
+func on_consumable_picked_up(consumable_data: ConsumableData) -> void:
     .on_consumable_picked_up(consumable_data)
     _yztato_chal_on_consumable_picked_up()
 
 # =========================== Custom =========================== #
 func _yztato_blade_storm_ready() -> void:
-    blade_storm = RunData.get_player_effect(Utils.yztato_blade_storm_hash,player_index)
+    blade_storm = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
 
-func _yztato_lifesteal_ready() -> void:
-    if !RunData.is_connected("lifesteal_effect", self, "_on_lifesteal_effect"):
-        RunData.connect("lifesteal_effect", self, "_on_lifesteal_effect")
-
-func _yztato_blade_storm_attack_speed(delta: float)-> void:
+func _yztato_blade_storm_attack_speed(delta: float) -> void:
     if dead: return
 
     if blade_storm != 0:
@@ -59,7 +62,7 @@ func _yztato_blade_storm_attack_speed(delta: float)-> void:
         for weapon in current_weapons:
             _storm_duration += weapon.current_stats.cooldown
         _storm_duration *= max(0.1, current_stats.health * 1.0 / max_stats.health) * 0.07 / current_weapons.size()
-        _storm_duration /= max( 1.0, current_stats.speed / 10000.0 / current_weapons.size() )
+        _storm_duration /= max(1.0, current_stats.speed / 10000.0 / current_weapons.size())
         _storm_duration /= max(0.01, 1.0 + Utils.get_stat(Keys.stat_attack_speed_hash, player_index) / 100.0)
         _storm_duration = max(_storm_duration, 0.04)
         _weapons_container.rotation += delta / _storm_duration * TAU
@@ -68,7 +71,7 @@ func _yztato_blade_storm_attack_speed(delta: float)-> void:
             if _weapons_container.rotation > TAU:
                 weapon.disable_hitbox()
                 weapon.enable_hitbox()
-            weapon._hitbox.set_knockback( - Vector2(cos(weapon.global_rotation), sin(weapon.global_rotation)), weapon.current_stats.knockback, player_index)
+            weapon._hitbox.set_knockback(-Vector2(cos(weapon.global_rotation), sin(weapon.global_rotation)), weapon.current_stats.knockback, player_index)
 
         if _weapons_container.rotation > TAU:
                 _weapons_container.rotation -= TAU
@@ -102,7 +105,7 @@ func _yztato_blood_rage_ready() -> void:
             blood_rage_timer.one_shot = false
             blood_rage_timer.autostart = false
             add_child(blood_rage_timer)
-            blood_rage_timer.connect("timeout", self, "yz_on_blood_rage_timer_timeout")
+            blood_rage_timer.connect("timeout", self , "yz_on_blood_rage_timer_timeout")
 
             var interval = effect[0]
             blood_rage_timer.wait_time = interval
@@ -147,29 +150,19 @@ func _yztato_chal_ready() -> void:
     RunData.get_free_weapon_slots(player_index) < 4:
         ChallengeService.try_complete_challenge(Utils.chal_more_than_enough_hash, RunData.get_free_weapon_slots(player_index))
 
-func _yztato_chal_on_consumable_picked_up()->void :
+func _yztato_chal_on_consumable_picked_up() -> void:
     ### only_in ###
     var player_data = RunData.players_data[player_index]
     consumables_picked_up_this_wave = player_data.consumables_picked_up_this_run - consumables_picked_up_last_wave
     ChallengeService.try_complete_challenge(Utils.chal_only_in_hash, consumables_picked_up_this_wave)
 
 # =========================== Method =========================== #
-func yz_on_lifesteal_effect(value: int, player_index: int) -> void:
-    if self.player_index == player_index and not dead and is_instance_valid(self):
-        var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
-        if life_steal != 0:
-            on_healing_effect(value)
-            return
-        
-    .on_lifesteal_effect(value)
-
-
 func yz_on_enemy_killed_reset_blood_rage() -> void:
     if !blood_rage_effects.empty():
         for effect in blood_rage_effects:
             yz_trigger_blood_rage(effect[2], effect[1])
 
-func yz_trigger_blood_rage(stats_change: Array, duration: float)->void :
+func yz_trigger_blood_rage(stats_change: Array, duration: float) -> void:
     if _blood_rage_screen:
         _blood_rage_screen.start_blood_rage(0.4)
     
@@ -182,7 +175,7 @@ func yz_trigger_blood_rage(stats_change: Array, duration: float)->void :
             TempStats.add_stat(stat_change[0], stat_change[1], player_index)
 
     var timer = RunData.get_tree().create_timer(duration, false)
-    timer.connect("timeout", self, "yz_on_blood_rage_timeout", [stats_change])
+    timer.connect("timeout", self , "yz_on_blood_rage_timeout", [stats_change])
 
 func yz_on_blood_rage_timeout(stats_change: Array) -> void:
     for stat_change in stats_change:
