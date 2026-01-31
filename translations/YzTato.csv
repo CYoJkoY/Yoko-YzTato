@@ -1,10 +1,8 @@
 keys,en,zh_Hans_CN
 WEAPON_YZTATO_CHISEFENGBAO,Red Storm,赤色风暴
-WEAPON_YZTATO_CHISEFENGBAO_1,Red Storm △,赤色风暴 △
 WEAPON_YZTATO_LIUYEDAO,Lancet,柳叶刀
 CLASS_YZTATO_EMERGENCY,Emergency,急救
 WEAPON_YZTATO_CHUCHANYI,Defibrillagun,除颤枪
-WEAPON_YZTATO_CHUCHANYI_1,Defibrillagun △,除颤枪 △
 ITEM_YZTATO_SMALLER_MAP,Map Reducer,地图缩小术
 ITEM_YZTATO_LARGER_MAP,Map Dilator,地图扩大术
 CHARACTER_YZTATO_MINOTAUR,Minotaur,牛头怪物
@@ -25,7 +23,6 @@ YZTATO_BLIND_NECROMANCER_BEHAVIOUR_DESCRIPTION,Stay as far away from the player 
 YZTATO_ICE_MAGE_SOUL_NAME,Ice Mage Soul,冰法魂
 YZTATO_ICE_MAGE_SOUL_BEHAVIOUR_DESCRIPTION,A summon of the Blind Necromancer that fires fast-moving red ice shards,"盲·死灵法师的召唤物,发射速度较快的红色冰棱"
 WEAPON_YZTATO_BANBOCHANGDI,Mottled Flute,斑驳长笛
-WEAPON_YZTATO_BANBOCHANGDI_1,Mottled Flute △,斑驳长笛 △
 CLASS_YZTATO_UNCANNY_INSTRUMENT,Uncanny Instrument,诡乐
 WEAPON_YZTATO_ANMOUHONGYUN,Dusky Pupil Melody,黯眸红韵
 WEAPON_YZTATO_LIUCAIYAOLING,Flowing Colors Rattle,流彩摇铃
@@ -38,7 +35,7 @@ WEAPON_YZTATO_HUANGWUWANGE_1,Desolate Elegy △,荒芜挽歌 △
 EFFECT_YZTATO_UPGRADE_WHEN_KILLED_ENEMIES,Weapon upgrades after {0} kills in a single wave,单波次杀敌{0}个后武器升级
 EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can erase enemy bullets,近战武器可以消除敌人子弹
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
-EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n[{5}]",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n[{5}]
+EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n{5}",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n{5}
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
 EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by damage,attack speed,range and player's level","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color],受{1}伤害、攻速、范围、角色等级[/color]影响"
 EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by weapon's damage and enemy's damage","你的近战武器可反弹敌人子弹,其伤害受{2}武器伤害、敌人伤害[/color]影响"
@@ -74,7 +71,7 @@ EFFECT_YZTATO_ONE_SHOT_LOOT,Loot Enemies Die In One Hit,战利品敌人能被一
 ITEM_YZTATO_BLOOD_DRESS,Blood Dress,血服
 YZTATO_EXTRA_UPGRADE_CHANCE,Get an extra upgrade option!,获得额外一次升级选择机会！
 ITEM_YZTATO_DESTINY_DICE,Destiny Dice,命运骰子
-EFFECT_YZTATO_EXTRA_UPGRADE,{0} chance to get an additional upgrade option,{0} 概率获得额外升级选择机会
+EFFECT_YZTATO_EXTRA_UPGRADE,{0} chance to get an additional upgrade option,{0}概率获得额外升级选择机会
 EFFECT_YZTATO_BLOOD_RAGE,"Trigger [color=#c9171e]blood rage[/color] every {0} seconds,{2}lasts {1} seconds,[color=#c9171e]defeating enemies resets cooldown[/color]","每{0}秒触发一次[color=#c9171e]血怒[/color],{2}持续{1}秒,[color=#c9171e]击败敌人重置冷却[/color]"
 CHARACTER_YZTATO_BERSERKER,Berserker,狂战士
 EFFECT_YZTATO_MULTI_HIT,"Each hit on an enemy will deal {0} additional hits,each dealing {1} of the original damage","每次命中敌人将多造成{0}次伤害,数值为{1}原伤害"

@@ -18,7 +18,7 @@ func serialize()-> Dictionary:
     var serialized = .serialize()
     serialized.chimera_projectile_stats = []
     for projectile_stats in chimera_projectile_stats:
-        serialized.chimera_projectile_stats.push_back(projectile_stats.resource_path)
+        serialized.chimera_projectile_stats.append(projectile_stats.resource_path)
 
     return serialized
 
@@ -26,7 +26,7 @@ func deserialize_and_merge(serialized:Dictionary)-> void:
     .deserialize_and_merge(serialized)
     if serialized.has("chimera_projectile_stats"):
         for projectile_stats_path in serialized.chimera_projectile_stats:
-            chimera_projectile_stats.push_back(load(projectile_stats_path))
+            chimera_projectile_stats.append(load(projectile_stats_path))
 
 
 # =========================== Custom =========================== #

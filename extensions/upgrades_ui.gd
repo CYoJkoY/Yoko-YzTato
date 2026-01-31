@@ -1,12 +1,12 @@
 extends "res://ui/menus/ingame/upgrades_ui.gd"
 
-# =========================== Extention =========================== #
-func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int)->void :
+# =========================== Extension =========================== #
+func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int) -> void:
     _yztato_extra_upgrade(player_index)
     ._on_choose_button_pressed(upgrade_data, player_index)
 
 # =========================== Custom =========================== #
-func _yztato_extra_upgrade(player_index: int)->void :
+func _yztato_extra_upgrade(player_index: int) -> void:
     var extra_upgrades: Array = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
     if extra_upgrades.empty(): return
 
@@ -33,10 +33,10 @@ func _yztato_extra_upgrade(player_index: int)->void :
             floating_text_manager.display(
                 popup_text,
                 center_top_pos,
-                Color.gold, 
-                null, 
-                2.0, 
+                Color.gold,
+                null,
+                2.0,
                 true,
-                Vector2(0, -50), 
+                Vector2(0, -50),
                 true
             )

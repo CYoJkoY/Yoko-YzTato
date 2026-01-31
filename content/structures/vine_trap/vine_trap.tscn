@@ -221,9 +221,12 @@ monitorable = false
 rotation = 1.5708
 shape = SubResource( 12 )
 
-[node name="Timer" type="Timer" parent="."]
+[node name="DurationTimer" type="Timer" parent="."]
 one_shot = true
+
+[node name="AttackTimer" type="Timer" parent="."]
 
 [connection signal="body_entered" from="Area2D" to="." method="yztato_on_trap_area_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="yztato_on_trap_area_exited"]
-[connection signal="timeout" from="Timer" to="." method="yztato_on_trap_duration_finished"]
+[connection signal="timeout" from="DurationTimer" to="." method="yztato_on_trap_duration_finished"]
+[connection signal="timeout" from="AttackTimer" to="." method="yztato_on_trap_attack"]

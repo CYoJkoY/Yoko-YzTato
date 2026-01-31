@@ -4,7 +4,7 @@ var yztato_data: Resource = null
 var Yztato: Node = null
 var yz_dir: String = ModLoaderMod.get_unpacked_dir() + "Yoko-YzTato/"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _ready() -> void:
     call_deferred("_yztato_ready")
 

@@ -1,6 +1,6 @@
 extends "res://singletons/item_service.gd"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetRandItemForWaveArgs)->ItemParentData:
     var item :ItemParentData = ._get_rand_item_for_wave(wave, player_index, type, args)
     item = _yztato_weapon_set_filter(item, player_index, type, wave, args)

@@ -19,7 +19,7 @@ shader_param/outline_color_2 = Color( 0, 0, 0, 0 )
 shader_param/outline_color_3 = Color( 0, 0, 0, 0 )
 
 [sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 68, 13 )
+extents = Vector2( 97.5, 15 )
 
 [sub_resource type="CircleShape2D" id=4]
 radius = 89.2693
@@ -33,14 +33,11 @@ position = Vector2( 38, 0 )
 texture = ExtResource( 2 )
 
 [node name="Collision" parent="Sprite/Hitbox" index="0"]
-position = Vector2( 0, -9.53674e-07 )
+position = Vector2( -29.5, -4.76837e-07 )
 shape = SubResource( 1 )
 
 [node name="Muzzle" parent="Sprite" index="1"]
-position = Vector2( 40, 0 )
-
-[node name="Attach" parent="." index="1"]
-position = Vector2( 0, 3 )
+position = Vector2( 55, 0 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
 position = Vector2( 52, 0 )

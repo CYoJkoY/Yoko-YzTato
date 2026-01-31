@@ -25,15 +25,15 @@ func _generate_hashes() -> void:
 func apply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
     
-    var gain_stat_effects = RunData.get_player_effect(custom_key_hash, player_index)
-    gain_stat_effects.push_back([stat_hash, value, interval, reset_on_hit])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].append([stat_hash, value, interval, reset_on_hit])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
     
-    var gain_stat_effects = RunData.get_player_effect(custom_key_hash, player_index)
-    gain_stat_effects.erase([stat_hash, value, interval, reset_on_hit])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].erase([stat_hash, value, interval, reset_on_hit])
     Utils.reset_stat_cache(player_index)
 
 func _add_custom_args() -> void:

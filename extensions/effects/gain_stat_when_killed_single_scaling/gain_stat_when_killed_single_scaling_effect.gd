@@ -12,7 +12,7 @@ var tracking_key_hash: int = Keys.empty_hash
 
 var tracking_value: int = 0
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
     var duplication = .duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":
@@ -40,15 +40,15 @@ func _generate_hashes() -> void:
 func apply(player_index: int)->void :
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.push_back([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].append([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int)->void :
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.erase([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].erase([scope, value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
     Utils.reset_stat_cache(player_index)
 
 func get_args(player_index: int)->Array:
@@ -60,8 +60,8 @@ func get_args(player_index: int)->Array:
     tracking_value = RunData.yz_get_effect_tracking_value(tracking_key_hash, player_index)
     var str_tracking_value: String
     match tracking_value >= 0:
-        true: str_tracking_value = tr("STATS_GAINED").format([tracking_value])
-        false: str_tracking_value = tr("STATS_LOST").format([tracking_value])
+        true: str_tracking_value = "[color=%s]%s[/color]" % [Utils.SECONDARY_FONT_COLOR_HTML, tr("STATS_GAINED").format([tracking_value])]
+        false: str_tracking_value = "[color=%s]%s[/color]" % [Utils.SECONDARY_FONT_COLOR_HTML, tr("STATS_LOST").format([-tracking_value])]
 
     return [str(stat_nb), tr(stat.to_upper()), stat_icon_text, numer_of_need, scaling_text, str_tracking_value]
 

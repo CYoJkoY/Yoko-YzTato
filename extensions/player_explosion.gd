@@ -1,6 +1,6 @@
 extends "res://projectiles/player_explosion.gd"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func start_explosion() -> void :
     _yztato_explosion_erase(player_index)
     .start_explosion()

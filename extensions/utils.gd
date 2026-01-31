@@ -50,7 +50,7 @@ var chal_only_in_hash: int = Keys.generate_hash("chal_only_in")
 var chal_sudden_misfortune_hash: int = Keys.generate_hash("chal_sudden_misfortune")
 var chal_one_force_subdue_ten_hash: int = Keys.generate_hash("chal_one_force_subdue_ten")
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func is_manual_aim(player_index: int)-> bool:
     var is_manual: bool = .is_manual_aim(player_index) || false
     is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)

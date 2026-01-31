@@ -3,7 +3,7 @@ extends "res://main.gd"
 # EFFECT : special_picked_up_change_stat
 var special_picked_up_count: Dictionary = {}
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _on_EndWaveTimer_timeout()->void:
     ._on_EndWaveTimer_timeout()
     _yztato_destory_weapons()

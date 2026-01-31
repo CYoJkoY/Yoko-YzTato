@@ -4,22 +4,22 @@ export (String) var name: String = ""
 export (Resource) var extra_group_data: Resource = null
 export (int) var waves: int = 0
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 static func get_id() -> String:
     return "yztato_extra_enemies_next_waves"
 
 func apply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.append([extra_group_data.resource_path, value, waves])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].append([extra_group_data.resource_path, value, waves])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.erase([extra_group_data.resource_path, value, waves])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].erase([extra_group_data.resource_path, value, waves])
     Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
@@ -27,8 +27,8 @@ func get_args(_player_index: int) -> Array:
     var str_waves: String = tr("INFINITE") if waves >= 999 else str(waves)
     var enemy_name: String = tr(name.to_upper())
 
-    args.push_back(str_waves)
-    args.push_back(enemy_name)
+    args.append(str_waves)
+    args.append(enemy_name)
     
     return args
 

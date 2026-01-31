@@ -7,7 +7,7 @@ func _ready():
     _yztato_extrusion_attack_ready()
 
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
-    var damage_taken = .take_damage(value, args)
+    var damage_taken =.take_damage(value, args)
     _yztato_one_shot_loot_take_damage(args)
 
     return damage_taken
@@ -27,7 +27,7 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     
     if args.hitbox and \
     args.hitbox.from and \
-    ( 
+    (
         not (args.hitbox.from is Object) or \
         (
             args.hitbox.from is Object and \

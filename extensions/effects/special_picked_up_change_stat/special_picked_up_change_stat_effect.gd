@@ -24,14 +24,14 @@ func _generate_hashes() -> void:
 func apply(player_index: int)->void :
     if custom_key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
-    effect_items.push_back([key_hash, value, stat_hash, stat_nb])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].append([key_hash, value, stat_hash, stat_nb])
 
 func unapply(player_index: int)->void :
     if custom_key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
-    effect_items.erase([key_hash, value, stat_hash, stat_nb])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].erase([key_hash, value, stat_hash, stat_nb])
 
 func get_args(_player_index: int)->Array:
     var stat_icon: Texture = ItemService.get_stat_small_icon(stat_hash)

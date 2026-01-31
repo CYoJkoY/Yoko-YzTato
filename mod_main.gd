@@ -55,7 +55,6 @@ func _init():
 
         "item_service.gd",
         # EFFECTS : weapon_set_filter, weapon_set_delete
-        # Weapon Banned
         
         "utils.gd",
         # EFFECTS : blade_storm[ 3/4 ]

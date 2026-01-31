@@ -1,6 +1,6 @@
 extends "res://zones/wave_manager.gd"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func init(p_wave_timer: Timer, zone_data: ZoneData, wave_data: Resource)->void :
     .init(p_wave_timer, zone_data, wave_data)
     _yztato_extra_enemies_next_waves_init(wave_data)
@@ -15,15 +15,15 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
             var group_count = effect[1]
             var waves_remaining = effect[2]
             
-            for _i in range(group_count):
+            for _i in group_count:
                 var new_group = group_data
                 if group_data.is_boss:
                     new_group = init_elite_group([effect[2]])
-                current_wave_data.groups_data.push_back(new_group)
+                current_wave_data.groups_data.append(new_group)
             
             waves_remaining -= 1
             if waves_remaining > 0:
                 var new_effect = [effect[0], group_count, waves_remaining]
-                remaining_effects.push_back(new_effect)
+                remaining_effects.append(new_effect)
         
         effects = remaining_effects

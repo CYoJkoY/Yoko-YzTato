@@ -2,22 +2,22 @@ extends NullEffect
 
 export (int) var interval: int = 1
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 static func get_id()->String:
     return "yztato_random_primary_stat_over_time"
 
 func apply(player_index: int)->void :
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.push_back([value, interval])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].append([value, interval])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int)->void :
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.erase([value, interval])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].erase([value, interval])
     Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int)->Array:

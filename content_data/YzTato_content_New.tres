@@ -189,7 +189,13 @@ zones = null
 tracked_items = {
 "character_yztato_baseball_player": 0,
 "character_yztato_fanatic": 0,
+"item_yztato_cursed_box": [ 0, 0 ],
 "item_yztato_insurance_policy": 0
+}
+tracked_effects = {
+"yztato_character_xiake_1": 0,
+"yztato_character_xiake_2": 0,
+"yztato_item_ghost_tree": 0
 }
 translation_keys_needing_operator = {
 "effect_yztato_crit_damage": [ 0 ],

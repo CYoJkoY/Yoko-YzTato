@@ -1,38 +1,16 @@
 extends "res://singletons/run_data.gd"
 
-var yz_init_tracked_effects: Dictionary = {
-
-    Utils.yztato_item_ghost_tree_hash: 0,
-    Utils.yztato_character_xiake_1_hash: 0,
-    Utils.yztato_character_xiake_2_hash: 0,
-
-}
+var yz_init_tracked_effects: Dictionary = {}
 
 var yz_tracked_effects: Array= [{}, {}, {}, {}]
 
-# =========================== Extention =========================== #
-func _init() -> void:
-    init_tracked_items = init_tracked_effects()
-
+# =========================== Extension =========================== #
 func _ready():
     _yztato_unlock_all_challenges()
 
 func manage_life_steal(weapon_stats:WeaponStats, player_index:int)->void :
     if _yztato_life_steal(weapon_stats, player_index): return
     .manage_life_steal(weapon_stats, player_index)
-
-func init_tracked_effects()->Dictionary:
-    var vanilla_tracked: Dictionary = .init_tracked_effects()
-
-    var new_tracked: Dictionary = {
-        
-        Utils.item_yztato_cursed_box_hash: [0, 0],
-
-    }
-
-    new_tracked.merge(vanilla_tracked)
-
-    return new_tracked
 
 func reset(restart: bool = false)->void :
     .reset(restart)
@@ -47,7 +25,7 @@ func get_state()->Dictionary:
 
 func resume_from_state(state: Dictionary)->void :
     .resume_from_state(state)
-    yz_tracked_effects = state.yz_tracked_effects.duplicate()
+    yz_tracked_effects = Utils.convert_to_hash_array(state.yz_tracked_effects.duplicate())
 
 # =========================== Custom =========================== #
 func _yztato_life_steal(weapon_stats:WeaponStats, player_index:int)-> bool:
@@ -68,20 +46,32 @@ func _yztato_unlock_all_challenges() -> void:
 func yz_init_tracking_effects()->Dictionary:
     return yz_init_tracked_effects.duplicate(true)
 
-func yz_add_effect_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void:
-    if !yz_tracked_effects[player_index].has(tracking_key_hash):
-        return 
+func yz_add_effect_tracking_value(yz_tracking_key_hash: int, value: float, player_index: int, index: int = 0) -> void:
+    if !yz_tracked_effects[player_index].has(yz_tracking_key_hash):
+        print("yz tracking key %s does not exist" % yz_tracking_key_hash)
+        return
 
-    yz_tracked_effects[player_index][tracking_key_hash] += value as int
+    if yz_tracked_effects[player_index][yz_tracking_key_hash] is Array:
+        yz_tracked_effects[player_index][yz_tracking_key_hash][index] += value as int
+    else: 
+        yz_tracked_effects[player_index][yz_tracking_key_hash] += value as int
 
-func yz_get_effect_tracking_value(tracking_key_hash: int, player_index: int) -> float:
-    if !yz_tracked_effects[player_index].has(tracking_key_hash):
+func yz_set_effect_tracking_value(yz_tracking_key_hash: int, value: float, player_index: int, index: int = 0) -> void :
+    if !yz_tracked_effects[player_index].has(yz_tracking_key_hash):
+        print("yz tracking key %s does not exist" % yz_tracking_key_hash)
+        return
+
+    if yz_tracked_effects[player_index][yz_tracking_key_hash] is Array:
+        yz_tracked_effects[player_index][yz_tracking_key_hash][index] = value as int
+    else: 
+        yz_tracked_effects[player_index][yz_tracking_key_hash] = value as int
+
+func yz_get_effect_tracking_value(yz_tracking_key_hash: int, player_index: int, index: int = 0) -> float:
+    if !yz_tracked_effects[player_index].has(yz_tracking_key_hash):
+        print("yz tracking key %s does not exist" % yz_tracking_key_hash)
         return 0.0
-
-    return yz_tracked_effects[player_index][tracking_key_hash]
-
-func yz_set_tracking_value(tracking_key_hash: int, value: float, player_index: int) -> void :
-    if !yz_tracked_effects[player_index].has(tracking_key_hash):
-        return 
-
-    yz_tracked_effects[player_index][tracking_key_hash] = value as int
+    
+    if yz_tracked_effects[player_index][yz_tracking_key_hash] is Array:
+        return yz_tracked_effects[player_index][yz_tracking_key_hash][index]
+    else:
+        return yz_tracked_effects[player_index][yz_tracking_key_hash]

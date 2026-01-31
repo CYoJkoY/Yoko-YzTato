@@ -10,15 +10,15 @@ static func get_id() -> String:
 func apply(player_index: int)->void :
     if custom_key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
-    effect_items.push_back([key_hash, value, duration, scale])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].append([key_hash, value, duration, scale])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int)->void :
     if custom_key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(custom_key_hash, player_index)
-    effect_items.erase([key_hash, value, duration, scale])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[custom_key_hash].erase([key_hash, value, duration, scale])
     Utils.reset_stat_cache(player_index)
 
 func serialize() -> Dictionary:

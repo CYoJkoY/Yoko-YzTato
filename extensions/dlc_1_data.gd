@@ -1,29 +1,29 @@
 extends "res://dlcs/dlc_1/dlc_1_data.gd"
 
 # =========================== Extension =========================== #
-func curse_item(item_data: ItemParentData, player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0)->ItemParentData:
+func curse_item(item_data: ItemParentData, player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
     if yz_has_yztato_effect(item_data.effects):
         return _yztato_curse_item(item_data, player_index, turn_randomization_off, min_modifier)
     else:
-        return .curse_item(item_data, player_index, turn_randomization_off, min_modifier)
+        return.curse_item(item_data, player_index, turn_randomization_off, min_modifier)
     
 # =========================== Custom =========================== #
-func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0)->ItemParentData:
+func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
     if item_data.is_cursed:
         return item_data
 
-    var new_effects: = []
+    var new_effects := []
     var max_effect_modifier = 0.0
-    var curse_effect_modified: = false
+    var curse_effect_modified := false
     var new_item_data = item_data.duplicate()
 
     if item_data is WeaponData:
-        var effect_modifier: = _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
+        var effect_modifier := _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
         max_effect_modifier = max(max_effect_modifier, effect_modifier)
         new_item_data.stats = _boost_weapon_stats_damage(item_data.stats, effect_modifier)
 
     for effect in item_data.effects:
-        var effect_modifier: = _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
+        var effect_modifier := _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
         max_effect_modifier = max(max_effect_modifier, effect_modifier)
 
         var new_effect = effect.duplicate()
@@ -106,7 +106,6 @@ func yz_has_yztato_effect(effects: Array) -> bool:
 func _curse_effect_value(
     value: float, modifier: float, options: Dictionary = {}
 ) -> float:
-    
     var step: float = options.get("step", 0.01)
     var process_negative: bool = options.get("process_negative", true)
     var is_negative: bool = options.get("is_negative", false)

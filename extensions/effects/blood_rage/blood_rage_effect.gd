@@ -30,15 +30,15 @@ func _generate_hashes() -> void:
 func apply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.push_back([interval, duration, stats_change_hashes])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].append([interval, duration, stats_change_hashes])
     Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
-    var effect_items = RunData.get_player_effect(key_hash, player_index)
-    effect_items.erase([interval, duration, stats_change_hashes])
+    var effects: Dictionary = RunData.get_player_effects(player_index)
+    effects[key_hash].erase([interval, duration, stats_change_hashes])
     Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:

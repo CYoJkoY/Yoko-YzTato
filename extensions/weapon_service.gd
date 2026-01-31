@@ -1,6 +1,6 @@
 extends "res://singletons/weapon_service.gd"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
     var new_stats: Array = ._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
     new_stats = _yztato_scaling_damage(new_stats, player_index)
@@ -25,6 +25,6 @@ func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
                 if existing_scaling_stat != null:
                     existing_scaling_stat[1] += scaling_stat_value * num
                 else :
-                    new_scaling_stats.push_back([scaling_stat_hash, scaling_stat_value * num])
+                    new_scaling_stats.append([scaling_stat_hash, scaling_stat_value * num])
             return new_scaling_stats
     return new_stats

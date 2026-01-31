@@ -28,7 +28,7 @@ var effect_single_kill_count: Dictionary = {}
 # EFFECT : vine_trap
 onready var _entity_spawner = get_tree().current_scene.get_node("EntitySpawner")
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _ready():
     _yztato_boomerang_ready()
     _yztato_leave_fire_ready()
@@ -87,7 +87,7 @@ func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
 
-        old_projectiles.push_back(projectile)
+        old_projectiles.append(projectile)
 
         if !projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
             projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
@@ -101,9 +101,9 @@ func _yztato_chimera_init_stats()-> void:
         for proj_stats in effect.chimera_projectile_stats:
             var projectile_instance = proj_stats.projectile_scene.instance()
             var sprite_node = projectile_instance.get_node_or_null("Sprite")
-            current_chimera_projs_textures_paths.push_back(sprite_node.texture.resource_path)
+            current_chimera_projs_textures_paths.append(sprite_node.texture.resource_path)
             projectile_instance.queue_free()
-            current_chimera_projs.push_back(WeaponService.init_ranged_stats(proj_stats, player_index))
+            current_chimera_projs.append(WeaponService.init_ranged_stats(proj_stats, player_index))
         
         for proj_texture_set in effect.chimera_texture_sets:
             current_chimera_texture_sets.append(proj_texture_set)
@@ -202,7 +202,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
     RunData.emit_signal("stats_updated", player_index)
 
 func _apply_multi_hit_effect(thing_hit: Node, damage_dealt: int, effect_data: Array, player_index: int) -> void:
-    for _i in range(effect_data[0]):
+    for _i in effect_data[0]:
         var args = TakeDamageArgs.new(player_index)
         var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect_data[1] / 100, args)
         RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
@@ -219,10 +219,10 @@ func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) ->
             _apply_multi_hit_effect(thing_hit, damage_dealt, effect, player_index)
 
 func _spawn_vine_traps(thing_hit: Node, trap_count: int, player_index: int, trap_data) -> void:
-    for _i in range(trap_count):
+    for _i in trap_count:
         var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
         var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-        queue.push_back([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
+        queue.append([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
     for effect in effects:

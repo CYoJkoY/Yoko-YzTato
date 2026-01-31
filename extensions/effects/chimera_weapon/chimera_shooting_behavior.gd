@@ -1,6 +1,6 @@
 extends RangedWeaponShootingBehavior
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func shoot_projectile(rotation:float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
     var projectile = _yztato_chimera_shoot_projectile(rotation, knockback)
 

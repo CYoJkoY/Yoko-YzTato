@@ -2,28 +2,19 @@ extends Structure
 
 export (float) var time = 5.0
 
-onready var _timer: Timer = $Timer
+onready var duration_timer: Timer = $DurationTimer
+onready var attack_timer: Timer = $AttackTimer
 
 var enemies_in_range: Array = []
-var frame_count: int = 0
 var weapon_pos: int = -1
 
 # =========================== Extension =========================== #
 func _ready():
-    _timer.wait_time = time
-    _timer.start()
+    duration_timer.wait_time = time
+    attack_timer.wait_time = stats.cooldown * 0.05
 
-func _physics_process(_delta: float):
-    frame_count += 1
-    if frame_count >= stats.cooldown \
-    and !enemies_in_range.empty():
-        frame_count = 0
-        for enemy in enemies_in_range:
-            if enemy and not enemy.dead:
-                enemy.add_decaying_speed(enemy.current_stats.speed * stats.speed_percent_modifier / 100)
-                var args = TakeDamageArgs.new(player_index)
-                var damage_taken: Array = enemy.take_damage(stats.damage, args)
-                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+    duration_timer.start()
+    attack_timer.start()
 
 func set_data(data: Resource)->void :
     .set_data(data)
@@ -41,3 +32,13 @@ func yztato_on_trap_area_exited(body: Node):
 
 func yztato_on_trap_duration_finished():
     if !dead: die()
+
+func yztato_on_trap_attack(_delta: float):
+    if enemies_in_range.empty(): return
+
+    for enemy in enemies_in_range:
+        if enemy and not enemy.dead:
+            enemy.add_decaying_speed(enemy.current_stats.speed * stats.speed_percent_modifier / 100)
+            var args = TakeDamageArgs.new(player_index)
+            var damage_taken: Array = enemy.take_damage(stats.damage, args)
+            RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)

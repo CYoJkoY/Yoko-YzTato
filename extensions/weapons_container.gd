@@ -1,6 +1,6 @@
 extends "res://entities/units/player/weapons_container.gd"
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func update_weapons_positions(weapons: Array)-> void :
     if _yztato_blade_storm_positions(weapons): return
     .update_weapons_positions(weapons)

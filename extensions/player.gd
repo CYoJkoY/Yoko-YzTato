@@ -18,7 +18,7 @@ var _last_damage_taken: int = 0
 var consumables_picked_up_last_wave: int = 0
 var consumables_picked_up_this_wave: int = 0
 
-# =========================== Extention =========================== #
+# =========================== Extension =========================== #
 func _ready() -> void:
     _yztato_blade_storm_ready()
     _yztato_lifesteal_ready()
@@ -96,10 +96,9 @@ func _yztato_blood_rage_ready() -> void:
     if _blood_rage_particles: _blood_rage_particles.emitting = false
 
     if !blood_rage_effects.empty():
-        for i in range(blood_rage_effects.size()):
+        for i in blood_rage_effects.size():
             var effect = blood_rage_effects[i]
             var blood_rage_timer = Timer.new()
-            blood_rage_timer.name = "BloodRageTimer_" + str(i)
             blood_rage_timer.one_shot = false
             blood_rage_timer.autostart = false
             add_child(blood_rage_timer)

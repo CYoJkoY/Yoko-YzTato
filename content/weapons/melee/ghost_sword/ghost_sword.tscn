@@ -18,8 +18,8 @@ shader_param/outline_color_1 = Color( 0, 0, 0, 0 )
 shader_param/outline_color_2 = Color( 0, 0, 0, 0 )
 shader_param/outline_color_3 = Color( 0, 0, 0, 0 )
 
-[sub_resource type="RectangleShape2D" id=1]
-extents = Vector2( 92, 20.5 )
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 101, 27.5 )
 
 [sub_resource type="CircleShape2D" id=2]
 resource_local_to_scene = true
@@ -30,18 +30,15 @@ script = ExtResource( 4 )
 outline_shader_mat = SubResource( 3 )
 
 [node name="Sprite" parent="." index="0"]
-position = Vector2( 40, 0 )
+position = Vector2( 42, 0 )
 texture = ExtResource( 1 )
 
 [node name="Collision" parent="Sprite/Hitbox" index="0"]
-position = Vector2( -20, -2.5 )
-shape = SubResource( 1 )
+position = Vector2( -19, -2.5 )
+shape = SubResource( 4 )
 
 [node name="Muzzle" parent="Sprite" index="1"]
-position = Vector2( 64, 0 )
-
-[node name="Attach" parent="Sprite" index="2"]
-position = Vector2( -50, 0 )
+position = Vector2( 70, 0 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
 shape = SubResource( 2 )
