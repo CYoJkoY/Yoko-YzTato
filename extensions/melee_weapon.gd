@@ -285,7 +285,7 @@ func yz_on_Hitbox_area_entered_erase(area: Area2D) -> void:
         area.active = false
         area.disable()
         area.ignored_objects.clear()
-        ProgressData.Yztato.Methods.yz_delete_projectile(enemy_projectile)
+        Utils.yz_delete_projectile(enemy_projectile)
 
 func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: Hitbox, symbol: String) -> void:
     if area.get_parent() is EnemyProjectile:
@@ -311,7 +311,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
 
         var direction: float = enemy_projectile.velocity.angle() + PI
 
-        ProgressData.Yztato.Methods.yz_delete_projectile(enemy_projectile)
+        Utils.yz_delete_projectile(enemy_projectile)
 
         var new_projectile: Node = WeaponService.spawn_projectile(
             enemy_projectile.global_position,
@@ -334,7 +334,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         ChallengeService.try_complete_challenge(Utils.chal_counterattack_hash, attack_hit_count)
 
 func yz_set_new_projectile_stat(new_projectile: Node, symbol: String):
-    var projectile_shader: ShaderMaterial = ProgressData.Yztato.YzProjectile.Shader()
+    var projectile_shader: ShaderMaterial = load("res://resources/shaders/hue_shift_shadermat.tres")
     projectile_shader.set_shader_param("hue", 0.55)
     projectile_shader.set_shader_param("desaturation", 0.0)
     new_projectile.set_sprite_material(projectile_shader)
@@ -354,7 +354,7 @@ func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
 
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
-        ProgressData.Yztato.Methods.yz_delete_projectile(area.get_parent())
+        Utils.yz_delete_projectile(area.get_parent())
 
 func _yztato_blade_storm_direction(direction: float) -> float:
     if YZ_is_blade_storm:
@@ -455,9 +455,9 @@ func yz_return_to_player(target: Node):
 
 func yz_initialize_cached_resources():
     if _cached_projectile_scene == null:
-        _cached_projectile_scene = ProgressData.Yztato.YzProjectile.Tscn()
+        _cached_projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/default_projectile.tscn")
     if _cached_base_stats == null:
-        _cached_base_stats = ProgressData.Yztato.YzProjectile.Stats()
+        _cached_base_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/default_stats.tres")
 
 func yz_get_projectile_from_pool() -> Resource:
     if _projectile_pool.size() > 0:
@@ -491,7 +491,7 @@ func yz_create_sword_projectile(target: Node):
     sword_array_stats.can_bounce = false
 
     var modified_scene: PackedScene = _cached_projectile_scene.duplicate()
-    modified_scene._bundled["variants"][2] = ProgressData.Yztato.YzProjectile.SwordArray()
+    modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/sword_array/sword_array.webp")
     sword_array_stats.projectile_scene = modified_scene
 
     var sword_array_projectile: Node = WeaponService.spawn_projectile(

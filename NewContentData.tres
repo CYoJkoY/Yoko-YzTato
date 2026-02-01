@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=167 format=2]
 
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content_data/NewContent.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-NewContentLoader/NewContent.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/minotaur_data.tres" type="Resource" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/blade_dancer_data.tres" type="Resource" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/arsonist/arsonist_data.tres" type="Resource" id=4]

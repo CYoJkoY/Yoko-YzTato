@@ -9,24 +9,12 @@ var trans_dir: String = ""
 
 # =========================== Extension =========================== #
 func _init():
-    ModLoaderLog.info("========== Add Translation ==========", MYMODNAME_LOG)
     dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
     trans_dir = dir + "translations/"
     ext_dir = dir + "extensions/"
     
-    # NameSpace ~ Node: /root/ModLoader/Yoko-YzTato/Yztato
-    # progress_data.gd --> _ready --> ProgressData.Yztato
-    var Yztato_instance = load(dir + "content_data/NameSpace.gd").new()
-    Yztato_instance.name = "Yztato"
-    add_child(Yztato_instance)
-    
-    #######################################
-    ########## Add translations ##########
-    #####################################
     ModLoaderMod.add_translation(trans_dir + "Yztato.en.translation")
     ModLoaderMod.add_translation(trans_dir + "Yztato.zh_Hans_CN.translation")
-    
-    ModLoaderLog.info("========== Add Translation Done ==========", MYMODNAME_LOG)
 
     var extensions: Array = [
 
@@ -58,7 +46,7 @@ func _init():
         
         "utils.gd",
         # EFFECTS : blade_storm[ 3/4 ]
-        # EFFECTS' NAMES
+        # EFFECTS' NAMES, Methods
         
         "progress_data.gd",
         # Mod's Contents
