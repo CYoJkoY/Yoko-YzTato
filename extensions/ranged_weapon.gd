@@ -40,11 +40,11 @@ func shoot() -> void:
 
     .shoot()
 
-func init_stats(at_wave_begin:bool = true)-> void :
+func init_stats(at_wave_begin: bool = true) -> void:
     .init_stats(at_wave_begin)
     _yztato_chimera_init_stats()
 
-func on_projectile_shot(projectile: Node2D) -> void :
+func on_projectile_shot(projectile: Node2D) -> void:
     .on_projectile_shot(projectile)
     _yztato_boomerang_on_projectile_shot(projectile)
     _yztato_upgrade_on_projectile_shot(projectile)
@@ -61,8 +61,8 @@ func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     _yztato_gain_stat_when_killed_scaling_single()
     _yztato_upgrade_when_killed_enemies()
 
-func should_shoot()->bool:
-    var should_shoot: bool = .should_shoot()
+func should_shoot() -> bool:
+    var should_shoot: bool =.should_shoot()
     should_shoot = _yztato_can_attack_while_moving(should_shoot)
     
     return should_shoot
@@ -83,18 +83,18 @@ func _yztato_upgrade_when_killed_enemies() -> void:
         _parent.yz_change_weapon(weapon_pos, target_weapon_id_hash)
         break
 
-func _yztato_upgrade_on_projectile_shot(projectile: Node2D)-> void:
+func _yztato_upgrade_on_projectile_shot(projectile: Node2D) -> void:
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
 
         old_projectiles.append(projectile)
 
-        if !projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
-            projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
+        if !projectile.is_connected("has_stopped", self , "yz_on_projectile_stopped"):
+            projectile.connect("has_stopped", self , "yz_on_projectile_stopped")
 
     return
 
-func _yztato_chimera_init_stats()-> void:
+func _yztato_chimera_init_stats() -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon": continue
         
@@ -116,20 +116,19 @@ func _yztato_boomerang_ready() -> void:
             knockback_only_back = effect.knockback_only_back
             wait_until_return = effect.boomerang_wait
 
-func _yztato_boomerang_on_projectile_shot(projectile: Node2D)-> void:
+func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
     if is_boomerang:
         active_boomerangs.append(projectile)
         _hitbox.damage *= 1 + max_damage_mul
         if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
 
-        if !projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
-            projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
+        if !projectile.is_connected("returned_to_player", self , "yz_on_projectile_returned"):
+            projectile.connect("returned_to_player", self , "yz_on_projectile_returned")
 
 func _yztato_boomerang_shoot() -> void:
     _nb_shots_taken += 1
     var original_stats: RangedWeaponStats
     for projectile_count in _stats_every_x_shots:
-        
         if _nb_shots_taken % projectile_count == 0:
             original_stats = current_stats
             current_stats = _stats_every_x_shots[projectile_count]
@@ -159,7 +158,7 @@ func _yztato_boomerang_shoot() -> void:
 
     is_returning = true
 
-    if stats.custom_on_cooldown_sprite != null and (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == - 1):
+    if stats.custom_on_cooldown_sprite != null and (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == -1):
         update_sprite(stats.custom_on_cooldown_sprite)
 
     if original_stats:
@@ -197,7 +196,7 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
         if effect.get_id() == "yztato_gain_stat_when_killed_single_scaling" and \
            effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
             RunData.add_stat(effect.stat, effect.stat_nb, player_index)
-            RunData.yz_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
+            RunData.ncl_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
 
     RunData.emit_signal("stats_updated", player_index)
 
@@ -246,7 +245,7 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
                 _spawn_vine_traps(thing_hit, count, player_index, effect_data[2])
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-    if should_shoot: 
+    if should_shoot:
         for effect in effects:
             if effect.get_id() == "yztato_can_attack_while_moving":
                 return _parent._current_movement == Vector2.ZERO
@@ -255,9 +254,9 @@ func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
 
 func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
     ### sudden_misfortune ###
-    if hitbox == null: return 
-    var attack_id: = hitbox.player_attack_id
-    if attack_id < 0: return 
+    if hitbox == null: return
+    var attack_id := hitbox.player_attack_id
+    if attack_id < 0: return
     var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0)
     attack_hit_count += 1
     _hit_count_by_attack_id[attack_id] = attack_hit_count

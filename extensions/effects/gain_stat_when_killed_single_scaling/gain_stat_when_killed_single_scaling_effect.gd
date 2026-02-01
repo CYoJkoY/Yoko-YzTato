@@ -57,7 +57,7 @@ func get_args(player_index: int) -> Array:
     var w = 18 * ProgressData.settings.font_size
     var stat_icon_text: String = "[img=%sx%s]%s[/img]" % [w, w, stat_icon.resource_path]
     var scaling_text: String = Utils.get_scaling_stat_icon_text(scaling_stat_hash, scaling_percent)
-    tracking_value = RunData.yz_get_effect_tracking_value(tracking_key_hash, player_index)
+    tracking_value = RunData.ncl_get_effect_tracking_value(tracking_key_hash, player_index)
     var str_tracking_value: String = ""
     match tracking_value >= 0:
         true: str_tracking_value = "[color=%s]%s[/color]" % [Utils.SECONDARY_FONT_COLOR_HTML, tr("STATS_GAINED").format([tracking_value])]

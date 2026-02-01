@@ -44,7 +44,7 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
             if scaling_value > 0 and current_effect_count % int(scaling_value) == 0:
                 effect_single_kill_count[effect_index] = 0
                 RunData.add_stat(effect[2], effect[3], player_index)
-                RunData.yz_add_effect_tracking_value(effect[6], effect[3], player_index)
+                RunData.ncl_add_effect_tracking_value(effect[6], effect[3], player_index)
 
 func _yztato_blood_rage_on_enemy_died() -> void:
     for player_index in RunData.players_data.size():
