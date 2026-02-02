@@ -1,17 +1,15 @@
-[gd_resource type="Resource" load_steps=3 format=2]
+[gd_resource type="Resource" load_steps=2 format=2]
 
-[ext_resource path="res://effects/items/extra_enemy_effect.gd" type="Script" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/zones/000_extra/ice_bait_group.tres" type="Resource" id=2]
-
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/extra_enemies_next_waves/extra_enemies_next_waves_effect.gd" type="Script" id=1]
 
 [resource]
 script = ExtResource( 1 )
-key = "extra_enemies_next_wave"
-text_key = "EFFECT_ICE_BAIT"
+key = "yztato_extra_enemies_next_waves"
+text_key = "EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES"
 value = 1
 custom_key = ""
 storage_method = 0
 effect_sign = 3
 custom_args = [  ]
-extra_group_data = ExtResource( 2 )
-waves = 999
+name = ""
+waves = 0

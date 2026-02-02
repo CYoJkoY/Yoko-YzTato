@@ -2,7 +2,7 @@ extends "res://dlcs/dlc_1/dlc_1_data.gd"
 
 # =========================== Extension =========================== #
 func curse_item(item_data: ItemParentData, player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
-    if yz_has_yztato_effect(item_data.effects):
+    if yz_has_effect_yztato(item_data.effects):
         return _yztato_curse_item(item_data, player_index, turn_randomization_off, min_modifier)
     else:
         return.curse_item(item_data, player_index, turn_randomization_off, min_modifier)
@@ -95,7 +95,7 @@ func yz_process_other_effect(effect: Resource, modifier: float):
     return effect
 
 # =========================== Method =========================== #
-func yz_has_yztato_effect(effects: Array) -> bool:
+func yz_has_effect_yztato(effects: Array) -> bool:
     for effect in effects:
         if effect.get_id().begins_with("yztato") or \
         effect.key.begins_with("yztato") or \

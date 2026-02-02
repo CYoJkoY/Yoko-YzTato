@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource( 1 )
 key = "weapon_yztato_liucaiyaoling"
-text_key = "EFFECT_DESTORY_WEAPONS"
+text_key = "EFFECT_YZTATO_DESTORY_WEAPONS"
 value = 1
 custom_key = "yztato_destory_weapons"
 storage_method = 1

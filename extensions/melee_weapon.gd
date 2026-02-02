@@ -414,15 +414,14 @@ func yz_process_sword_array_mode(player_level: int) -> bool:
     return true
 
 func yz_select_target() -> Node:
-    if _current_locked_target != null:
-        if is_instance_valid(_current_locked_target) and \
-        _targets_in_range.has(_current_locked_target):
-            return _current_locked_target
-        else:
-            _current_locked_target = null
+    if _current_locked_target != null and \
+    _targets_in_range.has(_current_locked_target):
+        return _current_locked_target
+    else:
+        _current_locked_target = null
 
     if _targets_in_range.size() > 0:
-        _current_locked_target = _targets_in_range.pick_random()
+        _current_locked_target = Utils.get_rand_element(_targets_in_range)
         return _current_locked_target
     
     return null
@@ -430,9 +429,10 @@ func yz_select_target() -> Node:
 func yz_move_to_target(target: Node, speed: float):
     var direction: Vector2 = (target.position - global_position).normalized()
     var new_position: Vector2 = global_position + direction * speed
+    var distance: float = global_position.distance_squared_to(target.position)
+    var current_max_range: float = current_stats.max_range * current_stats.max_range * 2.25
 
-    if global_position.distance_to(target.position) <= 4 \
-    or global_position.distance_to(_parent.position) > current_stats.max_range * 1.5:
+    if distance <= 16 or distance > current_max_range:
         has_attacked_target = true
     
     if new_position != global_position:

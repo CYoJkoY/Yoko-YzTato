@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource( 1 )
 key = "yztato_flying_sword"
-text_key = ""
+text_key = "EFFECT_YZTATO_FLYING_SWORD_QI"
 value = 0
 custom_key = ""
 storage_method = 0

@@ -29,7 +29,7 @@ func _init():
         # ACHIEVE : dark_forest_rule
 
         "player.gd",
-        # EFFECTS : blade_storm[ 2/4 ], lifesteal[ 1/2 ], blood_rage[ 2/2 ],
+        # EFFECTS : blade_storm[ 2/4 ], lifestea, blood_rage[ 2/2 ],
         #           temp_stat_per_interval[ hit_protection ], heal_on_damage_taken,
         #           upgrade_when_killed_enemies[ 1/4 ]    
         # ACHIEVE : only_in, more_than_enough
@@ -51,10 +51,6 @@ func _init():
         "progress_data.gd",
         # Mod's Contents
         # Extensions After DLC
-
-        "run_data.gd",
-        # EFFECTS : lifesteal[ 2/2 ]
-        # Tracked Effects
 
         "sound_manager.gd",
         # Sound Fix[ 1/2 ]

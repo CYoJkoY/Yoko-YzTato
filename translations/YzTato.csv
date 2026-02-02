@@ -27,7 +27,7 @@ CLASS_YZTATO_UNCANNY_INSTRUMENT,Uncanny Instrument,诡乐
 WEAPON_YZTATO_ANMOUHONGYUN,Dusky Pupil Melody,黯眸红韵
 WEAPON_YZTATO_LIUCAIYAOLING,Flowing Colors Rattle,流彩摇铃
 EFFECT_WEAPON_SLOT_REPLACE,You will own {0} Weapon Slot(s),你将拥有{0}个武器栏
-EFFECT_DESTORY_WEAPONS,"At the end of each wave, only the {1} remains","每波结束时,只保留{1}"
+EFFECT_YZTATO_DESTORY_WEAPONS,"At the end of each wave, only the {1} remains","每波结束时,只保留{1}"
 BG_YZTATO_NETHER,Nether,幽冥
 EFFECT_YZTATO_CHIMERA_FRONT,Launch the following {0} projectiles in sequence,依次发射以下{0}种投射物
 WEAPON_YZTATO_HUANGWUWANGE,Desolate Elegy,荒芜挽歌

@@ -16,4 +16,4 @@ stat = "trees"
 stat_nb = 1
 scaling_stat = "trees"
 scaling_percent = 50.0
-tracking_key = "yztato_item_ghost_tree"
+tracking_key = "item_yztato_ghost_tree"

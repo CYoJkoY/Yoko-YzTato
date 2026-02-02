@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.gd" type="Script" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/dot_structure.gd" type="Script" id=2]
 [ext_resource path="res://particles/curse/curse_particles.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.webp" type="Texture" id=4]
 
@@ -226,7 +226,7 @@ one_shot = true
 
 [node name="AttackTimer" type="Timer" parent="."]
 
-[connection signal="body_entered" from="Area2D" to="." method="yztato_on_trap_area_entered"]
-[connection signal="body_exited" from="Area2D" to="." method="yztato_on_trap_area_exited"]
-[connection signal="timeout" from="DurationTimer" to="." method="yztato_on_trap_duration_finished"]
-[connection signal="timeout" from="AttackTimer" to="." method="yztato_on_trap_attack"]
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
+[connection signal="timeout" from="DurationTimer" to="." method="_on_DurationTimer_timeout"]
+[connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]

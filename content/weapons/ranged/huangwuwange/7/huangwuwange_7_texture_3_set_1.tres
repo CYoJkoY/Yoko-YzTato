@@ -3,6 +3,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/chimera_weapon/chimera_texture_set.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/huangwuwange/huangwuwange_projectiles_3_1.webp" type="Texture" id=2]
 
+
 [resource]
 script = ExtResource( 1 )
 texture = ExtResource( 2 )

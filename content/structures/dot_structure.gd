@@ -1,6 +1,6 @@
 extends Structure
 
-export (float) var time = 5.0
+export(float) var time = 5.0
 
 onready var duration_timer: Timer = $DurationTimer
 onready var attack_timer: Timer = $AttackTimer
@@ -16,24 +16,24 @@ func _ready():
     duration_timer.start()
     attack_timer.start()
 
-func set_data(data: Resource)->void :
+func set_data(data: Resource) -> void:
     .set_data(data)
     weapon_pos = data.weapon_pos
 
 # =========================== Custom =========================== #
-func yztato_on_trap_area_entered(body: Node):
+func _on_Area2D_body_entered(body: Node):
     if body is Enemy and not body.dead:
         if !enemies_in_range.has(body):
             enemies_in_range.append(body)
 
-func yztato_on_trap_area_exited(body: Node):
+func _on_Area2D_body_exited(body: Node):
     if enemies_in_range.has(body):
         enemies_in_range.erase(body)
 
-func yztato_on_trap_duration_finished():
+func _on_DurationTimer_timeout():
     if !dead: die()
 
-func yztato_on_trap_attack(_delta: float):
+func _on_AttackTimer_timeout(_delta: float):
     if enemies_in_range.empty(): return
 
     for enemy in enemies_in_range:
