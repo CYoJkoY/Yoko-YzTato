@@ -11,7 +11,6 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/8/huangwuwange_8_stats_1.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/8/huangwuwange_8_effect_1b.tres" type="Resource" id=10]
 
-
 [resource]
 script = ExtResource( 1 )
 my_id = "weapon_yztato_huangwuwange_8"
@@ -26,7 +25,7 @@ tracking_text = ""
 is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
-curse_factor = 19.0
+curse_factor = 0.0
 weapon_id = "weapon_yztato_huangwuwange_1"
 type = 1
 sets = [ ExtResource( 4 ) ]

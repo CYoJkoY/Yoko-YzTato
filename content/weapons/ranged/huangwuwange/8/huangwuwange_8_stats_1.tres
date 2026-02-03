@@ -4,7 +4,6 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/huangwuwange/huangwuwange.ogg" type="AudioStream" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/huangwuwange/huangwuwange_projectile_1.tscn" type="PackedScene" id=6]
 
-
 [resource]
 script = ExtResource( 1 )
 cooldown = 15

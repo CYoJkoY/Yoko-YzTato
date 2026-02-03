@@ -97,7 +97,7 @@ func _yztato_upgrade_on_projectile_shot(projectile: Node2D) -> void:
 func _yztato_chimera_init_stats() -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon": continue
-        
+
         for proj_stats in effect.chimera_projectile_stats:
             var projectile_instance = proj_stats.projectile_scene.instance()
             var sprite_node = projectile_instance.get_node_or_null("Sprite")
@@ -110,11 +110,12 @@ func _yztato_chimera_init_stats() -> void:
 
 func _yztato_boomerang_ready() -> void:
     for effect in effects:
-        if effect.get_id() == "yztato_boomerang_weapon":
-            is_boomerang = true
-            max_damage_mul = effect.max_damage_mul
-            knockback_only_back = effect.knockback_only_back
-            wait_until_return = effect.boomerang_wait
+        if effect.get_id() != "yztato_boomerang_weapon": continue
+
+        is_boomerang = true
+        max_damage_mul = effect.max_damage_mul
+        knockback_only_back = effect.knockback_only_back
+        wait_until_return = effect.boomerang_wait
 
 func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
     if is_boomerang:
@@ -197,8 +198,6 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
            effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
             RunData.add_stat(effect.stat, effect.stat_nb, player_index)
             RunData.ncl_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
-
-    RunData.emit_signal("stats_updated", player_index)
 
 func _apply_multi_hit_effect(thing_hit: Node, damage_dealt: int, effect_data: Array, player_index: int) -> void:
     for _i in effect_data[0]:

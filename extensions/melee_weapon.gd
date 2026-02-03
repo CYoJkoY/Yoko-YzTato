@@ -209,8 +209,6 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
             RunData.add_stat(effect.stat, effect.stat_nb, player_index)
             RunData.ncl_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
 
-    RunData.emit_signal("stats_updated", player_index)
-
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
     # Check weapon effects first
     for effect in effects:
@@ -285,7 +283,7 @@ func yz_on_Hitbox_area_entered_erase(area: Area2D) -> void:
         area.active = false
         area.disable()
         area.ignored_objects.clear()
-        Utils.yz_delete_projectile(enemy_projectile)
+        Utils.ncl_delete_projectile(enemy_projectile)
 
 func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: Hitbox, symbol: String) -> void:
     if area.get_parent() is EnemyProjectile:
@@ -311,7 +309,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
 
         var direction: float = enemy_projectile.velocity.angle() + PI
 
-        Utils.yz_delete_projectile(enemy_projectile)
+        Utils.ncl_delete_projectile(enemy_projectile)
 
         var new_projectile: Node = WeaponService.spawn_projectile(
             enemy_projectile.global_position,
@@ -354,7 +352,7 @@ func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
 
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
-        Utils.yz_delete_projectile(area.get_parent())
+        Utils.ncl_delete_projectile(area.get_parent())
 
 func _yztato_blade_storm_direction(direction: float) -> float:
     if YZ_is_blade_storm:

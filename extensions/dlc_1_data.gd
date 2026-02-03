@@ -30,35 +30,39 @@ func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_rand
 
         match new_effect.get_id():
             "yztato_boomerang_weapon":
-                new_effect.min_damage_mul = yz_curse_effect_value(new_effect.min_damage_mul, effect_modifier)
-                new_effect.max_damage_mul = yz_curse_effect_value(new_effect.max_damage_mul, effect_modifier)
+                new_effect.min_damage_mul = Utils.ncl_curse_effect_value(new_effect.min_damage_mul, effect_modifier)
+                new_effect.max_damage_mul = Utils.ncl_curse_effect_value(new_effect.max_damage_mul, effect_modifier)
             
             "yztato_damage_scaling":
-                var new_scaling_stats: Array = []
-                for scaling in new_effect.scaling_stats:
-                    scaling[1] = yz_curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
-                    new_scaling_stats.append(scaling)
-                new_effect.scaling_stats = new_scaling_stats
+                var new_scaling_stats: Array = new_effect.scaling_stats.duplicate()
+                for scaling in new_scaling_stats:
+                    scaling[1] = Utils.ncl_curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
 
             "yztato_gain_stat_when_killed_single_scaling":
-                new_effect.scaling_percent = yz_curse_effect_value(new_effect.scaling_percent, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
-                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.scaling_percent = Utils.ncl_curse_effect_value(new_effect.scaling_percent, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.value = Utils.ncl_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
 
             "yztato_multi_hit":
-                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
-                new_effect.damage_percent = yz_curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
+                new_effect.value = Utils.ncl_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false})
+                new_effect.damage_percent = Utils.ncl_curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
 
             "yztato_special_picked_up_change_stat", \
             "yztato_upgrade_when_killed_enemies":
-                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
+                new_effect.value = Utils.ncl_curse_effect_value(new_effect.value, effect_modifier, {"is_negative": true, "has_min": true, "min_num": 1})
             
             "yztato_temp_stats_per_interval":
-                new_effect.value = yz_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false, "has_min": true, "min_num": new_effect.value + 1})
+                new_effect.value = Utils.ncl_curse_effect_value(new_effect.value, effect_modifier, {"process_negative": false, "has_min": true, "min_num": new_effect.value + 1})
                 
             "yztato_vine_trap":
-                new_effect.trap_count = yz_curse_effect_value(new_effect.trap_count, effect_modifier, {"process_negative": false})
-                new_effect.chance = yz_curse_effect_value(new_effect.chance, effect_modifier, {"process_negative": false})
+                new_effect.trap_count = Utils.ncl_curse_effect_value(new_effect.trap_count, effect_modifier, {"process_negative": false})
+                new_effect.chance = Utils.ncl_curse_effect_value(new_effect.chance, effect_modifier, {"process_negative": false})
                 
+            "yztato_chimera_weapon":
+                var new_chimera_projectile_stats: Array = new_effect.chimera_projectile_stats.duplicate()
+                for stats in new_chimera_projectile_stats:
+                    for scaling in stats.scaling_stats:
+                        scaling[1] = Utils.ncl_curse_effect_value(scaling[1], effect_modifier, {"process_negative": false})
+
             _: new_effect = yz_process_other_effect(new_effect, effect_modifier)
 
         new_effects.append(new_effect)
@@ -81,17 +85,17 @@ func yz_process_other_effect(effect: Resource, modifier: float):
     match effect.key:
         "yztato_heal_on_damage_taken", \
         "yztato_random_curse_on_reroll":
-            effect.value = yz_curse_effect_value(effect.value, modifier, {"process_negative": false})
-            effect.value2 = yz_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
+            effect.value = Utils.ncl_curse_effect_value(effect.value, modifier, {"process_negative": false})
+            effect.value2 = Utils.ncl_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
 
     match effect.custom_key:
         "yztato_stats_chance_on_level_up":
-            effect.value = yz_curse_effect_value(effect.value, modifier)
-            effect.value2 = yz_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
+            effect.value = Utils.ncl_curse_effect_value(effect.value, modifier)
+            effect.value2 = Utils.ncl_curse_effect_value(effect.value2, modifier, {"step": 1, "process_negative": false})
             return effect
     
-    effect.value = yz_curse_effect_value(effect.value, modifier, {"process_negative": false})
+    effect.value = Utils.ncl_curse_effect_value(effect.value, modifier, {"process_negative": false})
     return effect
 
 # =========================== Method =========================== #
@@ -102,25 +106,3 @@ func yz_has_effect_yztato(effects: Array) -> bool:
         effect.custom_key.begins_with("yztato"):
             return true
     return false
-
-func yz_curse_effect_value(
-    value: float, modifier: float, options: Dictionary = {}
-) -> float:
-    var step: float = options.get("step", 0.01)
-    var process_negative: bool = options.get("process_negative", true)
-    var is_negative: bool = options.get("is_negative", false)
-    var has_min: bool = options.get("has_min", false)
-    var min_num: float = options.get("min_num", 0.0)
-    var has_max: bool = options.get("has_max", false)
-    var max_num: float = options.get("max_num", 0.0)
-
-    match is_negative or (process_negative and value < 0.0):
-        true:
-            value = stepify(value / (1.0 + modifier), step)
-        false:
-            value = stepify(value * (1.0 + modifier), step)
-
-    if has_min: value = max(value, min_num)
-    if has_max: value = min(value, max_num)
-
-    return value
