@@ -1,8 +1,8 @@
 extends NullEffect
 
-export (int) var interval: int = 3
-export (float) var duration: float = 1.5
-export (Array, Array) var stats_change: Array = [
+export(float) var interval: float = 3.0
+export(float) var duration: float = 1.5
+export(Array, Array) var stats_change: Array = [
     ["stat_percent_damage", 15],
     ["stat_attack_speed", 12],
     ["stat_dodge", -6],
@@ -12,7 +12,7 @@ var stats_change_hashes: Array = []
 
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
-    var duplication = .duplicate(subresources)
+    var duplication =.duplicate(subresources)
     if stats_change_hashes.empty() and not stats_change.empty():
         stats_change_hashes = Utils.convert_to_hash_array(stats_change)
     
@@ -58,7 +58,7 @@ func get_args(_player_index: int) -> Array:
     return args
 
 func serialize() -> Dictionary:
-    var serialized = .serialize()
+    var serialized =.serialize()
     serialized.interval = interval
     serialized.duration = duration
     serialized.stats_change = stats_change
@@ -67,7 +67,7 @@ func serialize() -> Dictionary:
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
-    interval = serialized.interval as int
+    interval = serialized.interval as float
     duration = serialized.duration as float
     stats_change = serialized.stats_change as Array
     stats_change_hashes = Utils.convert_to_hash_array(serialized.stats_change)

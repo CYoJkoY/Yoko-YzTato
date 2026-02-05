@@ -14,7 +14,7 @@ func _init():
     ext_dir = dir + "extensions/"
     
     ModLoaderMod.add_translation(trans_dir + "Yztato.en.translation")
-    ModLoaderMod.add_translation(trans_dir + "Yztato.zh_Hans_CN.translation")
+    ModLoaderMod.add_translation(trans_dir + "Yztato.zh.translation")
 
     var extensions: Array = [
 
@@ -64,11 +64,8 @@ func _init():
         "upgrades_ui.gd",
         # EFFECTS : extra_upgrade
 
-        "shop.gd",
-        # EFFECTS : random_curse_on_reroll[ 1/2 ]
-
-        "coop_shop.gd",
-        # EFFECTS : random_curse_on_reroll[ 2/2 ]
+        "base_shop.gd",
+        # EFFECTS : random_curse_on_reroll
 
         "melee_weapon.gd",
         # EFFECTS : melee_erase_bullets, melee_bounce_bullets,
@@ -91,6 +88,9 @@ func _init():
 
         "player_run_data.gd",
         # EFFECTS' NAMES
+
+        "run_data.gd",
+        # life_steal
         
     ]
 

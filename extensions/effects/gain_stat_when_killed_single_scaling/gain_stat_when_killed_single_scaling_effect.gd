@@ -10,8 +10,6 @@ export(float) var scaling_percent: float = 0.1
 export(String) var tracking_key: String = ""
 var tracking_key_hash: int = Keys.empty_hash
 
-var tracking_value: int = 0
-
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
     var duplication =.duplicate(subresources)
@@ -57,11 +55,12 @@ func get_args(player_index: int) -> Array:
     var w = 18 * ProgressData.settings.font_size
     var stat_icon_text: String = "[img=%sx%s]%s[/img]" % [w, w, stat_icon.resource_path]
     var scaling_text: String = Utils.get_scaling_stat_icon_text(scaling_stat_hash, scaling_percent)
-    tracking_value = RunData.ncl_get_effect_tracking_value(tracking_key_hash, player_index)
+
+    var tracking_value: int = RunData.ncl_get_effect_tracking_value(tracking_key_hash, player_index)
     var str_tracking_value: String = ""
     match tracking_value >= 0:
-        true: str_tracking_value = "[color=%s]%s[/color]" % [Utils.SECONDARY_FONT_COLOR_HTML, tr("STATS_GAINED").format([tracking_value])]
-        false: str_tracking_value = "[color=%s]%s[/color]" % [Utils.SECONDARY_FONT_COLOR_HTML, tr("STATS_LOST").format([-tracking_value])]
+        true: str_tracking_value = Utils.ncl_create_tracking("STATS_GAINED", tracking_value)
+        false: str_tracking_value = Utils.ncl_create_tracking("STATS_LOST", -tracking_value)
 
     return [str(stat_nb), tr(stat.to_upper()), stat_icon_text, numer_of_need, scaling_text, str_tracking_value]
 
@@ -72,7 +71,6 @@ func serialize() -> Dictionary:
     serialized.stat_nb = stat_nb
     serialized.scaling_stat = scaling_stat
     serialized.scaling_percent = scaling_percent
-    serialized.tracking_value = tracking_value
     serialized.tracking_key = tracking_key
 
     return serialized
@@ -86,6 +84,5 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
     scaling_stat = serialized.scaling_stat as String
     scaling_stat_hash = Keys.generate_hash(scaling_stat)
     scaling_percent = serialized.scaling_percent as float
-    tracking_value = serialized.tracking_value as int
     tracking_key = serialized.tracking_key as String
-    tracking_key_hash = Keys.generate_hash(tracking_key)
+    tracking_key_hash = Keys.generate_hash(tracking_key) as int

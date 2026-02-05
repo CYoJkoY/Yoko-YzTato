@@ -1,4 +1,4 @@
-keys,en,zh_Hans_CN
+﻿keys,en,zh
 WEAPON_YZTATO_CHISEFENGBAO,Red Storm,赤色风暴
 WEAPON_YZTATO_LIUYEDAO,Lancet,柳叶刀
 CLASS_YZTATO_EMERGENCY,Emergency,急救
@@ -10,7 +10,9 @@ WEAPON_YZTATO_XINGYUNBISHOU,Lucky Dagger,幸运匕首
 CLASS_YZTATO_LUCK,Luck,幸运
 ITEM_YZTATO_ICE_BAIT,Ice Bait,冰冻诱饵
 INFINITE,Infinite,无限
-EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES,{3} will appear in {2} future waves,未来 {2} 波次出现{3}
+EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES,"{3} will appear in {2} future waves
+{4}","未来 {2} 波次出现{3}
+{4}"
 ITEM_YZTATO_ELEMENTAL_BAIT,Elemental Bait,元素诱饵
 ITEM_YZTATO_ENGINEERING_BAIT,Engineering Bait,工程诱饵
 CORRUPTED_TREE_NAME,Corrupted Tree,被腐蚀的树
@@ -52,7 +54,8 @@ WEAPON_YZTATO_LEGEND_BAT,Legend Bat,传奇球棒
 EFFECT_YZTATO_BLADE_STORM,"Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color],which can remove enemy bullets and its rotation speed is affected by {3}current health,speed,number of weapons[/color] {2}and attack speed[/color]","你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color],可以消除敌人子弹,转速受{3}当前生命、速度、武器数量[/color]、{2}攻速[/color]影响"
 CHARACTER_YZTATO_BLADE_DANCER,Blade Dancer,剑舞者
 CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
-EFFECT_YZTATO_LEAVE_FIRE,[color=#F94E34]The burning enemy will leave flames on the ground[/color],[color=#F94E34]燃烧的敌人会在地面留下火焰[/color]
+EFFECT_YZTATO_LEAVE_FIRE,The burning enemy will [color=#F94E34]leave flames[/color] on the ground,燃烧的敌人会在地面[color=#F94E34]留下火焰[/color]
+EFFECT_YZTATO_LEAVE_FIRE_CURSED,[color=#F94E34]The burning enemy will leave larger and longer-lasting flames on the ground[/color],燃烧的敌人会在地面[color=#F94E34]留下更大更久的火焰[/color]
 EFFECT_YZTATO_WEAPON_SET_FILTER,Only [color=#3E68DA]weapons of {0} set[/color] will appear in the shop,商店里面只会出现[color=#3E68DA]{0}系列的武器[/color]
 EFFECT_YZTATO_EXTRUSION_ATTACK,Monsters can hurt each other,怪物可以互相伤害
 YZTATO_WEAPON_DAMAGE_LIMIT,"When weapon's damage>{0},","当武器伤害>{0}时,"
@@ -120,4 +123,5 @@ EFFECT_YZTATO_DAMAGE_SCALING_FRONT,"For every {1} {0} you have, weapon damage ad
 EFFECT_YZTATO_RANDOM_CURSE_ON_REROLL,"When refreshing the store,there is a {2}chance to curse {0} random owned items and weapons","刷新商店时,有{2}的几率诅咒随机{0}件已拥有的道具和武器"
 CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
-TRACKING_RANDOMCURSED,RandomCursed: {0},已随机诅咒：{0}
+TRACKING_RANDOMCURSED,Random Cursed: {0},已随机诅咒: {0}
+TRACKING_REMAINING,Remaining: {0},剩余: {0}

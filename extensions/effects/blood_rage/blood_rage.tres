@@ -12,5 +12,5 @@ storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 interval = 3
-duration = 1.0
+duration = 1.5
 stats_change = [ [ "stat_percent_damage", 15 ], [ "stat_attack_speed", 12 ], [ "stat_dodge", -6 ], [ "stat_armor", -5 ] ]

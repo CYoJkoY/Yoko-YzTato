@@ -7,6 +7,7 @@
 script = ExtResource( 1 )
 type = 1
 unit_scene = ExtResource( 2 )
+unit_scene_name = "blind_necromancer.tscn"
 min_number = 1
 max_number = 1
 spawn_chance = 1.0
