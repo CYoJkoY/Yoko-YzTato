@@ -9,6 +9,6 @@ text_key = "EFFECT_YZTATO_MULTI_HIT"
 value = 1
 custom_key = ""
 storage_method = 1
-effect_sign = 3
+effect_sign = 0
 custom_args = [  ]
 damage_percent = 35

@@ -1,8 +1,5 @@
 extends "res://entities/units/player/player.gd"
 
-# blade_storm
-var blade_storm: int = 0
-
 # blood_rage
 var blood_rage_effects: Array = []
 onready var _blood_rage_screen: ColorRect = null
@@ -10,7 +7,6 @@ onready var _blood_rage_particles: CPUParticles2D = null
 var blood_rage_timeout: int = 0
 
 # heal_on_damage_taken
-var heal_on_damage_taken: Array = []
 var _last_damage_taken: int = 0
 
 # chal_on_consumable_picked_up
@@ -20,9 +16,7 @@ var consumables_picked_up_this_wave: int = 0
 
 # =========================== Extension =========================== #
 func _ready() -> void:
-    _yztato_blade_storm_ready()
     _yztato_blood_rage_ready()
-    _yztato_heal_on_damage_taken_ready()
     _yztato_chal_ready()
 
 func _physics_process(delta: float) -> void:
@@ -51,12 +45,10 @@ func on_consumable_picked_up(consumable_data: ConsumableData) -> void:
     _yztato_chal_on_consumable_picked_up()
 
 # =========================== Custom =========================== #
-func _yztato_blade_storm_ready() -> void:
-    blade_storm = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
-
 func _yztato_blade_storm_attack_speed(delta: float) -> void:
     if dead: return
 
+    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
     if blade_storm != 0:
         var _storm_duration = 0.0
         for weapon in current_weapons:
@@ -123,21 +115,20 @@ func _yztato_temp_stats_per_interval() -> void:
                 _hit_protection = int(_hit_protection + TempStats.get_stat(Keys.hit_protection_hash, player_index))
                 TempStats.remove_stat(Keys.hit_protection_hash, stat_value, player_index)
 
-func _yztato_heal_on_damage_taken_ready() -> void:
-    heal_on_damage_taken = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)
-
 func _yztato_heal_on_damage_taken(result: Array) -> void:
+    var heal_on_damage_taken: Array = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)
     _last_damage_taken = result[1]
 
     for effect in heal_on_damage_taken:
-        var chance: float = effect[0] / 100.0
-        var percent: float = effect[1] / 100.0
+        var tracking_key_hash: int = effect[0]
+        var chance: float = effect[1] / 100.0
+        var percent: float = effect[2] / 100.0
         
         if Utils.get_chance_success(chance):
             var last_damage: int = _last_damage_taken
             var heal_amount: int = int(max(1, int(last_damage * percent)))
             if heal_amount > 0:
-                var _healed = on_healing_effect(heal_amount, Utils.item_yztato_insurance_policy_hash)
+                var _healed = on_healing_effect(heal_amount, tracking_key_hash)
 
 func _yztato_chal_ready() -> void:
     ### only_in ###

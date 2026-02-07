@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "yztato_melee_bounce_bullets"
+key = "character_yztato_baseball_player"
 text_key = "EFFECT_YZTATO_MELEE_BOUNCE_BULLETS"
 value = 50
-custom_key = ""
-storage_method = 0
+custom_key = "yztato_melee_bounce_bullets"
+storage_method = 4
 effect_sign = 3
 custom_args = [  ]

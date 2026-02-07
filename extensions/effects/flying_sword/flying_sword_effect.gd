@@ -1,6 +1,6 @@
-extends NullEffect
+extends GainStatEveryKilledEnemiesEffect
 
-export (int, "Qi", "Sword Array") var mode_type = 0
+export(int, "Qi", "Sword Array") var mode_type = 0
 
 # =========================== Extension =========================== #
 static func get_id() -> String:
@@ -28,7 +28,7 @@ func get_args(_player_index: int) -> Array:
     return [limit, col_pos, col_neg]
 
 func serialize() -> Dictionary:
-    var serialized = .serialize()
+    var serialized =.serialize()
     serialized.mode_type = mode_type
     
     return serialized

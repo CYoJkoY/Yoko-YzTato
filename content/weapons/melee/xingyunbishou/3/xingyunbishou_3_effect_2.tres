@@ -6,7 +6,7 @@
 script = ExtResource( 1 )
 key = "effect_gain_stat_every_killed_enemies"
 text_key = ""
-value = 15
+value = 12
 custom_key = ""
 storage_method = 0
 effect_sign = 3

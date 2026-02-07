@@ -1,12 +1,11 @@
 extends "res://singletons/player_run_data.gd"
 
-static func init_stats(all_null_values: bool = false)->Dictionary:
+static func init_stats(all_null_values: bool = false) -> Dictionary:
+    if (Utils != null):
+        var vanilla_stats =.init_stats(all_null_values)
 
-    if (Utils != null) :
-        var vanilla_stats = .init_stats(all_null_values)
-
-        var new_stats: = {
-            Keys.trees_hash: 0,                                                     # Debug : Only For Assert
+        var new_stats := {
+            Keys.trees_hash: 0, # Debug : Only For Assert
             
         }
 
@@ -16,12 +15,11 @@ static func init_stats(all_null_values: bool = false)->Dictionary:
     else:
         return {}
 
-static func init_effects()->Dictionary:
+static func init_effects() -> Dictionary:
+    if (Utils != null):
+        var vanilla_effects =.init_effects()
 
-    if (Utils != null) :
-        var vanilla_effects = .init_effects()
-
-        var new_effects: = {
+        var new_effects := {
             Utils.yztato_destory_weapons_hash: [],
             Utils.yztato_set_stat_hash: [],
             Utils.yztato_life_steal_hash: 0,
@@ -33,7 +31,7 @@ static func init_effects()->Dictionary:
             Utils.yztato_explosion_erase_bullets_hash: 0,
             Utils.yztato_upgrade_when_killed_enemies_hash: [],
             Utils.yztato_gain_stat_when_killed_single_scaling_hash: [],
-            Utils.yztato_melee_bounce_bullets_hash: 0,
+            Utils.yztato_melee_bounce_bullets_hash: [],
             Utils.yztato_special_picked_up_change_stat_hash: [],
             Utils.yztato_weapon_set_filter_hash: [],
             Utils.yztato_weapon_set_delete_hash: [],

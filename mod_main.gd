@@ -47,10 +47,6 @@ func _init():
         "utils.gd",
         # EFFECTS : blade_storm[ 3/4 ]
         # EFFECTS' NAMES, Methods
-        
-        "progress_data.gd",
-        # Mod's Contents
-        # Extensions After DLC
 
         "sound_manager.gd",
         # Sound Fix[ 1/2 ]
@@ -90,7 +86,10 @@ func _init():
         # EFFECTS' NAMES
 
         "run_data.gd",
-        # life_steal
+        # EFFECTS: life_steal
+
+        "dlc_1_data.gd"
+        # Curse
         
     ]
 

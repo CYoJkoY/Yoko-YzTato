@@ -12,25 +12,28 @@ func _yztato_apply_random_curse(player_index: int) -> void:
     var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
     
     for curse in random_curse:
-        if !Utils.get_chance_success(curse[1] / 100.0): continue
+        if !Utils.get_chance_success(curse[2] / 100.0): continue
         
+        var tracking_key_hash: int = curse[0]
         var player_items: Array = RunData.get_player_items(player_index)
         var player_weapons: Array = RunData.get_player_weapons(player_index)
-        
+
         var all_gears: Array = []
         for item in player_items:
-            if !item.is_cursed and \
-            !(item is CharacterData):
-                all_gears.append(item)
+            if item.is_cursed or (item is CharacterData): continue
+            
+            all_gears.append(item)
                 
         for weapon in player_weapons:
-            if !weapon.is_cursed:
-                all_gears.append(weapon)
+            if weapon.is_cursed: continue
+
+            all_gears.append(weapon)
         
-        var gear_count: int = min(curse[0], all_gears.size()) as int
+        var gear_count: int = min(curse[1], all_gears.size()) as int
         if gear_count <= 0: continue
         
-        RunData.add_tracked_value(player_index, Utils.character_yztato_fanatic_hash, gear_count)
+        RunData.add_tracked_value(player_index, tracking_key_hash, gear_count)
+
         var gears_to_curse = []
         for _i in gear_count:
             var random_index: int = Utils.randi_range(0, all_gears.size() - 1)
@@ -39,7 +42,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
         
         var updated_any_gear := false
         for gear in gears_to_curse:
-            var new_gear: ItemParentData = Utils.ncl_curse(gear, player_index)
+            var new_gear: ItemParentData = Utils.ncl_curse_item(gear, player_index)
 
             if new_gear is WeaponData:
                 RunData.remove_weapon(gear, player_index)

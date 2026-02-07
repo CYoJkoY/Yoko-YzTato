@@ -13,12 +13,12 @@ arg_key = ""
 
 [resource]
 script = ExtResource( 2 )
-key = "yztato_heal_on_damage_taken"
+key = "item_yztato_insurance_policy"
 text_key = "EFFECT_YZTATO_HEAL_ON_DAMAGE_TAKEN"
 value = 25
-custom_key = ""
-storage_method = 3
-effect_sign = 3
+custom_key = "yztato_heal_on_damage_taken"
+storage_method = 1
+effect_sign = 0
 custom_args = [ SubResource( 1 ) ]
 value2 = 20
 sum_strategy = 0

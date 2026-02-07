@@ -31,7 +31,6 @@ var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
 
 # Tracking Items
-var item_yztato_cursed_box_hash: int = Keys.generate_hash("item_yztato_cursed_box")
 var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")
 var character_yztato_baseball_player_hash = Keys.generate_hash("character_yztato_baseball_player")
 var item_yztato_insurance_policy_hash: int = Keys.generate_hash("item_yztato_insurance_policy")

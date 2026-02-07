@@ -40,7 +40,7 @@ CHARACTER_YZTATO_XIAKE,XiaKe,侠客
 EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n{5}",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n{5}
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
 EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by damage,attack speed,range and player's level","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color],受{1}伤害、攻速、范围、角色等级[/color]影响"
-EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by weapon's damage and enemy's damage","你的近战武器可反弹敌人子弹,其伤害受{2}武器伤害、敌人伤害[/color]影响"
+EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by {2} {0}weapon's damage and enemy's damage[/color], number of bullets produced equals to the number of this effect","你的近战武器可反弹敌人子弹,其伤害受{2}{0}武器伤害、敌人伤害[/color]影响,产生的子弹数量为本效果数量"
 CHARACTER_YZTATO_BASEBALL_PLAYER,Baseball Player,棒球手
 CHARACTER_YZTATO_BOMBER,Bomber,炸弹人
 EFFECT_YZTATO_BOMBS,A bomb spawns every {1} seconds dealing {2} ({3}) damage in situ,"炸弹每{1}秒原地生成一次,并对一个区域造成{2}({3})伤害"
@@ -97,7 +97,9 @@ WEAPON_YZTATO_GHOST_TASER,Ghost Taser,幽魂电击枪
 WEAPON_YZTATO_GHOST_WAND,Ghost Wand,幽魂魔杖
 ITEM_YZTATO_SHIELD_GENERATOR,Shield Generator,护盾生成器
 ITEM_YZTATO_CURSED_BOX,Cursed Box,诅咒盒子
-EFFECT_YZTATO_STATS_CHANCE_ON_LEVEL_UP,{2} chance to {0} {1} when level up,升级时{2}概率{0}{1}
+EFFECT_YZTATO_STATS_CHANCE_ON_LEVEL_UP,"{2} chance to {0} {1} when level up
+{3}","升级时{2}概率{0}{1}
+{3}"
 ITEM_YZTATO_INSURANCE_POLICY,Insurance Policy,保险单
 EFFECT_YZTATO_HEAL_ON_DAMAGE_TAKEN,"When injured,there is {0} chance to recover {2} of the damage taken","受到伤害时,有{0}概率恢复{2}所受伤害的血量"
 WEAPON_YZTATO_SNIPER_GUN,Sniper Gun,狙击枪
@@ -125,3 +127,4 @@ CHARACTER_YZTATO_FANATIC,Fanatic,狂信徒
 CHAL_CURSED_CONVERSION,Cursed Conversion,诅咒皈依
 TRACKING_RANDOMCURSED,Random Cursed: {0},已随机诅咒: {0}
 TRACKING_REMAINING,Remaining: {0},剩余: {0}
+TRACKING_EXTRA_UPGRADES,Extra Upgraded: {0},已额外升级: {0}

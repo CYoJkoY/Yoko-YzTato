@@ -187,13 +187,14 @@ zones = null
 tracked_items = {
 "character_yztato_baseball_player": 0,
 "character_yztato_fanatic": 0,
-"item_yztato_cursed_box": [ 0, 0 ],
+"item_yztato_destiny_dice": 0,
 "item_yztato_insurance_policy": 0
 }
 tracked_effects = {
 "character_yztato_baseball_player": 0,
 "character_yztato_xiake_1": 0,
 "character_yztato_xiake_2": 0,
+"item_yztato_cursed_box": 0,
 "item_yztato_ghost_tree": 0,
 "item_yztato_ice_bait": 0,
 "item_yztato_prosperity_ring": 0
@@ -208,7 +209,11 @@ translation_keys_needing_percent = {
 "effect_yztato_extra_upgrade": [ 0 ],
 "effect_yztato_heal_on_damage_taken": [ 0, 2 ],
 "effect_yztato_lifesteal_val": [ 0 ],
+"effect_yztato_melee_bounce_bullets": [ 0 ],
 "effect_yztato_multi_hit": [ 1 ],
 "effect_yztato_random_curse_on_reroll": [ 2 ],
 "effect_yztato_stats_chance_on_level_up": [ 2 ]
 }
+scene_effect_behaviors = [  ]
+enemy_effect_behaviors = [  ]
+player_effect_behaviors = [  ]

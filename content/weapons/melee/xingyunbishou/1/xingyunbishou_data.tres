@@ -1,18 +1,15 @@
-[gd_resource type="Resource" load_steps=13 format=2]
+[gd_resource type="Resource" load_steps=11 format=2]
 
 [ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/1/xingyunbishou_stats.tres" type="Resource" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/2/xingyunbishou_2_data.tres" type="Resource" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_icon.webp" type="Texture" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou.tscn" type="PackedScene" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_1b.tres" type="Resource" id=6]
 [ext_resource path="res://items/sets/precise/precise_set_data.tres" type="Resource" id=7]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0a.tres" type="Resource" id=8]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/xingyunbishou_effect_0b.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/1/xingyunbishou_effect_1a.tres" type="Resource" id=10]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/luck/luck_set_data.tres" type="Resource" id=12]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/1/xingyunbishou_effect_2.tres" type="Resource" id=13]
-
 
 [resource]
 script = ExtResource( 1 )
@@ -23,7 +20,7 @@ icon = ExtResource( 4 )
 name = "WEAPON_YZTATO_XINGYUNBISHOU"
 tier = 0
 value = 57
-effects = [ ExtResource( 8 ), ExtResource( 9 ), ExtResource( 10 ), ExtResource( 6 ), ExtResource( 13 ) ]
+effects = [ ExtResource( 8 ), ExtResource( 10 ), ExtResource( 13 ) ]
 tracking_text = "stats_gained"
 is_lockable = true
 unlock_codex_descr_after_get_it = 1

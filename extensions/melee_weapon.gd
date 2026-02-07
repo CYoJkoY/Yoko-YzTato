@@ -126,16 +126,25 @@ func _connect_melee_signals(effect_type: String) -> void:
     
     match effect_type:
         "erase":
-            if !node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_erase"):
-                node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_erase")
+            if node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_erase"): return
+
+            node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_erase")
         "bounce":
-            if !node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_bounce"):
-                var bounce_value: int = RunData.get_player_effect(Utils.yztato_melee_bounce_bullets_hash, player_index)
-                
+            if node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_bounce"): return
+            
+            var melee_bounces: Array = RunData.get_player_effect(Utils.yztato_melee_bounce_bullets_hash, player_index)
+            var tracking_key_hashes: Array = []
+            var bounce_values: Array = []
+            for melee_bounce in melee_bounces:
+                tracking_key_hashes.append(melee_bounce[0])
+                var bounce_value: int = melee_bounce[1]
+
                 for effect in effects:
-                    if effect.get_id() == "yztato_melee_bounce":
-                        bounce_value += effect.value
-                node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_bounce", [bounce_value, node_hit_box, "weapon"])
+                    if effect.get_id() != "yztato_melee_bounce": continue
+
+                    bounce_value += effect.value
+                bounce_values.append(bounce_value)
+            node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_bounce", [tracking_key_hashes, bounce_values, node_hit_box])
 
 func _yztato_flying_sword(player_index: int) -> bool:
     var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
@@ -285,8 +294,9 @@ func yz_on_Hitbox_area_entered_erase(area: Area2D) -> void:
         area.ignored_objects.clear()
         Utils.ncl_delete_projectile(enemy_projectile)
 
-func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: Hitbox, symbol: String) -> void:
+func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, melee_bounces: Array, hitbox: Hitbox) -> void:
     if area.get_parent() is EnemyProjectile:
+        var num: int = melee_bounces.size()
         var enemy_projectile: Projectile = area.get_parent()
         
         yz_initialize_cached_resources()
@@ -295,8 +305,6 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         var projectile_scene: PackedScene = _cached_projectile_scene.duplicate()
         projectile_scene._bundled["variants"][2] = enemy_projectile._sprite.texture
         projectile_stats.projectile_scene = projectile_scene
-
-        projectile_stats.damage = (area.damage + current_stats.damage / 2.0) * melee_bounce / 100.0
         projectile_stats.can_bounce = false
         projectile_stats.piercing = 99
         projectile_stats.max_range = Utils.LARGE_NUMBER
@@ -305,21 +313,30 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         var args: WeaponServiceSpawnProjectileArgs = WeaponServiceSpawnProjectileArgs.new()
         args.from_player_index = player_index
         args.deferred = true
-        args.damage_tracking_key_hash = Utils.character_yztato_baseball_player_hash
 
-        var direction: float = enemy_projectile.velocity.angle() + PI
+        var base_damage = area.damage + current_stats.damage / 2.0
+        var original_angle = enemy_projectile.velocity.angle()
+        var original_position = enemy_projectile.global_position
+        var new_projectiles = []
 
         Utils.ncl_delete_projectile(enemy_projectile)
 
-        var new_projectile: Node = WeaponService.spawn_projectile(
-            enemy_projectile.global_position,
-            projectile_stats,
-            direction,
-            self ,
-            args
-        )
-        
-        call_deferred("yz_set_new_projectile_stat", new_projectile, symbol)
+        for i in num:
+            projectile_stats.damage = base_damage * melee_bounces[i] / 100.0
+            args.damage_tracking_key_hash = tracking_key_hashes[i]
+            var direction: float = original_angle + PI + cos(i * PI) * i * PI / 12.0
+            var new_projectile: Node = WeaponService.spawn_projectile(
+                original_position,
+                projectile_stats,
+                direction,
+                self ,
+                args
+            )
+            
+            new_projectiles.append(new_projectile)
+
+        for projectile in new_projectiles:
+            call_deferred("yz_set_new_projectile_stat", projectile)
 
         ### counterattack ###
         if hitbox == null: return
@@ -331,14 +348,12 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, melee_bounce: int, hitbox: H
         
         ChallengeService.try_complete_challenge(Utils.chal_counterattack_hash, attack_hit_count)
 
-func yz_set_new_projectile_stat(new_projectile: Node, symbol: String):
+func yz_set_new_projectile_stat(new_projectile: Node):
     var projectile_shader: ShaderMaterial = load("res://resources/shaders/hue_shift_shadermat.tres")
     projectile_shader.set_shader_param("hue", 0.55)
     projectile_shader.set_shader_param("desaturation", 0.0)
     new_projectile.set_sprite_material(projectile_shader)
-
-    if symbol == "weapon" and !new_projectile.is_connected("hit_something", self , "on_weapon_hit_something"):
-        new_projectile.connect("hit_something", self , "on_weapon_hit_something", [new_projectile._hitbox])
+    new_projectile.connect("hit_something", self , "on_weapon_hit_something", [new_projectile._hitbox])
 
 func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
     var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)

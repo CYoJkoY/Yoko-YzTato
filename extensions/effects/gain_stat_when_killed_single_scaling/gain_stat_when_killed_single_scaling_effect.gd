@@ -1,9 +1,6 @@
-extends NullEffect
+extends GainStatEveryKilledEnemiesEffect
 
 export(int, "Global", "Only Weapon") var scope: int = 0
-export(String) var stat: String = ""
-var stat_hash: int = Keys.empty_hash
-export(int) var stat_nb: int = 1
 export(String) var scaling_stat: String = ""
 var scaling_stat_hash: int = Keys.empty_hash
 export(float) var scaling_percent: float = 0.1
@@ -13,14 +10,11 @@ var tracking_key_hash: int = Keys.empty_hash
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
     var duplication =.duplicate(subresources)
-    if stat_hash == Keys.empty_hash and stat != "":
-        stat_hash = Keys.generate_hash(stat)
     if scaling_stat_hash == Keys.empty_hash and scaling_stat != "":
         scaling_stat_hash = Keys.generate_hash(scaling_stat)
     if tracking_key_hash == Keys.empty_hash and tracking_key != "":
         tracking_key_hash = Keys.generate_hash(tracking_key)
 
-    duplication.stat_hash = stat_hash
     duplication.scaling_stat_hash = scaling_stat_hash
     duplication.tracking_key_hash = tracking_key_hash
 
@@ -31,7 +25,6 @@ static func get_id() -> String:
 
 func _generate_hashes() -> void:
     ._generate_hashes()
-    stat_hash = Keys.generate_hash(stat)
     scaling_stat_hash = Keys.generate_hash(scaling_stat)
     tracking_key_hash = Keys.generate_hash(tracking_key)
 
@@ -67,8 +60,6 @@ func get_args(player_index: int) -> Array:
 func serialize() -> Dictionary:
     var serialized =.serialize()
     serialized.scope = scope
-    serialized.stat = stat
-    serialized.stat_nb = stat_nb
     serialized.scaling_stat = scaling_stat
     serialized.scaling_percent = scaling_percent
     serialized.tracking_key = tracking_key
@@ -78,9 +69,6 @@ func serialize() -> Dictionary:
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
     scope = serialized.scope as int
-    stat = serialized.stat as String
-    stat_hash = Keys.generate_hash(stat)
-    stat_nb = serialized.stat_nb as int
     scaling_stat = serialized.scaling_stat as String
     scaling_stat_hash = Keys.generate_hash(scaling_stat)
     scaling_percent = serialized.scaling_percent as float

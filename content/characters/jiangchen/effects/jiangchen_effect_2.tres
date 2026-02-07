@@ -9,5 +9,5 @@ text_key = "EFFECT_YZTATO_LIFESTEAL_VAL"
 value = 5
 custom_key = ""
 storage_method = 0
-effect_sign = 3
+effect_sign = 0
 custom_args = [  ]

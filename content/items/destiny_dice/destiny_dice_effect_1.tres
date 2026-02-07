@@ -4,10 +4,10 @@
 
 [resource]
 script = ExtResource( 1 )
-key = "yztato_extra_upgrade"
+key = "item_yztato_destiny_dice"
 text_key = "EFFECT_YZTATO_EXTRA_UPGRADE"
 value = 10
 custom_key = "yztato_extra_upgrade"
 storage_method = 4
-effect_sign = 3
+effect_sign = 0
 custom_args = [  ]

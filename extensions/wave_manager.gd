@@ -24,7 +24,9 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
                 current_wave_data.groups_data.append(new_group)
             
             waves_remaining -= 1
-            if waves_remaining <= 0: continue
+            if waves_remaining <= 0:
+                RunData.ncl_set_effect_tracking_value(tracking_key_hash, 0, player_index)
+                continue
 
             remaining_effects.append([effect[0], group_count, waves_remaining, tracking_key_hash])
             RunData.ncl_set_effect_tracking_value(tracking_key_hash, waves_remaining, player_index)

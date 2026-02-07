@@ -8,6 +8,6 @@ key = ""
 text_key = "EFFECT_YZTATO_MELEE_BOUNCE_BULLETS"
 value = 150
 custom_key = ""
-storage_method = 2
+storage_method = 0
 effect_sign = 3
 custom_args = [  ]
