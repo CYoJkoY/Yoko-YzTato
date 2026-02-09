@@ -56,5 +56,3 @@ func serialize() -> Dictionary:
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
     scaling_stats = Utils.convert_to_hash_array(serialized.scaling_stats)
-
-# =========================== Method =========================== #

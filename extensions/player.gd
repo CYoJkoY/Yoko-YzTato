@@ -54,7 +54,6 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
         for weapon in current_weapons:
             _storm_duration += weapon.current_stats.cooldown
         _storm_duration *= max(0.1, current_stats.health * 1.0 / max_stats.health) * 0.07 / current_weapons.size()
-        _storm_duration /= max(1.0, current_stats.speed / 10000.0 / current_weapons.size())
         _storm_duration /= max(0.01, 1.0 + Utils.get_stat(Keys.stat_attack_speed_hash, player_index) / 100.0)
         _storm_duration = max(_storm_duration, 0.04)
         _weapons_container.rotation += delta / _storm_duration * TAU

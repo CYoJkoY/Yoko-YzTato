@@ -1,11 +1,11 @@
 extends NullEffect
 
-export (String) var set_id: String = ""
+export(String) var set_id: String = ""
 var set_id_hash: int = Keys.empty_hash
 
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
-    var duplication = .duplicate(subresources)
+    var duplication =.duplicate(subresources)
     if set_id_hash == Keys.empty_hash and set_id != "":
         set_id_hash = Keys.generate_hash(set_id)
     
@@ -39,7 +39,7 @@ func get_args(_player_index: int) -> Array:
     return [tr(set_data.name.to_upper())]
 
 func serialize() -> Dictionary:
-    var serialized = .serialize()
+    var serialized =.serialize()
     serialized.set_id = set_id
     
     return serialized

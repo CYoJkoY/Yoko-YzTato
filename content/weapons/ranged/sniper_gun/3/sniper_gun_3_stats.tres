@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=8 format=2]
+[gd_resource type="Resource" load_steps=9 format=2]
 
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_02.wav" type="AudioStream" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_05.wav" type="AudioStream" id=4]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_01.wav" type="AudioStream" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/sniper_gun/bullet_laser.tscn" type="PackedScene" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/sniper_gun/sniper_gun_empty.webp" type="Texture" id=7]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_04.wav" type="AudioStream" id=8]
 
 [resource]
@@ -27,6 +28,7 @@ lifesteal = 0.0
 shooting_sounds = [ ExtResource( 5 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 8 ), ExtResource( 4 ) ]
 sound_db_mod = -5
 is_healing = false
+custom_on_cooldown_sprite = ExtResource( 7 )
 recoil = 25
 recoil_duration = 0.1
 additional_cooldown_every_x_shots = 5

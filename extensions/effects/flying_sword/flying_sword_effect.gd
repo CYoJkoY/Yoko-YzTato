@@ -22,10 +22,8 @@ func unapply(player_index: int) -> void:
 
 func get_args(_player_index: int) -> Array:
     var limit: String = tr("YZTATO_WEAPON_DAMAGE_LIMIT").format([str(value)]) if value > 0 else ""
-    var col_pos: String = "[color=#" + ProgressData.settings.color_positive + "]"
-    var col_neg: String = "[color=#" + ProgressData.settings.color_negative + "]"
     
-    return [limit, col_pos, col_neg]
+    return [limit]
 
 func serialize() -> Dictionary:
     var serialized =.serialize()

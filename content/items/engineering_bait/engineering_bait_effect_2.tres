@@ -15,4 +15,4 @@ custom_args = [  ]
 name = "CORRUPTED_TREE_NAME"
 extra_group_data = ExtResource( 1 )
 waves = 99999
-tracking_key = ""
+tracking_key = "item_yztato_engineering_bait"

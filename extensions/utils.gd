@@ -57,5 +57,3 @@ func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
     if blade_storm != 0:
         is_manual = false
     return is_manual
-
-# =========================== Method =========================== #

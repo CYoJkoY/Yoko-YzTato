@@ -14,5 +14,3 @@ func _yztato_life_steal(weapon_stats: WeaponStats, player_index: int) -> bool:
     if Utils.get_chance_success(weapon_stats.lifesteal):
         emit_signal("lifesteal_effect", true_lifesteal, player_index)
     return true
-
-# =========================== Method =========================== #

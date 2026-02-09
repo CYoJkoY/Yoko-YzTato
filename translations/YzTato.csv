@@ -9,7 +9,6 @@ CHARACTER_YZTATO_MINOTAUR,Minotaur,牛头怪物
 WEAPON_YZTATO_XINGYUNBISHOU,Lucky Dagger,幸运匕首
 CLASS_YZTATO_LUCK,Luck,幸运
 ITEM_YZTATO_ICE_BAIT,Ice Bait,冰冻诱饵
-INFINITE,Infinite,无限
 EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES,"{3} will appear in {2} future waves
 {4}","未来 {2} 波次出现{3}
 {4}"
@@ -18,7 +17,7 @@ ITEM_YZTATO_ENGINEERING_BAIT,Engineering Bait,工程诱饵
 CORRUPTED_TREE_NAME,Corrupted Tree,被腐蚀的树
 CHARACTER_YZTATO_GLUTTONY,Gluttony,饕餮
 WEAPON_YZTATO_LEIFU,Thunder Talisman,雷符
-YZTATO_LEIFU_PROJECTILES,Hitting an enemy later spawns {0} [color=#FDDB27]thunderblots[/color] dealing {1} ({3}) damage,"击中敌人后产生{0}道[color=#FDDB27]天雷[/color], 造成{1}（{3}）伤害"
+YZTATO_LEIFU_PROJECTILES,Hitting an enemy later spawns {0} [color=#FDDB27]thunderblots[/color] dealing {1} ({3}) damage,"击中敌人后产生{0}道[color=#FDDB27]天雷[/color], 造成{1}({3})伤害"
 ITEM_YZTATO_PROSPERITY_RING,Prosperity Ring,繁荣之戒
 YZTATO_BLIND_NECROMANCER_NAME,Blind Necromancer,盲·死灵法师
 YZTATO_BLIND_NECROMANCER_BEHAVIOUR_DESCRIPTION,Stay as far away from the player as possible and summon Ice Mage Souls,"尽可能远离玩家, 且会召唤出冰法魂"
@@ -35,12 +34,14 @@ EFFECT_YZTATO_CHIMERA_FRONT,Launch the following {0} projectiles in sequence,依
 WEAPON_YZTATO_HUANGWUWANGE,Desolate Elegy,荒芜挽歌
 WEAPON_YZTATO_HUANGWUWANGE_1,Desolate Elegy △,荒芜挽歌 △
 EFFECT_YZTATO_UPGRADE_WHEN_KILLED_ENEMIES,Weapon upgrades after {0} kills in a single wave,单波次杀敌{0}个后武器升级
-EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can erase enemy bullets,近战武器可以消除敌人子弹
+EFFECT_YZTATO_MELEE_ERASE_BULLETS,Melee weapon can [color=#FF8C00]erase enemy bullets[/color],近战武器可以[color=#FF8C00]消除敌人子弹[/color]
 CHARACTER_YZTATO_XIAKE,XiaKe,侠客
-EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})\n{5}",击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})\n{5}
+EFFECT_YZTATO_GAIN_STAT_WHEN_KILLED_SINGLE_SCALING,"After killing {3} ({4}) enemies, gain {0} points {1} ({2})
+{5}","击杀{3} ({4}) 名敌人后获得{0}点{1} ({2})
+{5}"
 CHARACTER_YZTATO_SWORD_IMMORTAL,Sword Immortal,剑仙
-EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by damage,attack speed,range and player's level","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color],受{1}伤害、攻速、范围、角色等级[/color]影响"
-EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can bounce enemy bullets back,its damage affected by {2} {0}weapon's damage and enemy's damage[/color], number of bullets produced equals to the number of this effect","你的近战武器可反弹敌人子弹,其伤害受{2}{0}武器伤害、敌人伤害[/color]影响,产生的子弹数量为本效果数量"
+EFFECT_YZTATO_FLYING_SWORD_ARRAY,"{0}Weapon attack mode changes to [color=#FF8C00]Sword Formation mode[/color],which is affected by weapon's damage(+),attack speed(+),range(+) and player's level(+)","{0}武器攻击方式变为[color=#FF8C00]剑阵模式[/color],受武器伤害(+),攻速(+),范围(+),角色等级(+)影响"
+EFFECT_YZTATO_MELEE_BOUNCE_BULLETS,"Your melee weapon can [color=#FF8C00]bounce enemy bullets back[/color],its damage affected by {0}weapon's damage(+) and enemy's damage(+), number of bullets produced equals to the number of this effect","你的近战武器可[color=#FF8C00]反弹敌人子弹[/color],其伤害受{0}武器伤害(+),敌人伤害(+)影响,产生的子弹数量为本效果数量"
 CHARACTER_YZTATO_BASEBALL_PLAYER,Baseball Player,棒球手
 CHARACTER_YZTATO_BOMBER,Bomber,炸弹人
 EFFECT_YZTATO_BOMBS,A bomb spawns every {1} seconds dealing {2} ({3}) damage in situ,"炸弹每{1}秒原地生成一次,并对一个区域造成{2}({3})伤害"
@@ -51,15 +52,15 @@ EFFECT_YZTATO_FRUIT_PICKED_UP_COUNT,"For every {0} picked up normal fruits,{3} (
 EFFECT_YZTATO_POISONED_FRUIT_PICKED_UP_COUNT,"For every {0} picked up poisoned fruits,{3} ({4}) will be {2}","每捡起{0}个有毒的果实,{3} ({4}) 将会{2}"
 CHARACTER_YZTATO_JIANGCHEN,JiangChen,将臣
 WEAPON_YZTATO_LEGEND_BAT,Legend Bat,传奇球棒
-EFFECT_YZTATO_BLADE_STORM,"Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color],which can remove enemy bullets and its rotation speed is affected by {3}current health,speed,number of weapons[/color] {2}and attack speed[/color]","你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color],可以消除敌人子弹,转速受{3}当前生命、速度、武器数量[/color]、{2}攻速[/color]影响"
+EFFECT_YZTATO_BLADE_STORM,"Your weapon's attack mode becomes [color=#FF8C00] Blade Storm Mode[/color],which can [color=#FF8C00]erase enemy bullets[color=#FF8C00], its rotation speed is affected by attack speed(+),current health(-),number of weapons(-)","你的武器攻击方式变为[color=#FF8C00]剑刃风暴模式[/color],可以[color=#FF8C00]消除敌人子弹[/color],转速受攻速(+),当前生命(-),武器数量(-)影响"
 CHARACTER_YZTATO_BLADE_DANCER,Blade Dancer,剑舞者
 CHARACTER_YZTATO_ARSONIST,Arsonist,纵火犯
 EFFECT_YZTATO_LEAVE_FIRE,The burning enemy will [color=#F94E34]leave flames[/color] on the ground,燃烧的敌人会在地面[color=#F94E34]留下火焰[/color]
-EFFECT_YZTATO_LEAVE_FIRE_CURSED,[color=#F94E34]The burning enemy will leave larger and longer-lasting flames on the ground[/color],燃烧的敌人会在地面[color=#F94E34]留下更大更久的火焰[/color]
+EFFECT_YZTATO_LEAVE_FIRE_CURSED,The burning enemy will [color=#F94E34]leave larger and longer-lasting flames[/color] on the ground,燃烧的敌人会在地面[color=#F94E34]留下更大更久的火焰[/color]
 EFFECT_YZTATO_WEAPON_SET_FILTER,Only [color=#3E68DA]weapons of {0} set[/color] will appear in the shop,商店里面只会出现[color=#3E68DA]{0}系列的武器[/color]
 EFFECT_YZTATO_EXTRUSION_ATTACK,Monsters can hurt each other,怪物可以互相伤害
 YZTATO_WEAPON_DAMAGE_LIMIT,"When weapon's damage>{0},","当武器伤害>{0}时,"
-EFFECT_YZTATO_FLYING_SWORD_QI,"{0}Weapon attack mode changes to [color=#FF8C00]Qi mode[/color],which is affected by {2}weapon's damage and range[/color],not by attack speed","{0}武器攻击方式变为[color=#FF8C00]御气模式[/color],受{1}武器伤害、范围、效果[/color]影响,不受攻速影响"
+EFFECT_YZTATO_FLYING_SWORD_QI,"{0}Weapon attack mode changes to [color=#FF8C00]Qi mode[/color],which is affected by weapon's damage(+) and range(+),not by attack speed","{0}武器攻击方式变为[color=#FF8C00]御气模式[/color],受武器伤害(+),范围(+),效果影响,不受攻速影响"
 CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,气剑师
 EFFECT_YZTATO_WEAPON_SET_DELETE,[color=#3E68DA]weapons of {0} set[/color] will not appear in the shop,商店里面不会出现[color=#3E68DA]{0}系列的武器[/color]
 EFFECT_YZTATO_BOOMERANG_WEAPON,"[color=#FF8C00]Boomerang Weapon[/color],{0},{1},{2},damage is {4}~{3} bonus depending on distance","[color=#FF8C00]回旋武器[/color],{0},{1},{2},伤害根据距离得到 {4}~{3} 的加成"
@@ -72,10 +73,10 @@ ITEM_YZTATO_HAZARD_SUIT,Hazard Suit,危险防护服
 WEAPON_YZTATO_FLY_AXE,Fly Axe,飞斧
 EFFECT_YZTATO_ONE_SHOT_LOOT,Loot Enemies Die In One Hit,战利品敌人能被一击毙命
 ITEM_YZTATO_BLOOD_DRESS,Blood Dress,血服
-YZTATO_EXTRA_UPGRADE_CHANCE,Get an extra upgrade option!,获得额外一次升级选择机会！
+YZTATO_EXTRA_UPGRADE_CHANCE,Get an extra upgrade option!,获得额外一次升级选择机会!
 ITEM_YZTATO_DESTINY_DICE,Destiny Dice,命运骰子
 EFFECT_YZTATO_EXTRA_UPGRADE,{0} chance to get an additional upgrade option,{0}概率获得额外升级选择机会
-EFFECT_YZTATO_BLOOD_RAGE,"Trigger [color=#c9171e]blood rage[/color] every {0} seconds,{2}lasts {1} seconds,[color=#c9171e]defeating enemies resets cooldown[/color]","每{0}秒触发一次[color=#c9171e]血怒[/color],{2}持续{1}秒,[color=#c9171e]击败敌人重置冷却[/color]"
+EFFECT_YZTATO_BLOOD_RAGE,"Trigger [color=#C9171E]blood rage[/color] every {0} seconds,{2}lasts {1} seconds,[color=#C9171E]defeating enemies resets cooldown[/color]","每{0}秒触发一次[color=#c9171e]血怒[/color],{2}持续{1}秒,[color=#c9171e]击败敌人重置冷却[/color]"
 CHARACTER_YZTATO_BERSERKER,Berserker,狂战士
 EFFECT_YZTATO_MULTI_HIT,"Each hit on an enemy will deal {0} additional hits,each dealing {1} of the original damage","每次命中敌人将多造成{0}次伤害,数值为{1}原伤害"
 WEAPON_YZTATO_BAZHANDAO,Eight Cutting Broadsword,八斩刀
