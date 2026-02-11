@@ -1,4 +1,4 @@
-extends NullEffect
+extends Effect
 
 export var stat: String = "hit_protection"
 var stat_hash: int = Keys.empty_hash
@@ -7,7 +7,7 @@ export var reset_on_hit: bool = false
 
 # =========================== Extension =========================== #
 func duplicate(subresources := false) -> Resource:
-    var duplication = .duplicate(subresources)
+    var duplication =.duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":
         stat_hash = Keys.generate_hash(stat)
 
@@ -46,7 +46,7 @@ func _add_custom_args() -> void:
 func get_text(player_index: int, colored: bool = true) -> String:
     if interval == 1:
         text_key = "EFFECT_TEMP_STATS_PER_INTERVAL_SINGULAR"
-    return .get_text(player_index, colored)
+    return.get_text(player_index, colored)
 
 
 func get_args(_player_index: int) -> Array:
@@ -54,7 +54,7 @@ func get_args(_player_index: int) -> Array:
 
 
 func serialize() -> Dictionary:
-    var serialized = .serialize()
+    var serialized =.serialize()
     serialized.stat = stat
     serialized.interval = interval
     serialized.reset_on_hit = reset_on_hit

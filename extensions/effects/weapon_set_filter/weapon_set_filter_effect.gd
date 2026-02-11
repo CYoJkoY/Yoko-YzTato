@@ -1,4 +1,4 @@
-extends NullEffect
+extends Effect
 
 export(String) var set_id: String = ""
 var set_id_hash: int = Keys.empty_hash

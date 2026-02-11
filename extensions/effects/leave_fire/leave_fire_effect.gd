@@ -1,4 +1,4 @@
-extends NullEffect
+extends Effect
 
 export(float) var duration: float = 1.0
 export(float) var scale: float = 1.0

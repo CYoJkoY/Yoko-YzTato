@@ -1,9 +1,9 @@
-extends NullEffect
+extends Effect
 
-export (int) var damage_percent: int = 50
+export(int) var damage_percent: int = 50
 
 # =========================== Extension =========================== #
-static func get_id()-> String:
+static func get_id() -> String:
     return "yztato_multi_hit"
 
 func apply(player_index: int) -> void:
@@ -24,7 +24,7 @@ func get_args(_player_index: int) -> Array:
     return [str(value), str(damage_percent)]
 
 func serialize() -> Dictionary:
-    var serialized = .serialize()
+    var serialized =.serialize()
     serialized.damage_percent = damage_percent
     
     return serialized
@@ -32,4 +32,3 @@ func serialize() -> Dictionary:
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
     damage_percent = serialized.damage_percent as int
-    

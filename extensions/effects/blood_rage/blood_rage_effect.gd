@@ -1,4 +1,4 @@
-extends NullEffect
+extends Effect
 
 export(float) var interval: float = 3.0
 export(float) var duration: float = 1.5

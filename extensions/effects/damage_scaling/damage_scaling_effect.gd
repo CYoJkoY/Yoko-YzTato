@@ -1,4 +1,4 @@
-extends NullEffect
+extends Effect
 
 export(Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 
