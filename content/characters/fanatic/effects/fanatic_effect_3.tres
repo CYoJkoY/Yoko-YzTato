@@ -9,6 +9,6 @@ text_key = "EFFECT_YZTATO_DAMAGE_SCALING_FRONT"
 value = 10
 custom_key = "yztato_damage_scaling"
 storage_method = 0
-effect_sign = 3
+effect_sign = 5
 custom_args = [  ]
 scaling_stats = [ [ "stat_elemental_damage", 0.02 ], [ "stat_engineering", 0.02 ], [ "stat_luck", 0.01 ] ]

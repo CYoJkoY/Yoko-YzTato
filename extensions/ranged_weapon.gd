@@ -172,8 +172,10 @@ func _yztato_leave_fire_ready() -> void:
 func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
     for fire in effects:
         if fire.get_id() != "yztato_leave_fire": continue
+        
         var new_fire = _burning_particles_manager.get_burning_particle()
         if new_fire == null: return
+        
         call_deferred("yz_activate_burning_particle", new_fire,
         thing_hit.global_position, thing_hit._burning,
         fire.scale, fire.duration)
@@ -199,55 +201,62 @@ func _yztato_gain_stat_when_killed_scaling_single() -> void:
             RunData.add_stat(effect.stat, effect.stat_nb, player_index)
             RunData.ncl_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
 
-func _apply_multi_hit_effect(thing_hit: Node, damage_dealt: int, effect_data: Array, player_index: int) -> void:
-    for _i in effect_data[0]:
-        var args = TakeDamageArgs.new(player_index)
-        var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect_data[1] / 100, args)
-        RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
-
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
+    # Check weapon effects first
     for effect in effects:
         if effect.get_id() == "yztato_multi_hit":
-            _apply_multi_hit_effect(thing_hit, damage_dealt, [effect.value, effect[1]], player_index)
+            for _i in effect.value:
+                var args = TakeDamageArgs.new(player_index)
+                var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
+                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
             return
     
-    var effect_multi_hit: Array = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
+    # Check player effects
+    var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
     if !effect_multi_hit.empty():
         for effect in effect_multi_hit:
-            _apply_multi_hit_effect(thing_hit, damage_dealt, effect, player_index)
-
-func _spawn_vine_traps(thing_hit: Node, trap_count: int, player_index: int, trap_data) -> void:
-    for _i in trap_count:
-        var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-        var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-        queue.append([EntityType.STRUCTURE, trap_data.scene, pos, trap_data])
+            for _i in effect[0]:
+                var args = TakeDamageArgs.new(player_index)
+                var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
+                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 
 func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
+    # Check weapon effects first
     for effect in effects:
         if effect.get_id() == "yztato_vine_trap":
             var count: int = effect.trap_count
             var chance: float = effect.chance / 100.0
 
             if Utils.get_chance_success(chance):
-                effect.weapon_pos = weapon_pos
-                _spawn_vine_traps(thing_hit, count, player_index, effect)
-
+                var vine_trap = effect
+                for _i in count:
+                    var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
+                    var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+                    vine_trap.weapon_pos = weapon_pos
+                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
             return
 
-    var vine_trap_effects: Array = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
+    # Check player effects
+    var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
     if !vine_trap_effects.empty():
         for effect_data in vine_trap_effects:
             var count: int = effect_data[0]
             var chance: float = effect_data[1] / 100.0
             
             if Utils.get_chance_success(chance):
-                _spawn_vine_traps(thing_hit, count, player_index, effect_data[2])
+                var vine_trap = effect_data[2]
+                for _i in count:
+                    var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
+                    var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-    if should_shoot:
-        for effect in effects:
-            if effect.get_id() == "yztato_can_attack_while_moving":
-                return _parent._current_movement == Vector2.ZERO
+    if !should_shoot: return false
+
+    for effect in effects:
+        if effect.get_id() == "yztato_can_attack_while_moving":
+            should_shoot = _parent._current_movement == Vector2.ZERO
+            break
 
     return should_shoot
 

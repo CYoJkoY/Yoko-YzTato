@@ -18,21 +18,21 @@ func _yztato_extra_upgrade(player_index: int) -> void:
 
         RunData.add_tracked_value(player_index, tracking_key_hash, 1)
 
-        var level = RunData.get_player_level(player_index)
-        var main = Utils.get_scene_node()
+        var level: int = RunData.get_player_level(player_index)
+        var main: Node = Utils.get_scene_node()
         var upgrades: BoxContainer = main._things_to_process_player_containers[player_index].upgrades
 
         upgrades.add_element(ItemService.get_icon(Keys.icon_upgrade_to_process_hash), level)
         
-        var upgrade_to_process = UpgradeToProcess.new()
+        var upgrade_to_process: UpgradeToProcess = UpgradeToProcess.new()
         upgrade_to_process.level = level
         upgrade_to_process.player_index = player_index
         _upgrades_to_process[player_index].push_front(upgrade_to_process)
 
         main._players_ui[player_index].update_level_label()
 
-        var floating_text_manager = main._floating_text_manager
-        var rect_size = main._hud.rect_size
+        var floating_text_manager: FloatingTextManager = main._floating_text_manager
+        var rect_size: Vector2 = main._hud.rect_size
         var center_top_pos = Vector2(rect_size.x * 0.5, rect_size.y * 0.3)
         var popup_text: String = tr("YZTATO_EXTRA_UPGRADE_CHANCE")
         floating_text_manager.display(

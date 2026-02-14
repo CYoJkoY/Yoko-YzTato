@@ -162,6 +162,15 @@ func _yztato_flying_sword(player_index: int) -> bool:
 
     return false
 
+func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
+    var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    if flying_sword.empty(): return
+
+    for flying in flying_sword:
+        if current_stats.damage <= flying[0]: return
+
+    _hitbox.ignored_objects.erase(thing_hit)
+
 func _yztato_blade_storm(player_index: int) -> bool:
     var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
     if blade_storm == 0:
@@ -182,6 +191,17 @@ func _yztato_blade_storm(player_index: int) -> bool:
 
     return false
 
+func _yztato_blade_storm_direction(direction: float) -> float:
+    if YZ_is_blade_storm:
+        direction = _current_idle_angle
+    return direction
+
+
+func _yztato_blade_storm_target(target: float) -> float:
+    if YZ_is_blade_storm:
+        target = _current_idle_angle
+    return target
+
 func _yztato_leave_fire_ready() -> void:
     _burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
     get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
@@ -190,8 +210,10 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
     # Check effects first
     for fire in effects:
         if fire.get_id() != "yztato_leave_fire": continue
+
         var new_fire = _burning_particles_manager.get_burning_particle()
         if new_fire == null: return
+        
         call_deferred("yz_activate_burning_particle", new_fire,
         thing_hit.global_position, thing_hit._burning,
         fire.scale, fire.duration)
@@ -268,11 +290,12 @@ func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
                     queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
 func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-    if should_shoot:
-        for effect in effects:
-            if effect.get_id() == "yztato_can_attack_while_moving":
-                should_shoot = _parent._current_movement == Vector2.ZERO
-                break
+    if !should_shoot: return false
+
+    for effect in effects:
+        if effect.get_id() == "yztato_can_attack_while_moving":
+            should_shoot = _parent._current_movement == Vector2.ZERO
+            break
 
     return should_shoot
 
@@ -355,30 +378,9 @@ func yz_set_new_projectile_stat(new_projectile: Node):
     new_projectile.set_sprite_material(projectile_shader)
     new_projectile.connect("hit_something", self , "on_weapon_hit_something", [new_projectile._hitbox])
 
-func _yztato_flying_sword_erase(thing_hit: Node, player_index: int) -> void:
-    var flying_sword: Array = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
-    if flying_sword.empty(): return
-
-    for flying in flying_sword:
-        if current_stats.damage <= flying[0]: return
-
-    _hitbox.ignored_objects.erase(thing_hit)
-
-
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
         Utils.ncl_delete_projectile(area.get_parent())
-
-func _yztato_blade_storm_direction(direction: float) -> float:
-    if YZ_is_blade_storm:
-        direction = _current_idle_angle
-    return direction
-
-
-func _yztato_blade_storm_target(target: float) -> float:
-    if YZ_is_blade_storm:
-        target = _current_idle_angle
-    return target
 
 func yz_process_attack_mode() -> bool:
     var target: Node = yz_select_target()
