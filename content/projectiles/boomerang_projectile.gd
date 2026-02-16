@@ -18,7 +18,7 @@ func _physics_process(_delta: float):
     _yztato_boomerang_physics_process()
 
 func stop() -> void:
-    emit_signal("returned_to_player", self)
+    emit_signal("returned_to_player", self )
     is_returning = false
     .stop()
 
@@ -68,7 +68,7 @@ func _yztato_boomerang_physics_process() -> void:
     else:
         if knockback_only_back:
             _hitbox.set_knockback(direction_normalized,
-                                -_weapon_stats.knockback, 
+                                - _weapon_stats.knockback,
                                 _weapon_stats.knockback_piercing)
 
         var speed = return_speed if lock_speed else _weapon_stats.projectile_speed
@@ -76,5 +76,5 @@ func _yztato_boomerang_physics_process() -> void:
         var target_velocity = direction_normalized * speed
         velocity = target_velocity
         
-        if distance < 30: 
+        if distance < 30:
             _time_until_max_range = 0

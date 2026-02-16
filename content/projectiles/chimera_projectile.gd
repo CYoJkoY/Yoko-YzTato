@@ -1,6 +1,5 @@
 extends PlayerProjectile
 
-# EFFECT : chimera_weapon_effect
 onready var sprite_node: Sprite = $Sprite
 signal has_stopped
 
@@ -10,7 +9,7 @@ func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
     ._on_Hitbox_hit_something(thing_hit, damage_dealt)
 
 func stop() -> void:
-    emit_signal("has_stopped", self)
+    emit_signal("has_stopped", self )
     .stop()
 
 # =========================== Custom =========================== #

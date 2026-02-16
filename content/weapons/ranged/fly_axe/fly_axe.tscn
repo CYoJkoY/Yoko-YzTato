@@ -22,15 +22,11 @@ resource_local_to_scene = true
 radius = 109.041
 
 [node name="FlyAxe" instance=ExtResource( 2 )]
-position = Vector2( 0, 3 )
 script = ExtResource( 3 )
 outline_shader_mat = SubResource( 2 )
 
 [node name="Sprite" parent="." index="0"]
 texture = ExtResource( 4 )
-
-[node name="Attach" parent="." index="1"]
-position = Vector2( 0, -18 )
 
 [node name="CollisionShape2D" parent="Range" index="0"]
 shape = SubResource( 1 )
