@@ -87,9 +87,6 @@ func _init():
 
         "run_data.gd",
         # EFFECTS: life_steal
-
-        "dlc_1_data.gd"
-        # Curse
         
     ]
 
