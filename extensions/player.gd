@@ -33,6 +33,7 @@ func on_lifesteal_effect(value: int) -> void:
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
     var result =.take_damage(value, args)
     _yztato_heal_on_damage_taken(result)
+    _yztato_temp_stats_per_interval_reset_on_hit(result)
     
     return result
 
@@ -103,16 +104,30 @@ func _yztato_blood_rage_ready() -> void:
             blood_rage_timer.start()
 
 func _yztato_temp_stats_per_interval() -> void:
+    # Extra process for hit_protection
     var effect: Array = RunData.get_player_effect(Keys.temp_stats_per_interval_hash, player_index)
     for sub_effect in effect:
         var stat_key_hash: int = sub_effect[0]
-        if stat_key_hash == Keys.hit_protection_hash:
-            var stat_value: int = sub_effect[1]
-            var interval: int = sub_effect[2]
-            
-            if _one_second_timeouts % interval == 0:
-                _hit_protection = int(_hit_protection + TempStats.get_stat(Keys.hit_protection_hash, player_index))
-                TempStats.remove_stat(Keys.hit_protection_hash, stat_value, player_index)
+        if stat_key_hash != Keys.hit_protection_hash: continue
+
+        var interval: int = sub_effect[2]
+        
+        if _one_second_timeouts % interval != 0: continue
+        
+        # The _hit_protection only affected by RunData's stat,so it will reset in _ready()
+        var stat_value: int = sub_effect[1]
+        _hit_protection += stat_value
+
+func _yztato_temp_stats_per_interval_reset_on_hit(result: Array) -> void:
+    # Extra process for hit_protection
+    var damage_taken_bool: float = result[1] > 0
+    if !damage_taken_bool: return
+
+    for stat in _remove_temp_stats_on_hit:
+        if stat != Keys.hit_protection_hash: continue
+
+        _hit_protection -= _remove_temp_stats_on_hit[stat]
+
 
 func _yztato_heal_on_damage_taken(result: Array) -> void:
     var heal_on_damage_taken: Array = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)

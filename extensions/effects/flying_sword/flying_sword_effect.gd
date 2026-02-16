@@ -1,6 +1,8 @@
 extends GainStatEveryKilledEnemiesEffect
 
-export(int, "Qi", "Sword Array") var mode_type = 0
+enum ModeType {Qi, SwordArray}
+
+export(ModeType) var mode_type = ModeType.Qi
 
 # =========================== Extension =========================== #
 static func get_id() -> String:

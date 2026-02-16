@@ -13,11 +13,11 @@ var _current_locked_target: Node = null
 var _cached_projectile_scene: PackedScene = null
 var _cached_base_stats: Resource = null
 
-# EFFECT : gain_stat_when_killed_scaling_single
-var kill_count: Dictionary = {}
-var effect_single_kill_count: Dictionary = {}
 var _projectile_pool: Array = []
 var _max_pool_size: int = 50
+
+# EFFECT : gain_stat_when_killed_single_scaling
+var gain_stat_when_killed_single_scaling_killed_count: Dictionary = {}
 
 # EFFECT : leave_fire
 var _burning_particles_manager = null
@@ -230,15 +230,21 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
                 fire[3], fire[2])
 
 func _yztato_gain_stat_when_killed_scaling_single() -> void:
-    kill_count[weapon_id] = kill_count.get(weapon_id, 0) + 1
     for effect_index in effects.size():
         var effect = effects[effect_index]
-        effect_single_kill_count[effect_index] = effect_single_kill_count.get(effect_index, kill_count[weapon_id] - 1) + 1
-        
-        if effect.get_id() == "yztato_gain_stat_when_killed_single_scaling" and \
-           effect_single_kill_count[effect_index] % int(effect.value + Utils.get_stat(effect.scaling_stat, player_index) * effect.scaling_percent) == 0:
-            RunData.add_stat(effect.stat, effect.stat_nb, player_index)
-            RunData.ncl_add_effect_tracking_value(effect.tracking_key, effect.stat_nb, player_index)
+        if !effect.get_id() == "yztato_gain_stat_when_killed_single_scaling": continue
+
+        gain_stat_when_killed_single_scaling_killed_count[effect_index] = gain_stat_when_killed_single_scaling_killed_count.get(effect_index, 0) + 1
+        var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int
+        if scaling_value <= 0 or gain_stat_when_killed_single_scaling_killed_count[effect_index] % scaling_value != 0: continue
+
+        gain_stat_when_killed_single_scaling_killed_count[effect_index] = 0 # For dynamic scaling_value
+        RunData.add_stat(effect.stat_hash, effect.stat_nb, player_index)
+        RunData.ncl_add_effect_tracking_value(effect.tracking_key_hash, effect.stat_nb, player_index)
+
+        # Update when first add hit_protection
+        if effect.stat_hash == Keys.hit_protection_hash:
+            _parent._hit_protection += effect.stat_nb
 
 func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
     # Check weapon effects first
