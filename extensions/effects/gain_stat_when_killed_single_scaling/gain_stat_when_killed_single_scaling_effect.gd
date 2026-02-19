@@ -32,14 +32,12 @@ func apply(player_index: int) -> void:
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].append([value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
-    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
-    Utils.reset_stat_cache(player_index)
 
 func get_args(player_index: int) -> Array:
     var numer_of_need: String = str(int(value + Utils.get_stat(scaling_stat_hash, player_index) * scaling_percent))

@@ -28,14 +28,12 @@ func apply(player_index: int) -> void:
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].append([extra_group_data.resource_path, value, waves, tracking_key_hash])
-    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([extra_group_data.resource_path, value, waves, tracking_key_hash])
-    Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
     var args: Array =.get_args(_player_index)

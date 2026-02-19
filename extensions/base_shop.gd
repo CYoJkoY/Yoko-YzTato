@@ -30,7 +30,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
             all_gears.append(weapon)
         
         var gear_count: int = min(curse[1], all_gears.size()) as int
-        if gear_count <= 0: continue
+        if gear_count <= 0: break
         
         RunData.add_tracked_value(player_index, tracking_key_hash, gear_count)
 
@@ -40,7 +40,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
             gears_to_curse.append(all_gears[random_index])
             all_gears.remove(random_index)
         
-        var updated_any_gear := false
+        var updated_any_gear: bool = false
         for gear in gears_to_curse:
             var new_gear: ItemParentData = Utils.ncl_curse_item(gear, player_index)
 

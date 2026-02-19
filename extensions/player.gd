@@ -150,9 +150,8 @@ func _yztato_chal_ready() -> void:
     consumables_picked_up_last_wave = player_data.consumables_picked_up_this_run
 
     ### more_than_enough ###    
-    if RunData.current_wave == 20 and \
-    RunData.get_player_character(player_index).my_id == "character_multitasker" and \
-    RunData.get_free_weapon_slots(player_index) < 4:
+    if RunData.current_wave >= 20 and \
+    RunData.get_player_character(player_index).my_id == "character_multitasker":
         ChallengeService.try_complete_challenge(Utils.chal_more_than_enough_hash, RunData.get_free_weapon_slots(player_index))
 
 func _yztato_chal_on_consumable_picked_up() -> void:

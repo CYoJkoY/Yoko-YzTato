@@ -25,14 +25,12 @@ func apply(player_index: int) -> void:
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append(set_id_hash)
-    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase(set_id_hash)
-    Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
     var set_data = ItemService.get_set(set_id_hash)

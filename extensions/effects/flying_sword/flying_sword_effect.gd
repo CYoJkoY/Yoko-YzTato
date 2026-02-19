@@ -12,15 +12,13 @@ func apply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
-    effects[key_hash].append([value, mode_type])
-    Utils.reset_stat_cache(player_index)
+    effects[key_hash][mode_type] = effects[key_hash].get(mode_type, 0) + value
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
-    effects[key_hash].erase([value, mode_type])
-    Utils.reset_stat_cache(player_index)
+    effects[key_hash][mode_type] -= value
 
 func get_args(_player_index: int) -> Array:
     var limit: String = tr("YZTATO_WEAPON_DAMAGE_LIMIT").format([str(value)]) if value > 0 else ""

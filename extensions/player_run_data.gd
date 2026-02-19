@@ -24,7 +24,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_set_stat_hash: [],
             Utils.yztato_life_steal_hash: 0,
             Utils.yztato_melee_erase_bullets_hash: 0,
-            Utils.yztato_flying_sword_hash: [],
+            Utils.yztato_flying_sword_hash: {},
             Utils.yztato_blade_storm_hash: 0,
             Utils.yztato_leave_fire_hash: [],
             Utils.yztato_chimera_weapon_hash: [],

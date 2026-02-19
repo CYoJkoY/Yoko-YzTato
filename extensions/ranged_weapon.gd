@@ -192,7 +192,7 @@ func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
 func _yztato_gain_stat_when_killed_scaling_single() -> void:
     for effect_index in effects.size():
         var effect = effects[effect_index]
-        if !effect.get_id() == "yztato_gain_stat_when_killed_single_scaling": continue
+        if effect.get_id() != "yztato_gain_stat_when_killed_single_scaling": continue
 
         gain_stat_when_killed_single_scaling_killed_count[effect_index] = gain_stat_when_killed_single_scaling_killed_count.get(effect_index, 0) + 1
         var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int

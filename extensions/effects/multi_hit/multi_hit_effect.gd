@@ -11,14 +11,12 @@ func apply(player_index: int) -> void:
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([value, damage_percent])
-    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([value, damage_percent])
-    Utils.reset_stat_cache(player_index)
 
 func get_args(_player_index: int) -> Array:
     return [str(value), str(damage_percent)]

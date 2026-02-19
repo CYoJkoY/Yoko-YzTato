@@ -12,14 +12,12 @@ func apply(player_index: int) -> void:
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([key_hash, value, duration, scale])
-    Utils.reset_stat_cache(player_index)
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
     
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, duration, scale])
-    Utils.reset_stat_cache(player_index)
 
 func serialize() -> Dictionary:
     var serialized =.serialize()
