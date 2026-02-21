@@ -18,6 +18,8 @@ func _physics_process(_delta: float):
     _yztato_boomerang_physics_process()
 
 func stop() -> void:
+    if _enable_stop_delay: return
+
     emit_signal("returned_to_player", self )
     is_returning = false
     .stop()
