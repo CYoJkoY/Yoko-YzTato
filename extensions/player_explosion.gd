@@ -16,5 +16,4 @@ func _yztato_explosion_erase(player_index: int) -> void:
 
 # =========================== Custom =========================== #
 func yz_on_Hitbox_area_entered(area: Area2D) -> void:
-    if area.get_parent() is EnemyProjectile:
-        area.get_parent().stop()
+    if area.get_parent() is EnemyProjectile: area.hit_something(self , 0)
