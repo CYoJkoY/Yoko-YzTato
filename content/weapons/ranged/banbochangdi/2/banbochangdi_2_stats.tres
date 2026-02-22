@@ -2,7 +2,7 @@
 
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/banbochangdi.ogg" type="AudioStream" id=2]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/banbochangdi/banbochangdi_projectile.tscn" type="PackedScene" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/banbochangdi/banbochangdi_projectile.tscn" type="PackedScene" id=6]
 
 [resource]
 script = ExtResource( 1 )

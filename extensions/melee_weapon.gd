@@ -1,7 +1,7 @@
 extends "res://weapons/melee/melee_weapon.gd"
 
-var _cached_projectile_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/default_projectile.tscn")
-var _cached_base_stats: RangedWeaponStats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/default_stats.tres")
+var _cached_projectile_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
+var _cached_base_stats: RangedWeaponStats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres")
 
 # blade_storm
 onready var _collision: CollisionShape2D = $Sprite/Hitbox/Collision

@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/ghost_rocket/ghost_rocket_projectile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/ghost_rocket/ghost_rocket_projectile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://weapons/ranged/rocket_launcher/gun_silenced_pistol2_shot_01.wav" type="AudioStream" id=3]
 
 [resource]

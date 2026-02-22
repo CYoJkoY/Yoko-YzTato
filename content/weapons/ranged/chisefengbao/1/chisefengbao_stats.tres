@@ -3,7 +3,8 @@
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/chisefengbao.ogg" type="AudioStream" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chisefengbao/chisefengbao_empty.webp" type="Texture" id=4]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/chisefengbao/chisefengbao_projectiles.tscn" type="PackedScene" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/chisefengbao/chisefengbao_projectiles.tscn" type="PackedScene" id=5]
+
 
 [resource]
 script = ExtResource( 1 )

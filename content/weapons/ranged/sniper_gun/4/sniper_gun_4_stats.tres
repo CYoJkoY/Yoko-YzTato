@@ -5,7 +5,7 @@
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_03.wav" type="AudioStream" id=3]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_05.wav" type="AudioStream" id=4]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_01.wav" type="AudioStream" id=5]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/sniper_gun/bullet_laser.tscn" type="PackedScene" id=6]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sniper_gun/bullet_laser.tscn" type="PackedScene" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/sniper_gun/sniper_gun_empty.webp" type="Texture" id=7]
 [ext_resource path="res://weapons/ranged/pistol/gun_pistol_shot_04.wav" type="AudioStream" id=8]
 

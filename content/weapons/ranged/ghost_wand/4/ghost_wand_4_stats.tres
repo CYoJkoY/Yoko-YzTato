@@ -4,7 +4,7 @@
 [ext_resource path="res://weapons/melee_sounds/whoosh_swish_small_harsh_02.wav" type="AudioStream" id=2]
 [ext_resource path="res://weapons/melee_sounds/whoosh_swish_small_harsh_03.wav" type="AudioStream" id=3]
 [ext_resource path="res://weapons/melee_sounds/whoosh_swish_small_harsh_01.wav" type="AudioStream" id=4]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/ghost_wand/ghost_wand_projectile.tscn" type="PackedScene" id=5]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/ghost_wand/ghost_wand_projectile.tscn" type="PackedScene" id=5]
 
 [resource]
 script = ExtResource( 1 )

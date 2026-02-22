@@ -1,7 +1,7 @@
 [gd_resource type="Resource" load_steps=5 format=2]
 
 [ext_resource path="res://weapons/weapon_stats/ranged_weapon_stats.gd" type="Script" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/fly_axe/fly_axe_projectile.tscn" type="PackedScene" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/projectiles/player/fly_axe/fly_axe_projectile.tscn" type="PackedScene" id=2]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/fly_axe/fly_axe_empty.webp" type="Texture" id=3]
 [ext_resource path="res://entities/units/unit/dodge_sounds/whoosh_swish_small_harsh_02.wav" type="AudioStream" id=4]
 

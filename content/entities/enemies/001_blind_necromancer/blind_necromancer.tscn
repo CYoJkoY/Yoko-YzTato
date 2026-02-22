@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=1]
 [ext_resource path="res://entities/units/movement_behaviors/stay_in_range_from_player_movement_behavior.gd" type="Script" id=2]
@@ -7,7 +7,6 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/001_blind_necromancer/blind_necromancer_stats.tres" type="Resource" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/001_blind_necromancer/blind_necromancer.webp" type="Texture" id=6]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/002_ice_mage_soul/ice_mage_soul.tscn" type="PackedScene" id=7]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/entities/enemies/001_blind_necromancer/blind_necromancer.gd" type="Script" id=8]
 
 [sub_resource type="ShaderMaterial" id=7]
 shader = ExtResource( 1 )
@@ -32,14 +31,9 @@ radius = 15.0
 height = 24.0
 
 [node name="Enemy" instance=ExtResource( 4 )]
-script = ExtResource( 8 )
 outline_material = SubResource( 7 )
-crit_sounds = [  ]
-hurt_sounds = [  ]
-burn_sounds = [  ]
-dodge_sounds = [  ]
 stats = ExtResource( 5 )
-enemy_id = "blindnecromance"
+enemy_id = "yztato_blind_necromancer"
 
 [node name="Animation" parent="." index="0"]
 position = Vector2( 0, -20 )
