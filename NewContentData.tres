@@ -168,7 +168,7 @@
 
 [resource]
 script = ExtResource( 1 )
-my_id = "yztato"
+my_id = ""
 groups_in_all_zones = [  ]
 music_tracks = [  ]
 backgrounds = [ ExtResource( 11 ) ]
@@ -186,6 +186,7 @@ sets = [ ExtResource( 50 ), ExtResource( 52 ), ExtResource( 35 ) ]
 difficulties = [  ]
 icons = [  ]
 title_screen_backgrounds = [  ]
+translations = [  ]
 challenges = [ ExtResource( 216 ), ExtResource( 217 ), ExtResource( 218 ), ExtResource( 219 ), ExtResource( 220 ), ExtResource( 76 ), ExtResource( 92 ), ExtResource( 221 ), ExtResource( 222 ), ExtResource( 224 ), ExtResource( 223 ), ExtResource( 226 ) ]
 zones = [  ]
 tracked_items = {
