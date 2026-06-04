@@ -11,5 +11,5 @@ dest_files=[ "res://.import/huangwuwange.ogg-59cf8a9f0d5e266028b9ea8c180132d1.og
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

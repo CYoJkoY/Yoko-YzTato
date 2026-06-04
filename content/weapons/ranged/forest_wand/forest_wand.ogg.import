@@ -11,5 +11,5 @@ dest_files=[ "res://.import/forest_wand.ogg-541da76c28f82952b1fbdd095813085e.ogg
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

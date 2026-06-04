@@ -14,8 +14,8 @@ dest_files=[ "res://.import/ice_bait_icon.webp-03f3c3a34873685638928e0d77cb9d8c.
 
 [params]
 
-compress/mode=1
-compress/lossy_quality=0.8
+compress/mode=0
+compress/lossy_quality=0.7
 compress/hdr_mode=0
 compress/bptc_ldr=0
 compress/normal_map=0
@@ -31,5 +31,5 @@ process/invert_color=false
 process/normal_map_invert_y=false
 stream=false
 size_limit=0
-detect_3d=false
+detect_3d=true
 svg/scale=1.0

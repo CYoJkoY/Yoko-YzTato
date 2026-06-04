@@ -11,5 +11,5 @@ dest_files=[ "res://.import/banbochangdi.ogg-7e78f6ccedb9e8d4e6abca1bb162c6da.og
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

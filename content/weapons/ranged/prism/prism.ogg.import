@@ -11,5 +11,5 @@ dest_files=[ "res://.import/prism.ogg-bb9371d16aa4d726bd2725c656addd08.oggstr" ]
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

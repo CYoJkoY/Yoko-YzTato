@@ -11,5 +11,5 @@ dest_files=[ "res://.import/chisefengbao.ogg-adeed9c2767a937689510adccde83030.og
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0

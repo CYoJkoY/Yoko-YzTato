@@ -11,5 +11,5 @@ dest_files=[ "res://.import/chuchanyi.ogg-bf9053ae375fc8d402c0c84ae4bd98f2.oggst
 
 [params]
 
-loop=false
+loop=true
 loop_offset=0
