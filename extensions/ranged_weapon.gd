@@ -21,16 +21,12 @@ var wait_until_return: bool = true
 # EFFECT : gain_stat_when_killed_single_scaling
 var gain_stat_when_killed_single_scaling_killed_count: Dictionary = {}
 
-# EFFECT : leave_fire
-var _burning_particles_manager = null
-
 # EFFECT : vine_trap
 onready var _entity_spawner = get_tree().current_scene.get_node("EntitySpawner")
 
 # =========================== Extension =========================== #
 func _ready():
     _yztato_boomerang_ready()
-    _yztato_leave_fire_ready()
 
 func shoot() -> void:
     if is_boomerang:
@@ -50,38 +46,23 @@ func on_projectile_shot(projectile: Node2D) -> void:
 
 func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox) -> void:
     .on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
-    if thing_hit._burning != null: _yztato_leave_fire(thing_hit, player_index)
-    _yztato_multi_hit(thing_hit, damage_dealt, player_index)
-    _yztato_vine_trap(thing_hit, player_index)
+    if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
+    WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
+    WeaponService.yz_vine_trap(effects, weapon_pos, _entity_spawner, thing_hit, player_index)
     _yztato_chal_on_weapon_hit_something(hitbox)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
-    _yztato_gain_stat_when_killed_scaling_single()
-    _yztato_upgrade_when_killed_enemies()
+    WeaponService.yz_gain_stat_when_killed_scaling_single(effects, gain_stat_when_killed_single_scaling_killed_count, _parent, player_index)
+    WeaponService.yz_upgrade_when_killed_enemies(effects, _enemies_killed_this_wave_count, weapon_pos, player_index)
 
 func should_shoot() -> bool:
     var should_shoot: bool =.should_shoot()
-    should_shoot = _yztato_can_attack_while_moving(should_shoot)
+    should_shoot = WeaponService.yz_can_attack_while_moving(effects, _parent, should_shoot)
     
     return should_shoot
 
 # =========================== Custom =========================== #
-func _yztato_upgrade_when_killed_enemies() -> void:
-    for effect in effects:
-        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
-        if _enemies_killed_this_wave_count % effect.value != 0: continue
-    
-        var target_weapon_id_hash: int = effect.key_hash
-
-        if !old_projectiles.empty():
-            for projectile in old_projectiles:
-                if is_instance_valid(projectile):
-                    projectile.queue_free()
-
-        _parent.yz_change_weapon(weapon_pos, target_weapon_id_hash)
-        break
-
 func _yztato_upgrade_on_projectile_shot(projectile: Node2D) -> void:
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
@@ -163,107 +144,6 @@ func _yztato_boomerang_shoot() -> void:
 
     if original_stats:
         current_stats = original_stats
-
-func _yztato_leave_fire_ready() -> void:
-    _burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
-    get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
-
-func _yztato_leave_fire(thing_hit: Node, player_index: int) -> void:
-    for fire in effects:
-        if fire.get_id() != "yztato_leave_fire": continue
-        
-        var new_fire = _burning_particles_manager.get_burning_particle()
-        if new_fire == null: return
-        
-        call_deferred("yz_activate_burning_particle", new_fire,
-        thing_hit.global_position, thing_hit._burning,
-        fire.scale, fire.duration)
-        return
-
-    var effect_leave_fire: Array = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
-    if !effect_leave_fire.empty():
-        for fire in effect_leave_fire:
-            var new_fire = _burning_particles_manager.get_burning_particle()
-            if new_fire != null:
-                call_deferred("yz_activate_burning_particle", new_fire,
-                thing_hit.global_position, thing_hit._burning,
-                fire[3], fire[2])
-
-func _yztato_gain_stat_when_killed_scaling_single() -> void:
-    for effect_index in effects.size():
-        var effect = effects[effect_index]
-        if effect.get_id() != "yztato_gain_stat_when_killed_single_scaling": continue
-
-        gain_stat_when_killed_single_scaling_killed_count[effect_index] = gain_stat_when_killed_single_scaling_killed_count.get(effect_index, 0) + 1
-        var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int
-        if scaling_value <= 0 or gain_stat_when_killed_single_scaling_killed_count[effect_index] % scaling_value != 0: continue
-
-        gain_stat_when_killed_single_scaling_killed_count[effect_index] = 0 # For dynamic scaling_value
-        RunData.add_stat(effect.stat_hash, effect.stat_nb, player_index)
-        RunData.ncl_add_effect_tracking_value(effect.tracking_key_hash, effect.stat_nb, player_index)
-
-        # Update when first add hit_protection
-        if effect.stat_hash == Keys.hit_protection_hash:
-            _parent._hit_protection += effect.stat_nb
-
-func _yztato_multi_hit(thing_hit: Node, damage_dealt: int, player_index: int) -> void:
-    # Check weapon effects first
-    for effect in effects:
-        if effect.get_id() == "yztato_multi_hit":
-            for _i in effect.value:
-                var args = TakeDamageArgs.new(player_index)
-                var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
-                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
-            return
-    
-    # Check player effects
-    var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
-    if !effect_multi_hit.empty():
-        for effect in effect_multi_hit:
-            for _i in effect[0]:
-                var args = TakeDamageArgs.new(player_index)
-                var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
-                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
-
-func _yztato_vine_trap(thing_hit: Node, player_index: int) -> void:
-    # Check weapon effects first
-    for effect in effects:
-        if effect.get_id() == "yztato_vine_trap":
-            var count: int = effect.trap_count
-            var chance: float = effect.chance / 100.0
-
-            if Utils.get_chance_success(chance):
-                var vine_trap = effect
-                for _i in count:
-                    var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-                    var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-                    vine_trap.weapon_pos = weapon_pos
-                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
-            return
-
-    # Check player effects
-    var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
-    if !vine_trap_effects.empty():
-        for effect_data in vine_trap_effects:
-            var count: int = effect_data[0]
-            var chance: float = effect_data[1] / 100.0
-            
-            if Utils.get_chance_success(chance):
-                var vine_trap = effect_data[2]
-                for _i in count:
-                    var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-                    var queue = _entity_spawner.queues_to_spawn_structures[player_index]
-                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
-
-func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-    if !should_shoot: return false
-
-    for effect in effects:
-        if effect.get_id() == "yztato_can_attack_while_moving":
-            should_shoot = _parent._current_movement == Vector2.ZERO
-            break
-
-    return should_shoot
 
 func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
     ### sudden_misfortune ###

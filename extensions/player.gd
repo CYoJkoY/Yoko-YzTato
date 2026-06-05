@@ -128,7 +128,6 @@ func _yztato_temp_stats_per_interval_reset_on_hit(result: Array) -> void:
 
         _hit_protection -= _remove_temp_stats_on_hit[stat]
 
-
 func _yztato_heal_on_damage_taken(result: Array) -> void:
     var heal_on_damage_taken: Array = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)
     _last_damage_taken = result[1]
@@ -194,21 +193,3 @@ func yz_on_blood_rage_timer_timeout() -> void:
 
     for effect in blood_rage_effects:
         yz_trigger_blood_rage(effect[2], effect[1])
-
-func yz_change_weapon(weapon_position: int, new_weapon_id_hash: int) -> void:
-    if weapon_position < 0 or weapon_position >= current_weapons.size(): return
-    
-    var old_weapon = current_weapons[weapon_position]
-    if old_weapon == null: return
-    
-    RunData.remove_weapon_by_index(weapon_position, player_index)
-    
-    current_weapons.erase(old_weapon)
-    
-    old_weapon.queue_free()
-    
-    var weapon_data = ItemService.get_element(ItemService.weapons, new_weapon_id_hash)
-    if weapon_data == null: return
-    
-    RunData.add_weapon(weapon_data, player_index)
-    call_deferred("add_weapon", weapon_data, weapon_position)
