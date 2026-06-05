@@ -33,7 +33,7 @@ func _on_Area2D_body_exited(body: Node):
     if enemies_in_range.has(body): enemies_in_range.erase(body)
 
 func _on_DurationTimer_timeout():
-    if !dead: die()
+    if !_pending_die: deferred_die()
 
 func _on_AttackTimer_timeout():
     if enemies_in_range.empty(): return
