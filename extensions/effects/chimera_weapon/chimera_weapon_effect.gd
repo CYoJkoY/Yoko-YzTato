@@ -47,7 +47,6 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
             set.deserialize_and_merge(texture_set)
             chimera_texture_sets.append(set)
 
-
 # =========================== Custom =========================== #
 func _yztato_chimera_get_text(player_index: int) -> String:
     var text = Text.text("EFFECT_YZTATO_CHIMERA_FRONT", [str(value)])
@@ -57,8 +56,10 @@ func _yztato_chimera_get_text(player_index: int) -> String:
 
 # =========================== Method =========================== #
 func get_projectile_text(stats: Resource, player_index: int) -> String:
-    var percent_dmg_bonus: float = 1 + Utils.get_stat(Keys.stat_percent_damage_hash, player_index) / 100.0
-    var true_damage: float = percent_dmg_bonus * (Utils.ncl_get_scaling_stats_dmg(stats.scaling_stats, player_index) + stats.damage)
-    var damage: int = max(1, round(true_damage)) as int
-    var text: String = Utils.ncl_get_dmg_text_with_scaling_stats(damage, stats.scaling_stats, stats.damage)
+    var text: String = Utils.ncl_get_dmg_text_with_scaling_stats(
+        stats.damage, stats.scaling_stats,
+        {
+            "player_index": player_index
+        }
+    )
     return text
