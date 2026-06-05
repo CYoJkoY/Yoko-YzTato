@@ -38,6 +38,8 @@ func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
 
 # =========================== Method =========================== #
 func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
+    if !is_instance_valid(thing_hit): return
+
     # Check weapon effects first
     for effect in effects:
         if effect.get_id() != "yztato_multi_hit": continue
@@ -57,7 +59,9 @@ func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt
             RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 
 func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
-    if entity_spawner == null: entity_spawner = Utils.get_scene_node()._entity_spawner
+    if !is_instance_valid(entity_spawner): entity_spawner = Utils.get_scene_node()._entity_spawner
+
+    if !is_instance_valid(thing_hit): return
 
     var spawn_pos: Vector2 = thing_hit.global_position
 
