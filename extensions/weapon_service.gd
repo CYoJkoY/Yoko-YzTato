@@ -4,9 +4,6 @@ extends "res://singletons/weapon_service.gd"
 var _burning_particles_manager: Node = null
 
 # =========================== Extension =========================== #
-func _ready() -> void:
-    _yztato_leave_fire_ready()
-
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
     var new_stats: Array =._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
     new_stats = _yztato_scaling_damage(new_stats, player_index)
@@ -14,10 +11,6 @@ func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int)
     return new_stats
 
 # =========================== Custom =========================== #
-func _yztato_leave_fire_ready() -> void:
-    _burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
-    get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
-
 func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
     var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
     if damage_scaling_effects.empty(): return new_stats
@@ -76,7 +69,6 @@ func yz_vine_trap(effects: Array, weapon_pos: int, _entity_spawner: EntitySpawne
             var queue = _entity_spawner.queues_to_spawn_structures[player_index]
             vine_trap.weapon_pos = weapon_pos
             queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
-        return
 
     # Check player effects
     var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
@@ -94,7 +86,7 @@ func yz_vine_trap(effects: Array, weapon_pos: int, _entity_spawner: EntitySpawne
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
     if _burning_particles_manager == null:
-        _burning_particles_manager = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
+        _burning_particles_manager = load("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
         get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
 
     # Check effects first
@@ -109,7 +101,6 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
             thing_hit.global_position, thing_hit._burning,
             fire.scale, fire.duration
         )
-        return
 
     # Check player effects
     var effect_leave_fire = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)

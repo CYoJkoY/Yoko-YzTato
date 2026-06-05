@@ -4,9 +4,6 @@ onready var node_collision: CollisionShape2D = $"Sprite/Hitbox/Collision"
 onready var node_range: Area2D = $"Range"
 onready var node_hit_box: Hitbox = $"Sprite/Hitbox"
 
-var _cached_projectile_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
-var _cached_base_stats: RangedWeaponStats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres")
-
 # blade_storm
 onready var YZ_is_blade_storm: bool = false
 
@@ -154,17 +151,6 @@ func _yztato_blade_storm_ready() -> void:
     if !node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_erase"):
         node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_erase")
 
-func _yztato_can_attack_while_moving(should_shoot: bool) -> bool:
-    if !should_shoot: return false
-
-    for effect in effects:
-        if effect.get_id() != "yztato_can_attack_while_moving": continue
-
-        should_shoot = _parent._current_movement == Vector2.ZERO
-        break
-
-    return should_shoot
-
 # =========================== Method =========================== #
 func yz_connect_melee_signals(effect_type: String) -> void:
     node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
@@ -223,13 +209,13 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, 
         var num: int = melee_bounces.size()
 
         if bounced_projectile_stats == null:
-            bounced_projectile_stats = _cached_base_stats.duplicate()
-            bounced_projectile_scene = _cached_projectile_scene.duplicate()
+            bounced_projectile_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres").duplicate()
+            bounced_projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
             bounced_projectile_stats.can_bounce = false
             bounced_projectile_stats.piercing = 99
             bounced_projectile_stats.max_range = Utils.LARGE_NUMBER
             bounced_projectile_stats.projectile_speed = 2000
-            bounced_projectile_stats.projectile_scene = _cached_projectile_scene
+            bounced_projectile_stats.projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
 
             melee_bounce_args = WeaponServiceSpawnProjectileArgs.new()
             melee_bounce_args.from_player_index = player_index
@@ -317,7 +303,7 @@ func yz_create_sword_projectile(target: Node) -> void:
     var direction_to_target: float = (target.global_position - project_position).angle()
 
     if sword_array_stats == null:
-        sword_array_stats = _cached_base_stats.duplicate()
+        sword_array_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres").duplicate()
         sword_array_stats.damage = current_stats.damage
         sword_array_stats.crit_chance = current_stats.crit_chance
         sword_array_stats.crit_damage = current_stats.crit_damage
@@ -326,7 +312,7 @@ func yz_create_sword_projectile(target: Node) -> void:
         sword_array_stats.max_range = 300
         sword_array_stats.can_bounce = false
 
-        var modified_scene: PackedScene = _cached_projectile_scene.duplicate()
+        var modified_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
         modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/sword_array/sword_array.webp")
         sword_array_stats.projectile_scene = modified_scene
 
