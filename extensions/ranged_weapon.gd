@@ -144,7 +144,7 @@ func _yztato_boomerang_shoot() -> void:
 
     if original_stats:
         current_stats = original_stats
-
+ 
 func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
     ### sudden_misfortune ###
     if hitbox == null: return
