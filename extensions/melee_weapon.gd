@@ -4,10 +4,10 @@ onready var node_collision: CollisionShape2D = $"Sprite/Hitbox/Collision"
 onready var node_range: Area2D = $"Range"
 onready var node_hit_box: Hitbox = $"Sprite/Hitbox"
 
-# blade_storm
+# EFFECT: blade_storm
 onready var YZ_is_blade_storm: bool = false
 
-# flying_sword
+# EFFECT: flying_sword
 var YZ_is_flying_sword: bool = false
 var can_attack: bool = false
 var can_array: bool = false
@@ -18,17 +18,14 @@ var _current_locked_target: Node = null
 
 var sword_array_stats: RangedWeaponStats = null
 
-# melee_bounce
+# EFFECT: melee_bounce
 var bounced_projectile_stats: RangedWeaponStats = null
 var bounced_projectile_scene: PackedScene = null
 var melee_bounce_args: WeaponServiceSpawnProjectileArgs = null
 var bounced_projectile_shader: ShaderMaterial = load("res://resources/shaders/hue_shift_shadermat.tres")
 
-# gain_stat_when_killed_single_scaling
+# EFFECT: gain_stat_when_killed_single_scaling
 var gain_stat_when_killed_single_scaling_killed_count: Dictionary = {}
-
-# vine_trap
-onready var _entity_spawner: Node = get_tree().current_scene.get_node("EntitySpawner")
 
 # =========================== Extension =========================== #
 func _ready() -> void:
@@ -48,7 +45,7 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
     .on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
     if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
     WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
-    WeaponService.yz_vine_trap(effects, weapon_pos, _entity_spawner, thing_hit, player_index)
+    WeaponService.yz_vine_trap(effects, weapon_pos, thing_hit, player_index)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
@@ -125,8 +122,7 @@ func _yztato_flying_sword(player_index: int) -> void:
             var player_level: int = RunData.players_data[player_index].current_level
             yz_process_sword_array_mode(player_level)
             yz_process_attack_mode()
-        [true, false]:
-            yz_process_attack_mode()
+        [true, false]: yz_process_attack_mode()
         [false, true]:
             var player_level: int = RunData.players_data[player_index].current_level
             yz_process_sword_array_mode(player_level)

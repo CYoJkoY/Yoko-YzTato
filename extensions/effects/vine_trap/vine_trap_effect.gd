@@ -3,8 +3,6 @@ extends StructureEffect
 export(int) var trap_count: int = 1
 export(int) var chance: int = 100
 
-var col_b: String = "[/color]"
-
 var weapon_pos: int = -1
 
 # =========================== Extension =========================== #

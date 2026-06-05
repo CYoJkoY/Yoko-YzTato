@@ -1,7 +1,10 @@
 extends "res://singletons/weapon_service.gd"
 
-# leave_fire
+# EFFECT: leave_fire
 var _burning_particles_manager: Node = null
+
+# EFFECT: vine_trap
+var entity_spawner: EntitySpawner = null
 
 # =========================== Extension =========================== #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
@@ -44,7 +47,7 @@ func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt
             var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
             RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
         return
-    
+
     # Check player effects
     var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
     for effect in effect_multi_hit:
@@ -53,7 +56,11 @@ func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt
             var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
             RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 
-func yz_vine_trap(effects: Array, weapon_pos: int, _entity_spawner: EntitySpawner, thing_hit: Node, player_index: int) -> void:
+func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
+    if entity_spawner == null: entity_spawner = Utils.get_scene_node()._entity_spawner
+
+    var spawn_pos: Vector2 = thing_hit.global_position
+
     # Check weapon effects first
     for effect in effects:
         if effect.get_id() != "yztato_vine_trap": continue
@@ -63,10 +70,10 @@ func yz_vine_trap(effects: Array, weapon_pos: int, _entity_spawner: EntitySpawne
 
         if !Utils.get_chance_success(chance): continue
 
-        var vine_trap = effect
+        var vine_trap: StructureEffect = effect
         for _i in count:
-            var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-            var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 20)
+            var queue = entity_spawner.queues_to_spawn_structures[player_index]
             vine_trap.weapon_pos = weapon_pos
             queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
@@ -78,10 +85,10 @@ func yz_vine_trap(effects: Array, weapon_pos: int, _entity_spawner: EntitySpawne
         
         if !Utils.get_chance_success(chance): continue
 
-        var vine_trap = effect_data[2]
+        var vine_trap: StructureEffect = effect_data[2]
         for _i in count:
-            var pos = _entity_spawner.get_spawn_pos_in_area(thing_hit.global_position, 20)
-            var queue = _entity_spawner.queues_to_spawn_structures[player_index]
+            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 20)
+            var queue = entity_spawner.queues_to_spawn_structures[player_index]
             queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:

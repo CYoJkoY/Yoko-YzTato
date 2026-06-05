@@ -1,16 +1,16 @@
 extends RangedWeapon
 
-# EFFECT : upgrade_killed_enemies
+# EFFECT: upgrade_killed_enemies
 var effect_kill_count: Dictionary = {}
 var connection_ids = {}
 var old_projectiles: Array = []
 
-# EFFECT : chimera_weapon_effect
+# EFFECT: chimera_weapon_effect
 var current_chimera_projs: Array = []
 var current_chimera_projs_textures_paths: Array = []
 var current_chimera_texture_sets: Array = []
 
-# EFFECT : boomerang_weapon_effect
+# EFFECT: boomerang_weapon_effect
 var active_boomerangs: Array = []
 var max_damage_mul: float = 0.0
 var is_boomerang: bool = false
@@ -18,11 +18,8 @@ var is_returning: bool = false
 var knockback_only_back: bool = false
 var wait_until_return: bool = true
 
-# EFFECT : gain_stat_when_killed_single_scaling
+# EFFECT: gain_stat_when_killed_single_scaling
 var gain_stat_when_killed_single_scaling_killed_count: Dictionary = {}
-
-# EFFECT : vine_trap
-onready var _entity_spawner = get_tree().current_scene.get_node("EntitySpawner")
 
 # =========================== Extension =========================== #
 func _ready():
@@ -48,7 +45,7 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
     .on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
     if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
     WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
-    WeaponService.yz_vine_trap(effects, weapon_pos, _entity_spawner, thing_hit, player_index)
+    WeaponService.yz_vine_trap(effects, weapon_pos, thing_hit, player_index)
     _yztato_chal_on_weapon_hit_something(hitbox)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:

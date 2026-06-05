@@ -9,29 +9,31 @@ var enemies_in_range: Array = []
 var weapon_pos: int = -1
 
 # =========================== Extension =========================== #
-func _ready():
+func set_data(data: Resource) -> void:
+    .set_data(data)
+    _fantasy_set_data(data)
+    
+# =========================== Custom =========================== #
+func _fantasy_set_data(data: Resource) -> void:
+    weapon_pos = data.weapon_pos
+
     duration_timer.wait_time = time
     attack_timer.wait_time = stats.cooldown * 0.05
 
     duration_timer.start()
     attack_timer.start()
 
-func set_data(data: Resource) -> void:
-    .set_data(data)
-    weapon_pos = data.weapon_pos
-
-# =========================== Custom =========================== #
+# =========================== Method =========================== #
 func _on_Area2D_body_entered(body: Node):
-    if body is Enemy and not body.dead:
-        if !enemies_in_range.has(body):
-            enemies_in_range.append(body)
+    if body.dead: return
+
+    if !enemies_in_range.has(body): enemies_in_range.append(body)
 
 func _on_Area2D_body_exited(body: Node):
-    if enemies_in_range.has(body):
-        enemies_in_range.erase(body)
+    if enemies_in_range.has(body): enemies_in_range.erase(body)
 
 func _on_DurationTimer_timeout():
-    if !dead: die()
+    if !_pending_die: deferred_die()
 
 func _on_AttackTimer_timeout(_delta: float):
     if enemies_in_range.empty(): return
