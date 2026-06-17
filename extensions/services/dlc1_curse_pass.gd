@@ -1,28 +1,39 @@
-extends "res://dlcs/dlc_1/dlc_1_data.gd"
+extends Reference
 
 # =========================== Extension =========================== #
-func curse_item(item_data: ItemParentData, player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
-    if item_data.is_cursed: return item_data
+func apply(
+    original_item: ItemParentData,
+    cursed_item: ItemParentData,
+    player_index: int,
+    turn_randomization_off: bool = false,
+    min_modifier: float = 0.0,
+    dlc_1_data: Object = null
+) -> ItemParentData:
+    if original_item == null or cursed_item == null or dlc_1_data == null:
+        return cursed_item
+    if !has_effect_yztato(original_item.effects):
+        return cursed_item
 
-    var new_item_data: ItemParentData =.curse_item(item_data, player_index, turn_randomization_off, min_modifier)
-    if has_effect_yztato(item_data.effects):
-        new_item_data = _yztato_curse_item(new_item_data, player_index, turn_randomization_off, min_modifier)
-    return new_item_data
+    return _yztato_curse_item(original_item, cursed_item, player_index, turn_randomization_off, min_modifier, dlc_1_data)
     
 # =========================== Custom =========================== #
-func _yztato_curse_item(item_data: ItemParentData, _player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
-    var max_effect_modifier: float = 0.0
-    var new_item_data: ItemParentData = item_data.duplicate()
+func _yztato_curse_item(
+    _original_item: ItemParentData,
+    cursed_item: ItemParentData,
+    _player_index: int,
+    turn_randomization_off: bool,
+    min_modifier: float,
+    dlc_1_data: Object
+) -> ItemParentData:
+    var new_item_data: ItemParentData = cursed_item.duplicate()
     var new_effects: Array = []
 
-    for effect in item_data.effects:
+    for effect in cursed_item.effects:
         if !is_effect_yztato(effect):
             new_effects.append(effect)
             continue
 
-        var effect_modifier: float = _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
-        max_effect_modifier = max(max_effect_modifier, effect_modifier)
-
+        var effect_modifier: float = dlc_1_data._get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
         var new_effect: Effect = effect.duplicate()
         var id: String = new_effect.get_id()
         var key: int = new_effect.key_hash
