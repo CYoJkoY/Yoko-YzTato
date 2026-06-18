@@ -37,6 +37,10 @@ func take_damage(value: int, args: TakeDamageArgs) -> Array:
     
     return result
 
+func _on_LoseHealthTimer_timeout() -> void:
+    if _yztato_lose_hp_per_second_min_hp(): return
+    ._on_LoseHealthTimer_timeout()
+
 func _on_OneSecondTimer_timeout() -> void:
     ._on_OneSecondTimer_timeout()
     _yztato_temp_stats_per_interval()
@@ -158,6 +162,23 @@ func _yztato_chal_on_consumable_picked_up() -> void:
     var player_data = RunData.players_data[player_index]
     consumables_picked_up_this_wave = player_data.consumables_picked_up_this_run - consumables_picked_up_last_wave
     ChallengeService.try_complete_challenge(Utils.chal_only_in_hash, consumables_picked_up_this_wave)
+
+func _yztato_lose_hp_per_second_min_hp() -> bool:
+    var lose_hp_per_second_min_hp: int = RunData.get_player_effect(Utils.yztato_lose_hp_per_second_min_hp_hash, player_index)
+    if lose_hp_per_second_min_hp <= 0: return false
+
+    _take_damage_args.dodgeable = false
+    _take_damage_args.armor_applied = false
+    _take_damage_args.bypass_invincibility = true
+    _take_damage_args.from = self
+    var lose_hp_per_second: int = RunData.get_player_effect(Keys.lose_hp_per_second_hash, player_index)
+    if current_stats.health - lose_hp_per_second <= lose_hp_per_second_min_hp: lose_hp_per_second = current_stats.health - lose_hp_per_second_min_hp
+
+    if lose_hp_per_second > 0: var _dmg_taken: Array = take_damage(lose_hp_per_second, _take_damage_args)
+    elif lose_hp_per_second == 0: pass
+    else: var _healed: int = on_healing_effect(-lose_hp_per_second)
+    
+    return true
 
 # =========================== Method =========================== #
 func yz_on_enemy_killed_reset_blood_rage() -> void:

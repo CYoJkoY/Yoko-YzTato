@@ -48,6 +48,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_damage_scaling_hash: [],
             Utils.yztato_random_curse_on_reroll_hash: [],
             Utils.yztato_extrusion_attack_hash: 0,
+            Utils.yztato_lose_hp_per_second_min_hp_hash: 0,
             
         }
 

@@ -29,6 +29,7 @@ var yztato_extra_enemies_next_waves_hash: int = Keys.generate_hash("yztato_extra
 var yztato_damage_scaling_hash: int = Keys.generate_hash("yztato_damage_scaling")
 var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_curse_on_reroll")
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
+var yztato_lose_hp_per_second_min_hp_hash: int = Keys.generate_hash("yztato_lose_hp_per_second_min_hp")
 
 # Tracking Items
 var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")
@@ -53,7 +54,7 @@ func is_manual_aim(player_index: int) -> bool:
 
 # =========================== Custom =========================== #
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
-    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
-    if blade_storm != 0:
-        is_manual = false
+    var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
+    if is_blade_storm: is_manual = false
+
     return is_manual
