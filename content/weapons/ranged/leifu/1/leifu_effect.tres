@@ -13,4 +13,4 @@ storage_method = 0
 effect_sign = 3
 custom_args = [  ]
 weapon_stats = ExtResource( 1 )
-auto_target_enemy = true
+auto_target_enemy = false

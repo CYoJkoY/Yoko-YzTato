@@ -30,6 +30,7 @@ var yztato_damage_scaling_hash: int = Keys.generate_hash("yztato_damage_scaling"
 var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_curse_on_reroll")
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
 var yztato_lose_hp_per_second_min_hp_hash: int = Keys.generate_hash("yztato_lose_hp_per_second_min_hp")
+var yztato_summon_lightning_hash: int = Keys.generate_hash("yztato_summon_lightning")
 
 # Tracking Items
 var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")
