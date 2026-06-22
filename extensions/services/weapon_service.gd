@@ -160,3 +160,40 @@ func yz_can_attack_while_moving(effects: Array, player: Player, should_shoot: bo
             break
 
     return should_shoot
+
+func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
+    if !is_instance_valid(entity_spawner): entity_spawner = Utils.get_scene_node()._entity_spawner
+
+    if !is_instance_valid(thing_hit): return
+
+    var spawn_pos: Vector2 = thing_hit.global_position
+
+    # Check weapon effects first
+    for effect in effects:
+        if effect.get_id() != "yztato_summon_lightning": continue
+
+        var count: int = effect.lightning_count
+        var chance: float = effect.chance / 100.0
+
+        if !Utils.get_chance_success(chance): continue
+
+        var lightning: StructureEffect = effect
+        for _i in count:
+            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 30)
+            var queue = entity_spawner.queues_to_spawn_structures[player_index]
+            lightning.weapon_pos = weapon_pos
+            queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+
+    # Check player effects
+    var summon_lightning_effects = RunData.get_player_effect(Utils.yztato_summon_lightning_hash, player_index)
+    for effect_data in summon_lightning_effects:
+        var count: int = effect_data[0]
+        var chance: float = effect_data[1] / 100.0
+        
+        if !Utils.get_chance_success(chance): continue
+
+        var lightning: StructureEffect = effect_data[2]
+        for _i in count:
+            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 30)
+            var queue = entity_spawner.queues_to_spawn_structures[player_index]
+            queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])

@@ -1,8 +1,8 @@
 [gd_resource type="Resource" load_steps=9 format=2]
 
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/vine_trap/vine_trap_effect.gd" type="Script" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.tscn" type="PackedScene" id=2]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/vine_trap/vine_trap_stats.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/summon_lightning/summon_lightning_effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/summon_lightning/summon_lightning.tscn" type="PackedScene" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/1/leifu_effect_1_stats.tres" type="Resource" id=3]
 [ext_resource path="res://items/global/custom_arg.gd" type="Script" id=4]
 
 [sub_resource type="Resource" id=1]
@@ -40,7 +40,7 @@ arg_key = ""
 [resource]
 script = ExtResource( 1 )
 key = ""
-text_key = "EFFECT_YZTATO_VINE_TRAP"
+text_key = "EFFECT_YZTATO_SUMMON_LIGHTNING"
 value = 0
 custom_key = ""
 storage_method = 0
@@ -54,5 +54,5 @@ spawn_in_center = -1
 spawn_around_player = -1
 can_be_grouped = true
 is_pet = false
-trap_count = 1
-chance = 100
+lightning_count = 1
+chance = 5

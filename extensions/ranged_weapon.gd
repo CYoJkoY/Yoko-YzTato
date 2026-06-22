@@ -46,6 +46,7 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
     if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
     WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
     WeaponService.yz_vine_trap(effects, weapon_pos, thing_hit, player_index)
+    WeaponService.yz_summon_lightning(effects, weapon_pos, thing_hit, player_index)
     _yztato_chal_on_weapon_hit_something(hitbox)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
@@ -66,8 +67,8 @@ func _yztato_upgrade_on_projectile_shot(projectile: Node2D) -> void:
 
         old_projectiles.append(projectile)
 
-        if !projectile.is_connected("has_stopped", self , "yz_on_projectile_stopped"):
-            projectile.connect("has_stopped", self , "yz_on_projectile_stopped")
+        if !projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
+            projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
 
     return
 
@@ -100,8 +101,8 @@ func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
         _hitbox.damage *= 1 + max_damage_mul
         if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
 
-        if !projectile.is_connected("returned_to_player", self , "yz_on_projectile_returned"):
-            projectile.connect("returned_to_player", self , "yz_on_projectile_returned")
+        if !projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
+            projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
 
 func _yztato_boomerang_shoot() -> void:
     _nb_shots_taken += 1

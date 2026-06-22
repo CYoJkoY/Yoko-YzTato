@@ -2,7 +2,7 @@
 
 [ext_resource path="res://items/global/weapon_data.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/4/leifu_4_data.tres" type="Resource" id=2]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/3/leifu_3_effect.tres" type="Resource" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/3/leifu_3_effect_1.tres" type="Resource" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/3/leifu_3_stats.tres" type="Resource" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/leifu.tscn" type="PackedScene" id=5]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/leifu/leifu_icon.webp" type="Texture" id=6]

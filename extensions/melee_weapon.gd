@@ -46,6 +46,7 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
     if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
     WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
     WeaponService.yz_vine_trap(effects, weapon_pos, thing_hit, player_index)
+    WeaponService.yz_summon_lightning(effects, weapon_pos, thing_hit, player_index)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
@@ -144,31 +145,31 @@ func _yztato_blade_storm_ready() -> void:
 
     node_hit_box.monitoring = true
     node_hit_box.collision_mask = Utils.ENEMY_PROJECTILES_BIT
-    if !node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_erase"):
-        node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_erase")
+    if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"):
+        node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_erase")
 
 # =========================== Method =========================== #
 func yz_connect_melee_signals(effect_type: String) -> void:
     node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
     
-    if !node_range.is_connected("area_entered", self , "yz_on_Range_area_entered"):
-        node_range.connect("area_entered", self , "yz_on_Range_area_entered")
-    if !node_range.is_connected("area_exited", self , "yz_on_Range_area_exited"):
-        node_range.connect("area_exited", self , "yz_on_Range_area_exited")
+    if !node_range.is_connected("area_entered", self, "yz_on_Range_area_entered"):
+        node_range.connect("area_entered", self, "yz_on_Range_area_entered")
+    if !node_range.is_connected("area_exited", self, "yz_on_Range_area_exited"):
+        node_range.connect("area_exited", self, "yz_on_Range_area_exited")
     
     node_hit_box.monitoring = true
     node_hit_box.collision_mask += Utils.ENEMY_PROJECTILES_BIT
     
     match effect_type:
         "erase":
-            if node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_erase"): return
+            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"): return
 
-            node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_erase")
+            node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_erase")
         "bounce":
             bounced_projectile_shader.set_shader_param("hue", 0.55)
             bounced_projectile_shader.set_shader_param("desaturation", 0.0)
 
-            if node_hit_box.is_connected("area_entered", self , "yz_on_Hitbox_area_entered_bounce"): return
+            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"): return
             
             var tracking_key_hashes: Array = []
             var bounce_values: Array = []
@@ -183,7 +184,7 @@ func yz_connect_melee_signals(effect_type: String) -> void:
                 tracking_key_hashes.append(effect.key_hash) # tracking_key_hash
                 bounce_values.append(effect.value)
 
-            node_hit_box.connect("area_entered", self , "yz_on_Hitbox_area_entered_bounce", [tracking_key_hashes, bounce_values, node_hit_box])
+            node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_bounce", [tracking_key_hashes, bounce_values, node_hit_box])
 
 func yz_on_Range_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile: _targets_in_range.append(area)
@@ -192,7 +193,7 @@ func yz_on_Range_area_exited(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile: _targets_in_range.erase(area)
 
 func yz_on_Hitbox_area_entered_erase(area: Area2D) -> void:
-    if area.get_parent() is EnemyProjectile: area.hit_something(self , 0)
+    if area.get_parent() is EnemyProjectile: area.hit_something(self, 0)
 
 func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, melee_bounces: Array, hitbox: Hitbox) -> void:
     if area.get_parent() is EnemyProjectile:
@@ -219,7 +220,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, 
 
         bounced_projectile_scene._bundled["variants"][2] = original_texture
         bounced_projectile_stats.projectile_scene = bounced_projectile_scene
-        area.hit_something(self , 0)
+        area.hit_something(self, 0)
 
         var new_projectiles: Array = []
 
@@ -231,7 +232,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, 
                 original_position,
                 bounced_projectile_stats,
                 direction,
-                self ,
+                self,
                 melee_bounce_args
             )
             
@@ -240,8 +241,8 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, 
         for projectile in new_projectiles:
             projectile.call_deferred("set_sprite_material", bounced_projectile_shader)
 
-            if !projectile.is_connected("hit_something", self , "on_weapon_hit_something"):
-                projectile.connect("hit_something", self , "on_weapon_hit_something", [projectile._hitbox])
+            if !projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
+                projectile.connect("hit_something", self, "on_weapon_hit_something", [projectile._hitbox])
 
         ### counterattack ###
         if hitbox == null: return
@@ -316,12 +317,12 @@ func yz_create_sword_projectile(target: Node) -> void:
         project_position,
         sword_array_stats,
         direction_to_target,
-        self ,
+        self,
         WeaponServiceSpawnProjectileArgs.new()
     )
 
-    if !sword_array_projectile.is_connected("hit_something", self , "on_weapon_hit_something"):
-        sword_array_projectile.connect("hit_something", self , "on_weapon_hit_something", [sword_array_projectile._hitbox])
+    if !sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
+        sword_array_projectile.connect("hit_something", self, "on_weapon_hit_something", [sword_array_projectile._hitbox])
 
 func yz_move_to_target(target: Node) -> void:
     var dist_to_player: float = global_position.distance_squared_to(target.global_position)

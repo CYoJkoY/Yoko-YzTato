@@ -1,8 +1,7 @@
 shader_type canvas_item;
 
-uniform float distortion_strength : hint_range(0, 0.1) = 0.04;
-uniform float flow_speed = 1;
-uniform float lightning_power : hint_range(0, 2) = 1.0;
+uniform float distortion_strength : hint_range(0, 0.3) = 0.1;
+uniform float flow_speed = 2;
 uniform vec4 lightning_color: hint_color = vec4(0.7, 0.9, 1.0, 1.0);
 
 float hash(vec2 p) {
@@ -47,9 +46,6 @@ void fragment() {
     vec3 final_color = col.rgb * brightness;
     vec3 dark_tint = vec3(0.06, 0.08, 0.16);
     final_color = mix(final_color, dark_tint, 0.5);
-
-    vec3 lightning_glow = lightning_color.rgb * lightning_power * 0.8;
-    final_color += lightning_glow;
 
     COLOR = vec4(final_color, lightning_color.a);
 }

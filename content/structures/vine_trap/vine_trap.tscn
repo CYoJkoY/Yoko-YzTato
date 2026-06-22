@@ -1,7 +1,7 @@
 [gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://resources/shaders/outline.gdshader" type="Shader" id=1]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/dot_structure.gd" type="Script" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.gd" type="Script" id=2]
 [ext_resource path="res://particles/curse/curse_particles.tscn" type="PackedScene" id=3]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/vine_trap/vine_trap.webp" type="Texture" id=4]
 
@@ -99,8 +99,8 @@ tracks/5/keys = {
 
 [sub_resource type="Animation" id=10]
 resource_name = "death"
-length = 1.05
-step = 0.25
+length = 0.6
+step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath("Animation/Sprite:modulate")
 tracks/0/interp = 1
@@ -120,7 +120,7 @@ tracks/1/loop_wrap = true
 tracks/1/imported = false
 tracks/1/enabled = true
 tracks/1/keys = {
-"times": PoolRealArray( 0.25, 1 ),
+"times": PoolRealArray( 0.25, 0.6 ),
 "transitions": PoolRealArray( 1, 1 ),
 "values": [ {
 "args": [  ],
@@ -213,6 +213,7 @@ anims/death = SubResource( 10 )
 anims/idle = SubResource( 11 )
 
 [node name="Area2D" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 4
 monitorable = false
@@ -223,9 +224,13 @@ shape = SubResource( 12 )
 [node name="DurationTimer" type="Timer" parent="."]
 one_shot = true
 
+[node name="ChargeTimer" type="Timer" parent="."]
+one_shot = true
+
 [node name="AttackTimer" type="Timer" parent="."]
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
 [connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]
 [connection signal="timeout" from="DurationTimer" to="." method="_on_DurationTimer_timeout"]
+[connection signal="timeout" from="ChargeTimer" to="." method="_on_DurationTimer_timeout"]
 [connection signal="timeout" from="AttackTimer" to="." method="_on_AttackTimer_timeout"]

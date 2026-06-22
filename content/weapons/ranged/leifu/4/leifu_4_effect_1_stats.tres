@@ -2,11 +2,10 @@
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/structures/dot_structure_stats.gd" type="Script" id=1]
 
-
 [resource]
 script = ExtResource( 1 )
-cooldown = 10
-damage = 1
+cooldown = 15
+damage = 20
 accuracy = 1.0
 crit_chance = 0.03
 crit_damage = 1.5
@@ -17,7 +16,7 @@ knockback_piercing = 0.0
 can_have_positive_knockback = true
 can_have_negative_knockback = false
 effect_scale = 1.0
-scaling_stats = [ [ "stat_max_hp", 1.0 ] ]
+scaling_stats = [ [ "stat_elemental_damage", 1.5 ] ]
 lifesteal = 0.0
 shooting_sounds = [  ]
 sound_db_mod = -5
@@ -26,7 +25,7 @@ recoil = 25
 recoil_duration = 0.1
 additional_cooldown_every_x_shots = -1
 additional_cooldown_multiplier = -1.0
-speed_percent_modifier = -5
+speed_percent_modifier = -25
 nb_projectiles = 1
 projectile_spread = 0.0
 piercing = 0
