@@ -7,6 +7,6 @@
 script = ExtResource( 2 )
 sprite = ExtResource( 1 )
 position = 0
-display_priority = 4
-depth = 9999.0
+display_priority = 0
+depth = 2.0
 is_character_appearance = true

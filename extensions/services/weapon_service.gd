@@ -1,10 +1,11 @@
 extends "res://singletons/weapon_service.gd"
 
-# EFFECT: leave_fire
-var _burning_particles_manager: Node = null
-
-# EFFECT: vine_trap
+var main: Main = null
 var entity_spawner: EntitySpawner = null
+
+# EFFECT: leave_fire
+const BURNING_PARTICLE_TSCN = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/ground_burning_particles.tscn")
+var _burning_particle_pool_id: int = Keys.generate_hash(BURNING_PARTICLE_TSCN.resource_path)
 
 # =========================== Extension =========================== #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
@@ -96,35 +97,48 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
             queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
-    if _burning_particles_manager == null:
-        _burning_particles_manager = load("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/burning_particles_manager.gd").new()
-        get_tree().current_scene.call_deferred("add_child", _burning_particles_manager)
-
-    # Check effects first
     for fire in effects:
         if fire.get_id() != "yztato_leave_fire": continue
 
-        var new_fire = _burning_particles_manager.get_burning_particle()
-        if !new_fire: continue
-        
-        call_deferred(
-            "yz_activate_burning_particle", new_fire,
-            thing_hit.global_position, thing_hit._burning,
-            fire.scale, fire.duration
-        )
+        var particle = yz_get_burning_particle()
+        if particle:
+            particle.activate(thing_hit.global_position, thing_hit._burning)
+            particle.rescale(fire.scale)
+            particle.set_duration(fire.duration)
+            if !is_instance_valid(main): main = Utils.get_scene_node()
+            main._on_emit_fire_particle(particle)
 
-    # Check player effects
     var effect_leave_fire = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
-    if !effect_leave_fire.empty():
-        for fire in effect_leave_fire:
-            var new_fire = _burning_particles_manager.get_burning_particle()
-            if !new_fire: continue
+    if effect_leave_fire.empty(): return
 
-            call_deferred(
-                "yz_activate_burning_particle", new_fire,
-                thing_hit.global_position, thing_hit._burning,
-                fire[3], fire[2]
-            )
+    for fire in effect_leave_fire:
+        var particle = yz_get_burning_particle()
+        if particle:
+            particle.activate(thing_hit.global_position, thing_hit._burning)
+            particle.rescale(fire[3])
+            particle.set_duration(fire[2])
+            if !is_instance_valid(main): main = Utils.get_scene_node()
+            main._on_emit_fire_particle(particle)
+
+func yz_get_burning_particle() -> CPUParticles2D:
+    if !is_instance_valid(main): main = Utils.get_scene_node()
+    var particle: CPUParticles2D = main.get_node_from_pool(_burning_particle_pool_id, main._effects)
+    if particle == null:
+        particle = BURNING_PARTICLE_TSCN.instance()
+        particle.visible = false
+        particle.emitting = false
+        main._effects.add_child(particle)
+    particle.on_deactivate_callback = funcref(self, "yz_recycle_burning_particle")
+    return particle
+
+func yz_recycle_burning_particle(particle: CPUParticles2D) -> void:
+    if !is_instance_valid(particle): return
+
+    particle.on_deactivate_callback = null
+    particle.visible = false
+    particle.emitting = false
+    if !is_instance_valid(main): main = Utils.get_scene_node()
+    main.add_node_to_pool(particle, _burning_particle_pool_id)
 
 func yz_gain_stat_when_killed_scaling_single(effects: Array, gain_stat_when_killed_single_scaling_killed_count: Dictionary, player: Player, player_index: int) -> void:
     for effect_index in effects.size():

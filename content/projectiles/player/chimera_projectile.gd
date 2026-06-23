@@ -1,18 +1,11 @@
 extends PlayerProjectile
 
 onready var sprite_node: Sprite = $Sprite
-signal has_stopped
 
 # =========================== Extension =========================== #
 func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
     _yztato_chimera_on_Hitbox_hit_something(_hitbox.effects)
     ._on_Hitbox_hit_something(thing_hit, damage_dealt)
-
-func stop() -> void:
-    if _enable_stop_delay: return
-
-    emit_signal("has_stopped", self )
-    .stop()
 
 # =========================== Custom =========================== #
 func _yztato_chimera_on_Hitbox_hit_something(effects: Array) -> void:

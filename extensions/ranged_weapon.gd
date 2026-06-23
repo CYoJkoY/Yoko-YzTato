@@ -39,7 +39,6 @@ func init_stats(at_wave_begin: bool = true) -> void:
 func on_projectile_shot(projectile: Node2D) -> void:
     .on_projectile_shot(projectile)
     _yztato_boomerang_on_projectile_shot(projectile)
-    _yztato_upgrade_on_projectile_shot(projectile)
 
 func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox) -> void:
     .on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
@@ -61,17 +60,6 @@ func should_shoot() -> bool:
     return should_shoot
 
 # =========================== Custom =========================== #
-func _yztato_upgrade_on_projectile_shot(projectile: Node2D) -> void:
-    for effect in effects:
-        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
-
-        old_projectiles.append(projectile)
-
-        if !projectile.is_connected("has_stopped", self, "yz_on_projectile_stopped"):
-            projectile.connect("has_stopped", self, "yz_on_projectile_stopped")
-
-    return
-
 func _yztato_chimera_init_stats() -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon": continue
@@ -96,13 +84,14 @@ func _yztato_boomerang_ready() -> void:
         wait_until_return = effect.boomerang_wait
 
 func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
-    if is_boomerang:
-        active_boomerangs.append(projectile)
-        _hitbox.damage *= 1 + max_damage_mul
-        if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
+    if !is_boomerang: return
 
-        if !projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
-            projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
+    active_boomerangs.append(projectile)
+    _hitbox.damage *= 1 + max_damage_mul
+    if knockback_only_back: _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
+
+    if !projectile.is_connected("returned_to_player", self, "yz_on_projectile_returned"):
+        projectile.connect("returned_to_player", self, "yz_on_projectile_returned")
 
 func _yztato_boomerang_shoot() -> void:
     _nb_shots_taken += 1
@@ -164,12 +153,3 @@ func yz_on_projectile_returned(projectile: Node2D) -> void:
 
     if wait_until_return:
         _current_cooldown = get_next_cooldown()
-
-func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
-    if particle != null and particle.has_method("activate"):
-        particle.activate(position, burning_data)
-        particle.rescale(scale)
-        particle.set_duration(duration)
-
-func yz_on_projectile_stopped(projectile: Node2D) -> void:
-    old_projectiles.erase(projectile)

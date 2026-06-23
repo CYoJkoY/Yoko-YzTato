@@ -108,16 +108,16 @@ func _yztato_melee_setup(effect_type: String) -> void:
 
 func _yztato_flying_sword_ready() -> void:
     var flying_sword: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    YZ_is_flying_sword = !(flying_sword.empty())
+    if !YZ_is_flying_sword: return
+
     var Qi_value: float = flying_sword.get(0, NAN)
     var SwordArray_value: float = flying_sword.get(1, NAN)
 
-    can_attack = Qi_value < current_stats.damage
-    can_array = SwordArray_value < current_stats.damage
-    YZ_is_flying_sword = can_attack or can_array
+    can_attack = !is_nan(Qi_value) and Qi_value < current_stats.damage
+    can_array = !is_nan(SwordArray_value) and SwordArray_value < current_stats.damage
 
 func _yztato_flying_sword(player_index: int) -> void:
-    if !YZ_is_flying_sword: return
-
     match [can_attack, can_array]:
         [true, true]:
             var player_level: int = RunData.players_data[player_index].current_level
@@ -357,9 +357,3 @@ func yz_get_idle_position() -> Vector2:
     var offset_x: float = cos(idle_angle + weapon_offset_angle) * radius
     var offset_y: float = sin(idle_angle + weapon_offset_angle) * radius
     return Vector2(_parent.global_position.x + offset_x, _parent.global_position.y + offset_y - 24)
-
-func yz_activate_burning_particle(particle, position: Vector2, burning_data, scale: float, duration: float) -> void:
-    if particle != null and particle.has_method("activate"):
-        particle.activate(position, burning_data)
-        particle.rescale(scale)
-        particle.set_duration(duration)
