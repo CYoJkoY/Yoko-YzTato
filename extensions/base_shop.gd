@@ -1,6 +1,9 @@
 extends "res://ui/menus/shop/base_shop.gd"
 
 # =========================== Extension =========================== #
+func _ready() -> void:
+    _yztato_wave_card_ready()
+
 func _on_RerollButton_pressed(player_index: int) -> void:
     ._on_RerollButton_pressed(player_index)
     
@@ -8,6 +11,18 @@ func _on_RerollButton_pressed(player_index: int) -> void:
         _yztato_apply_random_curse(player_index)
 
 # =========================== Custom =========================== #
+func _yztato_wave_card_ready() -> void:
+    var player_count: int = RunData.get_player_count()
+    for player_index in player_count:
+        var has_wave_contract: bool = RunData.get_player_effect_bool(Utils.yztato_wave_card_hash, player_index)
+        if !has_wave_contract: continue
+
+        var go_button: Control = _get_go_button(player_index)
+        var select_wave_card_button: Control = load("res://mods-unpacked/Yoko-YzTato/content/scenes/select_wave_card_button.tscn").instance()
+        go_button.hide()
+        go_button.get_parent().add_child(select_wave_card_button)
+        select_wave_card_button.connect("pressed", self, "yz_on_select_wave_card_button_pressed", [player_index])
+
 func _yztato_apply_random_curse(player_index: int) -> void:
     var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
     

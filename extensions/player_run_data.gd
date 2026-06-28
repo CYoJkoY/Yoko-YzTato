@@ -50,6 +50,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_extrusion_attack_hash: 0,
             Utils.yztato_lose_hp_per_second_min_hp_hash: 0,
             Utils.yztato_summon_lightning_hash: [],
+            Utils.yztato_wave_card_hash: 0,
 
         }
 
