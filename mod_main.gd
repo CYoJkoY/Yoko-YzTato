@@ -21,7 +21,7 @@ func _init():
 
         "entity_spawner.gd",
         # EFFECTS: gain_stat_when_killed_single_scaling[ 1/4 ]
-        #           blood_rage[ 1/2 ]
+        #          blood_rage[ 1/2 ]
         # ACHIEVE: dark_forest_rule
 
         "player.gd",

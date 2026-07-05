@@ -112,7 +112,7 @@ func _yztato_boomerang_shoot() -> void:
     if _manual_aim:
         target = current_stats.max_range
     else:
-        if _current_target.size() == 0 or not is_instance_valid(_current_target[0]):
+        if _current_target.size() == 0 or !is_instance_valid(_current_target[0]):
             target = current_stats.max_range
         else:
             target = _current_target[1]

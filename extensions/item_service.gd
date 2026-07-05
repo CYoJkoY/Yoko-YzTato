@@ -1,13 +1,12 @@
 extends "res://singletons/item_service.gd"
 
 # =========================== Extension =========================== #
-func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetRandItemForWaveArgs)->ItemParentData:
-    var item :ItemParentData = ._get_rand_item_for_wave(wave, player_index, type, args)
+func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetRandItemForWaveArgs) -> ItemParentData:
+    var item: ItemParentData =._get_rand_item_for_wave(wave, player_index, type, args)
     item = _yztato_weapon_set_filter(item, player_index, type, wave, args)
     item = _yztato_weapon_set_delete(item, player_index, type, wave, args)
 
     return item
-
 
 # =========================== Custom =========================== #
 func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: int, wave: int, args: GetRandItemForWaveArgs) -> ItemParentData:
@@ -33,7 +32,7 @@ func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: in
                     has_required_set = true
                     break
             
-            if !has_required_set: item = ._get_rand_item_for_wave(wave, player_index, type, args)
+            if !has_required_set: item =._get_rand_item_for_wave(wave, player_index, type, args)
     
     return item
 
@@ -57,14 +56,14 @@ func _yztato_weapon_set_delete(item: ItemParentData, player_index: int, type: in
     # Filter Until No Forbidden Set
     if has_valid_weapons:
         var has_forbidden_set = false
-        while not has_forbidden_set:
+        while !has_forbidden_set:
             for set in item.sets:
                 if weapon_set_deletes.has(set.my_id_hash):
                     has_forbidden_set = true
                     break
 
             if has_forbidden_set:
-                item = ._get_rand_item_for_wave(wave, player_index, type, args)
+                item =._get_rand_item_for_wave(wave, player_index, type, args)
                 has_forbidden_set = false
             else: break
 

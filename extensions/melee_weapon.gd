@@ -114,8 +114,8 @@ func _yztato_flying_sword_ready() -> void:
     var Qi_value: float = flying_sword.get(0, NAN)
     var SwordArray_value: float = flying_sword.get(1, NAN)
 
-    can_attack = !is_nan(Qi_value) and Qi_value < current_stats.damage
-    can_array = !is_nan(SwordArray_value) and SwordArray_value < current_stats.damage
+    can_attack = !is_nan(Qi_value) and Qi_value >= 0 and Qi_value < current_stats.damage
+    can_array = !is_nan(SwordArray_value) and SwordArray_value >= 0 and SwordArray_value < current_stats.damage
 
 func _yztato_flying_sword(player_index: int) -> void:
     match [can_attack, can_array]:
@@ -123,7 +123,8 @@ func _yztato_flying_sword(player_index: int) -> void:
             var player_level: int = RunData.players_data[player_index].current_level
             yz_process_sword_array_mode(player_level)
             yz_process_attack_mode()
-        [true, false]: yz_process_attack_mode()
+        [true, false]:
+            yz_process_attack_mode()
         [false, true]:
             var player_level: int = RunData.players_data[player_index].current_level
             yz_process_sword_array_mode(player_level)
@@ -310,7 +311,7 @@ func yz_create_sword_projectile(target: Node) -> void:
         sword_array_stats.can_bounce = false
 
         var modified_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
-        modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/sword_array/sword_array.webp")
+        modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sword_array/sword_array.webp")
         sword_array_stats.projectile_scene = modified_scene
 
     var sword_array_projectile: Node = WeaponService.spawn_projectile(

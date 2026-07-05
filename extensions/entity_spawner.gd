@@ -49,11 +49,11 @@ func _yztato_blood_rage_on_enemy_died() -> void:
         if _players[player_index] and is_instance_valid(_players[player_index]):
             _players[player_index].yz_on_enemy_killed_reset_blood_rage()
 
-func _yztato_chal_on_enemy_charmed(charmed_enemies: Array) -> void:
-    ### dark_forest_rule ###
-    ChallengeService.try_complete_challenge(Utils.chal_dark_forest_rule_hash, charmed_enemies.size())
-
 func _yztato_chal_on_enemy_died(enemy: Entity) -> void:
     ### hellfire ###
     if enemy._is_burning: enemies_killed_is_burning += 1
     ChallengeService.try_complete_challenge(Utils.chal_hellfire_hash, enemies_killed_is_burning)
+
+func _yztato_chal_on_enemy_charmed(charmed_enemies: Array) -> void:
+    ### dark_forest_rule ###
+    ChallengeService.try_complete_challenge(Utils.chal_dark_forest_rule_hash, charmed_enemies.size())

@@ -11,9 +11,9 @@ export(Array, Array) var stats_change: Array = [
 var stats_change_hashes: Array = []
 
 # =========================== Extension =========================== #
-func duplicate(subresources := false) -> Resource:
+func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
-    if stats_change_hashes.empty() and not stats_change.empty():
+    if stats_change_hashes.empty() and !stats_change.empty():
         stats_change_hashes = Utils.convert_to_hash_array(stats_change)
     
     duplication.stats_change_hashes = stats_change_hashes
