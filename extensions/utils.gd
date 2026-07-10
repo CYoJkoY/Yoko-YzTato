@@ -1,5 +1,8 @@
 extends "res://singletons/utils.gd"
 
+# Stats
+var stat_yztato_suture_hash: int = Keys.generate_hash("stat_yztato_suture")
+
 # Effects
 var yztato_destory_weapons_hash: int = Keys.generate_hash("yztato_destory_weapons")
 var yztato_set_stat_hash: int = Keys.generate_hash("yztato_set_stat")

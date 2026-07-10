@@ -6,7 +6,8 @@ static func init_stats(all_null_values: bool = false) -> Dictionary:
 
         var new_stats := {
             Keys.trees_hash: 0, # Debug : Only For Assert
-            
+            Utils.stat_yztato_suture_hash: 0,
+
         }
 
         new_stats.merge(vanilla_stats)

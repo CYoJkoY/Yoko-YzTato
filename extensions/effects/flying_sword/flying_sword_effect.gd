@@ -1,4 +1,4 @@
-extends GainStatEveryKilledEnemiesEffect
+extends Effect
 
 enum ModeType {Qi, SwordArray}
 
