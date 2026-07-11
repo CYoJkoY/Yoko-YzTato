@@ -43,7 +43,7 @@ func _yztato_curse_item(
             ["yztato_boomerang_weapon", _, _]:
                 new_effect.min_damage_mul = Utils.ncl_curse_effect_value(new_effect.min_damage_mul, effect_modifier)
                 new_effect.max_damage_mul = Utils.ncl_curse_effect_value(new_effect.max_damage_mul, effect_modifier)
-            
+
             ["yztato_damage_scaling", _, _]:
                 var new_scaling_stats: Array = new_effect.scaling_stats.duplicate()
                 for scaling in new_scaling_stats:
@@ -54,11 +54,11 @@ func _yztato_curse_item(
 
             ["yztato_multi_hit", _, _]:
                 new_effect.damage_percent = Utils.ncl_curse_effect_value(new_effect.damage_percent, effect_modifier, {"process_negative": false})
-            
+
             ["yztato_vine_trap", _, _]:
                 new_effect.trap_count = Utils.ncl_curse_effect_value(new_effect.trap_count, effect_modifier, {"process_negative": false})
                 new_effect.chance = Utils.ncl_curse_effect_value(new_effect.chance, effect_modifier, {"process_negative": false})
-                
+
             ["yztato_chimera_weapon", _, _]:
                 var new_chimera_projectile_stats: Array = new_effect.chimera_projectile_stats.duplicate()
                 for stats in new_chimera_projectile_stats:
@@ -71,7 +71,7 @@ func _yztato_curse_item(
                 var new_stats_change: Array = new_effect.stats_change.duplicate()
                 for stat in new_stats_change:
                     stat[1] = Utils.ncl_curse_effect_value(stat[1], effect_modifier, {"step": 1})
-            
+
             ["yztato_leave_fire", _, _]:
                 new_effect.duration = Utils.ncl_curse_effect_value(new_effect.duration, effect_modifier, {"process_negative": false})
                 new_effect.scale = Utils.ncl_curse_effect_value(new_effect.scale, effect_modifier, {"process_negative": false})
@@ -80,7 +80,7 @@ func _yztato_curse_item(
             [_, Utils.yztato_heal_on_damage_taken_hash, _], \
             [_, Utils.yztato_random_curse_on_reroll_hash, _]:
                 new_effect.value2 = Utils.ncl_curse_effect_value(new_effect.value2, effect_modifier, {"step": 1, "process_negative": false})
-            
+
             [_, Utils.yztato_one_shot_loot_hash, _]:
                 var extra_effect: Effect = Effect.new()
                 extra_effect.key = "loot_alien_chance"

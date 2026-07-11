@@ -40,7 +40,7 @@ func get_args(_player_index: int) -> Array:
     var str_stat_nb: String = str(stat_nb)
     if stat_nb >= 0:
         str_stat_nb = "+" + str_stat_nb
-    return [str(value), tr(key.to_upper()), str_stat_nb, tr(stat.to_upper()), stat_icon_text]
+    return [str(value), Utils.ncl_get_true_stat_name(key), str_stat_nb, Utils.ncl_get_true_stat_name(stat), stat_icon_text]
 
 func serialize() -> Dictionary:
     var serialized =.serialize()

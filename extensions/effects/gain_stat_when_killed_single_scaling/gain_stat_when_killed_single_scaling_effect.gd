@@ -59,7 +59,7 @@ func get_args(player_index: int) -> Array:
         true: str_tracking_value = Utils.ncl_create_tracking("STATS_GAINED", tracking_value)
         false: str_tracking_value = Utils.ncl_create_tracking("STATS_LOST", -tracking_value)
 
-    return [str(stat_nb), tr(stat.to_upper()), stat_icon_text, numer_of_need, scaling_text, str_tracking_value]
+    return [str(stat_nb), Utils.ncl_get_true_stat_name(stat), stat_icon_text, numer_of_need, scaling_text, str_tracking_value]
 
 func serialize() -> Dictionary:
     var serialized =.serialize()

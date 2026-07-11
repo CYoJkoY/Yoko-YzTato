@@ -6,7 +6,7 @@ export var interval: int = 1
 export var reset_on_hit: bool = false
 
 # =========================== Extension =========================== #
-func duplicate(subresources := false) -> Resource:
+func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":
         stat_hash = Keys.generate_hash(stat)
@@ -40,16 +40,13 @@ func _add_custom_args() -> void:
     interval_as_neutral.arg_sign = Sign.NEUTRAL
     custom_args.append(interval_as_neutral)
 
-
 func get_text(player_index: int, colored: bool = true) -> String:
     if interval == 1:
         text_key = "EFFECT_TEMP_STATS_PER_INTERVAL_SINGULAR"
     return.get_text(player_index, colored)
 
-
 func get_args(_player_index: int) -> Array:
-    return [str(value), tr(stat.to_upper()), str(interval)]
-
+    return [str(value), Utils.ncl_get_true_stat_name(stat), str(interval)]
 
 func serialize() -> Dictionary:
     var serialized =.serialize()
@@ -57,7 +54,6 @@ func serialize() -> Dictionary:
     serialized.interval = interval
     serialized.reset_on_hit = reset_on_hit
     return serialized
-
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)

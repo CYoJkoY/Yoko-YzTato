@@ -45,7 +45,7 @@ func get_args(_player_index: int) -> Array:
     
     for stat_change in stats_change:
         var val: int = stat_change[1]
-        var name: String = tr(stat_change[0].to_upper())
+        var name: String = Utils.ncl_get_true_stat_name(stat_change[0])
         var str_val: String = str(val) if val < 0 else "+{0}".format([val])
         stats_arg += "{1}{0},".format([name, str_val])
     

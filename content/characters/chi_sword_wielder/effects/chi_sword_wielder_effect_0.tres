@@ -20,6 +20,4 @@ custom_key = ""
 storage_method = 0
 effect_sign = 1
 custom_args = [ SubResource( 1 ) ]
-stat = ""
-stat_nb = 1
 mode_type = 0

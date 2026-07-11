@@ -4,7 +4,7 @@ export(String) var tracking_key = ""
 var tracking_key_hash: int = Keys.empty_hash
 
 # =========================== Extension =========================== #
-func duplicate(subresources := false) -> Resource:
+func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
     if tracking_key_hash == Keys.empty_hash and tracking_key != "":
         tracking_key_hash = Keys.generate_hash(tracking_key)
@@ -39,4 +39,4 @@ func get_args(player_index: int) -> Array:
         true: tracking = Utils.ncl_create_tracking("STATS_GAINED", tracking_value)
         false: tracking = Utils.ncl_create_tracking("STATS_LOST", -tracking_value)
 
-    return [str(value), tr(key.to_upper()), str(value2), tracking]
+    return [str(value), Utils.ncl_get_true_stat_name(key), str(value2), tracking]
