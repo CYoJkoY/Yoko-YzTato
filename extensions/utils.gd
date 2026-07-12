@@ -34,7 +34,8 @@ var yztato_random_curse_on_reroll_hash: int = Keys.generate_hash("yztato_random_
 var yztato_extrusion_attack_hash: int = Keys.generate_hash("yztato_extrusion_attack")
 var yztato_lose_hp_per_second_min_hp_hash: int = Keys.generate_hash("yztato_lose_hp_per_second_min_hp")
 var yztato_summon_lightning_hash: int = Keys.generate_hash("yztato_summon_lightning")
-var yztato_wave_card_hash: int = Keys.generate_hash("yztato_wave_contract")
+var yztato_old_specific_tag_item_bonus_hash: int = Keys.generate_hash("yztato_old_specific_tag_item_bonus")
+var yztato_specific_tag_item_bonus_hash: int = Keys.generate_hash("yztato_specific_tag_item_bonus")
 
 # Tracking Items
 var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")

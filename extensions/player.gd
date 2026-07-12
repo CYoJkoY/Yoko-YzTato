@@ -101,7 +101,7 @@ func _yztato_blood_rage_ready() -> void:
             blood_rage_timer.one_shot = false
             blood_rage_timer.autostart = false
             add_child(blood_rage_timer)
-            blood_rage_timer.connect("timeout", self , "yz_on_blood_rage_timer_timeout")
+            blood_rage_timer.connect("timeout", self, "yz_on_blood_rage_timer_timeout")
 
             var interval = effect[0]
             blood_rage_timer.wait_time = interval
@@ -199,7 +199,7 @@ func yz_trigger_blood_rage(stats_change: Array, duration: float) -> void:
             TempStats.add_stat(stat_change[0], stat_change[1], player_index)
 
     var timer = RunData.get_tree().create_timer(duration, false)
-    timer.connect("timeout", self , "yz_on_blood_rage_timeout", [stats_change])
+    timer.connect("timeout", self, "yz_on_blood_rage_timeout", [stats_change])
 
 func yz_on_blood_rage_timeout(stats_change: Array) -> void:
     for stat_change in stats_change:

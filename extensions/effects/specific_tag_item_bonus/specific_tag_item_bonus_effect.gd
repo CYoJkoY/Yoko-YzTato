@@ -5,7 +5,7 @@ export(int) var tag_nb = 1
 
 # =========================== Extension =========================== #
 static func get_id() -> String:
-    return "yztato_gain_stat_for_every_tag_item"
+    return "yztato_specific_tag_item_bonus"
 
 func apply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
@@ -20,7 +20,10 @@ func unapply(player_index: int) -> void:
     effects[custom_key].erase([key_hash, value, tag, tag_nb])
 
 func get_args(_player_index: int) -> Array:
-    return [Utils.ncl_get_true_stat_name(key), str(value), ]
+    var tag_name: String = "tag_yztato_" + tag if !tag.begins_with("stat_") else tag
+    tag_name = tr(tag_name.to_upper())
+
+    return [Utils.ncl_get_true_stat_name(key), str(value), tag_name, str(tag_nb)]
 
 func serialize() -> Dictionary:
     var serialized: Dictionary = serialize()
