@@ -30,7 +30,7 @@ func get_args(_player_index: int) -> Array:
         for item_tag in item.tags:
             if item_tag != tag: continue
 
-        nb_specific_tag_items += 1
+            nb_specific_tag_items += 1
 
     bonus_value = value * nb_specific_tag_items / tag_nb
 
