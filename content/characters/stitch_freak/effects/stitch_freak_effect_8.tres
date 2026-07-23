@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/trigger_subeffects_on_specific_stat_over/trigger_subeffects_on_specific_stat_over_effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/stitch_freak/effects/stitch_freak_effect_8_1.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+key = "stat_yztato_suture"
+text_key = "EFFECT_YZTATO_TRIGGER_SUBEFFECTS_ON_SPECIFIC_STAT_OVER"
+value = 0
+custom_key = "yztato_trigger_subeffect_on_specific_stat_over"
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+sub_effects = [ ExtResource( 2 ) ]
+over_types = [ 1 ]
+stat_over_values = [ 5 ]

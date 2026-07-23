@@ -1,77 +1,62 @@
 extends "res://ui/menus/shop/base_shop.gd"
 
 # =========================== Extension =========================== #
-func _ready() -> void:
-    _yztato_wave_card_ready()
-
 func _on_RerollButton_pressed(player_index: int) -> void:
-    ._on_RerollButton_pressed(player_index)
-    
-    if RunData.get_player_gold(player_index) >= _reroll_price[player_index]:
-        _yztato_apply_random_curse(player_index)
+	._on_RerollButton_pressed(player_index)
+
+	if RunData.get_player_gold(player_index) >= _reroll_price[player_index]:
+		_yztato_apply_random_curse(player_index)
 
 # =========================== Custom =========================== #
-func _yztato_wave_card_ready() -> void:
-    var player_count: int = RunData.get_player_count()
-    for player_index in player_count:
-        var has_wave_contract: bool = RunData.get_player_effect_bool(Utils.yztato_wave_card_hash, player_index)
-        if !has_wave_contract: continue
-
-        var go_button: Control = _get_go_button(player_index)
-        var select_wave_card_button: Control = load("res://mods-unpacked/Yoko-YzTato/content/scenes/select_wave_card_button.tscn").instance()
-        go_button.hide()
-        go_button.get_parent().add_child(select_wave_card_button)
-        select_wave_card_button.connect("pressed", self, "yz_on_select_wave_card_button_pressed", [player_index])
-
 func _yztato_apply_random_curse(player_index: int) -> void:
-    var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
-    
-    for curse in random_curse:
-        if !Utils.get_chance_success(curse[2] / 100.0): continue
-        
-        var tracking_key_hash: int = curse[0]
-        var player_items: Array = RunData.get_player_items(player_index)
-        var player_weapons: Array = RunData.get_player_weapons(player_index)
+	var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
+	
+	for curse in random_curse:
+		if !Utils.get_chance_success(curse[2] / 100.0): continue
+		
+		var tracking_key_hash: int = curse[0]
+		var player_items: Array = RunData.get_player_items(player_index)
+		var player_weapons: Array = RunData.get_player_weapons(player_index)
 
-        var all_gears: Array = []
-        for item in player_items:
-            if item.is_cursed or (item is CharacterData): continue
-            
-            all_gears.append(item)
-                
-        for weapon in player_weapons:
-            if weapon.is_cursed: continue
+		var all_gears: Array = []
+		for item in player_items:
+			if item.is_cursed or (item is CharacterData): continue
+			
+			all_gears.append(item)
+				
+		for weapon in player_weapons:
+			if weapon.is_cursed: continue
 
-            all_gears.append(weapon)
-        
-        var gear_count: int = min(curse[1], all_gears.size()) as int
-        if gear_count <= 0: break
-        
-        RunData.add_tracked_value(player_index, tracking_key_hash, gear_count)
+			all_gears.append(weapon)
+		
+		var gear_count: int = min(curse[1], all_gears.size()) as int
+		if gear_count <= 0: break
+		
+		RunData.add_tracked_value(player_index, tracking_key_hash, gear_count)
 
-        var gears_to_curse = []
-        for _i in gear_count:
-            var random_index: int = Utils.randi_range(0, all_gears.size() - 1)
-            gears_to_curse.append(all_gears[random_index])
-            all_gears.remove(random_index)
-        
-        var updated_any_gear: bool = false
-        for gear in gears_to_curse:
-            var new_gear: ItemParentData = Utils.ncl_curse_item(gear, player_index)
+		var gears_to_curse = []
+		for _i in gear_count:
+			var random_index: int = Utils.randi_range(0, all_gears.size() - 1)
+			gears_to_curse.append(all_gears[random_index])
+			all_gears.remove(random_index)
+		
+		var updated_any_gear: bool = false
+		for gear in gears_to_curse:
+			var new_gear: ItemParentData = Utils.ncl_curse_item(gear, player_index)
 
-            if new_gear is WeaponData:
-                RunData.remove_weapon(gear, player_index)
-                RunData.add_weapon(new_gear, player_index)
-                updated_any_gear = true
-            
-            elif new_gear is ItemData:
-                RunData.remove_item(gear, player_index)
-                if gear.replaced_by: RunData.remove_item(gear.replaced_by, player_index)
-                RunData.add_item(new_gear, player_index)
-                updated_any_gear = true
+			if new_gear is WeaponData:
+				RunData.remove_weapon(gear, player_index)
+				RunData.add_weapon(new_gear, player_index)
+				updated_any_gear = true
+			
+			elif new_gear is ItemData:
+				RunData.remove_item(gear, player_index)
+				if gear.replaced_by: RunData.remove_item(gear.replaced_by, player_index)
+				RunData.add_item(new_gear, player_index)
+				updated_any_gear = true
 
-        if updated_any_gear:
-            _update_stats()
-            var player_gear_container: PlayerGearContainer = _get_gear_container(player_index)
-            player_gear_container.set_weapons_data(RunData.get_player_weapons(player_index))
-            player_gear_container.set_items_data(RunData.get_player_items(player_index))
+		if updated_any_gear:
+			_update_stats()
+			var player_gear_container: PlayerGearContainer = _get_gear_container(player_index)
+			player_gear_container.set_weapons_data(RunData.get_player_weapons(player_index))
+			player_gear_container.set_items_data(RunData.get_player_items(player_index))

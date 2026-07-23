@@ -16,13 +16,13 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
             var group_count = effect[1]
             var waves_remaining = effect[2]
             var tracking_key_hash = effect[3]
-            
+
             for _i in group_count:
                 var new_group = group_data
                 if group_data.is_boss:
                     new_group = init_elite_group([effect[2]])
                 current_wave_data.groups_data.append(new_group)
-            
+
             waves_remaining -= 1
             if waves_remaining <= 0:
                 RunData.ncl_set_effect_tracking_value(tracking_key_hash, 0, player_index)
@@ -30,5 +30,5 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
 
             remaining_effects.append([effect[0], group_count, waves_remaining, tracking_key_hash])
             RunData.ncl_set_effect_tracking_value(tracking_key_hash, waves_remaining, player_index)
-        
+
         effects[Utils.yztato_extra_enemies_next_waves_hash] = remaining_effects

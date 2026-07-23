@@ -36,11 +36,9 @@ var yztato_lose_hp_per_second_min_hp_hash: int = Keys.generate_hash("yztato_lose
 var yztato_summon_lightning_hash: int = Keys.generate_hash("yztato_summon_lightning")
 var yztato_old_specific_tag_item_bonus_hash: int = Keys.generate_hash("yztato_old_specific_tag_item_bonus")
 var yztato_specific_tag_item_bonus_hash: int = Keys.generate_hash("yztato_specific_tag_item_bonus")
-
-# Tracking Items
-var character_yztato_fanatic_hash: int = Keys.generate_hash("character_yztato_fanatic")
-var character_yztato_baseball_player_hash = Keys.generate_hash("character_yztato_baseball_player")
-var item_yztato_insurance_policy_hash: int = Keys.generate_hash("item_yztato_insurance_policy")
+var yztato_trigger_subeffect_on_specific_stat_over_hash: int = Keys.generate_hash("yztato_trigger_subeffect_on_specific_stat_over")
+var yztato_triggered_subeffects: int = Keys.generate_hash("yztato_triggered_subeffects")
+var yztato_projectiles_on_hurt_hash: int = Keys.generate_hash("yztato_projectiles_on_hurt")
 
 # Challenges
 var chal_dark_forest_rule_hash: int = Keys.generate_hash("chal_dark_forest_rule")
@@ -53,14 +51,14 @@ var chal_one_force_subdue_ten_hash: int = Keys.generate_hash("chal_one_force_sub
 
 # =========================== Extension =========================== #
 func is_manual_aim(player_index: int) -> bool:
-    var is_manual: bool =.is_manual_aim(player_index) || false
-    is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
+	var is_manual: bool =.is_manual_aim(player_index) or false
+	is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
 
-    return is_manual
+	return is_manual
 
 # =========================== Custom =========================== #
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
-    var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
-    if is_blade_storm: is_manual = false
+	var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
+	if is_blade_storm: is_manual = false
 
-    return is_manual
+	return is_manual

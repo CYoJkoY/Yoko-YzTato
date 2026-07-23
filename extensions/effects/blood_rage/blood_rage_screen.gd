@@ -12,7 +12,7 @@ func _ready():
     material.set_shader_param("distortion_intensity", 0.0)
     material.set_shader_param("wave_speed", 2.0)
     material.set_shader_param("wave_amount", 0.1)
-    
+
     anchor_right = 1.0
     anchor_bottom = 1.0
     mouse_filter = MOUSE_FILTER_IGNORE
@@ -24,9 +24,8 @@ func _process(delta):
     else:
         distortion_intensity = lerp(distortion_intensity, 0.0, fade_speed * delta)
         material.set_shader_param("distortion_intensity", distortion_intensity)
-        
-        if distortion_intensity < 0.01:
-            visible = false
+
+        if distortion_intensity < 0.01: visible = false
 
 func start_blood_rage(intensity: float = 0.5):
     active = true

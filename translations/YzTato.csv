@@ -178,3 +178,27 @@ TAG_YZTATO_STAND_STILL,"Stand Still","Restez immobile","静止不动","静止す
 TAG_YZTATO_STRUCTURE,"Structure","Structure","构筑物","構造物","구조물","構築物","Строение","Struktura","Estructura","Estrutura","Struktur","Yapı","Struttura"
 TAG_YZTATO_XP_GAIN,"XP Gain","Gain d'EXP","经验获取","経験値獲得","경험치 획득","經驗獲取","Прирост опыта","Zdobywanie PD","Ganancia de EXP","Ganho de EXP","EP-Gewinn","TP Kazanma","Guadagno PE"
 TAG_YZTATO_PET,"Pet","Familier","宠物","ペット","펫","寵物","Питомец","Zwierzak","Mascota","Mascote","Begleiter","Evcil Hayvan","Animale domestico"
+EFFECT_YZTATO_SPECIFIC_TAG_ITEM_BONUS,"For every {4} items with the {2} tag, {1}{0}[{3}]","Pour chaque {4} objets possédant le tag {2}, {1}{0}[{3}]","每持有{4}个具有{2}词条的道具，则{1}{0}[{3}]","{2}タグを持つアイテムを{4}個所持するごとに、{1}{0}[{3}]","{2} 태그가 있는 아이템을 {4}개 보유할 때마다, {1}{0}[{3}]","每持有{4}個具有{2}詞條的道具，則{1}{0}[{3}]","За каждые {4} предмета с тегом {2}, {1}{0}[{3}]","Za każde {4} przedmioty z tagiem {2}, {1}{0}[{3}]","Por cada {4} objetos con la etiqueta {2}, {1}{0}[{3}]","Para cada {4} itens com a tag {2}, {1}{0}[{3}]","Für jeden {4} Gegenstände mit dem Tag {2}, {1}{0}[{3}]","Her {4} {2} etiketine sahip eşya için, {1}{0}[{3}]","Per ogni {4} oggetti con il tag {2}, {1}{0}[{3}]"
+YZTATO_EQUAL,"Equal to {0}","Égal à {0}","等于{0}","{0}に等しい","{0}와(과) 같음","等於{0}","Равно {0}","Równe {0}","Igual a {0}","Igual a {0}","Gleich {0}","{0}'a eşit","Uguale a {0}"
+YZTATO_UP_E,"Greater than or equal to {0}","Supérieur ou égal à {0}","大于等于{0}","{0}以上","{0} 이상","大於等於{0}","Больше или равно {0}","Większe lub równe {0}","Mayor o igual que {0}","Maior ou igual a {0}","Größer oder gleich {0}","{0}'dan büyük veya eşit","Maggiore o uguale a {0}"
+YZTATO_DOWN_E,"Less than or equal to {0}","Inférieur ou égal à {0}","小于等于{0}","{0}以下","{0} 이하","小於等於{0}","Меньше или равно {0}","Mniejsze lub równe {0}","Menor o igual que {0}","Menor ou igual a {0}","Kleiner oder gleich {0}","{0}'dan küçük veya eşit","Minore o uguale a {0}"
+YZTATO_UP,"Greater than {0}","Supérieur à {0}","大于{0}","{0}より大きい","{0}보다 큼","大於{0}","Больше {0}","Większe niż {0}","Mayor que {0}","Maior que {0}","Größer als {0}","{0}'dan büyük","Maggiore di {0}"
+YZTATO_DOWN,"Less than {0}","Inférieur à {0}","小于{0}","{0}より小さい","{0}보다 작음","小於{0}","Меньше {0}","Mniejsze niż {0}","Menor que {0}","Menor que {0}","Kleiner als {0}","{0}'dan küçük","Minore di {0}"
+YZTATO_EQUAL_MULTI,"Equal to a multiple of {0}","Égal à un multiple de {0}","等于{0}的倍数","{0}の倍数に等しい","{0}의 배수와 같음","等於{0}的倍數","Равно кратному {0}","Równe wielokrotności {0}","Igual a un múltiplo de {0}","Igual a um múltiplo de {0}","Gleich einem Vielfachen von {0}","{0}'ın katına eşit","Uguale a un multiplo di {0}"
+YZTATO_ANY_INT,"Any Integer","N'importe quel entier","任意整数","任意の整数","임의의 정수","任意整數","Любое целое число","Dowolna liczba całkowita","Cualquier entero","Qualquer inteiro","Beliebige Ganzzahl","Herhangi bir tam sayı","Qualsiasi intero"
+EFFECT_YZTATO_TRIGGER_SUBEFFECTS_ON_SPECIFIC_STAT_OVER,"When {0} meets the following conditions, trigger specific attribute sub-effects:
+{1}","Quand {0} remplit les conditions suivantes, déclenche des sous-effets d'attribut spécifiques :
+{1}","当{0}满足以下条件时，触发特定属性的附加效果：
+{1}","{0}が以下の条件を満たすとき、特定の属性のサブ効果を発動する：
+{1}","{0}이(가) 다음 조건을 충족할 때, 특정 속성의 추가 효과를 발동합니다:
+{1}","當{0}滿足以下條件時，觸發特定屬性的附加效果：
+{1}","Когда {0} удовлетворяет следующим условиям, активирует дополнительные эффекты определённого атрибута:
+{1}","Gdy {0} spełni następujące warunki, aktywuje dodatkowe efekty określonego atrybutu:
+{1}","Cuando {0} cumple las siguientes condiciones, activa subefectos de atributos específicos:
+{1}","Quando {0} atende às seguintes condições, ativa subefeitos de atributo específicos:
+{1}","Wenn {0} die folgenden Bedingungen erfüllt, werden spezifische Attribut-Untereffekte ausgelöst:
+{1}","{0} aşağıdaki koşulları karşıladığında, belirli özellik alt etkilerini tetikler:
+{1}","Quando {0} soddisfa le seguenti condizioni, attiva i sottoeffetti di attributo specifici:
+{1}"
+YZTATO_STITCH_EYES,"Stitch Eyes","Oeil de fil","缝线眼睛","縫线眼睛","봉합 눈","縫线眼睛","Глаз со швами","Oczy z szwami","Olhos de pontadas","Olhos de pontos","Augen mit Schnitt","Gözlerle Saldırma","Occhi con cuciture"
+EFFECT_YZTATO_PROJECTILES_ON_HURT,"On hit, fires {0} {4} around you, each dealing {1} ({3}) damage.","En cas de coup reçu, tire {0} {4} autour de vous, chacun infligeant {1} ({3}) dégâts.","每次受伤向周围发射{0}个{4}，每个{4}造成{1}（{3}）伤害","被ダメージ時、周囲に{0}個の{4}を発射し、各{4}は{1}（{3}）のダメージを与える。","피격 시 주변으로 {0}개의 {4}를 발사하며, 각 {4}는 {1}({3})의 피해를 입힙니다.","每次受傷向周圍發射{0}個{4}，每個{4}造成{1}（{3}）傷害","При получении урона выпускает {0} {4} вокруг, каждый наносит {1} ({3}) урона.","Po otrzymaniu obrażeń wystrzeliwuje {0} {4} wokół siebie, zadając każdy {1} ({3}) obrażeń.","Al recibir daño, dispara {0} {4} alrededor, cada uno inflige {1} ({3}) de daño.","Ao receber dano, dispara {0} {4} ao redor, cada um causando {1} ({3}) de dano.","Bei Treffer werden {0} {4} um dich herum abgefeuert, jeder verursacht {1} ({3}) Schaden.","Hasar alındığında etrafa {0} adet {4} ateşler, her biri {1} ({3}) hasar verir.","Quando colpito, spara {0} {4} intorno a te, ognuno infligge {1} ({3}) danni."

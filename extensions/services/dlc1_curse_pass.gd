@@ -14,8 +14,15 @@ func apply(
     if !has_effect_yztato(original_item.effects):
         return cursed_item
 
-    return _yztato_curse_item(original_item, cursed_item, player_index, turn_randomization_off, min_modifier, dlc_1_data)
-    
+    return _yztato_curse_item(
+        original_item,
+        cursed_item,
+        player_index,
+        turn_randomization_off,
+        min_modifier,
+        dlc_1_data
+    )
+
 # =========================== Custom =========================== #
 func _yztato_curse_item(
     _original_item: ItemParentData,
@@ -76,6 +83,35 @@ func _yztato_curse_item(
                 new_effect.duration = Utils.ncl_curse_effect_value(new_effect.duration, effect_modifier, {"process_negative": false})
                 new_effect.scale = Utils.ncl_curse_effect_value(new_effect.scale, effect_modifier, {"process_negative": false})
                 new_effect.text_key += "_CURSED"
+
+            ["yztato_trigger_subeffect_on_specific_stat_over", _, _]:
+                for i in range(new_effect.stat_over_values.size()):
+                    match new_effect.over_types[i]:
+                        0, 5: # Euqal / Equal Multiplier (Small chance unconditionally triggers on cursed)
+                            if Utils.get_chance_success(0.95): continue
+                            new_effect.stat_over_values[i] = Utils.LARGE_NUMBER
+                        1, 3: # Up / Up Equal
+                            new_effect.stat_over_values[i] = Utils.ncl_curse_effect_value(new_effect.stat_over_values[i], effect_modifier, {"is_negative": true})
+                        2, 4: # Down / Down Equal
+                            new_effect.stat_over_values[i] = Utils.ncl_curse_effect_value(new_effect.stat_over_values[i], effect_modifier, {"process_negative": false})
+
+                    var temp_item_data: ItemData = ItemData.new()
+                    temp_item_data.effects = new_effect.sub_effects[i]
+
+                    # Avoid sub effect's stat curse
+                    var curse_effect = Effect.new()
+                    curse_effect.key = "stat_curse"
+                    curse_effect.key_hash = Keys.stat_curse_hash
+                    temp_item_data.effects.push_front(curse_effect)
+
+                    temp_item_data = dlc_1_data.curse_item(
+                        temp_item_data,
+                        _player_index,
+                        turn_randomization_off,
+                        min_modifier
+                    )
+
+                    new_effect.sub_effects[i] = temp_item_data.effects.slice(1, -1)
 
             [_, Utils.yztato_heal_on_damage_taken_hash, _], \
             [_, Utils.yztato_random_curse_on_reroll_hash, _]:

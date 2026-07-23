@@ -3,7 +3,7 @@ extends Effect
 export(Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 
 # =========================== Extension =========================== #
-func duplicate(subresources := false) -> Resource:
+func duplicate(subresources:=false) -> Resource:
     var duplication: Resource =.duplicate(subresources)
     if !scaling_stats.empty():
         scaling_stats = Utils.convert_to_hash_array(scaling_stats)
@@ -21,13 +21,13 @@ func _generate_hashes() -> void:
 
 func apply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([key_hash, value, scaling_stats])
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, scaling_stats])
 
@@ -48,7 +48,7 @@ func get_text(_player_index: int, _colored: bool = true) -> String:
 func serialize() -> Dictionary:
     var serialized =.serialize()
     serialized.scaling_stats = scaling_stats
-    
+
     return serialized
 
 func deserialize_and_merge(serialized: Dictionary) -> void:

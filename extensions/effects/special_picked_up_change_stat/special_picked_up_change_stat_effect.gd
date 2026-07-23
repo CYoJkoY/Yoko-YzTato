@@ -23,13 +23,13 @@ func _generate_hashes() -> void:
 
 func apply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([key_hash, value, stat_hash, stat_nb])
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, stat_hash, stat_nb])
 
@@ -38,8 +38,8 @@ func get_args(_player_index: int) -> Array:
     var w = 18 * ProgressData.settings.font_size
     var stat_icon_text: String = "[img=%sx%s]%s[/img]" % [w, w, stat_icon.resource_path]
     var str_stat_nb: String = str(stat_nb)
-    if stat_nb >= 0:
-        str_stat_nb = "+" + str_stat_nb
+    if stat_nb >= 0: str_stat_nb = "+" + str_stat_nb
+
     return [str(value), Utils.ncl_get_true_stat_name(key), str_stat_nb, Utils.ncl_get_true_stat_name(stat), stat_icon_text]
 
 func serialize() -> Dictionary:

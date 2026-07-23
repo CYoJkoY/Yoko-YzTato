@@ -1,0 +1,17 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/projectiles_on_hurt/projectiles_on_hurt_effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/stitch_freak/effects/stitch_freak_effect_8_1_stats.tres" type="Resource" id=2]
+
+[resource]
+script = ExtResource( 1 )
+key = "yztato_stitch_eyes"
+text_key = "EFFECT_YZTATO_PROJECTILES_ON_HURT"
+value = 8
+custom_key = "yztato_projectiles_on_hurt"
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+weapon_stats = ExtResource( 2 )
+auto_target_enemy = false
+tracking_key = "character_yztato_stitch_freak"

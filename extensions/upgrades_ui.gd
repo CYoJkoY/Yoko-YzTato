@@ -13,7 +13,7 @@ func _yztato_extra_upgrade(player_index: int) -> void:
     for extra_upgrade in extra_upgrades:
         var tracking_key_hash: int = extra_upgrade[0]
         var extra_upgrade_chance: float = extra_upgrade[1] / 100.0
-        
+
         if !Utils.get_chance_success(extra_upgrade_chance): continue
 
         RunData.add_tracked_value(player_index, tracking_key_hash, 1)
@@ -23,7 +23,7 @@ func _yztato_extra_upgrade(player_index: int) -> void:
         var upgrades: BoxContainer = main._things_to_process_player_containers[player_index].upgrades
 
         upgrades.add_element(ItemService.get_icon(Keys.icon_upgrade_to_process_hash), level)
-        
+
         var upgrade_to_process: UpgradeToProcess = UpgradeToProcess.new()
         upgrade_to_process.level = level
         upgrade_to_process.player_index = player_index

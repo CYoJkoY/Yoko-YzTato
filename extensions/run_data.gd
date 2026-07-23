@@ -23,20 +23,21 @@ func _yztato_life_steal(weapon_stats: WeaponStats, player_index: int) -> bool:
 
 func _yztato_update_specific_tag_item_bonuses(player_index: int) -> void:
     var effects: Dictionary = get_player_effects(player_index)
-    var old_specific_tag_item_bonuses: Dictionary = effects[Utils.yztato_old_specific_tag_item_bonuses_hash]
+    var old_specific_tag_item_bonus: Dictionary = effects[Utils.yztato_old_specific_tag_item_bonus_hash]
 
-    for stat_hash in old_specific_tag_item_bonuses:
+    for stat_hash in old_specific_tag_item_bonus:
         assert(stat_hash is int)
-        effects[stat_hash] -= old_specific_tag_item_bonuses[stat_hash]
+        effects[stat_hash] -= old_specific_tag_item_bonus[stat_hash]
 
-    old_specific_tag_item_bonuses.clear()
+    old_specific_tag_item_bonus.clear()
 
     var items: Array = get_player_items_ref(player_index)
     var specific_tag_item_bonuses: Dictionary = {}
-    for item in items: for tag in item.tags:
-        specific_tag_item_bonuses[tag] = specific_tag_item_bonuses.get(tag, 0) + 1
-    
-    for effect in effects[Utils.yztato_specific_tag_item_bonuses_hash]:
+    for item in items:
+        for tag in item.tags:
+            specific_tag_item_bonuses[tag] = specific_tag_item_bonuses.get(tag, 0) + 1
+
+    for effect in effects[Utils.yztato_specific_tag_item_bonus_hash]:
         var tag: String = effect[2]
         var tag_count: int = specific_tag_item_bonuses.get(tag, 0)
         if tag_count == 0: continue
@@ -47,5 +48,5 @@ func _yztato_update_specific_tag_item_bonuses(player_index: int) -> void:
         var bonus: int = stat_value * tag_count / nb_scaled
         if bonus == 0: continue
 
-        old_specific_tag_item_bonuses[stat] = old_specific_tag_item_bonuses.get(stat, 0) + bonus
+        old_specific_tag_item_bonus[stat] = old_specific_tag_item_bonus.get(stat, 0) + bonus
         effects[stat] += bonus

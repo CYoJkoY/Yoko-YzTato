@@ -24,13 +24,13 @@ func _generate_hashes() -> void:
 
 func apply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([stat_hash, value, interval, reset_on_hit])
 
 func unapply(player_index: int) -> void:
     if custom_key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([stat_hash, value, interval, reset_on_hit])
 
@@ -43,6 +43,7 @@ func _add_custom_args() -> void:
 func get_text(player_index: int, colored: bool = true) -> String:
     if interval == 1:
         text_key = "EFFECT_TEMP_STATS_PER_INTERVAL_SINGULAR"
+
     return.get_text(player_index, colored)
 
 func get_args(_player_index: int) -> Array:

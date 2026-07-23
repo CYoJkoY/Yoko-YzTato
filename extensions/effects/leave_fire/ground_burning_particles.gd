@@ -14,7 +14,7 @@ func rescale(p_scale: float = 1.0) -> void:
     if mat != null:
         mat = mat.duplicate()
         set("process_material", mat)
-        
+
         if mat.has_method("set_emission_sphere_radius"):
             mat.set_emission_sphere_radius(mat.emission_sphere_radius * p_scale)
         elif mat.has_member("emission_sphere_radius"):
@@ -61,6 +61,7 @@ func _on_RefreshTimer_timeout() -> void:
     if burning_data == null: return
 
     if burning_data.spread > 0: burning_data.spread = 0
+
     for body in bodies:
         if !is_instance_valid(body): continue
 

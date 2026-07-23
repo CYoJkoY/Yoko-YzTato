@@ -19,12 +19,12 @@ func serialize() -> Dictionary:
     var serialized =.serialize()
     var projectile_stats_data: Array = []
     var texture_sets_data: Array = []
-    
+
     for projectile_stats in chimera_projectile_stats:
         projectile_stats_data.append(projectile_stats.serialize())
     for texture_set in chimera_texture_sets:
         texture_sets_data.append(texture_set.serialize())
-    
+
     serialized.chimera_projectile_stats = projectile_stats_data
     serialized.chimera_texture_sets = texture_sets_data
 
@@ -40,7 +40,7 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
             var stats: Resource = RangedWeaponStats.new()
             stats.deserialize_and_merge(projectile_stats)
             chimera_projectile_stats.append(stats)
-    
+
     if serialized.has("chimera_texture_sets"):
         for texture_set in serialized.chimera_texture_sets:
             var set: Resource = load(set_path).new()
@@ -52,6 +52,7 @@ func _yztato_chimera_get_text(player_index: int) -> String:
     var text = Text.text("EFFECT_YZTATO_CHIMERA_FRONT", [str(value)])
     for stats in chimera_projectile_stats:
         text = text + ", " + get_projectile_text(stats, player_index)
+
     return text
 
 # =========================== Method =========================== #

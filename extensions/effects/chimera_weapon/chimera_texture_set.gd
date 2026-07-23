@@ -43,7 +43,7 @@ func serialize() -> Dictionary:
 
     if texture != null:
         serialized.texture = texture.resource_path
-    
+
     return serialized
 
 func deserialize_and_merge(serialized: Dictionary):

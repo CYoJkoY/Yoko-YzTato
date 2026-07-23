@@ -53,6 +53,9 @@ static func init_effects() -> Dictionary:
             Utils.yztato_summon_lightning_hash: [],
             Utils.yztato_old_specific_tag_item_bonus_hash: {},
             Utils.yztato_specific_tag_item_bonus_hash: [],
+            Utils.yztato_triggered_subeffects:[],
+            Utils.yztato_trigger_subeffect_on_specific_stat_over_hash: [],
+            Utils.yztato_projectiles_on_hurt_hash: [],
 
         }
 

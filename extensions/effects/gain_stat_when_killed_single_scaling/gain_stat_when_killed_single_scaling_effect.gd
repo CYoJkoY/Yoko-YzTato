@@ -36,13 +36,13 @@ func _generate_hashes() -> void:
 
 func apply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].append([value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
-    
+
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([value, stat_hash, stat_nb, scaling_stat_hash, scaling_percent, tracking_key_hash])
 

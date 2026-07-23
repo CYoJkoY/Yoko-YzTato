@@ -1,0 +1,14 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/projectiles_on_hurt/projectiles_on_hurt_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = "yztato_stitch_eyes"
+text_key = "EFFECT_YZTATO_PROJECTILES_ON_HURT"
+value = 0
+custom_key = "yztato_projectiles_on_hurt"
+storage_method = 0
+effect_sign = 3
+custom_args = [  ]
+auto_target_enemy = false

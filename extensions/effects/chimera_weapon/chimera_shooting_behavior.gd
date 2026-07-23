@@ -1,13 +1,13 @@
 extends RangedWeaponShootingBehavior
 
 # =========================== Extension =========================== #
-func shoot_projectile(rotation:float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
+func shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
     var projectile = _yztato_chimera_shoot_projectile(rotation, knockback)
 
     return projectile
 
 # =========================== Custom =========================== #
-func _yztato_chimera_shoot_projectile(rotation:float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
+func _yztato_chimera_shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
     var projectile_index: int
     var projectile_stats: RangedWeaponStats = _parent.current_stats
     if _parent.current_chimera_projs.size() != 0:
@@ -20,7 +20,7 @@ func _yztato_chimera_shoot_projectile(rotation:float = _parent.rotation, knockba
     args.from_player_index = _parent.player_index
 
     if _parent.current_chimera_projs.size() != 0:
-        var projectile_stats_and_args:Array = _yztato_modify_projectile(projectile_stats, args)
+        var projectile_stats_and_args: Array = _yztato_modify_projectile(projectile_stats, args)
         projectile_stats = projectile_stats_and_args[0]
         args = projectile_stats_and_args[1]
 
@@ -38,7 +38,7 @@ func _yztato_chimera_shoot_projectile(rotation:float = _parent.rotation, knockba
     return projectile
 
 # =========================== Method =========================== #
-func _yztato_modify_projectile(projectile_stats: RangedWeaponStats, args: WeaponServiceSpawnProjectileArgs)-> Array:
+func _yztato_modify_projectile(projectile_stats: RangedWeaponStats, args: WeaponServiceSpawnProjectileArgs) -> Array:
     for effect in _parent.effects:
         if effect.get_id() == "yztato_chimera_weapon":
             var projectile_index = (_parent._nb_shots_taken - 1) % _parent.current_chimera_projs.size()
