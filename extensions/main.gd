@@ -97,41 +97,53 @@ func yz_trigger_subeffect_on_specific_stat_over(triggers: Array, player_index: i
             var over_type: int = over_types[i]
             var stat_over_value: int = stat_over_values[i]
             var sub_effect: Effect = sub_effects[i]
-            var sub_effect_rid: RID = sub_effect.get_rid()
+            var sub_effect_unid: int = Utils.ncl_generate_composite_hash([
+                trigger.key_hash,
+                trigger.custom_key_hash,
+                sub_effect.key_hash,
+                sub_effect.custom_key_hash,
+                Keys.generate_hash(sub_effect.get_id())
+            ])
 
             match over_type:
                 0: # Equal
                     match (stat_num == stat_over_value or stat_over_value == Utils.LARGE_NUMBER): 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 1: # Up_E
                     match stat_num >= stat_over_value: 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 2: # Down_E
                     match stat_num <= stat_over_value: 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 3: # Up
                     match stat_num > stat_over_value: 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 4: # Down
                     match stat_num < stat_over_value: 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 5: # Equal_Multi
                     match stat_num % stat_over_value == 0 or stat_over_value == Utils.LARGE_NUMBER: 
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_rid, false)
+                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
+                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
 
-func yz_process_trigger_subeffect(sub_effect: Array, player_index: int, triggered_subeffects: Array, sub_effect_rid: RID, is_append: bool) -> void:
+func yz_process_trigger_subeffect(
+    sub_effect: Array, 
+    player_index: int, 
+    triggered_subeffects: Array, 
+    sub_effect_unid: int, 
+    is_append: bool
+) -> void:
     match is_append:
         true:
-            if !triggered_subeffects.has(sub_effect_rid): 
+            if !triggered_subeffects.has(sub_effect_unid): 
                 RunData.apply_effects_array(sub_effect, player_index)
-                triggered_subeffects.append(sub_effect_rid)
+                triggered_subeffects.append(sub_effect_unid)
         false:
-            if triggered_subeffects.has(sub_effect_rid): 
+            if triggered_subeffects.has(sub_effect_unid): 
                 RunData.unapply_effects_array(sub_effect, player_index)
-                triggered_subeffects.erase(sub_effect_rid)
+                triggered_subeffects.erase(sub_effect_unid)
