@@ -24,14 +24,17 @@ func get_args(_player_index: int) -> Array:
     var sub_effects_text: String = ""
 
     for i in range(stat_over_values.size()):
+        var stat_over_value: int = stat_over_values[i]
+        var over_type: int = over_types[i]
+
         var str_stat_over_value: String = ""
         var str_over_type: String = ""
 
-        match stat_over_values[i]:
+        match stat_over_value:
             Utils.LARGE_NUMBER: str_stat_over_value = tr("YZTATO_ANY_INT")
             _: str_stat_over_value = str(stat_over_values[i])
 
-        match over_types[i]:
+        match over_type:
             0: str_over_type = tr("YZTATO_EQUAL").format([str_stat_over_value]) # Equal
             1: str_over_type = tr("YZTATO_UP_E").format([str_stat_over_value]) # Up_E
             2: str_over_type = tr("YZTATO_DOWN_E").format([str_stat_over_value]) # Down_E
@@ -78,5 +81,5 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
         sub_effect.deserialize_and_merge(serialized_sub_effect)
         sub_effects.append(sub_effect)
 
-    over_types = serialized.over_types
-    stat_over_values = serialized.stat_over_values
+    over_types = serialized.over_types as Array
+    stat_over_values = serialized.stat_over_values as Array

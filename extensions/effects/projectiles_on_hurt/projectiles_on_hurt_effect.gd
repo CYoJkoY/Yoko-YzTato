@@ -103,4 +103,4 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
 		data.deserialize_and_merge(serialized.weapon_stats)
 		weapon_stats = data
 
-	auto_target_enemy = serialized.auto_target_enemy
+	auto_target_enemy = serialized.auto_target_enemy as bool
