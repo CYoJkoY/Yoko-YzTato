@@ -31,6 +31,7 @@ func _init():
         #          temp_stat_per_interval[ hit_protection ]
         #          heal_on_damage_taken
         #          projectiles_on_hurt
+        #          delayed_death
         # ACHIEVE: only_in, more_than_enough
 
         "main.gd",

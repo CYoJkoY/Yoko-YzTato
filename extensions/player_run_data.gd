@@ -56,6 +56,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_triggered_subeffects:[],
             Utils.yztato_trigger_subeffect_on_specific_stat_over_hash: [],
             Utils.yztato_projectiles_on_hurt_hash: [],
+            Utils.yztato_delayed_death_hash: 0,
 
         }
 

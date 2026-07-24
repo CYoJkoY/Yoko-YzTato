@@ -39,6 +39,7 @@ var yztato_specific_tag_item_bonus_hash: int = Keys.generate_hash("yztato_specif
 var yztato_trigger_subeffect_on_specific_stat_over_hash: int = Keys.generate_hash("yztato_trigger_subeffect_on_specific_stat_over")
 var yztato_triggered_subeffects: int = Keys.generate_hash("yztato_triggered_subeffects")
 var yztato_projectiles_on_hurt_hash: int = Keys.generate_hash("yztato_projectiles_on_hurt")
+var yztato_delayed_death_hash: int = Keys.generate_hash("yztato_delayed_death")
 
 # Challenges
 var chal_dark_forest_rule_hash: int = Keys.generate_hash("chal_dark_forest_rule")

@@ -2,9 +2,9 @@ extends "res://entities/units/player/player.gd"
 
 # blood_rage
 var blood_rage_effects: Array = []
+var blood_rage_timeout: int = 0
 onready var _blood_rage_screen: ColorRect = null
 onready var _blood_rage_particles: CPUParticles2D = null
-var blood_rage_timeout: int = 0
 
 # heal_on_damage_taken
 var _last_damage_taken: int = 0
@@ -14,10 +14,19 @@ var _last_damage_taken: int = 0
 var consumables_picked_up_last_wave: int = 0
 var consumables_picked_up_this_wave: int = 0
 
+# delayed_death
+var _is_dying: bool = false
+var _death_delay: float = 0.0
+var _death_delay_duration: float = 0.0
+var _pending_die_args: Entity.DieArgs = null
+
 # =========================== Extension =========================== #
 func _ready() -> void:
     _yztato_blood_rage_ready()
     _yztato_chal_ready()
+
+func _process(delta: float) -> void:
+    _yztato_delayed_death_process(delta)
 
 func _physics_process(delta: float) -> void:
     _yztato_blade_storm_attack_speed(delta)
@@ -38,8 +47,25 @@ func take_damage(value: int, args: TakeDamageArgs) -> Array:
 
     return result
 
+func die(args := Utils.default_die_args) -> void:
+    if _is_dying: return
+
+    var delay: int = _yztato_delayed_death()
+    if delay >= 0:
+        _yztato_start_delayed_death(delay, args)
+        return
+
+    .die(args)
+
+func heal(value: int, is_from_torture: bool = false) -> int:
+    var healed: int =.heal(value, is_from_torture)
+    if _is_dying and current_stats.health > 0 and !dead: _yztato_cancel_delayed_death()
+
+    return healed
+
 func _on_LoseHealthTimer_timeout() -> void:
     if _yztato_lose_hp_per_second_min_hp(): return
+
     ._on_LoseHealthTimer_timeout()
 
 func _on_OneSecondTimer_timeout() -> void:
@@ -208,10 +234,54 @@ func _yztato_lose_hp_per_second_min_hp() -> bool:
         lose_hp_per_second = current_stats.health - lose_hp_per_second_min_hp
 
     if lose_hp_per_second > 0: take_damage(lose_hp_per_second, _take_damage_args)
-    elif lose_hp_per_second == 0: pass
-    else: on_healing_effect(-lose_hp_per_second)
+    elif lose_hp_per_second < 0: on_healing_effect(-lose_hp_per_second)
 
     return true
+
+func _yztato_delayed_death() -> int:
+    if dead: return -1
+
+    var delay: int = RunData.get_player_effect(Utils.yztato_delayed_death_hash, player_index)
+    if delay <= 0: delay = -1
+
+    return delay
+
+func _yztato_start_delayed_death(delay: int, args: Entity.DieArgs) -> void:
+    _is_dying = true
+    _death_delay = 0.0
+    _death_delay_duration = float(delay)
+    _pending_die_args = args
+    set_process(true)
+
+func _yztato_delayed_death_process(delta: float) -> void:
+    if _death_delay_duration <= 0.0: return
+
+    _death_delay += delta
+    if _death_delay < _death_delay_duration: return
+
+    _yztato_finish_delayed_death()
+
+func _yztato_finish_delayed_death() -> void:
+    _is_dying = false
+    _death_delay = 0.0
+    _death_delay_duration = 0.0
+    set_process(false)
+
+    if is_queued_for_deletion() or cleaning_up or dead: return
+
+    if current_stats.health > 0: return
+
+    var args: Entity.DieArgs = _pending_die_args
+    _pending_die_args = null
+
+    .die(args)
+
+func _yztato_cancel_delayed_death() -> void:
+    _is_dying = false
+    _death_delay = 0.0
+    _death_delay_duration = 0.0
+    _pending_die_args = null
+    set_process(false)
 
 # =========================== Method =========================== #
 func yz_on_enemy_killed_reset_blood_rage() -> void:
