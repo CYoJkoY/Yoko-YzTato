@@ -108,7 +108,11 @@ func _yztato_melee_setup(effect_type: String) -> void:
 
 func _yztato_flying_sword_ready() -> void:
     var flying_sword: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
-    YZ_is_flying_sword = !(flying_sword.empty())
+    for key in flying_sword:
+        if flying_sword[key] <= 0: continue
+
+        YZ_is_flying_sword = true
+
     if !YZ_is_flying_sword: return
 
     var Qi_value: float = flying_sword.get(0, NAN)

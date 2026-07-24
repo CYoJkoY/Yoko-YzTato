@@ -12,7 +12,7 @@ func apply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
-    effects[key_hash][mode_type] = effects[key_hash].get(mode_type, 0) + value
+    effects[key_hash][mode_type] += value
 
 func unapply(player_index: int) -> void:
     if key_hash == Keys.empty_hash: return

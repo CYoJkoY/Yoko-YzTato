@@ -19,6 +19,7 @@ var _is_dying: bool = false
 var _death_delay: float = 0.0
 var _death_delay_duration: float = 0.0
 var _pending_die_args: Entity.DieArgs = null
+var _death_blink_phase: float = 0.0
 
 # =========================== Extension =========================== #
 func _ready() -> void:
@@ -257,6 +258,18 @@ func _yztato_delayed_death_process(delta: float) -> void:
     if _death_delay_duration <= 0.0: return
 
     _death_delay += delta
+
+    _death_blink_phase += delta
+    var progress: float = clamp(_death_delay / _death_delay_duration, 0.0, 1.0)
+
+    var frequency: float = lerp(4.0, 12.0, progress)
+    var blink: float = sin(_death_blink_phase * frequency * TAU)
+
+    if blink > 0.0:
+        var intensity: float = lerp(0.2, 0.6, progress) * blink
+        modulate = Color(1.0 + intensity, 1.0 - intensity * 0.7, 1.0 - intensity * 0.7, 1.0)
+    else: modulate = Color(1, 1, 1, 1)
+
     if _death_delay < _death_delay_duration: return
 
     _yztato_finish_delayed_death()
@@ -266,6 +279,8 @@ func _yztato_finish_delayed_death() -> void:
     _death_delay = 0.0
     _death_delay_duration = 0.0
     set_process(false)
+
+    modulate = Color(1, 1, 1, 1)
 
     if is_queued_for_deletion() or cleaning_up or dead: return
 
@@ -282,6 +297,8 @@ func _yztato_cancel_delayed_death() -> void:
     _death_delay_duration = 0.0
     _pending_die_args = null
     set_process(false)
+
+    modulate = Color(1, 1, 1, 1)
 
 # =========================== Method =========================== #
 func yz_on_enemy_killed_reset_blood_rage() -> void:
