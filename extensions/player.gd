@@ -249,7 +249,7 @@ func _yztato_delayed_death() -> int:
 func _yztato_start_delayed_death(delay: int, args: Entity.DieArgs) -> void:
     _is_dying = true
     _death_delay = 0.0
-    _death_delay_duration = float(delay)
+    _death_delay_duration = delay
     _pending_die_args = args
     set_process(true)
 
@@ -304,6 +304,8 @@ func yz_trigger_blood_rage(stats_change: Array, duration: float) -> void:
     timer.connect("timeout", self, "yz_on_blood_rage_timeout", [stats_change])
 
 func yz_on_blood_rage_timeout(stats_change: Array) -> void:
+    if is_queued_for_deletion() or dead: return
+
     for stat_change in stats_change:
         if stat_change[1] != 0: 
             TempStats.remove_stat(stat_change[0], stat_change[1], player_index)
@@ -311,6 +313,8 @@ func yz_on_blood_rage_timeout(stats_change: Array) -> void:
     if _blood_rage_screen: _blood_rage_screen.stop_blood_rage()
 
 func yz_on_blood_rage_timer_timeout() -> void:
+    if is_queued_for_deletion() or dead: return
+
     if blood_rage_effects.empty(): return
 
     for effect in blood_rage_effects:
