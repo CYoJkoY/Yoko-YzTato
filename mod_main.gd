@@ -11,6 +11,11 @@ func _init():
     dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
     ext_dir = dir + "extensions/"
 
+    # Add extensions
+    install_script_extensions()
+
+# =========================== Custom =========================== #
+func install_script_extensions() -> void:
     var extensions: Array = [
 
         "enemy.gd",
