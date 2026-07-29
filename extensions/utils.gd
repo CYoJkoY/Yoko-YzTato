@@ -7,6 +7,7 @@ var stat_yztato_suture_hash: int = Keys.generate_hash("stat_yztato_suture")
 var yztato_destory_weapons_hash: int = Keys.generate_hash("yztato_destory_weapons")
 var yztato_set_stat_hash: int = Keys.generate_hash("yztato_set_stat")
 var yztato_life_steal_hash: int = Keys.generate_hash("yztato_life_steal")
+var yztato_melee_bounce_bullets_hash: int = Keys.generate_hash("yztato_melee_bounce_bullets")
 var yztato_melee_erase_bullets_hash: int = Keys.generate_hash("yztato_melee_erase_bullets")
 var yztato_flying_sword_hash: int = Keys.generate_hash("yztato_flying_sword")
 var yztato_blade_storm_hash: int = Keys.generate_hash("yztato_blade_storm")
@@ -15,7 +16,6 @@ var yztato_chimera_weapon_hash: int = Keys.generate_hash("yztato_chimera_weapon"
 var yztato_explosion_erase_bullets_hash: int = Keys.generate_hash("yztato_explosion_erase_bullets")
 var yztato_upgrade_when_killed_enemies_hash: int = Keys.generate_hash("yztato_upgrade_when_killed_enemies")
 var yztato_gain_stat_when_killed_single_scaling_hash: int = Keys.generate_hash("yztato_gain_stat_when_killed_single_scaling")
-var yztato_melee_bounce_bullets_hash: int = Keys.generate_hash("yztato_melee_bounce_bullets")
 var yztato_special_picked_up_change_stat_hash: int = Keys.generate_hash("yztato_special_picked_up_change_stat")
 var yztato_weapon_set_filter_hash: int = Keys.generate_hash("yztato_weapon_set_filter")
 var yztato_weapon_set_delete_hash: int = Keys.generate_hash("yztato_weapon_set_delete")
@@ -52,14 +52,14 @@ var chal_one_force_subdue_ten_hash: int = Keys.generate_hash("chal_one_force_sub
 
 # =========================== Extension =========================== #
 func is_manual_aim(player_index: int) -> bool:
-	var is_manual: bool =.is_manual_aim(player_index) or false
-	is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
+    var is_manual: bool =.is_manual_aim(player_index) or false
+    is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
 
-	return is_manual
+    return is_manual
 
 # =========================== Custom =========================== #
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
-	var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
-	if is_blade_storm: is_manual = false
+    var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
+    if is_blade_storm: is_manual = false
 
-	return is_manual
+    return is_manual

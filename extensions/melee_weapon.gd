@@ -152,15 +152,15 @@ func _yztato_blade_storm_ready() -> void:
 # =========================== Method =========================== #
 func yz_connect_melee_signals(effect_type: String) -> void:
     node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
-    
+
     if !node_range.is_connected("area_entered", self, "yz_on_Range_area_entered"):
         node_range.connect("area_entered", self, "yz_on_Range_area_entered")
     if !node_range.is_connected("area_exited", self, "yz_on_Range_area_exited"):
         node_range.connect("area_exited", self, "yz_on_Range_area_exited")
-    
+
     node_hit_box.monitoring = true
     node_hit_box.collision_mask += Utils.ENEMY_PROJECTILES_BIT
-    
+
     match effect_type:
         "erase":
             if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"): return
@@ -171,7 +171,7 @@ func yz_connect_melee_signals(effect_type: String) -> void:
             bounced_projectile_shader.set_shader_param("desaturation", 0.0)
 
             if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"): return
-            
+
             var tracking_key_hashes: Array = []
             var bounce_values: Array = []
             var melee_bounces: Array = RunData.get_player_effect(Utils.yztato_melee_bounce_bullets_hash, player_index)
@@ -254,7 +254,7 @@ func yz_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, 
         var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0)
         attack_hit_count += 1
         _hit_count_by_attack_id[attack_id] = attack_hit_count
-        
+
         ChallengeService.try_complete_challenge(Utils.chal_counterattack_hash, attack_hit_count)
 
 func yz_process_attack_mode() -> void:

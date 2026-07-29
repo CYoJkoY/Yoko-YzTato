@@ -5,16 +5,46 @@ const MYMODNAME_LOG: String = "Yoko-YzTato"
 
 var dir: String = ""
 var ext_dir: String = ""
+var service_dir: String = ""
 
 # =========================== Extension =========================== #
 func _init():
     dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
     ext_dir = dir + "extensions/"
+    service_dir = ext_dir + "services/"
+
+    # Add Classes
+    install_script_classes()
 
     # Add extensions
     install_script_extensions()
 
 # =========================== Custom =========================== #
+func install_script_classes() -> void:
+    var classes: Array = [
+        # Services
+        {
+            "base": "Reference",
+            "class": "MeleeBounceService",
+            "language": "GDScript",
+            "path": service_dir + "melee_bounce_service.gd"
+        },
+
+    ]
+
+    var registered_classes: Array = ProjectSettings.get_setting("_global_script_classes")
+    var registered_names: Dictionary = {}
+    for old_class in registered_classes:
+        registered_names[old_class.class ] = true
+
+    var classes_to_register: Array = []
+    for new_class in classes:
+        if !registered_names.has(new_class.class ):
+            classes_to_register.append(new_class)
+
+    if !classes_to_register.empty():
+        ModLoaderMod.register_global_classes_from_array(classes_to_register)
+
 func install_script_extensions() -> void:
     var extensions: Array = [
 
