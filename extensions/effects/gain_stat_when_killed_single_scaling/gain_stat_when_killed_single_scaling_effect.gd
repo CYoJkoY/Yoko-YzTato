@@ -9,7 +9,7 @@ export(float) var scaling_percent = 0.1
 export(String) var tracking_key = ""
 var tracking_key_hash: int = Keys.empty_hash
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":

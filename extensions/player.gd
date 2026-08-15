@@ -21,7 +21,7 @@ var _death_delay_duration: float = 0.0
 var _pending_die_args: Entity.DieArgs = null
 var _death_blink_phase: float = 0.0
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready() -> void:
     _yztato_blood_rage_ready()
     _yztato_chal_ready()
@@ -77,7 +77,7 @@ func on_consumable_picked_up(consumable_data: ConsumableData) -> void:
     .on_consumable_picked_up(consumable_data)
     _yztato_chal_on_consumable_picked_up()
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_blade_storm_attack_speed(delta: float) -> void:
     if dead: return
 
@@ -300,7 +300,7 @@ func _yztato_cancel_delayed_death() -> void:
 
     modulate = Color(1, 1, 1, 1)
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_on_enemy_killed_reset_blood_rage() -> void:
     if !blood_rage_effects.empty():
         for effect in blood_rage_effects: 

@@ -10,7 +10,7 @@ export(bool) var lock_range: bool = false
 export(bool) var lock_speed: bool = false
 export(bool) var knockback_only_back: bool = true
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_boomerang_weapon"
 

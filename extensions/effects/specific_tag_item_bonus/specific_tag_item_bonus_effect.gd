@@ -3,7 +3,7 @@ extends Effect
 export(String) var tag = ""
 export(int) var tag_nb = 1
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_specific_tag_item_bonus"
 

@@ -5,7 +5,7 @@ var stat_hash: int = Keys.empty_hash
 export var interval: int = 1
 export var reset_on_hit: bool = false
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":

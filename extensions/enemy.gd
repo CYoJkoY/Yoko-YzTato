@@ -1,6 +1,6 @@
 extends "res://entities/units/enemies/enemy.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready():
     _yztato_extrusion_attack_ready()
 
@@ -10,7 +10,7 @@ func take_damage(value: int, args: TakeDamageArgs) -> Array:
 
     return damage_taken
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_extrusion_attack_ready() -> void:
     for player_index in RunData.get_player_count():
         if !RunData.get_player_effect_bool(Utils.yztato_extrusion_attack_hash, player_index): continue

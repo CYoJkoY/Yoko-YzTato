@@ -5,7 +5,7 @@ var YzTimers: Array = []
 # EFFECT : special_picked_up_change_stat
 var special_picked_up_count: Dictionary = {}
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready() -> void:
     _yztato_init_trigger_subeffect_on_specific_stat_over_check_timer()
 
@@ -23,10 +23,10 @@ func on_levelled_up(player_index: int) -> void:
     _yztato_stats_chance_on_level_up(player_index)
 
 func clean_up_room() -> void:
-	for timer in YzTimers: timer.stop()
-	.clean_up_room()
+    for timer in YzTimers: timer.stop()
+    .clean_up_room()
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_init_trigger_subeffect_on_specific_stat_over_check_timer() -> void:
     for player_index in range(RunData.players_data.size()):
         var triggers: Array = RunData.get_player_effect(Utils.yztato_trigger_subeffect_on_specific_stat_over_hash, player_index)
@@ -82,7 +82,7 @@ func _yztato_stats_chance_on_level_up(player_index: int) -> void:
             RunData.add_stat(stat_hash, stat_increase, player_index)
             RunData.ncl_add_effect_tracking_value(tracking_key_hash, stat_increase, player_index)
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_trigger_subeffect_on_specific_stat_over(triggers: Array, player_index: int) -> void:
     var triggered_subeffects: Array = RunData.get_player_effect(Utils.yztato_triggered_subeffects, player_index)
 

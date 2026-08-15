@@ -6,7 +6,7 @@ export(Array, Resource) var sub_effects
 export(Array, StatOverType) var over_types
 export(Array, int) var stat_over_values
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_trigger_subeffect_on_specific_stat_over"
 

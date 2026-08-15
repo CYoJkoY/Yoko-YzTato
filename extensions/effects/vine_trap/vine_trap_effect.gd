@@ -7,7 +7,7 @@ export(int) var chance: int = 100
 
 var weapon_pos: int = -1
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_vine_trap"
 

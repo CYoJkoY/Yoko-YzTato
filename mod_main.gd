@@ -7,7 +7,7 @@ var dir: String = ""
 var ext_dir: String = ""
 var service_dir: String = ""
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _init():
     dir = ModLoaderMod.get_unpacked_dir() + MYMODNAME_MOD_DIR
     ext_dir = dir + "extensions/"
@@ -19,7 +19,7 @@ func _init():
     # Add extensions
     install_script_extensions()
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func install_script_classes() -> void:
     var classes: Array = [
         # Services

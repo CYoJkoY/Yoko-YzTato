@@ -4,7 +4,7 @@ enum ModeType {Qi, SwordArray}
 
 export(ModeType) var mode_type = ModeType.Qi
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_flying_sword"
 

@@ -3,7 +3,7 @@ extends Effect
 export(float) var duration: float = 1.0
 export(float) var scale: float = 1.0
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_leave_fire"
 

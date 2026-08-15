@@ -9,12 +9,12 @@ var args: TakeDamageArgs = null
 var enemies_in_range: Array = []
 var weapon_pos: int = -1
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func set_data(data: Resource) -> void:
     .set_data(data)
     _fantasy_set_data(data)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _fantasy_set_data(data: Resource) -> void:
     weapon_pos = data.weapon_pos
     args = TakeDamageArgs.new(player_index)
@@ -25,7 +25,7 @@ func _fantasy_set_data(data: Resource) -> void:
     duration_timer.start()
     attack_timer.start()
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func _on_Area2D_body_entered(body: Enemy):
     if body.dead: return
 

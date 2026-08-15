@@ -1,11 +1,11 @@
 extends "res://ui/menus/ingame/upgrades_ui.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int) -> void:
     _yztato_extra_upgrade(player_index)
     ._on_choose_button_pressed(upgrade_data, player_index)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_extra_upgrade(player_index: int) -> void:
     var extra_upgrades: Array = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
     if extra_upgrades.empty(): return

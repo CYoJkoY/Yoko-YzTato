@@ -1,6 +1,6 @@
 extends Reference
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func apply(
     original_item: ItemParentData,
     cursed_item: ItemParentData,
@@ -23,7 +23,7 @@ func apply(
         dlc_1_data
     )
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_curse_item(
     _original_item: ItemParentData,
     cursed_item: ItemParentData,
@@ -133,7 +133,7 @@ func _yztato_curse_item(
 
     return new_item_data as ItemParentData
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func has_effect_yztato(effects: Array) -> bool:
     for effect in effects:
         if is_effect_yztato(effect):

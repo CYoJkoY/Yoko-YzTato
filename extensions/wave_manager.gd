@@ -1,11 +1,11 @@
 extends "res://zones/wave_manager.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func init(p_wave_timer: Timer, zone_data: ZoneData, wave_data: Resource) -> void:
     .init(p_wave_timer, zone_data, wave_data)
     _yztato_extra_enemies_next_waves_init(wave_data)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
     for player_index in RunData.get_player_count():
         var effects: Dictionary = RunData.get_player_effects(player_index)

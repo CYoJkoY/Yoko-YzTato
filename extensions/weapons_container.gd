@@ -1,12 +1,12 @@
 extends "res://entities/units/player/weapons_container.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func update_weapons_positions(weapons: Array) -> void:
     if _yztato_blade_storm_positions(weapons):
         return
     .update_weapons_positions(weapons)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_blade_storm_positions(weapons: Array) -> bool:
     for player_index in RunData.players_data.size():
         var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)

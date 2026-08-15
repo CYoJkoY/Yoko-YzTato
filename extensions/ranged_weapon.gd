@@ -21,7 +21,7 @@ var wait_until_return: bool = true
 # EFFECT: gain_stat_when_killed_single_scaling
 var gain_stat_when_killed_single_scaling_killed_count: Dictionary = {}
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready():
     _yztato_boomerang_ready()
 
@@ -59,7 +59,7 @@ func should_shoot() -> bool:
     
     return should_shoot
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_chimera_init_stats() -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon": continue
@@ -145,7 +145,7 @@ func _yztato_chal_on_weapon_hit_something(hitbox: Hitbox) -> void:
     ### one_force_subdue_ten ###
     ChallengeService.try_complete_challenge(Utils.chal_one_force_subdue_ten_hash, hitbox.damage)
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_on_projectile_returned(projectile: Node2D) -> void:
     active_boomerangs.erase(projectile)
     if active_boomerangs.empty():

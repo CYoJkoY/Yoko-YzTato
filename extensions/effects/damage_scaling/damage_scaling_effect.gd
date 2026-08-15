@@ -2,7 +2,7 @@ extends Effect
 
 export(Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func duplicate(subresources:=false) -> Resource:
     var duplication: Resource =.duplicate(subresources)
     if !scaling_stats.empty():

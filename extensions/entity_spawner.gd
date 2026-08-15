@@ -6,7 +6,7 @@ var gain_stat_when_killed_single_scaling_killed_count: Array = [ {}, {}, {}, {}]
 ### hellfire ###
 var enemies_killed_is_burning: int = 0
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _on_enemy_died(enemy: Node2D, _args: Entity.DieArgs) -> void:
     ._on_enemy_died(enemy, _args)
     if !_cleaning_up:
@@ -18,7 +18,7 @@ func on_enemy_charmed(enemy: Entity) -> void:
     .on_enemy_charmed(enemy)
     _yztato_chal_on_enemy_charmed(charmed_enemies)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
     for player_index in RunData.players_data.size():
         var effect_items: Array = RunData.get_player_effect(Utils.yztato_gain_stat_when_killed_single_scaling_hash, player_index)

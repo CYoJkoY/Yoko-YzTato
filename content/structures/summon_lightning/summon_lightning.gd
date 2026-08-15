@@ -16,12 +16,12 @@ var args: TakeDamageArgs = null
 var enemies_in_area: Array = []
 var weapon_pos: int = -1
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func set_data(data: Resource) -> void:
     .set_data(data)
     _fantasy_set_data(data)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _fantasy_set_data(data: Resource) -> void:
     cloud.material.set_shader_param("lightning_power", 0.0)
 
@@ -36,7 +36,7 @@ func _fantasy_set_data(data: Resource) -> void:
     duration_timer.start()
     charge_timer.start()
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func _on_HitArea_body_entered(body: Enemy) -> void:
     if body.dead: return
 

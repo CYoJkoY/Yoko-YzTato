@@ -1,6 +1,6 @@
 extends "res://singletons/item_service.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetRandItemForWaveArgs) -> ItemParentData:
     var item: ItemParentData =._get_rand_item_for_wave(wave, player_index, type, args)
     item = _yztato_weapon_set_filter(item, player_index, type, wave, args)
@@ -8,7 +8,7 @@ func _get_rand_item_for_wave(wave: int, player_index: int, type: int, args: GetR
 
     return item
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: int, wave: int, args: GetRandItemForWaveArgs) -> ItemParentData:
     var weapon_set_filters: Array = RunData.get_player_effect(Utils.yztato_weapon_set_filter_hash, player_index)
     if weapon_set_filters.empty() or type != TierData.WEAPONS: return item

@@ -2,7 +2,7 @@ extends Effect
 
 export(int) var damage_percent: int = 50
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_multi_hit"
 

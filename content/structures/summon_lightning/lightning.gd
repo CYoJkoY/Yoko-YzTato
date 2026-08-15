@@ -9,7 +9,7 @@ var detail: int = 25
 var fade_duration: float = 0.3
 var fade_delay: float = 0.1
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func setup(start: Vector2, end: Vector2, dis: float = 80.0, det: int = 25, fade_time: float = 0.3) -> void:
     global_position = start
     var local_start = Vector2.ZERO
@@ -38,7 +38,7 @@ func setup(start: Vector2, end: Vector2, dis: float = 80.0, det: int = 25, fade_
     clear_timer.wait_time = fade_duration + fade_delay + 0.1
     clear_timer.start()
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func generate_lightning(start: Vector2, end: Vector2) -> PoolVector2Array:
     var points := PoolVector2Array([start])
     var total_points = detail
@@ -63,6 +63,6 @@ func generate_lightning(start: Vector2, end: Vector2) -> PoolVector2Array:
     points.append(end)
     return points
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func _on_ClearTimer_timeout():
     if !is_queued_for_deletion(): queue_free()

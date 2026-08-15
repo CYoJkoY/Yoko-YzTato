@@ -1,5 +1,5 @@
 extends Effect
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_melee_erase"

@@ -4,7 +4,7 @@ export(String) var stat: String = ""
 var stat_hash: int = Keys.empty_hash
 export(int) var stat_nb: int = 0
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func duplicate(subresources:=false) -> Resource:
     var duplication =.duplicate(subresources)
     if stat_hash == Keys.empty_hash and stat != "":

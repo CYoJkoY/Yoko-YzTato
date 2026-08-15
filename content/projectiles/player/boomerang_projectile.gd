@@ -13,7 +13,7 @@ var lock_range: bool = false
 var lock_speed: bool = false
 var knockback_only_back: bool = false
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _physics_process(_delta: float):
     _yztato_boomerang_physics_process()
 
@@ -28,7 +28,7 @@ func _set_time_until_max_range() -> void:
     ._set_time_until_max_range()
     _yztato_boomerang_set_time_until_max_range(_hitbox.effects)
     
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_boomerang_set_time_until_max_range(effects: Array) -> void:
     for effect in effects:
         if effect.get_id() != "yztato_boomerang_weapon": continue

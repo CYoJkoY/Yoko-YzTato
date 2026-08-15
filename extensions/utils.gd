@@ -50,14 +50,14 @@ var chal_only_in_hash: int = Keys.generate_hash("chal_only_in")
 var chal_sudden_misfortune_hash: int = Keys.generate_hash("chal_sudden_misfortune")
 var chal_one_force_subdue_ten_hash: int = Keys.generate_hash("chal_one_force_subdue_ten")
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func is_manual_aim(player_index: int) -> bool:
     var is_manual: bool =.is_manual_aim(player_index) or false
     is_manual = _yztato_blade_storm_manual_aim(is_manual, player_index)
 
     return is_manual
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
     var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
     if is_blade_storm: is_manual = false

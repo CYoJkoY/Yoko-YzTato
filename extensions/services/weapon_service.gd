@@ -7,14 +7,14 @@ var entity_spawner: EntitySpawner = null
 const BURNING_PARTICLE_TSCN = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/ground_burning_particles.tscn")
 var _burning_particle_pool_id: int = Keys.generate_hash(BURNING_PARTICLE_TSCN.resource_path)
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
     var new_stats: Array =._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
     new_stats = _yztato_scaling_damage(new_stats, player_index)
 
     return new_stats
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
     var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
     if damage_scaling_effects.empty(): return new_stats
@@ -37,7 +37,7 @@ func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
 
     return new_stats
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
     if !is_instance_valid(thing_hit): return
 

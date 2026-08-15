@@ -6,7 +6,7 @@ export(Array, Resource) var chimera_texture_sets: Array = []
 var col_b: String = "[/color]"
 var set_path: String = "res://mods-unpacked/Yoko-YzTato/extensions/effects/chimera_weapon/chimera_texture_set.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 static func get_id() -> String:
     return "yztato_chimera_weapon"
 
@@ -47,7 +47,7 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
             set.deserialize_and_merge(texture_set)
             chimera_texture_sets.append(set)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_chimera_get_text(player_index: int) -> String:
     var text = Text.text("EFFECT_YZTATO_CHIMERA_FRONT", [str(value)])
     for stats in chimera_projectile_stats:
@@ -55,7 +55,7 @@ func _yztato_chimera_get_text(player_index: int) -> String:
 
     return text
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func get_projectile_text(stats: Resource, player_index: int) -> String:
     var text: String = Utils.ncl_get_dmg_text_with_scaling_stats(
         stats.damage, stats.scaling_stats,

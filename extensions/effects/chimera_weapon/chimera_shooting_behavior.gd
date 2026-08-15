@@ -1,12 +1,12 @@
 extends RangedWeaponShootingBehavior
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
     var projectile = _yztato_chimera_shoot_projectile(rotation, knockback)
 
     return projectile
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_chimera_shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
     var projectile_index: int
     var projectile_stats: RangedWeaponStats = _parent.current_stats
@@ -37,7 +37,7 @@ func _yztato_chimera_shoot_projectile(rotation: float = _parent.rotation, knockb
 
     return projectile
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func _yztato_modify_projectile(projectile_stats: RangedWeaponStats, args: WeaponServiceSpawnProjectileArgs) -> Array:
     for effect in _parent.effects:
         if effect.get_id() == "yztato_chimera_weapon":

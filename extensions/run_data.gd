@@ -1,6 +1,6 @@
 extends "res://singletons/run_data.gd"
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func manage_life_steal(weapon_stats: WeaponStats, player_index: int) -> void:
     if _yztato_life_steal(weapon_stats, player_index): return
 
@@ -10,7 +10,7 @@ func update_item_related_effects(player_index: int) -> void:
     _yztato_update_specific_tag_item_bonuses(player_index)
     .update_item_related_effects(player_index)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_life_steal(weapon_stats: WeaponStats, player_index: int) -> bool:
     var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
     if life_steal == 0: return false

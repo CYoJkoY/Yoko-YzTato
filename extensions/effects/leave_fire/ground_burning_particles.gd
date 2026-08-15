@@ -8,7 +8,7 @@ var wait_time: float = 1.0
 var field_dmg: int = 1
 var is_active: bool = false
 
-# =========================== Method =========================== #
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func rescale(p_scale: float = 1.0) -> void:
     var mat = get("process_material")
     if mat != null:

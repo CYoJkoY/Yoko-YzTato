@@ -2,12 +2,12 @@ extends PlayerProjectile
 
 onready var sprite_node: Sprite = $Sprite
 
-# =========================== Extension =========================== #
+# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
     _yztato_chimera_on_Hitbox_hit_something(_hitbox.effects)
     ._on_Hitbox_hit_something(thing_hit, damage_dealt)
 
-# =========================== Custom =========================== #
+# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_chimera_on_Hitbox_hit_something(effects: Array) -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon": continue
@@ -22,7 +22,7 @@ func _yztato_chimera_on_Hitbox_hit_something(effects: Array) -> void:
             _apply_texture_modifications(texture_data)
             break
 
-# =========================== Methods =========================== #
+# ══════════════════════════════════════════ Methods ══════════════════════════════════════════ #
 func _apply_texture_modifications(texture_data) -> void:
     var enable_flags = texture_data.enable_flags
     
