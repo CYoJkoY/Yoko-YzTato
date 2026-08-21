@@ -43,22 +43,26 @@ func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
 func update_sprite_flipv() -> void:
     if _yztato_blade_storm_enabled:
         return
+
     .update_sprite_flipv()
 
 func update_idle_angle() -> void:
     if _yztato_blade_storm_enabled:
         _current_idle_angle = _yztato_idle_angle
         return
+
     .update_idle_angle()
 
 func get_direction() -> float:
     if _yztato_blade_storm_enabled:
         return _current_idle_angle
+
     return .get_direction()
 
 func get_direction_and_calculate_target() -> float:
     if _yztato_blade_storm_enabled:
         return _current_idle_angle
+
     return .get_direction_and_calculate_target()
 
 func shoot() -> void:
@@ -110,6 +114,10 @@ func _yztato_setup_melee_effects() -> void:
 func _yztato_setup_flying_sword() -> void:
     var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
     _yztato_flying_sword_enabled = not flying_sword_dict.empty()
+
+func _yztato_set_blade_storm_angle(angle: float) -> void:
+	_yztato_idle_angle = angle
+	_current_idle_angle = angle
 
 func _yztato_setup_blade_storm() -> void:
     _yztato_blade_storm_enabled = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)

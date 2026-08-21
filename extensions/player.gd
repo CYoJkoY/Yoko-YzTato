@@ -17,7 +17,7 @@ var _death_delay_duration: float = 0.0
 var _pending_die_args: Entity.DieArgs = null
 var _death_blink_phase: float = 0.0
 
-var _yztato_blade_storm_radius: float = 100.0
+var _yztato_blade_storm_initialized: bool = false
 var _yztato_blade_storm_angle_offset: float = 0.0
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
@@ -84,29 +84,56 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     if dead:
         return
 
-    var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
-    if blade_storm == 0:
+    if !RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index):
         return
-
-    var _storm_duration: float = 0.0
-    for weapon in current_weapons:
-        _storm_duration += weapon.current_stats.cooldown
-    _storm_duration *= max(0.1, current_stats.health * 1.0 / max_stats.health) * 0.07 / current_weapons.size()
-    _storm_duration /= max(0.01, 1.0 + Utils.get_stat(Keys.stat_attack_speed_hash, player_index) / 100.0)
-    _storm_duration = max(_storm_duration, 0.04)
-
-    _yztato_blade_storm_angle_offset += delta / _storm_duration * TAU
-    if _yztato_blade_storm_angle_offset > TAU:
-        _yztato_blade_storm_angle_offset -= TAU
 
     var weapon_count: int = current_weapons.size()
     if weapon_count == 0:
         return
 
-    var angle_step: float = TAU / weapon_count
+    var total_cooldown: float = 0.0
+    var valid_weapon_count: int = 0
 
+    for weapon in current_weapons:
+        if not weapon:
+            continue
+
+        total_cooldown += weapon.current_stats.cooldown
+        valid_weapon_count += 1
+
+    if valid_weapon_count == 0:
+        return
+
+    var avg_cooldown: float = total_cooldown / float(valid_weapon_count)
+
+    var health_ratio: float = clamp(
+        float(current_stats.health) / float(max(1, max_stats.health)),
+        0.0,
+        1.0
+    )
+
+    var health_speed_factor: float = lerp(2.0, 1.0, health_ratio)
+
+    var attack_speed: float = Utils.get_stat(Keys.stat_attack_speed_hash, player_index)
+    var attack_speed_factor: float = max(0.1, 1.0 + attack_speed / 100.0)
+
+    attack_speed_factor = pow(attack_speed_factor, 0.5)
+    attack_speed_factor = clamp(attack_speed_factor, 0.25, 2.0)
+
+    var storm_duration: float = avg_cooldown / (health_speed_factor * attack_speed_factor)
+
+    storm_duration = clamp(storm_duration, 0.22, 3.0)
+
+    var angle_delta: float = delta / storm_duration * TAU
+    _yztato_blade_storm_angle_offset += angle_delta
+
+    if _yztato_blade_storm_angle_offset >= TAU:
+        _yztato_blade_storm_angle_offset = fmod(_yztato_blade_storm_angle_offset, TAU)
+
+    var just_wrapped: bool = _yztato_blade_storm_angle_offset < angle_delta
+
+    var angle_step: float = TAU / weapon_count
     var radius: float = 100.0 if weapon_count <= 6 else 100.0 + (weapon_count - 6) * 10.0
-    _yztato_blade_storm_radius = radius
 
     for i in range(weapon_count):
         var weapon: Weapon = current_weapons[i]
@@ -114,17 +141,23 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
             continue
 
         var weapon_angle: float = _yztato_blade_storm_angle_offset + i * angle_step
-        var offset: Vector2 = Vector2(cos(weapon_angle), sin(weapon_angle)) * radius
+        var outward: Vector2 = Vector2(cos(weapon_angle), sin(weapon_angle))
+        var outward_angle: float = outward.angle()
 
-        weapon.global_position = global_position + offset
+        weapon.call("_yztato_set_blade_storm_angle", outward_angle)
 
-        weapon.rotation = weapon_angle
+        weapon.global_position = global_position + outward * radius
+        weapon.global_rotation = outward_angle
 
-        if _yztato_blade_storm_angle_offset < delta / _storm_duration * TAU:
+        if weapon.sprite:
+            weapon.sprite.global_rotation = outward_angle
+            weapon.sprite.flip_v = abs(outward_angle) > PI * 0.5
+
+        if just_wrapped and weapon._hitbox:
             weapon.disable_hitbox()
             weapon.enable_hitbox()
             weapon._hitbox.set_knockback(
-                -Vector2(cos(weapon_angle), sin(weapon_angle)),
+                outward,
                 weapon.current_stats.knockback,
                 player_index
             )

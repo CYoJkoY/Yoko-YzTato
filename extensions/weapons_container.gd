@@ -53,7 +53,7 @@ func update_weapons_positions(weapons: Array) -> void:
 func _yztato_blade_storm_positions(weapons: Array) -> bool:
     var has_blade_storm: bool = false
     for player_index in RunData.players_data.size():
-        if RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index) != 0:
+        if RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index):
             has_blade_storm = true
             break
 
