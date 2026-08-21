@@ -1,61 +1,104 @@
 extends "res://entities/units/player/weapons_container.gd"
 
+# ══════════════════════════════════════════ Constants & Variables ══════════════════════════════════════════ #
+
+const _LAYOUT_CONFIG: Dictionary = {
+    1: {
+        "node_pattern": "_one_weapon_attachment_%d",
+        "plus_angle": 0.5 * PI,
+        "reindex": {}
+    },
+
+    2: {
+        "node_pattern": "_two_weapons_attachment_%d",
+        "plus_angle": 0.0 * PI,
+        "reindex": {}
+    },
+
+    3: {
+        "node_pattern": "_three_weapons_attachment_%d",
+        "plus_angle": 0.166666 * PI,
+        "reindex": {}
+    },
+
+    4: {
+        "node_pattern": "_four_weapons_attachment_%d",
+        "plus_angle": 0.25 * PI,
+        "reindex": {}
+    },
+
+    5: {
+        "node_pattern": "_five_weapons_attachment_%d",
+        "plus_angle": 0.0,
+        "reindex": {3: 4, 4: 3}
+    },
+
+    6: {
+        "node_pattern": "_six_weapons_attachment_%d",
+        "plus_angle": 0.3333333 * PI,
+        "reindex": {3: 5, 4: 3, 5: 4}
+    },
+}
+
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
+
 func update_weapons_positions(weapons: Array) -> void:
     if _yztato_blade_storm_positions(weapons):
         return
+
     .update_weapons_positions(weapons)
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
+
 func _yztato_blade_storm_positions(weapons: Array) -> bool:
+    var has_blade_storm: bool = false
     for player_index in RunData.players_data.size():
-        var blade_storm: int = RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index)
-        if blade_storm == 0: continue
+        if RunData.get_player_effect(Utils.yztato_blade_storm_hash, player_index) != 0:
+            has_blade_storm = true
+            break
 
-        var attack_range: float = 0.0
-        for weapon in weapons: attack_range += weapon.current_stats.max_range
+    if not has_blade_storm:
+        return false
 
-        attack_range /= weapons.size() * 100.0
-        attack_range = max(attack_range, 0.5)
+    var count: int = weapons.size()
+    if count == 0:
+        return false
 
-        if weapons.size() <= 6:
-            var i2idx: Dictionary = {3: 5, 4: 3, 5: 4}
-            var node_name: String = "_six_weapons_attachment_%d"
-            var plus_angle: float = 0.3333333 * PI
-            match weapons.size():
-                1:
-                    node_name = "_one_weapon_attachment_%d"
-                    plus_angle = 0.5 * PI
-                2:
-                    node_name = "_two_weapons_attachment_%d"
-                    plus_angle = 0.0 * PI
-                3:
-                    node_name = "_three_weapons_attachment_%d"
-                    plus_angle = 0.166666 * PI
-                4:
-                    node_name = "_four_weapons_attachment_%d"
-                    plus_angle = 0.25 * PI
-                    i2idx = {}
-                5:
-                    i2idx = {3: 4, 4: 3}
-                    node_name = "_five_weapons_attachment_%d"
+    var total_range: float = 0.0
+    for weapon in weapons:
+        total_range += weapon.current_stats.max_range
+    var attack_range: float = max(total_range / (count * 100.0), 0.5)
 
-            var angle = TAU / weapons.size()
-            for i in weapons.size():
-                var position = self.get(node_name % (i + 1)).position
-                if weapons.size() == 2:
-                    position.y = 0
-                var real_idx = i
-                if i2idx.has(i):
-                    real_idx = i2idx[i]
-                weapons[i].attach(position * attack_range, real_idx * angle + plus_angle)
-                weapons[i].enable_hitbox()
-        else:
-            for i in weapons.size():
-                var r = 50 + (weapons.size() - 6) * 5
-                var angle = i * (TAU / weapons.size())
-                weapons[i].attach(Vector2(r * cos(angle) * attack_range, r * sin(angle) * attack_range), angle)
-                weapons[i].enable_hitbox()
+    if count <= 6:
+        var layout: Dictionary = _LAYOUT_CONFIG.get(count)
+        if layout == null:
+            return false
 
-            return true
-    return false
+        var node_pattern: String = layout["node_pattern"]
+        var plus_angle: float = layout["plus_angle"]
+        var reindex: Dictionary = layout["reindex"]
+        var angle_step: float = TAU / count
+
+        for i in count:
+            var node: Node = get_node(node_pattern % (i + 1))
+            if node == null:
+                continue
+
+            var pos: Vector2 = node.position
+            if count == 2:
+                pos.y = 0
+
+            var real_idx: int = reindex.get(i, i)
+            weapons[i].attach(pos * attack_range, real_idx * angle_step + plus_angle)
+            weapons[i].enable_hitbox()
+        return true
+
+    else:
+        var radius: int = 50 + (count - 6) * 5
+        var angle_step: float = TAU / count
+        for i in count:
+            var angle: float = i * angle_step
+            var pos: Vector2 = Vector2(radius * cos(angle) * attack_range, radius * sin(angle) * attack_range)
+            weapons[i].attach(pos, angle)
+            weapons[i].enable_hitbox()
+        return true

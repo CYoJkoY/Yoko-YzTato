@@ -1,213 +1,235 @@
 extends "res://singletons/weapon_service.gd"
 
-var main: Main = null
-var entity_spawner: EntitySpawner = null
+# ══════════════════════════════════════════ Variables & Constants ══════════════════════════════════════════ #
 
-# EFFECT: leave_fire
 const BURNING_PARTICLE_TSCN = preload("res://mods-unpacked/Yoko-YzTato/extensions/effects/leave_fire/ground_burning_particles.tscn")
-var _burning_particle_pool_id: int = Keys.generate_hash(BURNING_PARTICLE_TSCN.resource_path)
+var _BURNING_PARTICLE_POOL_ID = Keys.generate_hash(BURNING_PARTICLE_TSCN.resource_path)
+
+var _yz_main_cache: Main = null
+var _yz_entity_spawner_cache: EntitySpawner = null
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
+
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
-    var new_stats: Array =._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
-    new_stats = _yztato_scaling_damage(new_stats, player_index)
+    var new_stats: Array = ._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
+    new_stats = _yztato_apply_damage_scaling(new_stats, player_index)
 
     return new_stats
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func _yztato_scaling_damage(new_stats: Array, player_index: int) -> Array:
-    var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
-    if damage_scaling_effects.empty(): return new_stats
 
+func _yztato_apply_damage_scaling(new_stats: Array, player_index: int) -> Array:
+    var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
+    if damage_scaling_effects.empty():
+        return new_stats
+
+    var result_stats: Array = new_stats.duplicate(true)
     for effect in damage_scaling_effects:
         var stat: float = Utils.get_stat(effect[0], player_index)
         var value: float = effect[1]
         var scaling_stats: Array = effect[2]
         var num: float = stat / value
 
-        var new_scaling_stats = new_stats.duplicate(true)
         for scaling_stat in scaling_stats:
-            var scaling_stat_hash: int = scaling_stat[0]
-            var scaling_stat_value: float = scaling_stat[1]
-            var existing_scaling_stat = find_scaling_stat(scaling_stat_hash, new_scaling_stats)
-            if existing_scaling_stat != null: existing_scaling_stat[1] += scaling_stat_value * num
-            else: new_scaling_stats.append([scaling_stat_hash, scaling_stat_value * num])
+            var stat_hash: int = scaling_stat[0]
+            var add_value: float = scaling_stat[1] * num
+            var existing = _yztato_find_scaling_stat(stat_hash, result_stats)
+            if existing != null:
+                existing[1] += add_value
+            else:
+                result_stats.append([stat_hash, add_value])
 
-        return new_scaling_stats
+    return result_stats
 
-    return new_stats
+func _yztato_find_scaling_stat(stat_hash: int, stats_array: Array):
+    for item in stats_array:
+        if item[0] == stat_hash:
+            return item
 
-# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
-func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
-    if !is_instance_valid(thing_hit): return
+    return null
 
-    # Check weapon effects first
-    for effect in effects:
-        if effect.get_id() != "yztato_multi_hit": continue
+func _yztato_get_main() -> Main:
+    if _yz_main_cache == null:
+        _yz_main_cache = Utils.get_scene_node()
 
-        for _i in effect.value:
-            var args = TakeDamageArgs.new(player_index)
-            var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect.damage_percent / 100, args)
-            RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
-        return
+    return _yz_main_cache
 
-    # Check player effects
-    var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
-    for effect in effect_multi_hit:
-        for _i in effect[0]:
-            var args = TakeDamageArgs.new(player_index)
-            var damage_taken: Array = thing_hit.take_damage(damage_dealt * effect[1] / 100, args)
-            RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+func _yztato_get_entity_spawner() -> EntitySpawner:
+    if _yz_entity_spawner_cache == null:
+        var main = _yztato_get_main()
+        if main != null:
+            _yz_entity_spawner_cache = main._entity_spawner
 
-func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
-    if !is_instance_valid(entity_spawner): entity_spawner = Utils.get_scene_node()._entity_spawner
+    return _yz_entity_spawner_cache
 
-    if !is_instance_valid(thing_hit): return
-
-    var spawn_pos: Vector2 = thing_hit.global_position
-
-    # Check weapon effects first
-    for effect in effects:
-        if effect.get_id() != "yztato_vine_trap": continue
-
-        var count: int = effect.trap_count
-        var chance: float = effect.chance / 100.0
-
-        if !Utils.get_chance_success(chance): continue
-
-        var vine_trap: StructureEffect = effect
-        for _i in count:
-            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 20)
-            var queue = entity_spawner.queues_to_spawn_structures[player_index]
-            vine_trap.weapon_pos = weapon_pos
-            queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
-
-    # Check player effects
-    var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
-    for effect_data in vine_trap_effects:
-        var count: int = effect_data[0]
-        var chance: float = effect_data[1] / 100.0
-
-        if !Utils.get_chance_success(chance): continue
-
-        var vine_trap: StructureEffect = effect_data[2]
-        for _i in count:
-            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 20)
-            var queue = entity_spawner.queues_to_spawn_structures[player_index]
-            queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
-
-func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
-    for fire in effects:
-        if fire.get_id() != "yztato_leave_fire": continue
-
-        var particle = yz_get_burning_particle()
-        if particle:
-            particle.activate(thing_hit.global_position, thing_hit._burning)
-            particle.rescale(fire.scale)
-            particle.set_duration(fire.duration)
-            if !is_instance_valid(main): main = Utils.get_scene_node()
-            main._on_emit_fire_particle(particle)
-
-    var effect_leave_fire = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
-    if effect_leave_fire.empty(): return
-
-    for fire in effect_leave_fire:
-        var particle = yz_get_burning_particle()
-        if particle:
-            particle.activate(thing_hit.global_position, thing_hit._burning)
-            particle.rescale(fire[3])
-            particle.set_duration(fire[2])
-            if !is_instance_valid(main): main = Utils.get_scene_node()
-            main._on_emit_fire_particle(particle)
-
-func yz_get_burning_particle() -> CPUParticles2D:
-    if !is_instance_valid(main): main = Utils.get_scene_node()
-    var particle: CPUParticles2D = main.get_node_from_pool(_burning_particle_pool_id, main._effects)
+func _yztato_get_burning_particle(main: Main) -> CPUParticles2D:
+    var particle: CPUParticles2D = main.get_node_from_pool(_BURNING_PARTICLE_POOL_ID, main._effects)
     if particle == null:
         particle = BURNING_PARTICLE_TSCN.instance()
         particle.visible = false
         particle.emitting = false
         main._effects.add_child(particle)
-    particle.on_deactivate_callback = funcref(self, "yz_recycle_burning_particle")
+        particle.on_deactivate_callback = funcref(self, "_yztato_recycle_burning_particle")
+
     return particle
 
-func yz_recycle_burning_particle(particle: CPUParticles2D) -> void:
-    if !is_instance_valid(particle): return
+func _yztato_recycle_burning_particle(particle: CPUParticles2D) -> void:
+    if particle == null:
+        return
 
     particle.on_deactivate_callback = null
     particle.visible = false
     particle.emitting = false
-    if !is_instance_valid(main): main = Utils.get_scene_node()
-    main.add_node_to_pool(particle, _burning_particle_pool_id)
+    var main = _yztato_get_main()
+    if main != null:
+        main.add_node_to_pool(particle, _BURNING_PARTICLE_POOL_ID)
 
-func yz_gain_stat_when_killed_scaling_single(effects: Array, gain_stat_when_killed_single_scaling_killed_count: Dictionary, player: Player, player_index: int) -> void:
-    for effect_index in effects.size():
-        var effect = effects[effect_index]
-        if effect.get_id() != "yztato_gain_stat_when_killed_single_scaling": continue
+# ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 
-        gain_stat_when_killed_single_scaling_killed_count[effect_index] = gain_stat_when_killed_single_scaling_killed_count.get(effect_index, 0) + 1
-        var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int
-        if scaling_value <= 0 or gain_stat_when_killed_single_scaling_killed_count[effect_index] % scaling_value != 0: continue
+func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
+    if not is_instance_valid(thing_hit):
+        return
 
-        gain_stat_when_killed_single_scaling_killed_count[effect_index] = 0 # For dynamic scaling_value
-        RunData.add_stat(effect.stat_hash, effect.stat_nb, player_index)
-        RunData.ncl_add_effect_tracking_value(effect.tracking_key_hash, effect.stat_nb, player_index)
-
-        # Update when first add hit_protection
-        if effect.stat_hash == Keys.hit_protection_hash: player._hit_protection += effect.stat_nb
-
-func yz_upgrade_when_killed_enemies(effects: Array, _enemies_killed_this_wave_count: int, weapon_pos: int, player_index: int) -> void:
+    # Weapon effects
     for effect in effects:
-        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
-        if _enemies_killed_this_wave_count % effect.value != 0: return
+        if effect.get_id() == "yztato_multi_hit":
+            var dmg_percent = effect.damage_percent / 100.0
+            for _i in effect.value:
+                var args = TakeDamageArgs.new(player_index)
+                var damage_taken: Array = thing_hit.take_damage(damage_dealt * dmg_percent, args)
+                RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
+            return
 
-        var target_weapon_id_hash: int = effect.key_hash
+    # Player effects
+    var effect_multi_hit = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
+    for effect in effect_multi_hit:
+        var dmg_percent = effect[1] / 100.0
+        for _i in effect[0]:
+            var args = TakeDamageArgs.new(player_index)
+            var damage_taken: Array = thing_hit.take_damage(damage_dealt * dmg_percent, args)
+            RunData.add_weapon_dmg_dealt(weapon_pos, damage_taken[1], player_index)
 
-        Utils.ncl_change_weapon_within_run(weapon_pos, target_weapon_id_hash, player_index)
+func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
+    if not is_instance_valid(thing_hit):
+        return
 
-func yz_can_attack_while_moving(effects: Array, player: Player, should_shoot: bool) -> bool:
-    if !should_shoot: return false
-
-    for effect in effects:
-        if effect.get_id() == "yztato_cant_attack_while_moving":
-            should_shoot = player._current_movement == Vector2.ZERO
-            break
-
-    return should_shoot
-
-func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
-    if !is_instance_valid(entity_spawner): entity_spawner = Utils.get_scene_node()._entity_spawner
-
-    if !is_instance_valid(thing_hit): return
+    var spawner = _yztato_get_entity_spawner()
+    if spawner == null:
+        return
 
     var spawn_pos: Vector2 = thing_hit.global_position
 
-    # Check weapon effects first
+    # Weapon effects
     for effect in effects:
-        if effect.get_id() != "yztato_summon_lightning": continue
+        if effect.get_id() == "yztato_vine_trap":
+            if Utils.get_chance_success(effect.chance / 100.0):
+                var vine_trap: StructureEffect = effect
+                var queue = spawner.queues_to_spawn_structures[player_index]
+                for _i in effect.trap_count:
+                    var pos = spawner.get_spawn_pos_in_area(spawn_pos, 20)
+                    vine_trap.weapon_pos = weapon_pos
+                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+                break
 
-        var count: int = effect.lightning_count
-        var chance: float = effect.chance / 100.0
+    # Player effects
+    var vine_trap_effects = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
+    for effect_data in vine_trap_effects:
+        if Utils.get_chance_success(effect_data[1] / 100.0):
+            var vine_trap: StructureEffect = effect_data[2]
+            var queue = spawner.queues_to_spawn_structures[player_index]
+            for _i in effect_data[0]:
+                var pos = spawner.get_spawn_pos_in_area(spawn_pos, 20)
+                queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
 
-        if !Utils.get_chance_success(chance): continue
+func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
+    var main = _yztato_get_main()
+    if main == null:
+        return
 
-        var lightning: StructureEffect = effect
-        for _i in count:
-            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 30)
-            var queue = entity_spawner.queues_to_spawn_structures[player_index]
-            lightning.weapon_pos = weapon_pos
-            queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+    # Weapon effects
+    for fire in effects:
+        if fire.get_id() == "yztato_leave_fire":
+            var particle = _yztato_get_burning_particle(main)
+            if particle != null:
+                particle.activate(thing_hit.global_position, thing_hit._burning)
+                particle.rescale(fire.scale)
+                particle.set_duration(fire.duration)
+                main._on_emit_fire_particle(particle)
+            return
 
-    # Check player effects
+    # Player effects
+    var effect_leave_fire = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
+    for fire in effect_leave_fire:
+        var particle = _yztato_get_burning_particle(main)
+        if particle != null:
+            particle.activate(thing_hit.global_position, thing_hit._burning)
+            particle.rescale(fire[3])
+            particle.set_duration(fire[2])
+            main._on_emit_fire_particle(particle)
+
+func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
+    if not is_instance_valid(thing_hit):
+        return
+
+    var spawner = _yztato_get_entity_spawner()
+    if spawner == null:
+        return
+
+    var spawn_pos: Vector2 = thing_hit.global_position
+
+    # Weapon effects
+    for effect in effects:
+        if effect.get_id() == "yztato_summon_lightning":
+            if Utils.get_chance_success(effect.chance / 100.0):
+                var lightning: StructureEffect = effect
+                var queue = spawner.queues_to_spawn_structures[player_index]
+                for _i in effect.lightning_count:
+                    var pos = spawner.get_spawn_pos_in_area(spawn_pos, 30)
+                    lightning.weapon_pos = weapon_pos
+                    queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+                break
+
+    # Player effects
     var summon_lightning_effects = RunData.get_player_effect(Utils.yztato_summon_lightning_hash, player_index)
     for effect_data in summon_lightning_effects:
-        var count: int = effect_data[0]
-        var chance: float = effect_data[1] / 100.0
+        if Utils.get_chance_success(effect_data[1] / 100.0):
+            var lightning: StructureEffect = effect_data[2]
+            var queue = spawner.queues_to_spawn_structures[player_index]
+            for _i in effect_data[0]:
+                var pos = spawner.get_spawn_pos_in_area(spawn_pos, 30)
+                queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
 
-        if !Utils.get_chance_success(chance): continue
+func yz_gain_stat_when_killed_scaling_single(effects: Array, kill_count_dict: Dictionary, player: Player, player_index: int) -> void:
+    for effect_index in range(effects.size()):
+        var effect = effects[effect_index]
+        if effect.get_id() != "yztato_gain_stat_when_killed_single_scaling":
+            continue
 
-        var lightning: StructureEffect = effect_data[2]
-        for _i in count:
-            var pos = entity_spawner.get_spawn_pos_in_area(spawn_pos, 30)
-            var queue = entity_spawner.queues_to_spawn_structures[player_index]
-            queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+        kill_count_dict[effect_index] = kill_count_dict.get(effect_index, 0) + 1
+        var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int
+        if scaling_value <= 0 or kill_count_dict[effect_index] % scaling_value != 0:
+            continue
+
+        kill_count_dict[effect_index] = 0
+        RunData.add_stat(effect.stat_hash, effect.stat_nb, player_index)
+        RunData.ncl_add_effect_tracking_value(effect.tracking_key_hash, effect.stat_nb, player_index)
+        if effect.stat_hash == Keys.hit_protection_hash:
+            player._hit_protection += effect.stat_nb
+
+func yz_upgrade_when_killed_enemies(effects: Array, enemies_killed_this_wave_count: int, weapon_pos: int, player_index: int) -> void:
+    for effect in effects:
+        if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash:
+            continue
+
+        if enemies_killed_this_wave_count % effect.value == 0:
+            Utils.ncl_change_weapon_within_run(weapon_pos, effect.key_hash, player_index)
+
+func yz_can_attack_while_moving(effects: Array, player: Player, should_shoot: bool) -> bool:
+    if not should_shoot:
+        return false
+
+    for effect in effects:
+        if effect.get_id() == "yztato_cant_attack_while_moving":
+            return player._current_movement == Vector2.ZERO
+
+    return should_shoot
