@@ -1,7 +1,6 @@
-extends RangedWeapon
+extends "res://weapons/ranged/ranged_weapon.gd"
 
 # ══════════════════════════════════════════ Variables ══════════════════════════════════════════ #
-
 var _yztato_kill_count_scaling: Dictionary = {}
 var _yztato_chimera_projs: Array = []
 var _yztato_chimera_texture_paths: Array = []
@@ -14,7 +13,6 @@ var _yztato_knockback_only_back: bool = false
 var _yztato_wait_until_return: bool = true
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-
 func _ready() -> void:
     _yztato_setup_boomerang()
 
@@ -54,7 +52,6 @@ func should_shoot() -> bool:
     return should_shoot
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-
 func _yztato_init_chimera_stats() -> void:
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon":
@@ -81,6 +78,7 @@ func _yztato_setup_boomerang() -> void:
         _yztato_max_damage_mul = effect.max_damage_mul
         _yztato_knockback_only_back = effect.knockback_only_back
         _yztato_wait_until_return = effect.boomerang_wait
+
         break
 
 func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
@@ -96,7 +94,6 @@ func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
 
 func _yztato_boomerang_shoot() -> void:
     _nb_shots_taken += 1
-
     var original_stats: RangedWeaponStats
     for projectile_count in _stats_every_x_shots:
         if _nb_shots_taken % projectile_count == 0:
@@ -115,6 +112,7 @@ func _yztato_boomerang_shoot() -> void:
     var target: float = 0.0
     if _manual_aim:
         target = current_stats.max_range
+
     else:
         if _current_target.empty() or not is_instance_valid(_current_target[0]):
             target = current_stats.max_range
@@ -147,7 +145,6 @@ func _yztato_challenge_on_hit(hitbox: Hitbox) -> void:
         ChallengeService.try_complete_challenge(Utils.chal_one_force_subdue_ten_hash, hitbox.damage)
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
-
 func _yztato_on_projectile_returned(projectile: Node2D) -> void:
     _yztato_active_boomerangs.erase(projectile)
     if _yztato_active_boomerangs.empty():

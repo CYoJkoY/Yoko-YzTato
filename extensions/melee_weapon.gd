@@ -1,7 +1,6 @@
 extends "res://weapons/melee/melee_weapon.gd"
 
 # ══════════════════════════════════════════ Variables ══════════════════════════════════════════ #
-
 var _yztato_blade_storm_enabled: bool = false
 var _yztato_flying_sword_enabled: bool = false
 var _yztato_has_attacked_target: bool = false
@@ -15,7 +14,6 @@ var _yztato_bounced_projectile_shader: ShaderMaterial = null
 var _yztato_kill_count_scaling: Dictionary = {}
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-
 func _ready() -> void:
     _yztato_setup_melee_effects()
     _yztato_setup_flying_sword()
@@ -45,48 +43,52 @@ func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
 func update_sprite_flipv() -> void:
     if _yztato_blade_storm_enabled:
         return
-
     .update_sprite_flipv()
 
 func update_idle_angle() -> void:
     if _yztato_blade_storm_enabled:
         _current_idle_angle = _yztato_idle_angle
         return
-
     .update_idle_angle()
 
 func get_direction() -> float:
-    var direction: float = .get_direction()
     if _yztato_blade_storm_enabled:
-        direction = _current_idle_angle
-
-    return direction
+        return _current_idle_angle
+    return .get_direction()
 
 func get_direction_and_calculate_target() -> float:
-    var target: float = .get_direction_and_calculate_target()
     if _yztato_blade_storm_enabled:
-        target = _current_idle_angle
-
-    return target
+        return _current_idle_angle
+    return .get_direction_and_calculate_target()
 
 func shoot() -> void:
-    if _yztato_flying_sword_enabled or _yztato_blade_storm_enabled:
+    if _yztato_blade_storm_enabled:
         return
+
+    if _yztato_flying_sword_enabled:
+        var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+        if not flying_sword_dict.empty():
+            var qi_value: float = flying_sword_dict.get(0, -1.0)
+            var array_value: float = flying_sword_dict.get(1, -1.0)
+            var current_damage = current_stats.damage
+            var can_attack: bool = qi_value >= 0 and qi_value < current_damage
+            var can_array: bool = array_value >= 0 and array_value < current_damage
+            if can_attack or can_array:
+                return
 
     .shoot()
 
 func should_shoot() -> bool:
     var should_shoot: bool = .should_shoot()
     should_shoot = WeaponService.yz_can_attack_while_moving(effects, _parent, should_shoot)
-
     return should_shoot
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-
 func _yztato_setup_melee_effects() -> void:
-    var effect_types = ["erase", "bounce"]
+    var effect_types: Array = ["erase", "bounce"]
     for effect_type in effect_types:
-        var found = false
+        var found: bool = false
+
         # Check player effects
         for pi in RunData.players_data.size():
             if RunData.get_player_effect(Keys.generate_hash("yztato_melee_" + effect_type + "_bullets"), pi):
@@ -134,8 +136,8 @@ func _yztato_process_flying_sword(player_index: int) -> void:
     var qi_value: float = flying_sword_dict.get(0, -1.0)
     var array_value: float = flying_sword_dict.get(1, -1.0)
     var current_damage = current_stats.damage
-    var can_attack = qi_value >= 0 and qi_value < current_damage
-    var can_array = array_value >= 0 and array_value < current_damage
+    var can_attack: bool = qi_value >= 0 and qi_value < current_damage
+    var can_array: bool = array_value >= 0 and array_value < current_damage
 
     if can_attack:
         _yztato_process_attack_mode()
@@ -147,6 +149,7 @@ func _yztato_flying_sword_on_hit(thing_hit: Node) -> void:
     var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
     if flying_sword_dict.empty():
         return
+
     var qi_value: float = flying_sword_dict.get(0, -1.0)
     if qi_value >= 0 and qi_value < current_stats.damage:
         _yztato_has_attacked_target = true
@@ -163,11 +166,9 @@ func _yztato_init_bounce_resources() -> void:
     _yztato_bounced_projectile_stats.max_range = Utils.LARGE_NUMBER
     _yztato_bounced_projectile_stats.projectile_speed = 2000
     _yztato_bounced_projectile_stats.projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
-
     _yztato_bounce_args = WeaponServiceSpawnProjectileArgs.new()
     _yztato_bounce_args.from_player_index = player_index
     _yztato_bounce_args.deferred = true
-
     _yztato_bounced_projectile_shader = load("res://resources/shaders/hue_shift_shadermat.tres")
     _yztato_bounced_projectile_shader.set_shader_param("hue", 0.55)
     _yztato_bounced_projectile_shader.set_shader_param("desaturation", 0.0)
@@ -192,7 +193,6 @@ func _yztato_process_attack_mode() -> void:
 func _yztato_process_sword_array_mode(player_level: int) -> void:
     if _current_cooldown > 0 or _targets_in_range.empty():
         return
-
     _targets_in_range.shuffle()
     var sword_count: int = int(clamp(player_level / 2, 1, 16))
     var target_count: int = _targets_in_range.size()
@@ -227,9 +227,9 @@ func _yztato_create_sword_projectile(target: Node) -> void:
         _yztato_sword_array_stats.max_range = 300
         _yztato_sword_array_stats.can_bounce = false
 
-    var modified_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
-    modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sword_array/sword_array.webp")
-    _yztato_sword_array_stats.projectile_scene = modified_scene
+        var modified_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
+        modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sword_array/sword_array.webp")
+        _yztato_sword_array_stats.projectile_scene = modified_scene
 
     var sword_array_projectile: Node = WeaponService.spawn_projectile(
         project_position,
@@ -245,7 +245,6 @@ func _yztato_move_to_target(target: Node) -> void:
     var dist_to_player: float = global_position.distance_squared_to(target.global_position)
     var direction: float = global_position.direction_to(target.global_position).angle()
     var max_range_sq: float = current_stats.max_range * current_stats.max_range * 4
-
     if dist_to_player > max_range_sq:
         _yztato_has_attacked_target = true
         return
@@ -257,7 +256,6 @@ func _yztato_return_to_player() -> void:
     var target_idle_pos: Vector2 = _yztato_get_idle_position()
     var dist_to_orbit: float = global_position.distance_squared_to(target_idle_pos)
     var direction: float = global_position.direction_to(_parent.global_position).angle()
-
     if dist_to_orbit > 10000:
         global_position = global_position.move_toward(target_idle_pos, 20.0)
         rotation = lerp(rotation, direction, 0.2)
@@ -276,7 +274,6 @@ func _yztato_get_idle_position() -> Vector2:
     return Vector2(_parent.global_position.x + offset_x, _parent.global_position.y + offset_y - 24)
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
-
 func _yztato_connect_melee_signals(effect_type: String) -> void:
     var node_range: Area2D = $Range
     node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
@@ -332,9 +329,9 @@ func _yztato_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Ar
 
     if _yztato_bounced_projectile_stats == null:
         _yztato_init_bounce_resources()
-
     _yztato_bounced_projectile_scene._bundled["variants"][2] = original_texture
     _yztato_bounced_projectile_stats.projectile_scene = _yztato_bounced_projectile_scene
+
     area.hit_something(self, 0)
 
     var new_projectiles: Array = []
