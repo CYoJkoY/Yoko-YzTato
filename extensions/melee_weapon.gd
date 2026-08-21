@@ -1,9 +1,5 @@
 extends "res://weapons/melee/melee_weapon.gd"
 
-onready var node_collision: CollisionShape2D = $"Sprite/Hitbox/Collision"
-onready var node_range: Area2D = $"Range"
-onready var node_hit_box: Hitbox = $"Sprite/Hitbox"
-
 # EFFECT: blade_storm
 onready var YZ_is_blade_storm: bool = false
 
@@ -35,26 +31,33 @@ func _ready() -> void:
     _yztato_blade_storm_ready()
 
 func _physics_process(_delta: float) -> void:
-    if YZ_is_flying_sword: _yztato_flying_sword(player_index)
+    if YZ_is_flying_sword:
+        _yztato_flying_sword(player_index)
 
 func _on_Hitbox_hit_something(thing_hit: Node, damage_dealt: int) -> void:
     ._on_Hitbox_hit_something(thing_hit, damage_dealt)
+
     _yztato_flying_sword_erase(thing_hit)
 
 func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox):
     .on_weapon_hit_something(thing_hit, damage_dealt, hitbox)
-    if thing_hit._burning != null: WeaponService.yz_leave_fire(effects, thing_hit, player_index)
+
+    if thing_hit._burning != null:
+        WeaponService.yz_leave_fire(effects, thing_hit, player_index)
+
     WeaponService.yz_multi_hit(effects, weapon_pos, thing_hit, damage_dealt, player_index)
     WeaponService.yz_vine_trap(effects, weapon_pos, thing_hit, player_index)
     WeaponService.yz_summon_lightning(effects, weapon_pos, thing_hit, player_index)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
+
     WeaponService.yz_gain_stat_when_killed_scaling_single(effects, gain_stat_when_killed_single_scaling_killed_count, _parent, player_index)
     WeaponService.yz_upgrade_when_killed_enemies(effects, _enemies_killed_this_wave_count, weapon_pos, player_index)
 
 func update_sprite_flipv() -> void:
-    if YZ_is_blade_storm: return
+    if YZ_is_blade_storm:
+        return
 
     .update_sprite_flipv()
 
@@ -66,25 +69,29 @@ func update_idle_angle() -> void:
     .update_idle_angle()
 
 func get_direction() -> float:
-    var direction =.get_direction()
-    if YZ_is_blade_storm: direction = _current_idle_angle
+    var direction: float = .get_direction()
+
+    if YZ_is_blade_storm:
+        direction = _current_idle_angle
 
     return direction
 
 func get_direction_and_calculate_target() -> float:
-    var target =.get_direction_and_calculate_target()
-    if YZ_is_blade_storm: target = _current_idle_angle
+    var target: float = .get_direction_and_calculate_target()
+
+    if YZ_is_blade_storm:
+        target = _current_idle_angle
 
     return target
 
 func shoot() -> void:
-    if YZ_is_flying_sword or \
-    YZ_is_blade_storm: return
+    if YZ_is_flying_sword or YZ_is_blade_storm:
+        return
 
     .shoot()
 
 func should_shoot() -> bool:
-    var should_shoot: bool =.should_shoot()
+    var should_shoot: bool = .should_shoot()
     should_shoot = WeaponService.yz_can_attack_while_moving(effects, _parent, should_shoot)
 
     return should_shoot
@@ -139,11 +146,13 @@ func _yztato_blade_storm_ready() -> void:
     YZ_is_blade_storm = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
     if !YZ_is_blade_storm: return
 
-    var offset = node_collision.shape.extents.x * 0.5
+    var node_collision: CollisionShape2D = $"Sprite/Hitbox/Collision"
+    var offset: float = node_collision.shape.extents.x * 0.5
     node_collision.shape.extents.x = offset
     node_collision.position.x *= 0.5
     node_collision.position.x += offset
 
+    var node_hit_box: Hitbox = $"Sprite/Hitbox"
     node_hit_box.monitoring = true
     node_hit_box.collision_mask = Utils.ENEMY_PROJECTILES_BIT
     if !node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"):
@@ -151,6 +160,7 @@ func _yztato_blade_storm_ready() -> void:
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_connect_melee_signals(effect_type: String) -> void:
+    var node_range: Area2D = $"Range"
     node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
 
     if !node_range.is_connected("area_entered", self, "yz_on_Range_area_entered"):
@@ -158,19 +168,22 @@ func yz_connect_melee_signals(effect_type: String) -> void:
     if !node_range.is_connected("area_exited", self, "yz_on_Range_area_exited"):
         node_range.connect("area_exited", self, "yz_on_Range_area_exited")
 
+    var node_hit_box: Hitbox = $"Sprite/Hitbox"
     node_hit_box.monitoring = true
     node_hit_box.collision_mask += Utils.ENEMY_PROJECTILES_BIT
 
     match effect_type:
         "erase":
-            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"): return
+            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_erase"):
+                return
 
             node_hit_box.connect("area_entered", self, "yz_on_Hitbox_area_entered_erase")
         "bounce":
             bounced_projectile_shader.set_shader_param("hue", 0.55)
             bounced_projectile_shader.set_shader_param("desaturation", 0.0)
 
-            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"): return
+            if node_hit_box.is_connected("area_entered", self, "yz_on_Hitbox_area_entered_bounce"):
+                return
 
             var tracking_key_hashes: Array = []
             var bounce_values: Array = []

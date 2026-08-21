@@ -87,7 +87,7 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
     for effect_data in vine_trap_effects:
         var count: int = effect_data[0]
         var chance: float = effect_data[1] / 100.0
-        
+
         if !Utils.get_chance_success(chance): continue
 
         var vine_trap: StructureEffect = effect_data[2]
@@ -160,7 +160,7 @@ func yz_upgrade_when_killed_enemies(effects: Array, _enemies_killed_this_wave_co
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash: continue
         if _enemies_killed_this_wave_count % effect.value != 0: return
-        
+
         var target_weapon_id_hash: int = effect.key_hash
 
         Utils.ncl_change_weapon_within_run(weapon_pos, target_weapon_id_hash, player_index)
@@ -169,7 +169,7 @@ func yz_can_attack_while_moving(effects: Array, player: Player, should_shoot: bo
     if !should_shoot: return false
 
     for effect in effects:
-        if effect.get_id() == "yztato_can_attack_while_moving":
+        if effect.get_id() == "yztato_cant_attack_while_moving":
             should_shoot = player._current_movement == Vector2.ZERO
             break
 
@@ -203,7 +203,7 @@ func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, playe
     for effect_data in summon_lightning_effects:
         var count: int = effect_data[0]
         var chance: float = effect_data[1] / 100.0
-        
+
         if !Utils.get_chance_success(chance): continue
 
         var lightning: StructureEffect = effect_data[2]

@@ -14,36 +14,36 @@ func _init():
     service_dir = ext_dir + "services/"
 
     # Add Classes
-    install_script_classes()
+    # install_script_classes()
 
     # Add extensions
     install_script_extensions()
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func install_script_classes() -> void:
-    var classes: Array = [
-        # Services
-        {
-            "base": "Reference",
-            "class": "MeleeBounceService",
-            "language": "GDScript",
-            "path": service_dir + "melee_bounce_service.gd"
-        },
+# func install_script_classes() -> void:
+#     var classes: Array = [
+#         # Services
+#         {
+#             "base": "Reference",
+#             "class": "MeleeBounceService",
+#             "language": "GDScript",
+#             "path": service_dir + "melee_bounce_service.gd"
+#         },
 
-    ]
+#     ]
 
-    var registered_classes: Array = ProjectSettings.get_setting("_global_script_classes")
-    var registered_names: Dictionary = {}
-    for old_class in registered_classes:
-        registered_names[old_class.class ] = true
+#     var registered_classes: Array = ProjectSettings.get_setting("_global_script_classes")
+#     var registered_names: Dictionary = {}
+#     for old_class in registered_classes:
+#         registered_names[old_class.class ] = true
 
-    var classes_to_register: Array = []
-    for new_class in classes:
-        if !registered_names.has(new_class.class ):
-            classes_to_register.append(new_class)
+#     var classes_to_register: Array = []
+#     for new_class in classes:
+#         if !registered_names.has(new_class.class ):
+#             classes_to_register.append(new_class)
 
-    if !classes_to_register.empty():
-        ModLoaderMod.register_global_classes_from_array(classes_to_register)
+#     if !classes_to_register.empty():
+#         ModLoaderMod.register_global_classes_from_array(classes_to_register)
 
 func install_script_extensions() -> void:
     var extensions: Array = [
@@ -81,7 +81,7 @@ func install_script_extensions() -> void:
         "item_service.gd",
         # EFFECTS: weapon_set_filter
         #          weapon_set_delete
-        
+
         "utils.gd",
         # EFFECTS: blade_storm[ 3/4 ]
         # EFFECTS' NAMES, Methods
@@ -112,7 +112,7 @@ func install_script_extensions() -> void:
         #          vine_trap[ 2/3 ]
         #          upgrade_when_killed_enemies[ 2/3 ]
         #          can_attack_while_moving[ 2/3 ]
-        # ACHIEVE: counterattack 
+        # ACHIEVE: counterattack
 
         "ranged_weapon.gd",
         # EFFECTS: boomerang_weapon
@@ -133,7 +133,7 @@ func install_script_extensions() -> void:
         "run_data.gd",
         # EFFECTS: life_steal
         #          update_specific_tag_item_bonuses
-        
+
     ]
 
     for path in extensions:
