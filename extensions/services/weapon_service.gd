@@ -54,6 +54,7 @@ func _yztato_get_entity_spawner() -> EntitySpawner:
         var main: Main = _yztato_get_main()
         if main != null:
             _yz_entity_spawner_cache = main._entity_spawner
+
     return _yz_entity_spawner_cache
 
 func _yztato_get_burning_particle(main: Main) -> CPUParticles2D:
@@ -64,6 +65,7 @@ func _yztato_get_burning_particle(main: Main) -> CPUParticles2D:
         particle.emitting = false
         main._effects.add_child(particle)
         particle.on_deactivate_callback = funcref(self, "_yztato_recycle_burning_particle")
+
     return particle
 
 func _yztato_recycle_burning_particle(particle: CPUParticles2D) -> void:
@@ -117,8 +119,9 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
                 var queue: Array = spawner.queues_to_spawn_structures[player_index]
                 for _i in effect.trap_count:
                     var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 20)
-                    vine_trap.weapon_pos = weapon_pos
-                    queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+                    var copy: StructureEffect = vine_trap.duplicate()
+                    copy.weapon_pos = weapon_pos
+                    queue.append([EntityType.STRUCTURE, copy.scene, pos, copy])
                 break
 
     # Player effects
@@ -129,7 +132,8 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
             var queue: Array = spawner.queues_to_spawn_structures[player_index]
             for _i in effect_data[0]:
                 var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 20)
-                queue.append([EntityType.STRUCTURE, vine_trap.scene, pos, vine_trap])
+                var copy: StructureEffect = vine_trap.duplicate()
+                queue.append([EntityType.STRUCTURE, copy.scene, pos, copy])
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
     var main: Main = _yztato_get_main()

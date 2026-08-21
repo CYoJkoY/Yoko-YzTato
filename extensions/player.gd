@@ -17,7 +17,8 @@ var _death_delay_duration: float = 0.0
 var _pending_die_args: Entity.DieArgs = null
 var _death_blink_phase: float = 0.0
 
-var _yztato_blade_storm_positions_set: bool = false
+var _yztato_blade_storm_radius: float = 100.0
+var _yztato_blade_storm_angle_offset: float = 0.0
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready() -> void:
@@ -87,10 +88,6 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     if blade_storm == 0:
         return
 
-    if not _yztato_blade_storm_positions_set:
-        _weapons_container.update_weapons_positions(current_weapons)
-        _yztato_blade_storm_positions_set = true
-
     var _storm_duration: float = 0.0
     for weapon in current_weapons:
         _storm_duration += weapon.current_stats.cooldown
@@ -98,15 +95,39 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     _storm_duration /= max(0.01, 1.0 + Utils.get_stat(Keys.stat_attack_speed_hash, player_index) / 100.0)
     _storm_duration = max(_storm_duration, 0.04)
 
-    _weapons_container.rotation += delta / _storm_duration * TAU
-    for weapon in current_weapons:
-        if _weapons_container.rotation > TAU:
+    _yztato_blade_storm_angle_offset += delta / _storm_duration * TAU
+    if _yztato_blade_storm_angle_offset > TAU:
+        _yztato_blade_storm_angle_offset -= TAU
+
+    var weapon_count: int = current_weapons.size()
+    if weapon_count == 0:
+        return
+
+    var angle_step: float = TAU / weapon_count
+
+    var radius: float = 100.0 if weapon_count <= 6 else 100.0 + (weapon_count - 6) * 10.0
+    _yztato_blade_storm_radius = radius
+
+    for i in range(weapon_count):
+        var weapon: Weapon = current_weapons[i]
+        if not weapon:
+            continue
+
+        var weapon_angle: float = _yztato_blade_storm_angle_offset + i * angle_step
+        var offset: Vector2 = Vector2(cos(weapon_angle), sin(weapon_angle)) * radius
+
+        weapon.global_position = global_position + offset
+
+        weapon.rotation = weapon_angle
+
+        if _yztato_blade_storm_angle_offset < delta / _storm_duration * TAU:
             weapon.disable_hitbox()
             weapon.enable_hitbox()
-            weapon._hitbox.set_knockback(-Vector2(cos(weapon.global_rotation), sin(weapon.global_rotation)), weapon.current_stats.knockback, player_index)
-
-    if _weapons_container.rotation > TAU:
-        _weapons_container.rotation -= TAU
+            weapon._hitbox.set_knockback(
+                -Vector2(cos(weapon_angle), sin(weapon_angle)),
+                weapon.current_stats.knockback,
+                player_index
+            )
 
 func _yztato_blood_rage_ready() -> void:
     blood_rage_effects = RunData.get_player_effect(Utils.yztato_blood_rage_hash, player_index)
