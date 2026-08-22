@@ -5,8 +5,6 @@ const BURNING_PARTICLE_TSCN = preload("res://mods-unpacked/Yoko-YzTato/extension
 
 # ══════════════════════════════════════════ Variables ══════════════════════════════════════════ #
 var _burning_particle_pool_id: int = Keys.generate_hash(BURNING_PARTICLE_TSCN.resource_path)
-var _yz_main_cache: Main = null
-var _yz_entity_spawner_cache: EntitySpawner = null
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
@@ -44,19 +42,6 @@ func _yztato_find_scaling_stat(stat_hash: int, stats_array: Array):
             return item
     return null
 
-func _yztato_get_main() -> Main:
-    if _yz_main_cache == null:
-        _yz_main_cache = Utils.get_scene_node()
-    return _yz_main_cache
-
-func _yztato_get_entity_spawner() -> EntitySpawner:
-    if _yz_entity_spawner_cache == null:
-        var main: Main = _yztato_get_main()
-        if main != null:
-            _yz_entity_spawner_cache = main._entity_spawner
-
-    return _yz_entity_spawner_cache
-
 func _yztato_get_burning_particle(main: Main) -> CPUParticles2D:
     var particle: CPUParticles2D = main.get_node_from_pool(_burning_particle_pool_id, main._effects)
     if particle == null:
@@ -74,9 +59,8 @@ func _yztato_recycle_burning_particle(particle: CPUParticles2D) -> void:
     particle.on_deactivate_callback = null
     particle.visible = false
     particle.emitting = false
-    var main: Main = _yztato_get_main()
-    if main != null:
-        main.add_node_to_pool(particle, _burning_particle_pool_id)
+    var main: Main = Utils.get_scene_node()
+    main.add_node_to_pool(particle, _burning_particle_pool_id)
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
@@ -105,9 +89,8 @@ func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt
 func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
     if not thing_hit:
         return
-    var spawner: EntitySpawner = _yztato_get_entity_spawner()
-    if spawner == null:
-        return
+
+    var spawner: EntitySpawner = Utils.get_scene_node()._entity_spawner
 
     var spawn_pos: Vector2 = thing_hit.global_position
 
@@ -136,9 +119,7 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
                 queue.append([EntityType.STRUCTURE, copy.scene, pos, copy])
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
-    var main: Main = _yztato_get_main()
-    if main == null:
-        return
+    var main: Main = Utils.get_scene_node()
 
     # Weapon effects
     for fire in effects:
@@ -164,9 +145,7 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
 func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
     if not thing_hit:
         return
-    var spawner: EntitySpawner = _yztato_get_entity_spawner()
-    if spawner == null:
-        return
+    var spawner: EntitySpawner = Utils.get_scene_node()._entity_spawner
 
     var spawn_pos: Vector2 = thing_hit.global_position
 

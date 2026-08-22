@@ -61,7 +61,7 @@ func install_script_extensions() -> void:
 
         "player.gd",
         # EFFECTS: blade_storm[ 2/4 ]
-        #          lifestea
+        #          lifesteal
         #          blood_rage[ 2/2 ],
         #          temp_stat_per_interval[ hit_protection ]
         #          heal_on_damage_taken
