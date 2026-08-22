@@ -46,19 +46,36 @@ func _yztato_get_burning_particle(main: Main) -> CPUParticles2D:
     var particle: CPUParticles2D = main.get_node_from_pool(_burning_particle_pool_id, main._effects)
     if particle == null:
         particle = BURNING_PARTICLE_TSCN.instance()
-        particle.visible = false
-        particle.emitting = false
         main._effects.add_child(particle)
-        particle.on_deactivate_callback = funcref(self, "_yztato_recycle_burning_particle")
+
+    particle.restart()
+    particle.emitting = false
+    particle.visible = false
+    particle.is_active = false
+
+    var area: Area2D = particle.get_node("SpreadArea")
+    area.monitoring = true
+    area.monitorable = true
+
+    particle.on_deactivate_callback = funcref(self, "_yztato_recycle_burning_particle")
 
     return particle
 
 func _yztato_recycle_burning_particle(particle: CPUParticles2D) -> void:
     if particle == null:
         return
+
     particle.on_deactivate_callback = null
     particle.visible = false
     particle.emitting = false
+
+    particle.get_node("Timer").stop()
+    particle.get_node("RefreshTimer").stop()
+
+    var area: Area2D = particle.get_node("SpreadArea")
+    area.monitoring = false
+    area.monitorable = false
+
     var main: Main = Utils.get_scene_node()
     main.add_node_to_pool(particle, _burning_particle_pool_id)
 
@@ -126,9 +143,9 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
         if fire.get_id() == "yztato_leave_fire":
             var particle: CPUParticles2D = _yztato_get_burning_particle(main)
             if particle != null:
-                particle.activate(thing_hit.global_position, thing_hit._burning)
-                particle.rescale(fire.scale)
                 particle.set_duration(fire.duration)
+                particle.rescale(fire.scale)
+                particle.activate(thing_hit.global_position, thing_hit._burning)
                 main._on_emit_fire_particle(particle)
             return
 
@@ -137,9 +154,9 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
     for fire in effect_leave_fire:
         var particle: CPUParticles2D = _yztato_get_burning_particle(main)
         if particle != null:
-            particle.activate(thing_hit.global_position, thing_hit._burning)
-            particle.rescale(fire[3])
             particle.set_duration(fire[2])
+            particle.rescale(fire[3])
+            particle.activate(thing_hit.global_position, thing_hit._burning)
             main._on_emit_fire_particle(particle)
 
 func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:

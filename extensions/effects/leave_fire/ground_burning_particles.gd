@@ -28,6 +28,7 @@ func set_duration(duration: float = 1.0) -> void:
     wait_time = duration
 
 func activate(position: Vector2, data: BurningData) -> void:
+    bodies.clear()
     global_position = position
     burning_data = data
 
@@ -42,20 +43,22 @@ func activate(position: Vector2, data: BurningData) -> void:
 
 func deactivate() -> void:
     is_active = false
+    emitting = false
+    visible = false
     timer.stop()
     refresh_timer.stop()
     burning_data = null
     bodies.clear()
-    if !on_deactivate_callback or !(on_deactivate_callback.is_valid()): return
-
-    on_deactivate_callback.call_func(self)
+    if on_deactivate_callback and on_deactivate_callback.is_valid():
+        on_deactivate_callback.call_func(self)
 
 func _on_Timer_timeout() -> void:
     if emitting:
         emitting = false
         timer.start(lifetime * 0.75)
         refresh_timer.stop()
-    else: deactivate()
+    else:
+        deactivate()
 
 func _on_RefreshTimer_timeout() -> void:
     if burning_data == null: return
@@ -70,6 +73,10 @@ func _on_RefreshTimer_timeout() -> void:
             args.set_meta("custom_color", Color("#F94E34"))
             args.base_effect_scale = 0.3
             var dmg_dealt = body.take_damage(field_dmg, args)[1]
-            if !is_instance_valid(burning_data.from): continue
+            if not (
+                is_instance_valid(burning_data.from) and
+                burning_data.from.has_method("on_Hitbox_hit_something")
+            ):
+                continue
 
             burning_data.from._on_Hitbox_hit_something(body, dmg_dealt)
