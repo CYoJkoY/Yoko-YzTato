@@ -212,10 +212,12 @@ func yz_upgrade_when_killed_enemies(effects: Array, enemies_killed_this_wave_cou
         if enemies_killed_this_wave_count % effect.value == 0:
             Utils.ncl_change_weapon_within_run(weapon_pos, effect.key_hash, player_index)
 
-func yz_can_attack_while_moving(effects: Array, player: Player, should_shoot: bool) -> bool:
+func yz_cant_attack_while_moving(effects: Array, player: Player, should_shoot: bool) -> bool:
     if not should_shoot:
         return false
+
     for effect in effects:
         if effect.get_id() == "yztato_cant_attack_while_moving":
             return player._current_movement == Vector2.ZERO
+
     return should_shoot

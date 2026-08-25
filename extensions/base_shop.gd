@@ -10,10 +10,10 @@ func _on_RerollButton_pressed(player_index: int) -> void:
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_apply_random_curse(player_index: int) -> void:
     var random_curse: Array = RunData.get_player_effect(Utils.yztato_random_curse_on_reroll_hash, player_index)
-    
+
     for curse in random_curse:
         if !Utils.get_chance_success(curse[2] / 100.0): continue
-        
+
         var tracking_key_hash: int = curse[0]
         var player_items: Array = RunData.get_player_items(player_index)
         var player_weapons: Array = RunData.get_player_weapons(player_index)
@@ -21,17 +21,17 @@ func _yztato_apply_random_curse(player_index: int) -> void:
         var all_gears: Array = []
         for item in player_items:
             if item.is_cursed or (item is CharacterData): continue
-            
+
             all_gears.append(item)
-                
+
         for weapon in player_weapons:
             if weapon.is_cursed: continue
 
             all_gears.append(weapon)
-        
+
         var gear_count: int = min(curse[1], all_gears.size()) as int
         if gear_count <= 0: break
-        
+
         RunData.add_tracked_value(player_index, tracking_key_hash, gear_count)
 
         var gears_to_curse = []
@@ -39,7 +39,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
             var random_index: int = Utils.randi_range(0, all_gears.size() - 1)
             gears_to_curse.append(all_gears[random_index])
             all_gears.remove(random_index)
-        
+
         var updated_any_gear: bool = false
         for gear in gears_to_curse:
             var new_gear: ItemParentData = Utils.ncl_curse_item(gear, player_index)
@@ -48,7 +48,7 @@ func _yztato_apply_random_curse(player_index: int) -> void:
                 RunData.remove_weapon(gear, player_index)
                 RunData.add_weapon(new_gear, player_index)
                 updated_any_gear = true
-            
+
             elif new_gear is ItemData:
                 RunData.remove_item(gear, player_index)
                 if gear.replaced_by: RunData.remove_item(gear.replaced_by, player_index)

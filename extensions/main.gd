@@ -77,7 +77,7 @@ func _yztato_stats_chance_on_level_up(player_index: int) -> void:
         var stat_increase: int = chance_effect[1]
         var chance: int = chance_effect[2]
         var tracking_key_hash: int = chance_effect[3]
-        
+
         if Utils.get_chance_success(chance / 100.0):
             RunData.add_stat(stat_hash, stat_increase, player_index)
             RunData.ncl_add_effect_tracking_value(tracking_key_hash, stat_increase, player_index)
@@ -107,43 +107,43 @@ func yz_trigger_subeffect_on_specific_stat_over(triggers: Array, player_index: i
 
             match over_type:
                 0: # Equal
-                    match (stat_num == stat_over_value or stat_over_value == Utils.LARGE_NUMBER): 
+                    match (stat_num == stat_over_value or stat_over_value == Utils.LARGE_NUMBER):
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 1: # Up_E
-                    match stat_num >= stat_over_value: 
+                    match stat_num >= stat_over_value:
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 2: # Down_E
-                    match stat_num <= stat_over_value: 
+                    match stat_num <= stat_over_value:
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 3: # Up
-                    match stat_num > stat_over_value: 
+                    match stat_num > stat_over_value:
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 4: # Down
-                    match stat_num < stat_over_value: 
+                    match stat_num < stat_over_value:
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
                 5: # Equal_Multi
-                    match stat_num % stat_over_value == 0 or stat_over_value == Utils.LARGE_NUMBER: 
+                    match stat_num % stat_over_value == 0 or stat_over_value == Utils.LARGE_NUMBER:
                         true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
                         false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
 
 func yz_process_trigger_subeffect(
-    sub_effect: Array, 
-    player_index: int, 
-    triggered_subeffects: Array, 
-    sub_effect_unid: int, 
+    sub_effect: Array,
+    player_index: int,
+    triggered_subeffects: Array,
+    sub_effect_unid: int,
     is_append: bool
 ) -> void:
     match is_append:
         true:
-            if !triggered_subeffects.has(sub_effect_unid): 
+            if !triggered_subeffects.has(sub_effect_unid):
                 RunData.apply_effects_array(sub_effect, player_index)
                 triggered_subeffects.append(sub_effect_unid)
         false:
-            if triggered_subeffects.has(sub_effect_unid): 
+            if triggered_subeffects.has(sub_effect_unid):
                 RunData.unapply_effects_array(sub_effect, player_index)
                 triggered_subeffects.erase(sub_effect_unid)

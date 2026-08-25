@@ -121,8 +121,9 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     attack_speed_factor = clamp(attack_speed_factor, 0.25, 2.0)
 
     var storm_duration: float = avg_cooldown / (health_speed_factor * attack_speed_factor)
+    var is_standing: bool = (_current_movement == Vector2.ZERO)
 
-    storm_duration = clamp(storm_duration, 0.22, 3.0)
+    storm_duration = clamp(storm_duration, 0.2, 3.0) if not is_standing else 0.2
 
     var angle_delta: float = delta / storm_duration * TAU
     _yztato_blade_storm_angle_offset += angle_delta

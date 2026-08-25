@@ -22,7 +22,7 @@ func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: in
                 has_valid_weapons = true
                 break
         if has_valid_weapons: break
-    
+
     # Filter Until Required Set
     if has_valid_weapons:
         var has_required_set = false
@@ -31,9 +31,9 @@ func _yztato_weapon_set_filter(item: ItemParentData, player_index: int, type: in
                 if weapon_set_filters.has(set.my_id_hash):
                     has_required_set = true
                     break
-            
+
             if !has_required_set: item =._get_rand_item_for_wave(wave, player_index, type, args)
-    
+
     return item
 
 func _yztato_weapon_set_delete(item: ItemParentData, player_index: int, type: int, wave: int, args: GetRandItemForWaveArgs) -> ItemParentData:

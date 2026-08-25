@@ -47,7 +47,7 @@ func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
 
 func should_shoot() -> bool:
     var should_shoot: bool = .should_shoot()
-    should_shoot = WeaponService.yz_can_attack_while_moving(effects, _parent, should_shoot)
+    should_shoot = WeaponService.yz_cant_attack_while_moving(effects, _parent, should_shoot)
 
     return should_shoot
 
