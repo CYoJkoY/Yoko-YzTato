@@ -85,6 +85,7 @@ func shoot() -> void:
 func should_shoot() -> bool:
     var should_shoot: bool = .should_shoot()
     should_shoot = WeaponService.yz_cant_attack_while_moving(effects, _parent, should_shoot)
+
     return should_shoot
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
@@ -116,8 +117,8 @@ func _yztato_setup_flying_sword() -> void:
     _yztato_flying_sword_enabled = not flying_sword_dict.empty()
 
 func _yztato_set_blade_storm_angle(angle: float) -> void:
-	_yztato_idle_angle = angle
-	_current_idle_angle = angle
+    _yztato_idle_angle = angle
+    _current_idle_angle = angle
 
 func _yztato_setup_blade_storm() -> void:
     _yztato_blade_storm_enabled = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
@@ -125,6 +126,10 @@ func _yztato_setup_blade_storm() -> void:
         return
 
     var node_collision: CollisionShape2D = $Sprite/Hitbox/Collision
+
+    if node_collision.shape != null and not node_collision.shape.resource_local_to_scene:
+        node_collision.shape = node_collision.shape.duplicate()
+
     var offset: float = node_collision.shape.extents.x * 0.5
     node_collision.shape.extents.x = offset
     node_collision.position.x *= 0.5
@@ -135,6 +140,12 @@ func _yztato_setup_blade_storm() -> void:
     node_hit_box.collision_mask = Utils.ENEMY_PROJECTILES_BIT
     if not node_hit_box.is_connected("area_entered", self, "_yztato_on_Hitbox_area_entered_erase"):
         node_hit_box.connect("area_entered", self, "_yztato_on_Hitbox_area_entered_erase")
+
+    var original_max_range: float = stats.max_range
+    var current_max_range: float = current_stats.max_range
+    var max_range_ratio: float = current_max_range / original_max_range
+    max_range_ratio = clamp(max_range_ratio, 0.25, 2.5)
+    scale = Vector2(max_range_ratio, max_range_ratio)
 
 func _yztato_process_flying_sword(player_index: int) -> void:
     var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
