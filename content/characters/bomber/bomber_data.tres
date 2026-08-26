@@ -10,7 +10,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/appearences/bomber_eyes_appearance.tres" type="Resource" id=22]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/appearences/bomber_hair_appearance.tres" type="Resource" id=23]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/appearences/bomber_skin_appearance.tres" type="Resource" id=24]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/appearences/bomber_icon.webp" type="Texture" id=25]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/bomber/bomber_icon.webp" type="Texture" id=25]
 
 [resource]
 script = ExtResource( 12 )

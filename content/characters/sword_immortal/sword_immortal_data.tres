@@ -15,7 +15,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/appearences/sword_immortal_eyes_appearance.tres" type="Resource" id=13]
 [ext_resource path="res://weapons/melee/fist/1/fist_data.tres" type="Resource" id=14]
 [ext_resource path="res://weapons/melee/chopper/1/chopper_data.tres" type="Resource" id=15]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/appearences/sword_immortal_icon.webp" type="Texture" id=16]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/sword_immortal_icon.webp" type="Texture" id=16]
 [ext_resource path="res://weapons/melee/sword/2/sword_2_data.tres" type="Resource" id=17]
 [ext_resource path="res://weapons/melee/hatchet/1/hatchet_data.tres" type="Resource" id=18]
 [ext_resource path="res://weapons/melee/spiky_shield/1/spiky_shield_data.tres" type="Resource" id=19]
@@ -25,6 +25,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/effects/sword_immortal_effect_1c.tres" type="Resource" id=23]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/effects/sword_immortal_effect_1d.tres" type="Resource" id=24]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/sword_immortal/effects/sword_immortal_effect_1e.tres" type="Resource" id=25]
+
 
 [resource]
 script = ExtResource( 12 )

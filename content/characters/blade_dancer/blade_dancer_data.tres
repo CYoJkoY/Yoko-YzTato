@@ -22,7 +22,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/effects/blade_dancer_effect_1b.tres" type="Resource" id=20]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/effects/blade_dancer_effect_1a.tres" type="Resource" id=21]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/effects/blade_dancer_effect_0a.tres" type="Resource" id=22]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/appearences/blade_dancer_icon.webp" type="Texture" id=23]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/blade_dancer/blade_dancer_icon.webp" type="Texture" id=23]
 
 [resource]
 script = ExtResource( 2 )

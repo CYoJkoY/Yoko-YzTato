@@ -13,7 +13,7 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/effects/minotaur_effect_3c.tres" type="Resource" id=26]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/effects/minotaur_effect_1a.tres" type="Resource" id=29]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/effects/minotaur_effect_2a.tres" type="Resource" id=32]
-[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/appearances/minotaur_icon.webp" type="Texture" id=41]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/minotaur_icon.webp" type="Texture" id=41]
 
 [resource]
 script = ExtResource( 12 )
