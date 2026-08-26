@@ -134,6 +134,9 @@ func install_script_extensions() -> void:
         # EFFECTS: life_steal
         #          update_specific_tag_item_bonuses
 
+        "player_projectile.gd",
+        # EFFECTS: bounce_dmg_multiplier
+
     ]
 
     for path in extensions:
