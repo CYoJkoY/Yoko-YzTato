@@ -1,7 +1,5 @@
 extends StructureEffect
 
-const DotStructureWeaponStats = preload("res://mods-unpacked/Yoko-YzTato/content/structures/dot_structure_stats.gd")
-
 export(int) var trap_count: int = 1
 export(int) var chance: int = 100
 

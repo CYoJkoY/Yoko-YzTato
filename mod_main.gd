@@ -13,38 +13,10 @@ func _init():
     ext_dir = dir + "extensions/"
     content_dir = dir + "content/"
 
-    # Add Classes
-    install_script_classes()
-
     # Add extensions
     install_script_extensions()
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func install_script_classes() -> void:
-    var classes: Array = [
-        # Services
-        {
-            "base": "RangedWeaponStats",
-            "class": "DotStructureWeaponStats",
-            "language": "GDScript",
-            "path": content_dir + "structures/dot_structure_stats.gd"
-        },
-
-    ]
-
-    var registered_classes: Array = ProjectSettings.get_setting("_global_script_classes")
-    var registered_names: Dictionary = {}
-    for old_class in registered_classes:
-        registered_names[old_class.class ] = true
-
-    var classes_to_register: Array = []
-    for new_class in classes:
-        if !registered_names.has(new_class.class ):
-            classes_to_register.append(new_class)
-
-    if !classes_to_register.empty():
-        ModLoaderMod.register_global_classes_from_array(classes_to_register)
-
 func install_script_extensions() -> void:
     var extensions: Array = [
 

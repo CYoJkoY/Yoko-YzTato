@@ -1,46 +1,32 @@
-extends Reference
+extends "res://dlcs/dlc_1/dlc_1_data.gd"
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func apply(
-    original_item: ItemParentData,
-    cursed_item: ItemParentData,
-    player_index: int,
-    turn_randomization_off: bool = false,
-    min_modifier: float = 0.0,
-    dlc_1_data: Object = null
-) -> ItemParentData:
-    if original_item == null or cursed_item == null or dlc_1_data == null:
-        return cursed_item
-    if !has_effect_yztato(original_item.effects):
-        return cursed_item
-
-    return _yztato_curse_item(
-        original_item,
-        cursed_item,
-        player_index,
-        turn_randomization_off,
-        min_modifier,
-        dlc_1_data
-    )
+func curse_item(item_data: ItemParentData, player_index: int, turn_randomization_off: bool = false, min_modifier: float = 0.0) -> ItemParentData:
+    var already_cursed: bool = item_data.is_cursed
+    var cursed_item_data: ItemParentData = .curse_item(item_data, player_index, turn_randomization_off, min_modifier)
+    if already_cursed:
+        return cursed_item_data
+    return _yztato_curse_item(cursed_item_data, player_index, turn_randomization_off, min_modifier)
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_curse_item(
-    _original_item: ItemParentData,
-    cursed_item: ItemParentData,
+    cursed_item_data: ItemParentData,
     _player_index: int,
-    turn_randomization_off: bool,
-    min_modifier: float,
-    dlc_1_data: Object
+    turn_randomization_off: bool = false,
+    min_modifier: float = 0.0
 ) -> ItemParentData:
-    var new_item_data: ItemParentData = cursed_item.duplicate()
+    if not has_effect_yztato(cursed_item_data.effects):
+        return cursed_item_data
+
+    var new_item_data: ItemParentData = cursed_item_data.duplicate()
     var new_effects: Array = []
 
-    for effect in cursed_item.effects:
-        if !is_effect_yztato(effect):
+    for effect in new_item_data.effects:
+        if not is_effect_yztato(effect):
             new_effects.append(effect)
             continue
 
-        var effect_modifier: float = dlc_1_data._get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
+        var effect_modifier: float = _get_cursed_item_effect_modifier(turn_randomization_off, min_modifier)
         var new_effect: Effect = effect.duplicate()
         var id: String = new_effect.get_id()
         var key: int = new_effect.key_hash
@@ -104,7 +90,7 @@ func _yztato_curse_item(
                     curse_effect.key_hash = Keys.stat_curse_hash
                     temp_item_data.effects.push_front(curse_effect)
 
-                    temp_item_data = dlc_1_data.curse_item(
+                    temp_item_data = curse_item(
                         temp_item_data,
                         _player_index,
                         turn_randomization_off,
