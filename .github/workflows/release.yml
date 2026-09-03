@@ -283,6 +283,7 @@ jobs:
             --exclude='project.godot.*' \
             --exclude='export_presets.cfg' \
             --exclude='*.csv.import' \
+            --exclude='*.md5' \
             --exclude='.gdignore' \
             "$MOD_ROOT/" \
             "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
@@ -294,7 +295,7 @@ jobs:
             exit 1
           fi
 
-          IMPORT_COUNT=$(find "$PROJECT/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' | wc -l)
+          IMPORT_COUNT=$(find "$PROJECT/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' ! -name '*.md5' | wc -l)
           if (( IMPORT_COUNT == 0 )); then
             echo "::error::Generated project .import directory contains no imported resources."
             exit 1
@@ -304,6 +305,7 @@ jobs:
           rsync -a \
             --exclude='.gdignore' \
             --exclude='*.csv.import' \
+            --exclude='*.md5' \
             "$PROJECT/.import/" \
             "$STAGE/.import/"
 
@@ -316,7 +318,12 @@ jobs:
           # and Mod Tool does not need them in the final archive.
           find "$STAGE" -type f -name '*.csv.import' -delete
 
-          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' | wc -l)
+          # Godot 3.x imported resources may have companion .md5 checksum
+          # files (for example, alongside generated .stex files). These are
+          # editor/import cache artifacts and are not required by ModLoader.
+          find "$STAGE" -type f -name '*.md5' -delete
+
+          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' ! -name '*.md5' | wc -l)
           if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
             echo "::error::Imported resource copy is incomplete: source=$IMPORT_COUNT stage=$STAGED_IMPORT_COUNT"
             exit 1
@@ -324,10 +331,14 @@ jobs:
 
           echo "Staged imported resources: $STAGED_IMPORT_COUNT"
 
-          # Never ship internal ignore markers or CSV import descriptors.
-          if find "$STAGE" -type f \( -name '.gdignore' -o -name '*.csv.import' \) -print -quit | grep -q .; then
-            echo "::error::Forbidden internal file found in export stage (.gdignore or *.csv.import)."
-            find "$STAGE" -type f \( -name '.gdignore' -o -name '*.csv.import' \) -print
+          # Never ship internal ignore markers, CSV import descriptors, or MD5
+          # checksum files in the release archive.
+          if find "$STAGE" -type f \
+            \( -name '.gdignore' -o -name '*.csv.import' -o -name '*.md5' \) \
+            -print -quit | grep -q .; then
+            echo "::error::Forbidden internal file found in export stage (.gdignore, *.csv.import, or *.md5)."
+            find "$STAGE" -type f \
+              \( -name '.gdignore' -o -name '*.csv.import' -o -name '*.md5' \) -print
             exit 1
           fi
 
@@ -374,6 +385,11 @@ jobs:
 
           if unzip -l "$ZIP" | grep -Eq '\.csv\.import($|[[:space:]])'; then
             echo "::error::CSV .import descriptors must not be included in the release ZIP."
+            exit 1
+          fi
+
+          if unzip -l "$ZIP" | grep -Eq '(^|[[:space:]])[^[:space:]]*\.md5($|[[:space:]])'; then
+            echo "::error::.md5 checksum files must not be included in the release ZIP."
             exit 1
           fi
 
