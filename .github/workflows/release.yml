@@ -128,6 +128,7 @@ jobs:
             --exclude='.godot/' \
             --exclude='ci/' \
             --exclude='dist/' \
+            --exclude='.*' \
             ./ \
             "$MOD_ROOT/"
 
@@ -282,6 +283,7 @@ jobs:
             --exclude='project.godot' \
             --exclude='project.godot.*' \
             --exclude='export_presets.cfg' \
+            --exclude='.*' \
             --exclude='*.csv.import' \
             --exclude='*.md5' \
             --exclude='.gdignore' \
@@ -323,6 +325,11 @@ jobs:
           # editor/import cache artifacts and are not required by ModLoader.
           find "$STAGE" -type f -name '*.md5' -delete
 
+          # Release packages must not contain repository/editor metadata.
+          # The generated project-level .import tree is handled separately.
+          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" -type f -name '.*' -delete
+          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" -type d -name '.*' -prune -exec rm -rf {} +
+
           STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' ! -name '*.md5' | wc -l)
           if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
             echo "::error::Imported resource copy is incomplete: source=$IMPORT_COUNT stage=$STAGED_IMPORT_COUNT"
@@ -344,9 +351,18 @@ jobs:
 
           # The final ZIP root contains both .import and mods-unpacked, exactly
           # as required by the ModLoader distribution format.
+          # Use maximum Deflate for source/text/config files, while storing
+          # formats that are already compressed. Re-compressing these formats
+          # can make the ZIP larger and wastes CPU time.
+          #
+          # Info-ZIP also falls back to STORE when Deflate cannot improve a
+          # member, so this is a conservative compression policy rather than
+          # forcing every file through compression.
           (
             cd "$STAGE"
-            zip -r -q "$ZIP" .
+            zip -r -q -9 \
+              -n ".png:.webp:.jpg:.jpeg:.gif:.bmp:.ico:.dds:.stex:.ctex:.ogg:.oggstr:.mp3:.aac:.m4a:.mp4:.webm:.zip:.7z:.rar:.gz:.bz2:.xz:.zst" \
+              "$ZIP" .
           )
 
           test -f "$ZIP"
@@ -380,6 +396,12 @@ jobs:
 
           if unzip -l "$ZIP" | grep -Eq '(^|[[:space:]])\.gdignore($|[[:space:]])'; then
             echo "::error::.gdignore must not be included in the release ZIP."
+            exit 1
+          fi
+
+          if unzip -l "$ZIP" | grep -Eq 'mods-unpacked/[^ ]*/\.[^./][^[:space:]]*'; then
+            echo "::error::Repository/editor dotfiles must not be included in the release ZIP."
+            unzip -l "$ZIP" | grep -E 'mods-unpacked/[^ ]*/\.[^./][^[:space:]]*' || true
             exit 1
           fi
 
