@@ -32,14 +32,6 @@ jobs:
           path: ${{ github.workspace }}/.ci/godot
           key: godot-${{ runner.os }}-${{ env.GODOT_VERSION }}
 
-      - name: Cache Godot imports
-        uses: actions/cache@v4
-        with:
-          path: ${{ github.workspace }}/.ci/import-cache
-          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ github.sha }}
-          restore-keys: |
-            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
-
       - name: Validate tag
         id: version
         shell: pwsh
@@ -223,21 +215,8 @@ jobs:
 
           $project = $env:PROJECT
           $importDir = Join-Path $project '.import'
-          $cacheDir = Join-Path $env:GITHUB_WORKSPACE '.ci\import-cache'
-
           if (Test-Path $importDir) { Remove-Item -LiteralPath $importDir -Recurse -Force }
           New-Item -ItemType Directory -Force -Path $importDir | Out-Null
-
-          # Reuse previous imports when available. Godot will reimport only
-          # resources whose source files have changed.
-          if (Test-Path $cacheDir) {
-            robocopy $cacheDir $importDir /E /NFL /NDL /NJH /NJS /NP | Out-Null
-            if ($LASTEXITCODE -gt 7) {
-              Write-Error "Failed to restore cached imports (exit code $LASTEXITCODE)"
-            }
-            $global:LASTEXITCODE = 0
-            Write-Host 'Restored cached .import files.'
-          }
 
           $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
           $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
@@ -271,7 +250,7 @@ jobs:
                   $observedFiles = $true
                   if ($count -eq $lastCount) { $stableChecks++ } else { $lastCount = $count; $stableChecks = 0 }
 
-                  if ($stableChecks -ge 2) {
+                  if ($stableChecks -ge 1) {
                     $importDone = $true
                     break
                   }
@@ -289,15 +268,6 @@ jobs:
           } finally {
             if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
           }
-
-          # Refresh the cache for the next release build.
-          if (Test-Path $cacheDir) { Remove-Item $cacheDir -Recurse -Force }
-          New-Item -ItemType Directory -Force -Path $cacheDir | Out-Null
-          robocopy $importDir $cacheDir /E /NFL /NDL /NJH /NJS /NP /XF '.gdignore' '*.csv.import' '*.md5' | Out-Null
-          if ($LASTEXITCODE -gt 7) {
-            Write-Error "Failed to update import cache (exit code $LASTEXITCODE)"
-          }
-          $global:LASTEXITCODE = 0
 
           $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse | Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
           if (@($realImports).Count -eq 0) { Write-Error 'No imported resources were generated.' }
@@ -334,7 +304,7 @@ jobs:
           if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
           if (-not (Test-Path $sevenZip)) { Write-Error '7z.exe was not found on the Windows runner.' }
 
-          & $sevenZip a -tzip -mx=9 -mm=Deflate -mfb=258 -mpass=15 $zip (Join-Path $env:PROJECT '*') `
+          & $sevenZip a -tzip -mx=1 -mm=Deflate -mfb=32 -mpass=1 -mmt=on $zip (Join-Path $env:PROJECT '*') `
             -xr!project.godot -xr!project.godot.* -xr!export_presets.cfg `
             -xr!.git -xr!.github -xr!.godot -xr!.ci -xr!ci -xr!dist `
             -xr!.editorconfig -xr!.gitattributes -xr!.gitignore -xr!.gdignore `
@@ -361,6 +331,10 @@ jobs:
           $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
           if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
 
+          # One metadata listing is enough for structural verification.
+          # Avoid a full ZIP integrity scan here: creating the archive already
+          # completed successfully, and re-reading every member was a major
+          # source of avoidable Windows runner time.
           $listing = & $sevenZip l -slt $zip | Out-String
 
           $requiredManifest = "mods-unpacked\$env:MOD_DIRECTORY\manifest.json"
@@ -374,16 +348,14 @@ jobs:
             Write-Error 'Top-level .import directory is missing from ZIP.'
           }
 
-          if ($listing -match '(?im)^Path = .*\.gdignore$') {
-            Write-Error '.gdignore must not be included in the release ZIP.'
-          }
-
-          if ($listing -match '(?im)^Path = .*\.csv\.import$') {
-            Write-Error '*.csv.import must not be included in the release ZIP.'
-          }
-
-          if ($listing -match '(?im)^Path = .*\.md5$') {
-            Write-Error '*.md5 files must not be included in the release ZIP.'
+          foreach ($pattern in @(
+            '(?im)^Path = .*\.gdignore$',
+            '(?im)^Path = .*\.csv\.import$',
+            '(?im)^Path = .*\.md5$'
+          )) {
+            if ($listing -match $pattern) {
+              Write-Error 'Forbidden internal cache file detected in the release ZIP.'
+            }
           }
 
           foreach ($dotfile in @('.editorconfig', '.gitattributes', '.gitignore')) {
