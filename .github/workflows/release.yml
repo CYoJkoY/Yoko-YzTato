@@ -1,0 +1,378 @@
+name: Build Mod Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+env:
+  GODOT_VERSION: "3.7-dev1"
+  MOD_TOOL_REF: "v0.3.0"
+
+jobs:
+  release:
+    name: Build ${{ github.ref_name }}
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          TAG="${GITHUB_REF_NAME}"
+
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z, e.g. v1.2.3."
+            exit 1
+          fi
+
+          VERSION="${TAG#v}"
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Read manifest metadata
+        id: manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ ! -f manifest.json ]]; then
+            echo "::error::manifest.json was not found at repository root."
+            exit 1
+          fi
+
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("manifest.json")
+          data = json.loads(path.read_text(encoding="utf-8-sig"))
+
+          for key in ("name", "namespace", "version_number"):
+              if key not in data or not isinstance(data[key], str) or not data[key].strip():
+                  raise SystemExit(f"manifest.json must contain a non-empty string field: {key}")
+
+          name = data["name"].strip()
+          namespace = data["namespace"].strip()
+
+          # These two values become a directory name, so reject path-like values.
+          for key, value in (("name", name), ("namespace", namespace)):
+              if "/" in value or "\\" in value or value in {".", ".."}:
+                  raise SystemExit(f"manifest {key} contains an invalid path component: {value!r}")
+
+          print(f"name={name}")
+          print(f"namespace={namespace}")
+          print(f"current_version={data['version_number']}")
+          PY
+
+          NAME="$(python3 - <<'PY'
+          import json
+          print(json.load(open("manifest.json", encoding="utf-8-sig"))["name"].strip())
+          PY
+          )"
+
+          NAMESPACE="$(python3 - <<'PY'
+          import json
+          print(json.load(open("manifest.json", encoding="utf-8-sig"))["namespace"].strip())
+          PY
+          )"
+
+          VERSION="${{ steps.version.outputs.version }}"
+          MOD_DIR="${NAMESPACE}-${NAME}"
+          ZIP_NAME="${NAME}-${VERSION}.zip"
+
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "namespace=$NAMESPACE" >> "$GITHUB_OUTPUT"
+          echo "mod_dir=$MOD_DIR" >> "$GITHUB_OUTPUT"
+          echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Install Godot 3.7-dev1
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p "$RUNNER_TEMP/godot"
+
+          curl -L --fail --retry 5 --retry-delay 2 \
+            'https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=linux_headless.64&slug=linux_headless.64.zip' \
+            -o "$RUNNER_TEMP/godot/godot.zip"
+
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+
+          GODOT_BIN="$(find "$RUNNER_TEMP/godot" -type f -name 'Godot_v3.7-dev1_linux_headless.64' -print -quit)"
+
+          if [[ -z "$GODOT_BIN" ]]; then
+            echo "::error::Godot 3.7-dev1 headless executable was not found."
+            find "$RUNNER_TEMP/godot" -maxdepth 3 -type f -print
+            exit 1
+          fi
+
+          chmod +x "$GODOT_BIN"
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+
+          "$GODOT_BIN" --version
+
+      - name: Prepare temporary Godot project
+        env:
+          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          rm -rf "$RUNNER_TEMP/mod-project"
+          mkdir -p \
+            "$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR"
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.godot/' \
+            --exclude='ci/' \
+            --exclude='dist/' \
+            ./ \
+            "$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR/"
+
+          cat > "$RUNNER_TEMP/mod-project/project.godot" <<'GODOT'
+          ; Temporary CI project for Godot resource import.
+          config_version=4
+
+          [application]
+          config/name="Mod Export CI"
+
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          renderer/rendering_method.mobile="gl_compatibility"
+          GODOT
+
+      - name: Sync manifest version from tag
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          export MANIFEST="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR/manifest.json"
+
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path(os.environ["MANIFEST"])
+          version = os.environ["VERSION"]
+
+          data = json.loads(path.read_text(encoding="utf-8-sig"))
+          data["version_number"] = version
+
+          # Preserve normal JSON semantics. Formatting is intentionally normalized
+          # only in the temporary release copy.
+          path.write_text(
+              json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
+          )
+
+          check = json.loads(path.read_text(encoding="utf-8"))
+          if check.get("version_number") != version:
+              raise SystemExit("manifest.json version update failed")
+
+          print(f"manifest version -> {version}")
+          PY
+
+      - name: Import resources with Godot 3.7-dev1
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          "$GODOT_BIN" \
+            --path "$RUNNER_TEMP/mod-project" \
+            --editor \
+            --headless \
+            --quit
+
+      - name: Build ModLoader-compatible archive
+        env:
+          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          MOD_ROOT="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR"
+          OUT_DIR="$RUNNER_TEMP/release"
+          STAGE="$RUNNER_TEMP/export-stage"
+          ZIP="$OUT_DIR/$ZIP_NAME"
+
+          rm -rf "$OUT_DIR" "$STAGE"
+          mkdir -p "$OUT_DIR" "$STAGE/mods-unpacked/$MOD_DIR"
+
+          # Mirror the important behavior of Godot Mod Tool 3.x:
+          # 1) collect the Mod files
+          # 2) keep .import files
+          # 3) for each .import file, also include the imported resource
+          #    referenced by its [remap] path
+          # 4) zip the staged filesystem from its root
+          #
+          # We deliberately do not include repository metadata or CI files.
+
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.godot/' \
+            --exclude='project.godot' \
+            --exclude='project.godot.*' \
+            --exclude='export_presets.cfg' \
+            "$MOD_ROOT/" \
+            "$STAGE/mods-unpacked/$MOD_DIR/"
+
+          MOD_ROOT="$MOD_ROOT" STAGE="$STAGE" MOD_DIR="$MOD_DIR" python3 - <<'PY'
+          import configparser
+          import os
+          from pathlib import Path
+          import shutil
+
+          mod_root = Path(os.environ["MOD_ROOT"])
+          stage_root = Path(os.environ["STAGE"]) / "mods-unpacked" / os.environ["MOD_DIR"]
+
+          for import_file in mod_root.rglob("*.import"):
+              if not import_file.is_file():
+                  continue
+
+              # Godot 3 .import files are ConfigFile-style text files.
+              parser = configparser.ConfigParser(interpolation=None, strict=False)
+              parser.optionxform = str
+
+              try:
+                  parser.read(import_file, encoding="utf-8")
+              except Exception:
+                  continue
+
+              if not parser.has_section("remap"):
+                  continue
+              if not parser.has_option("remap", "path"):
+                  continue
+
+              imported = parser.get("remap", "path").strip()
+              if not imported.startswith("res://"):
+                  continue
+
+              relative = imported[len("res://"):].replace("/", os.sep)
+              source = Path(os.environ["RUNNER_TEMP"]) / "mod-project" / relative
+
+              # Only import paths which resolve inside the temporary project.
+              project_root = Path(os.environ["RUNNER_TEMP"]) / "mod-project"
+              try:
+                  source_resolved = source.resolve()
+                  if project_root.resolve() not in source_resolved.parents:
+                      continue
+              except FileNotFoundError:
+                  continue
+
+              if not source.is_file():
+                  continue
+
+              # The Mod Tool copies the imported resource to the same
+              # relative path that Godot reports through the .import file.
+              dest = Path(os.environ["STAGE"]) / relative
+              dest.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source, dest)
+
+          # The temporary project itself must never appear inside the archive.
+          for unwanted in (
+              stage_root / ".godot",
+              stage_root / "project.godot",
+          ):
+              if unwanted.is_dir():
+                  shutil.rmtree(unwanted, ignore_errors=True)
+              elif unwanted.exists():
+                  unwanted.unlink()
+          PY
+
+          # Pass the Mod root into the helper above.
+          # (The environment assignment is intentionally repeated here so the
+          # embedded Python block receives the exact same paths.)
+          python3 - <<'PY'
+          # Intentionally empty: environment validation for the shell stage.
+          import os
+          for key in ("MOD_ROOT", "STAGE", "MOD_DIR"):
+              assert os.environ[key]
+          PY
+
+          (
+            cd "$STAGE"
+            zip -r -q "$ZIP" "mods-unpacked"
+          )
+
+          test -f "$ZIP"
+          echo "Created: $ZIP"
+
+      - name: Verify archive
+        env:
+          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
+          VERSION: ${{ steps.version.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          ZIP="$RUNNER_TEMP/release/$ZIP_NAME"
+          REQUIRED="mods-unpacked/$MOD_DIR/manifest.json"
+
+          unzip -t "$ZIP"
+
+          if ! unzip -l "$ZIP" | grep -Fq "$REQUIRED"; then
+            echo "::error::Required file missing from archive: $REQUIRED"
+            exit 1
+          fi
+
+          unzip -p "$ZIP" "$REQUIRED" > "$RUNNER_TEMP/manifest.release.json"
+
+          python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          expected = os.environ["VERSION"]
+          path = Path(os.environ["RUNNER_TEMP"]) / "manifest.release.json"
+
+          data = json.loads(path.read_text(encoding="utf-8"))
+          actual = data.get("version_number")
+
+          if actual != expected:
+              raise SystemExit(
+                  f"Release manifest version mismatch: {actual!r} != {expected!r}"
+              )
+
+          print(f"Release manifest version: {actual}")
+          PY
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.manifest.outputs.name }}-${{ steps.version.outputs.version }}
+          path: ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ steps.manifest.outputs.name }} ${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          files: ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}

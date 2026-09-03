@@ -24,4 +24,4 @@ effect_sign = 2
 custom_args = [ SubResource( 1 ) ]
 sub_effects = [ ExtResource( 2 ), ExtResource( 3 ) ]
 over_types = [ 1, 1 ]
-stat_over_values = [ 5, 20 ]
+stat_over_values = [ 3, 10 ]
