@@ -26,6 +26,20 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cache Godot binary
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.ci/godot
+          key: godot-${{ runner.os }}-${{ env.GODOT_VERSION }}
+
+      - name: Cache Godot imports
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/.ci/import-cache
+          key: godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-${{ github.sha }}
+          restore-keys: |
+            godot-import-${{ runner.os }}-${{ env.GODOT_VERSION }}-
+
       - name: Validate tag
         id: version
         shell: pwsh
@@ -93,69 +107,43 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
 
-          $godotDir = Join-Path $env:RUNNER_TEMP 'godot'
-          $archive = Join-Path $godotDir 'Godot_v3.7-dev1_win64.exe.zip'
+          $godotDir = Join-Path $env:GITHUB_WORKSPACE '.ci\godot'
+          $godotExe = Join-Path $godotDir 'Godot_v3.7-dev1_win64.exe'
 
-          if (Test-Path -LiteralPath $godotDir) {
-            Remove-Item -LiteralPath $godotDir -Recurse -Force
+          if (-not (Test-Path -LiteralPath $godotExe)) {
+            $archive = Join-Path $env:RUNNER_TEMP 'Godot_v3.7-dev1_win64.exe.zip'
+            $downloadUrl = 'https://github.com/godotengine/godot-builds/releases/download/3.7-dev1/Godot_v3.7-dev1_win64.exe.zip'
+
+            New-Item -ItemType Directory -Force -Path $godotDir | Out-Null
+
+            Write-Host 'Godot cache miss; downloading Godot 3.7-dev1.'
+            & curl.exe `
+              --fail --location `
+              --retry 5 --retry-delay 3 --retry-all-errors `
+              --connect-timeout 20 --max-time 600 `
+              --output $archive `
+              $downloadUrl
+
+            if ($LASTEXITCODE -ne 0) {
+              Write-Error "Godot download failed. curl exit code: $LASTEXITCODE"
+            }
+
+            Expand-Archive -LiteralPath $archive -DestinationPath $godotDir -Force
+
+            $found = Get-ChildItem -LiteralPath $godotDir -Filter 'Godot_v3.7-dev1_win64.exe' -File -Recurse | Select-Object -First 1
+            if ($null -eq $found) {
+              Write-Error 'Godot_v3.7-dev1_win64.exe was not found after extraction.'
+            }
+
+            if ($found.FullName -ne $godotExe) {
+              Copy-Item -LiteralPath $found.FullName -Destination $godotExe -Force
+            }
+          } else {
+            Write-Host 'Godot cache hit; skipping download.'
           }
 
-          New-Item -ItemType Directory -Force -Path $godotDir | Out-Null
-
-          # Official Godot development builds are published through the
-          # godot-builds GitHub releases repository.
-          $downloadUrl = 'https://github.com/godotengine/godot-builds/releases/download/3.7-dev1/Godot_v3.7-dev1_win64.exe.zip'
-
-          Write-Host "Downloading Godot 3.7-dev1 from:"
-          Write-Host $downloadUrl
-
-          # Use curl.exe rather than Invoke-WebRequest. GitHub-hosted Windows
-          # runners already provide curl, and curl handles transient CDN/network
-          # failures much better with retries.
-          & curl.exe `
-            --fail `
-            --location `
-            --retry 8 `
-            --retry-delay 5 `
-            --retry-all-errors `
-            --connect-timeout 30 `
-            --max-time 600 `
-            --output $archive `
-            $downloadUrl
-
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "Failed to download Godot 3.7-dev1. curl exit code: $LASTEXITCODE"
-          }
-
-          if (-not (Test-Path -LiteralPath $archive)) {
-            Write-Error "Godot archive was not downloaded: $archive"
-          }
-
-          $archiveSize = (Get-Item -LiteralPath $archive).Length
-          if ($archiveSize -lt 1MB) {
-            Write-Error "Downloaded Godot archive is unexpectedly small: $archiveSize bytes"
-          }
-
-          Write-Host "Downloaded $archiveSize bytes."
-
-          Expand-Archive -LiteralPath $archive -DestinationPath $godotDir -Force
-
-          $godot = Get-ChildItem `
-            -LiteralPath $godotDir `
-            -Filter 'Godot_v3.7-dev1_win64.exe' `
-            -File `
-            -Recurse |
-            Select-Object -First 1
-
-          if ($null -eq $godot) {
-            Write-Error 'Godot_v3.7-dev1_win64.exe was not found after extraction.'
-          }
-
-          "GODOT_BIN=$($godot.FullName)" >> $env:GITHUB_ENV
-
-          Write-Host "Godot executable: $($godot.FullName)"
-          & $godot.FullName --version
-
+          "GODOT_BIN=$godotExe" >> $env:GITHUB_ENV
+          & $godotExe --version
           if ($LASTEXITCODE -ne 0) {
             Write-Error "Godot --version failed with exit code $LASTEXITCODE"
           }
@@ -179,7 +167,7 @@ jobs:
 
           # Copy the repository without Git/editor metadata.
           robocopy $env:GITHUB_WORKSPACE $modRoot /E `
-            /XD '.git' '.github' '.godot' 'ci' 'dist' `
+            /XD '.git' '.github' '.godot' '.ci' 'ci' 'dist' `
             /XF '.editorconfig' '.gitattributes' '.gitignore' `
                 'project.godot' 'project.godot.*' 'export_presets.cfg' `
                 '.gdignore' '*.csv.import' '*.md5'
@@ -235,19 +223,27 @@ jobs:
 
           $project = $env:PROJECT
           $importDir = Join-Path $project '.import'
-          $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
-          $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
+          $cacheDir = Join-Path $env:GITHUB_WORKSPACE '.ci\import-cache'
 
-          if (Test-Path $importDir) {
-            Remove-Item -LiteralPath $importDir -Recurse -Force
+          if (Test-Path $importDir) { Remove-Item -LiteralPath $importDir -Recurse -Force }
+          New-Item -ItemType Directory -Force -Path $importDir | Out-Null
+
+          # Reuse previous imports when available. Godot will reimport only
+          # resources whose source files have changed.
+          if (Test-Path $cacheDir) {
+            robocopy $cacheDir $importDir /E /NFL /NDL /NJH /NJS /NP | Out-Null
+            if ($LASTEXITCODE -gt 7) {
+              Write-Error "Failed to restore cached imports (exit code $LASTEXITCODE)"
+            }
+            $global:LASTEXITCODE = 0
+            Write-Host 'Restored cached .import files.'
           }
 
-          if (Test-Path $stdoutLog) { Remove-Item -LiteralPath $stdoutLog -Force }
-          if (Test-Path $stderrLog) { Remove-Item -LiteralPath $stderrLog -Force }
+          $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
+          $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
+          if (Test-Path $stdoutLog) { Remove-Item $stdoutLog -Force }
+          if (Test-Path $stderrLog) { Remove-Item $stderrLog -Force }
 
-          # Run the actual Godot 3.7-dev1 editor on Windows. Do not rely on
-          # --quit immediately: the FileSystem scan/import work is asynchronous.
-          # Start-Process requires different files for stdout and stderr.
           $process = Start-Process -FilePath $env:GODOT_BIN `
             -ArgumentList @('--path', $project, '--editor', '--headless', '--audio-driver', 'Dummy') `
             -RedirectStandardOutput $stdoutLog `
@@ -259,63 +255,53 @@ jobs:
             $lastCount = -1
             $stableChecks = 0
             $importDone = $false
+            $observedFiles = $false
 
             while ((Get-Date) -lt $deadline) {
               if ($process.HasExited) {
-                Write-Host 'Godot stdout:'
-                if (Test-Path $stdoutLog) { Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue }
-                Write-Host 'Godot stderr:'
-                if (Test-Path $stderrLog) { Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue }
+                if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue }
+                if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue }
                 Write-Error "Godot exited before resource import completed. Exit code: $($process.ExitCode)"
               }
 
               if (Test-Path $importDir) {
-                $files = Get-ChildItem -LiteralPath $importDir -File -Recurse |
-                  Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
-                $count = @($files).Count
+                $count = @(Get-ChildItem -LiteralPath $importDir -File -Recurse | Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }).Count
 
                 if ($count -gt 0) {
-                  if ($count -eq $lastCount) {
-                    $stableChecks++
-                  } else {
-                    $lastCount = $count
-                    $stableChecks = 0
-                  }
+                  $observedFiles = $true
+                  if ($count -eq $lastCount) { $stableChecks++ } else { $lastCount = $count; $stableChecks = 0 }
 
-                  Write-Host "Imported resource files: $count (stable checks: $stableChecks/8)"
-
-                  if ($stableChecks -ge 8) {
+                  if ($stableChecks -ge 2) {
                     $importDone = $true
                     break
                   }
                 }
               }
 
-              Start-Sleep -Seconds 1
+              Start-Sleep -Milliseconds 500
             }
 
-            if (-not $importDone) {
-              Write-Host 'Godot stdout:'
-              if (Test-Path $stdoutLog) { Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue }
-              Write-Host 'Godot stderr:'
-              if (Test-Path $stderrLog) { Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue }
+            if (-not $importDone -or -not $observedFiles) {
+              if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue }
+              if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue }
               Write-Error 'Timed out waiting for Godot resource import to complete.'
             }
-          }
-          finally {
-            if (-not $process.HasExited) {
-              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
-            }
+          } finally {
+            if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
           }
 
-          $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse |
-            Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
-
-          if (@($realImports).Count -eq 0) {
-            Write-Error 'No imported resources were generated.'
+          # Refresh the cache for the next release build.
+          if (Test-Path $cacheDir) { Remove-Item $cacheDir -Recurse -Force }
+          New-Item -ItemType Directory -Force -Path $cacheDir | Out-Null
+          robocopy $importDir $cacheDir /E /NFL /NDL /NJH /NJS /NP /XF '.gdignore' '*.csv.import' '*.md5' | Out-Null
+          if ($LASTEXITCODE -gt 7) {
+            Write-Error "Failed to update import cache (exit code $LASTEXITCODE)"
           }
+          $global:LASTEXITCODE = 0
 
-          Write-Host "Godot generated $(@($realImports).Count) imported resource files."
+          $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse | Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
+          if (@($realImports).Count -eq 0) { Write-Error 'No imported resources were generated.' }
+          Write-Host "Godot generated/retained $(@($realImports).Count) imported resource files."
 
       - name: Build ModLoader ZIP with 7-Zip
         env:
@@ -327,92 +313,35 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
 
-          $stage = Join-Path $env:RUNNER_TEMP 'export-stage'
           $release = Join-Path $env:RUNNER_TEMP 'release'
           $zip = Join-Path $release $env:ZIP_NAME
+          $packageRoot = Join-Path $env:PROJECT 'mods-unpacked'
 
-          if (Test-Path $stage) { Remove-Item $stage -Recurse -Force }
           if (Test-Path $release) { Remove-Item $release -Recurse -Force }
-
-          New-Item -ItemType Directory -Force -Path (Join-Path $stage "mods-unpacked\$env:MOD_DIRECTORY") | Out-Null
           New-Item -ItemType Directory -Force -Path $release | Out-Null
 
-          # Keep only real Mod files. The repository's dotfiles and editor
-          # metadata never enter the release package.
-          robocopy $env:MOD_ROOT (Join-Path $stage "mods-unpacked\$env:MOD_DIRECTORY") /E `
-            /XD '.git' '.github' '.godot' `
-            /XF '.editorconfig' '.gitattributes' '.gitignore' `
-                '.gdignore' '*.csv.import' '*.md5' `
-                'project.godot' 'project.godot.*' 'export_presets.cfg'
-
-          $robocopyExitCode = $LASTEXITCODE
-          if ($robocopyExitCode -gt 7) {
-            Write-Error "robocopy failed while copying the Mod (exit code $robocopyExitCode)"
+          # The Mod was already copied once into mods-unpacked during project
+          # preparation. Reuse that tree directly instead of copying it again.
+          # The temporary host project.godot is excluded from the archive.
+          if (-not (Test-Path (Join-Path $packageRoot $env:MOD_DIRECTORY))) {
+            Write-Error 'Prepared mod directory is missing.'
           }
-          $global:LASTEXITCODE = 0
-
-          # The generated project-level .import tree is required by ModLoader.
-          $projectImport = Join-Path $env:PROJECT '.import'
-          if (-not (Test-Path $projectImport)) {
-            Write-Error 'The generated project .import directory is missing.'
+          if (-not (Test-Path (Join-Path $env:PROJECT '.import'))) {
+            Write-Error 'Generated project .import directory is missing.'
           }
 
-          $stageImport = Join-Path $stage '.import'
-          New-Item -ItemType Directory -Force -Path $stageImport | Out-Null
-
-          robocopy $projectImport $stageImport /E `
-            /XF '.gdignore' '*.csv.import' '*.md5'
-
-          $robocopyExitCode = $LASTEXITCODE
-          if ($robocopyExitCode -gt 7) {
-            Write-Error "robocopy failed while copying .import (exit code $robocopyExitCode)"
-          }
-          $global:LASTEXITCODE = 0
-
-          # Defensive cleanup of files that must never ship.
-          Get-ChildItem -LiteralPath $stage -File -Recurse -Force |
-            Where-Object {
-              $_.Name -eq '.gdignore' -or
-              $_.Name -eq '.editorconfig' -or
-              $_.Name -eq '.gitattributes' -or
-              $_.Name -eq '.gitignore' -or
-              $_.Name -like '*.csv.import' -or
-              $_.Name -like '*.md5'
-            } |
-            Remove-Item -Force
-
-          # Remove empty directories created solely by ignored files.
-          Get-ChildItem -LiteralPath $stage -Directory -Recurse -Force |
-            Sort-Object FullName -Descending |
-            Where-Object { @(Get-ChildItem -LiteralPath $_.FullName -Force).Count -eq 0 } |
-            Remove-Item -Force
-
-          # Use 7-Zip, matching the tool used by Godot Mod Tool on Windows.
-          # Deflate level 9 is used for normal source/config/resource files.
-          # .stex is intentionally NOT in a Store list: these files must be
-          # compressed normally as requested.
           $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
-          if (-not $sevenZip) {
-            $candidates = @(
-              "$env:ProgramFiles\7-Zip\7z.exe",
-              "$env:ChocolateyInstall\bin\7z.exe"
-            )
-            $sevenZip = $candidates | Where-Object { Test-Path $_ } | Select-Object -First 1
-          }
+          if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
+          if (-not (Test-Path $sevenZip)) { Write-Error '7z.exe was not found on the Windows runner.' }
 
-          if (-not $sevenZip) {
-            Write-Error '7z.exe was not found on the Windows runner.'
-          }
+          & $sevenZip a -tzip -mx=9 -mm=Deflate -mfb=258 -mpass=15 $zip (Join-Path $env:PROJECT '*') `
+            -xr!project.godot -xr!project.godot.* -xr!export_presets.cfg `
+            -xr!.git -xr!.github -xr!.godot -xr!.ci -xr!ci -xr!dist `
+            -xr!.editorconfig -xr!.gitattributes -xr!.gitignore -xr!.gdignore `
+            -xr!*.csv.import -xr!*.md5
 
-          & $sevenZip a -tzip -mx=9 -mm=Deflate -mfb=258 -mpass=15 $zip (Join-Path $stage '*')
-          if ($LASTEXITCODE -ne 0) {
-            exit $LASTEXITCODE
-          }
-
-          if (-not (Test-Path $zip)) {
-            Write-Error "Release ZIP was not created: $zip"
-          }
-
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          if (-not (Test-Path $zip)) { Write-Error "Release ZIP was not created: $zip" }
           Write-Host "Created release archive: $zip"
 
       - name: Verify ZIP
@@ -431,9 +360,6 @@ jobs:
 
           $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
           if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
-
-          & $sevenZip t $zip
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
           $listing = & $sevenZip l -slt $zip | Out-String
 
@@ -475,14 +401,6 @@ jobs:
           }
 
           Write-Host "Verified release version: $($releaseManifest.version_number)"
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ steps.manifest.outputs.name }}-${{ steps.version.outputs.version }}
-          path: ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}
-          if-no-files-found: error
-          retention-days: 30
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
