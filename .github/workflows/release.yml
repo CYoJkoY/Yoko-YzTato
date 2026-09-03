@@ -12,10 +12,6 @@ concurrency:
   group: release-${{ github.ref_name }}
   cancel-in-progress: false
 
-env:
-  GODOT_VERSION: "3.7-dev1"
-  MOD_TOOL_REF: "v0.3.0"
-
 jobs:
   release:
     name: Build ${{ github.ref_name }}
@@ -36,13 +32,11 @@ jobs:
           TAG="${GITHUB_REF_NAME}"
 
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z, e.g. v1.2.3."
+            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z, for example v1.2.3."
             exit 1
           fi
 
           VERSION="${TAG#v}"
-
-          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Read manifest metadata
@@ -51,93 +45,83 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ ! -f manifest.json ]]; then
+          test -f manifest.json || {
             echo "::error::manifest.json was not found at repository root."
             exit 1
-          fi
+          }
 
           python3 - <<'PY'
           import json
           from pathlib import Path
 
-          path = Path("manifest.json")
-          data = json.loads(path.read_text(encoding="utf-8-sig"))
+          data = json.loads(Path("manifest.json").read_text(encoding="utf-8-sig"))
 
           for key in ("name", "namespace", "version_number"):
-              if key not in data or not isinstance(data[key], str) or not data[key].strip():
-                  raise SystemExit(f"manifest.json must contain a non-empty string field: {key}")
+              value = data.get(key)
+              if not isinstance(value, str) or not value.strip():
+                  raise SystemExit(f"manifest.json field '{key}' must be a non-empty string")
 
-          name = data["name"].strip()
-          namespace = data["namespace"].strip()
-
-          # These two values become a directory name, so reject path-like values.
-          for key, value in (("name", name), ("namespace", namespace)):
-              if "/" in value or "\\" in value or value in {".", ".."}:
-                  raise SystemExit(f"manifest {key} contains an invalid path component: {value!r}")
-
-          print(f"name={name}")
-          print(f"namespace={namespace}")
-          print(f"current_version={data['version_number']}")
+          for key in ("name", "namespace"):
+              value = data[key].strip()
+              if value in {".", ".."} or "/" in value or "\\" in value:
+                  raise SystemExit(f"Invalid manifest.{key}: {value!r}")
           PY
 
-          NAME="$(python3 - <<'PY'
-          import json
-          print(json.load(open("manifest.json", encoding="utf-8-sig"))["name"].strip())
-          PY
-          )"
-
-          NAMESPACE="$(python3 - <<'PY'
-          import json
-          print(json.load(open("manifest.json", encoding="utf-8-sig"))["namespace"].strip())
-          PY
-          )"
-
+          NAME="$(python3 -c 'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["name"].strip())')"
+          NAMESPACE="$(python3 -c 'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["namespace"].strip())')"
           VERSION="${{ steps.version.outputs.version }}"
-          MOD_DIR="${NAMESPACE}-${NAME}"
+
+          MOD_DIRECTORY="${NAMESPACE}-${NAME}"
           ZIP_NAME="${NAME}-${VERSION}.zip"
 
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           echo "namespace=$NAMESPACE" >> "$GITHUB_OUTPUT"
-          echo "mod_dir=$MOD_DIR" >> "$GITHUB_OUTPUT"
+          echo "mod_directory=$MOD_DIRECTORY" >> "$GITHUB_OUTPUT"
           echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
+
+          echo "Mod directory: $MOD_DIRECTORY"
+          echo "ZIP name: $ZIP_NAME"
 
       - name: Install Godot 3.7-dev1
         shell: bash
         run: |
           set -euo pipefail
 
-          mkdir -p "$RUNNER_TEMP/godot"
+          GODOT_DIR="$RUNNER_TEMP/godot"
+          mkdir -p "$GODOT_DIR"
 
           curl -L --fail --retry 5 --retry-delay 2 \
             'https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=linux_headless.64&slug=linux_headless.64.zip' \
-            -o "$RUNNER_TEMP/godot/godot.zip"
+            -o "$GODOT_DIR/godot.zip"
 
-          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          unzip -q "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
 
-          GODOT_BIN="$(find "$RUNNER_TEMP/godot" -type f -name 'Godot_v3.7-dev1_linux_headless.64' -print -quit)"
+          GODOT_BIN="$(find "$GODOT_DIR" -type f -name 'Godot_v3.7-dev1_linux_headless.64' -print -quit)"
 
           if [[ -z "$GODOT_BIN" ]]; then
             echo "::error::Godot 3.7-dev1 headless executable was not found."
-            find "$RUNNER_TEMP/godot" -maxdepth 3 -type f -print
+            find "$GODOT_DIR" -maxdepth 3 -type f -print
             exit 1
           fi
 
           chmod +x "$GODOT_BIN"
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
-
           "$GODOT_BIN" --version
 
       - name: Prepare temporary Godot project
         env:
-          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
         shell: bash
         run: |
           set -euo pipefail
 
-          rm -rf "$RUNNER_TEMP/mod-project"
-          mkdir -p \
-            "$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR"
+          PROJECT="$RUNNER_TEMP/mod-project"
+          MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
 
+          rm -rf "$PROJECT"
+          mkdir -p "$MOD_ROOT"
+
+          # The repository is copied into the exact ModLoader development layout.
           rsync -a \
             --exclude='.git/' \
             --exclude='.github/' \
@@ -145,31 +129,27 @@ jobs:
             --exclude='ci/' \
             --exclude='dist/' \
             ./ \
-            "$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR/"
+            "$MOD_ROOT/"
 
-          cat > "$RUNNER_TEMP/mod-project/project.godot" <<'GODOT'
-          ; Temporary CI project for Godot resource import.
+          cat > "$PROJECT/project.godot" <<'GODOT'
+          ; Temporary CI project. This file is never included in the release ZIP.
           config_version=4
 
           [application]
-          config/name="Mod Export CI"
-
-          [rendering]
-          renderer/rendering_method="gl_compatibility"
-          renderer/rendering_method.mobile="gl_compatibility"
+          config/name="Yoko-Fantasy CI Export"
           GODOT
 
-      - name: Sync manifest version from tag
+      - name: Update manifest version in temporary copy
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
         shell: bash
         run: |
           set -euo pipefail
 
-          export MANIFEST="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIR/manifest.json"
+          MANIFEST="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIRECTORY/manifest.json"
 
-          python3 - <<'PY'
+          VERSION="$VERSION" MANIFEST="$MANIFEST" python3 - <<'PY'
           import json
           import os
           from pathlib import Path
@@ -180,18 +160,13 @@ jobs:
           data = json.loads(path.read_text(encoding="utf-8-sig"))
           data["version_number"] = version
 
-          # Preserve normal JSON semantics. Formatting is intentionally normalized
-          # only in the temporary release copy.
           path.write_text(
               json.dumps(data, ensure_ascii=False, indent=2) + "\n",
               encoding="utf-8",
           )
 
-          check = json.loads(path.read_text(encoding="utf-8"))
-          if check.get("version_number") != version:
-              raise SystemExit("manifest.json version update failed")
-
-          print(f"manifest version -> {version}")
+          if json.loads(path.read_text(encoding="utf-8"))["version_number"] != version:
+              raise SystemExit("manifest version update failed")
           PY
 
       - name: Import resources with Godot 3.7-dev1
@@ -205,106 +180,101 @@ jobs:
 
           rm -rf "$IMPORT_DIR"
 
-          # IMPORTANT: Do NOT use --quit here. Godot 3.x performs the
-          # filesystem scan/import asynchronously. The previous workflow
-          # exited while that scan was still running, which produced:
-          #   WARNING: Scan thread aborted...
-          # and left only .import/.gdignore behind.
+          # IMPORTANT:
+          # Do not use `--quit` here. In Godot 3.x the editor file-system scan
+          # is asynchronous. The previous workflow could terminate the editor
+          # while the scan thread was still running, which produced only
+          # `.gdignore` in .import and the log message `Scan thread aborted`.
           "$GODOT_BIN" \
             --path "$PROJECT" \
             --editor \
             --headless \
             --audio-driver Dummy \
-            > "$LOG_FILE" 2>&1 &
+            >"$LOG_FILE" 2>&1 &
 
           GODOT_PID=$!
-          echo "Godot PID: $GODOT_PID"
+          trap 'kill "$GODOT_PID" 2>/dev/null || true' EXIT
 
-          cleanup() {
-            if kill -0 "$GODOT_PID" 2>/dev/null; then
-              kill "$GODOT_PID" || true
-              wait "$GODOT_PID" || true
-            fi
-          }
-          trap cleanup EXIT
+          # Wait until Godot has created .import and at least one real imported
+          # resource, then wait for the file count to remain stable.
+          # This avoids racing the asynchronous import scanner.
+          DEADLINE=$((SECONDS + 300))
+          LAST_COUNT=-1
+          STABLE=0
 
-          # Wait until Godot has created actual imported resources, not just
-          # the automatically-created .import/.gdignore marker.
-          stable_count=0
-          previous_count=-1
-          deadline=$((SECONDS + 180))
-
-          while (( SECONDS < deadline )); do
-            if [[ ! -d "$IMPORT_DIR" ]]; then
-              sleep 1
-              continue
-            fi
-
-            count=$(find "$IMPORT_DIR" -type f ! -name '.gdignore' | wc -l)
-
-            echo "Imported resource files: $count"
-
-            if (( count > 0 )); then
-              if (( count == previous_count )); then
-                stable_count=$((stable_count + 1))
-              else
-                stable_count=0
-              fi
-
-              previous_count=$count
-
-              # Require the count to remain unchanged for 5 seconds so that
-              # a partially-completed import is not packaged.
-              if (( stable_count >= 5 )); then
-                break
-              fi
-            fi
-
+          while (( SECONDS < DEADLINE )); do
             if ! kill -0 "$GODOT_PID" 2>/dev/null; then
               echo "::error::Godot exited before resource import completed."
               cat "$LOG_FILE" >&2 || true
               exit 1
             fi
 
+            if [[ -d "$IMPORT_DIR" ]]; then
+              COUNT=$(find "$IMPORT_DIR" -type f ! -name '.gdignore' | wc -l)
+
+              if (( COUNT > 0 )); then
+                if (( COUNT == LAST_COUNT )); then
+                  STABLE=$((STABLE + 1))
+                else
+                  STABLE=0
+                  LAST_COUNT=$COUNT
+                fi
+
+                echo "Imported resource files: $COUNT (stable checks: $STABLE/5)"
+
+                if (( STABLE >= 5 )); then
+                  break
+                fi
+              fi
+            fi
+
             sleep 1
           done
 
-          final_count="$(find "$IMPORT_DIR" -type f ! -name '.gdignore' | wc -l)"
-
-          if (( final_count == 0 )); then
-            echo "::error::No imported resources were generated by Godot."
-            echo "----- Godot import log -----"
+          if [[ ! -d "$IMPORT_DIR" ]]; then
+            echo "::error::Godot did not create project-level .import directory."
             cat "$LOG_FILE" >&2 || true
-            echo "----------------------------"
             exit 1
           fi
 
-          echo "Godot generated $final_count imported resource files."
+          IMPORT_COUNT=$(find "$IMPORT_DIR" -type f ! -name '.gdignore' | wc -l)
+
+          if (( IMPORT_COUNT == 0 )); then
+            echo "::error::Godot created an empty .import directory."
+            echo "Godot import log:"
+            cat "$LOG_FILE" >&2 || true
+            exit 1
+          fi
+
+          echo "Godot import completed with $IMPORT_COUNT generated files."
           echo "Generated .import files:"
           find "$IMPORT_DIR" -type f -print | sort
 
-      - name: Build ModLoader-compatible archive
+          # Stop Godot only after the import result has become stable.
+          kill "$GODOT_PID" 2>/dev/null || true
+          wait "$GODOT_PID" 2>/dev/null || true
+          trap - EXIT
+
+      - name: Build ModLoader ZIP
         env:
-          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
           ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
         shell: bash
         run: |
           set -euo pipefail
 
           PROJECT="$RUNNER_TEMP/mod-project"
-          MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIR"
-          OUT_DIR="$RUNNER_TEMP/release"
+          MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
           STAGE="$RUNNER_TEMP/export-stage"
-          ZIP="$OUT_DIR/$ZIP_NAME"
+          RELEASE="$RUNNER_TEMP/release"
+          ZIP="$RELEASE/$ZIP_NAME"
 
-          rm -rf "$OUT_DIR" "$STAGE"
-          mkdir -p \
-            "$OUT_DIR" \
-            "$STAGE/mods-unpacked/$MOD_DIR"
+          rm -rf "$STAGE" "$RELEASE"
+          mkdir -p "$STAGE/mods-unpacked/$MOD_DIRECTORY" "$RELEASE"
 
-          # ----------------------------------------------------------
-          # Copy the complete Mod source tree.
-          # ----------------------------------------------------------
+          # Source-side Mod files. The repository does not need to contain the
+          # project-level .import directory, but any *.import descriptors that
+          # are part of the Mod source are kept.
           rsync -a \
             --exclude='.git/' \
             --exclude='.github/' \
@@ -313,110 +283,34 @@ jobs:
             --exclude='project.godot.*' \
             --exclude='export_presets.cfg' \
             "$MOD_ROOT/" \
-            "$STAGE/mods-unpacked/$MOD_DIR/"
+            "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
 
-          # ----------------------------------------------------------
-          # Godot 3.x imported resources are PROJECT-level files.
-          # They are NOT expected to exist in the source repository.
-          #
-          # ModLoader's documented ZIP structure requires:
-          #
-          #   <mod>.zip
-          #   ├── .import/
-          #   └── mods-unpacked/
-          #       └── Namespace-ModName/
-          #
-          # The temporary project contains ONLY this Mod, so its complete
-          # generated .import tree contains exactly the imported resources
-          # needed by this release.
-          # ----------------------------------------------------------
+          # Godot generates imported custom assets in the PROJECT-LEVEL .import
+          # directory. ModLoader ZIPs require that directory at the ZIP root.
           if [[ ! -d "$PROJECT/.import" ]]; then
-            echo "::error::Godot did not create the project .import directory."
+            echo "::error::Generated project .import directory is missing."
             exit 1
           fi
 
-          IMPORT_COUNT="$(find "$PROJECT/.import" -type f ! -name '.gdignore' | wc -l)"
-
-          if [[ "$IMPORT_COUNT" -eq 0 ]]; then
-            echo "::error::Godot generated an empty .import directory."
+          IMPORT_COUNT=$(find "$PROJECT/.import" -type f ! -name '.gdignore' | wc -l)
+          if (( IMPORT_COUNT == 0 )); then
+            echo "::error::Generated project .import directory contains no imported resources."
             exit 1
           fi
 
           mkdir -p "$STAGE/.import"
           rsync -a "$PROJECT/.import/" "$STAGE/.import/"
 
-          echo "Staged imported resources: $IMPORT_COUNT"
+          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' | wc -l)
+          if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
+            echo "::error::Imported resource copy is incomplete: source=$IMPORT_COUNT stage=$STAGED_IMPORT_COUNT"
+            exit 1
+          fi
 
-          # ----------------------------------------------------------
-          # Sanity-check that every source .import descriptor whose
-          # [remap] path points into res://.import has a corresponding
-          # imported file in the staged project.
-          #
-          # This follows the behavior used by Mod Tool's build exporter.
-          # ----------------------------------------------------------
-          MOD_ROOT="$MOD_ROOT" PROJECT="$PROJECT" STAGE="$STAGE" python3 - <<'PY'
-          import configparser
-          import os
-          from pathlib import Path
+          echo "Staged imported resources: $STAGED_IMPORT_COUNT"
 
-          project = Path(os.environ["PROJECT"]).resolve()
-          mod_root = Path(os.environ["MOD_ROOT"]).resolve()
-          stage = Path(os.environ["STAGE"]).resolve()
-
-          missing = []
-
-          for import_file in mod_root.rglob("*.import"):
-              parser = configparser.ConfigParser(
-                  interpolation=None,
-                  strict=False,
-              )
-              parser.optionxform = str
-
-              try:
-                  parser.read(import_file, encoding="utf-8")
-              except Exception as exc:
-                  missing.append(
-                      f"{import_file}: cannot read .import: {exc}"
-                  )
-                  continue
-
-              if not parser.has_section("remap"):
-                  continue
-              if not parser.has_option("remap", "path"):
-                  continue
-
-              imported_path = parser.get("remap", "path").strip()
-
-              if not imported_path.startswith("res://.import/"):
-                  continue
-
-              relative = imported_path[len("res://"):]
-              source = project / relative
-              staged = stage / relative
-
-              if not source.is_file():
-                  missing.append(
-                      f"{import_file}: imported target missing from project: {relative}"
-                  )
-                  continue
-
-              if not staged.is_file():
-                  missing.append(
-                      f"{import_file}: imported target missing from archive stage: {relative}"
-                  )
-
-          if missing:
-              print("Missing imported resources:")
-              for item in missing:
-                  print(f"  - {item}")
-              raise SystemExit(1)
-
-          print("All .import remap targets are present in the stage.")
-          PY
-
-          # ----------------------------------------------------------
-          # Create the archive from the stage root.
-          # ----------------------------------------------------------
+          # The final ZIP root contains both .import and mods-unpacked, exactly
+          # as required by the ModLoader distribution format.
           (
             cd "$STAGE"
             zip -r -q "$ZIP" .
@@ -425,9 +319,9 @@ jobs:
           test -f "$ZIP"
           echo "Created release archive: $ZIP"
 
-      - name: Verify archive
+      - name: Verify ZIP structure
         env:
-          MOD_DIR: ${{ steps.manifest.outputs.mod_dir }}
+          MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
           ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
           VERSION: ${{ steps.version.outputs.version }}
         shell: bash
@@ -435,48 +329,44 @@ jobs:
           set -euo pipefail
 
           ZIP="$RUNNER_TEMP/release/$ZIP_NAME"
-          REQUIRED="mods-unpacked/$MOD_DIR/manifest.json"
+          MANIFEST_PATH="mods-unpacked/$MOD_DIRECTORY/manifest.json"
 
           unzip -t "$ZIP"
 
+          # Required by Godot ModLoader distribution format.
           if ! unzip -l "$ZIP" | grep -Eq '(^|[[:space:]])\.import/'; then
-            echo "::error::Required top-level .import directory is missing from archive."
+            echo "::error::Top-level .import directory is missing from the ZIP."
             exit 1
           fi
 
-          IMPORT_COUNT="$(unzip -l "$ZIP" | grep -E '\.import/[^[:space:]]+$' | wc -l)"
-
+          IMPORT_COUNT="$({ unzip -l "$ZIP" || true; } | grep -E '(^|[[:space:]])\.import/[^[:space:]]+$' | wc -l)"
           if [[ "$IMPORT_COUNT" -eq 0 ]]; then
-            echo "::error::Archive contains no imported resources."
+            echo "::error::No imported resource files were found under .import/."
             exit 1
           fi
 
-          echo "Archive imported resource entries: $IMPORT_COUNT"
-
-          if ! unzip -l "$ZIP" | grep -Fq "$REQUIRED"; then
-            echo "::error::Required file missing from archive: $REQUIRED"
+          if ! unzip -l "$ZIP" | grep -Fq "$MANIFEST_PATH"; then
+            echo "::error::Missing $MANIFEST_PATH"
             exit 1
           fi
 
-          unzip -p "$ZIP" "$REQUIRED" > "$RUNNER_TEMP/manifest.release.json"
+          unzip -p "$ZIP" "$MANIFEST_PATH" > "$RUNNER_TEMP/release-manifest.json"
 
-          python3 - <<'PY'
+          VERSION="$VERSION" python3 - <<'PY'
           import json
           import os
           from pathlib import Path
 
           expected = os.environ["VERSION"]
-          path = Path(os.environ["RUNNER_TEMP"]) / "manifest.release.json"
-
-          data = json.loads(path.read_text(encoding="utf-8"))
-          actual = data.get("version_number")
+          path = Path(os.environ["RUNNER_TEMP"]) / "release-manifest.json"
+          actual = json.loads(path.read_text(encoding="utf-8"))["version_number"]
 
           if actual != expected:
               raise SystemExit(
-                  f"Release manifest version mismatch: {actual!r} != {expected!r}"
+                  f"Manifest version mismatch: expected {expected!r}, got {actual!r}"
               )
 
-          print(f"Release manifest version: {actual}")
+          print(f"Verified manifest version: {actual}")
           PY
 
       - name: Upload build artifact
