@@ -282,6 +282,8 @@ jobs:
             --exclude='project.godot' \
             --exclude='project.godot.*' \
             --exclude='export_presets.cfg' \
+            --exclude='*.csv.import' \
+            --exclude='.gdignore' \
             "$MOD_ROOT/" \
             "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
 
@@ -292,22 +294,42 @@ jobs:
             exit 1
           fi
 
-          IMPORT_COUNT=$(find "$PROJECT/.import" -type f ! -name '.gdignore' | wc -l)
+          IMPORT_COUNT=$(find "$PROJECT/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' | wc -l)
           if (( IMPORT_COUNT == 0 )); then
             echo "::error::Generated project .import directory contains no imported resources."
             exit 1
           fi
 
           mkdir -p "$STAGE/.import"
-          rsync -a "$PROJECT/.import/" "$STAGE/.import/"
+          rsync -a \
+            --exclude='.gdignore' \
+            --exclude='*.csv.import' \
+            "$PROJECT/.import/" \
+            "$STAGE/.import/"
 
-          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' | wc -l)
+          # Godot creates .gdignore as an internal marker. It is not a Mod
+          # import artifact and must not be shipped. Remove any nested marker
+          # defensively as well.
+          find "$STAGE" -type f -name '.gdignore' -delete
+
+          # CSV import descriptors are not required by the Mod distribution
+          # and Mod Tool does not need them in the final archive.
+          find "$STAGE" -type f -name '*.csv.import' -delete
+
+          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' | wc -l)
           if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
             echo "::error::Imported resource copy is incomplete: source=$IMPORT_COUNT stage=$STAGED_IMPORT_COUNT"
             exit 1
           fi
 
           echo "Staged imported resources: $STAGED_IMPORT_COUNT"
+
+          # Never ship internal ignore markers or CSV import descriptors.
+          if find "$STAGE" -type f \( -name '.gdignore' -o -name '*.csv.import' \) -print -quit | grep -q .; then
+            echo "::error::Forbidden internal file found in export stage (.gdignore or *.csv.import)."
+            find "$STAGE" -type f \( -name '.gdignore' -o -name '*.csv.import' \) -print
+            exit 1
+          fi
 
           # The final ZIP root contains both .import and mods-unpacked, exactly
           # as required by the ModLoader distribution format.
@@ -342,6 +364,16 @@ jobs:
           IMPORT_COUNT="$({ unzip -l "$ZIP" || true; } | grep -E '(^|[[:space:]])\.import/[^[:space:]]+$' | wc -l)"
           if [[ "$IMPORT_COUNT" -eq 0 ]]; then
             echo "::error::No imported resource files were found under .import/."
+            exit 1
+          fi
+
+          if unzip -l "$ZIP" | grep -Eq '(^|[[:space:]])\.gdignore($|[[:space:]])'; then
+            echo "::error::.gdignore must not be included in the release ZIP."
+            exit 1
+          fi
+
+          if unzip -l "$ZIP" | grep -Eq '\.csv\.import($|[[:space:]])'; then
+            echo "::error::CSV .import descriptors must not be included in the release ZIP."
             exit 1
           fi
 
