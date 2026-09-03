@@ -215,8 +215,10 @@ jobs:
 
           $project = $env:PROJECT
           $importDir = Join-Path $project '.import'
-          if (Test-Path $importDir) { Remove-Item -LiteralPath $importDir -Recurse -Force }
-          New-Item -ItemType Directory -Force -Path $importDir | Out-Null
+
+          if (Test-Path $importDir) {
+            Remove-Item -LiteralPath $importDir -Recurse -Force
+          }
 
           $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
           $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
@@ -230,7 +232,7 @@ jobs:
             -PassThru
 
           try {
-            $deadline = (Get-Date).AddMinutes(10)
+            $deadline = (Get-Date).AddMinutes(5)
             $lastCount = -1
             $stableChecks = 0
             $importDone = $false
@@ -238,8 +240,10 @@ jobs:
 
             while ((Get-Date) -lt $deadline) {
               if ($process.HasExited) {
-                if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue }
-                if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue }
+                Write-Host "--- Godot STDOUT ---"
+                if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue | Write-Host }
+                Write-Host "--- Godot STDERR ---"
+                if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue | Write-Host }
                 Write-Error "Godot exited before resource import completed. Exit code: $($process.ExitCode)"
               }
 
@@ -248,30 +252,51 @@ jobs:
 
                 if ($count -gt 0) {
                   $observedFiles = $true
-                  if ($count -eq $lastCount) { $stableChecks++ } else { $lastCount = $count; $stableChecks = 0 }
 
-                  if ($stableChecks -ge 1) {
+                  if ($count -eq $lastCount) {
+                    $stableChecks++
+                  } else {
+                    $lastCount = $count
+                    $stableChecks = 0
+                  }
+
+                  Write-Host "Imported resource files: $count (stable: $stableChecks/5)"
+
+                  if ($stableChecks -ge 5) {
                     $importDone = $true
                     break
                   }
                 }
               }
 
-              Start-Sleep -Milliseconds 500
+              Start-Sleep -Seconds 1
             }
 
             if (-not $importDone -or -not $observedFiles) {
-              if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue }
-              if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue }
+              Write-Host "--- Godot STDOUT ---"
+              if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue | Write-Host }
+              Write-Host "--- Godot STDERR ---"
+              if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue | Write-Host }
+              Write-Host "--- .import directory state ---"
+              if (Test-Path $importDir) {
+                Get-ChildItem $importDir -Recurse | Select-Object -First 20 | ForEach-Object { Write-Host $_.FullName }
+              } else {
+                Write-Host ".import directory was never created."
+              }
               Write-Error 'Timed out waiting for Godot resource import to complete.'
             }
           } finally {
-            if (-not $process.HasExited) { Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue }
+            if (-not $process.HasExited) {
+              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
+            }
           }
 
           $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse | Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
-          if (@($realImports).Count -eq 0) { Write-Error 'No imported resources were generated.' }
+          if (@($realImports).Count -eq 0) {
+            Write-Error 'No imported resources were generated.'
+          }
           Write-Host "Godot generated/retained $(@($realImports).Count) imported resource files."
+
 
       - name: Build ModLoader ZIP with 7-Zip
         env:
