@@ -195,8 +195,8 @@ jobs:
           # --quit immediately: the FileSystem scan/import work is asynchronous.
           $process = Start-Process -FilePath $env:GODOT_BIN `
             -ArgumentList @('--path', $project, '--editor', '--headless', '--audio-driver', 'Dummy') `
-            -RedirectStandardOutput $logFile `
-            -RedirectStandardError $logFile `
+            -RedirectStandardOutput $stdoutLog
+            -RedirectStandardError $stderrLog
             -PassThru
 
           try {
