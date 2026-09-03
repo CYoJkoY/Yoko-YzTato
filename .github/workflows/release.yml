@@ -134,9 +134,14 @@ jobs:
                 'project.godot' 'project.godot.*' 'export_presets.cfg' `
                 '.gdignore' '*.csv.import' '*.md5'
 
-          if ($LASTEXITCODE -gt 7) {
-            exit $LASTEXITCODE
+          $robocopyExitCode = $LASTEXITCODE
+          if ($robocopyExitCode -gt 7) {
+            Write-Error "robocopy failed with exit code $robocopyExitCode"
           }
+
+          # Robocopy uses exit codes 0-7 for successful/non-fatal outcomes.
+          # Explicitly reset the PowerShell step to success before continuing.
+          $global:LASTEXITCODE = 0
 
           # This is only the host project used to run Godot's importer.
           # It is never copied into the Mod ZIP.
@@ -280,7 +285,11 @@ jobs:
                 '.gdignore' '*.csv.import' '*.md5' `
                 'project.godot' 'project.godot.*' 'export_presets.cfg'
 
-          if ($LASTEXITCODE -gt 7) { exit $LASTEXITCODE }
+          $robocopyExitCode = $LASTEXITCODE
+          if ($robocopyExitCode -gt 7) {
+            Write-Error "robocopy failed while copying the Mod (exit code $robocopyExitCode)"
+          }
+          $global:LASTEXITCODE = 0
 
           # The generated project-level .import tree is required by ModLoader.
           $projectImport = Join-Path $env:PROJECT '.import'
@@ -294,7 +303,11 @@ jobs:
           robocopy $projectImport $stageImport /E `
             /XF '.gdignore' '*.csv.import' '*.md5'
 
-          if ($LASTEXITCODE -gt 7) { exit $LASTEXITCODE }
+          $robocopyExitCode = $LASTEXITCODE
+          if ($robocopyExitCode -gt 7) {
+            Write-Error "robocopy failed while copying .import (exit code $robocopyExitCode)"
+          }
+          $global:LASTEXITCODE = 0
 
           # Defensive cleanup of files that must never ship.
           Get-ChildItem -LiteralPath $stage -File -Recurse -Force |
