@@ -240,7 +240,7 @@ jobs:
             "$MOD_ROOT/" \
             "$STAGE/mods-unpacked/$MOD_DIR/"
 
-          MOD_ROOT="$MOD_ROOT" STAGE="$STAGE" MOD_DIR="$MOD_DIR" python3 - <<'PY'
+          MOD_ROOT="$MOD_ROOT" STAGE="$STAGE" MOD_DIR="$MOD_DIR" RUNNER_TEMP="$RUNNER_TEMP" python3 - <<'PY'
           import configparser
           import os
           from pathlib import Path
@@ -301,16 +301,6 @@ jobs:
                   shutil.rmtree(unwanted, ignore_errors=True)
               elif unwanted.exists():
                   unwanted.unlink()
-          PY
-
-          # Pass the Mod root into the helper above.
-          # (The environment assignment is intentionally repeated here so the
-          # embedded Python block receives the exact same paths.)
-          python3 - <<'PY'
-          # Intentionally empty: environment validation for the shell stage.
-          import os
-          for key in ("MOD_ROOT", "STAGE", "MOD_DIR"):
-              assert os.environ[key]
           PY
 
           (
