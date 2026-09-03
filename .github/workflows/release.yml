@@ -94,21 +94,71 @@ jobs:
           $ErrorActionPreference = 'Stop'
 
           $godotDir = Join-Path $env:RUNNER_TEMP 'godot'
+          $archive = Join-Path $godotDir 'Godot_v3.7-dev1_win64.exe.zip'
+
+          if (Test-Path -LiteralPath $godotDir) {
+            Remove-Item -LiteralPath $godotDir -Recurse -Force
+          }
+
           New-Item -ItemType Directory -Force -Path $godotDir | Out-Null
 
-          $downloadUrl = 'https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=windows.64&slug=win64.exe.zip'
-          $archive = Join-Path $godotDir 'godot.zip'
+          # Official Godot development builds are published through the
+          # godot-builds GitHub releases repository.
+          $downloadUrl = 'https://github.com/godotengine/godot-builds/releases/download/3.7-dev1/Godot_v3.7-dev1_win64.exe.zip'
 
-          Invoke-WebRequest -Uri $downloadUrl -OutFile $archive
+          Write-Host "Downloading Godot 3.7-dev1 from:"
+          Write-Host $downloadUrl
+
+          # Use curl.exe rather than Invoke-WebRequest. GitHub-hosted Windows
+          # runners already provide curl, and curl handles transient CDN/network
+          # failures much better with retries.
+          & curl.exe `
+            --fail `
+            --location `
+            --retry 8 `
+            --retry-delay 5 `
+            --retry-all-errors `
+            --connect-timeout 30 `
+            --max-time 600 `
+            --output $archive `
+            $downloadUrl
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Failed to download Godot 3.7-dev1. curl exit code: $LASTEXITCODE"
+          }
+
+          if (-not (Test-Path -LiteralPath $archive)) {
+            Write-Error "Godot archive was not downloaded: $archive"
+          }
+
+          $archiveSize = (Get-Item -LiteralPath $archive).Length
+          if ($archiveSize -lt 1MB) {
+            Write-Error "Downloaded Godot archive is unexpectedly small: $archiveSize bytes"
+          }
+
+          Write-Host "Downloaded $archiveSize bytes."
+
           Expand-Archive -LiteralPath $archive -DestinationPath $godotDir -Force
 
-          $godot = Get-ChildItem -LiteralPath $godotDir -Filter 'Godot_v3.7-dev1_win64.exe' -File -Recurse | Select-Object -First 1
+          $godot = Get-ChildItem `
+            -LiteralPath $godotDir `
+            -Filter 'Godot_v3.7-dev1_win64.exe' `
+            -File `
+            -Recurse |
+            Select-Object -First 1
+
           if ($null -eq $godot) {
             Write-Error 'Godot_v3.7-dev1_win64.exe was not found after extraction.'
           }
 
           "GODOT_BIN=$($godot.FullName)" >> $env:GITHUB_ENV
+
+          Write-Host "Godot executable: $($godot.FullName)"
           & $godot.FullName --version
+
+          if ($LASTEXITCODE -ne 0) {
+            Write-Error "Godot --version failed with exit code $LASTEXITCODE"
+          }
 
       - name: Prepare isolated Godot project
         id: prepare
@@ -177,41 +227,29 @@ jobs:
           }
 
       - name: Import resources with Godot 3.7-dev1
-        shell: pwsh
         env:
-          PROJECT: ${{ env.PROJECT }}
+          PROJECT: ${{ steps.prepare.outputs.project }}
+        shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
           $project = $env:PROJECT
           $importDir = Join-Path $project '.import'
-
           $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
           $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
 
-          if (Test-Path -LiteralPath $importDir) {
+          if (Test-Path $importDir) {
             Remove-Item -LiteralPath $importDir -Recurse -Force
           }
 
-          if (Test-Path -LiteralPath $stdoutLog) {
-            Remove-Item -LiteralPath $stdoutLog -Force
-          }
+          if (Test-Path $stdoutLog) { Remove-Item -LiteralPath $stdoutLog -Force }
+          if (Test-Path $stderrLog) { Remove-Item -LiteralPath $stderrLog -Force }
 
-          if (Test-Path -LiteralPath $stderrLog) {
-            Remove-Item -LiteralPath $stderrLog -Force
-          }
-
-          Write-Host "Starting Godot 3.7-dev1 resource import..."
-          Write-Host "Project: $project"
-
-          $process = Start-Process `
-            -FilePath $env:GODOT_BIN `
-            -ArgumentList @(
-              '--path', $project,
-              '--editor',
-              '--headless',
-              '--audio-driver', 'Dummy'
-            ) `
+          # Run the actual Godot 3.7-dev1 editor on Windows. Do not rely on
+          # --quit immediately: the FileSystem scan/import work is asynchronous.
+          # Start-Process requires different files for stdout and stderr.
+          $process = Start-Process -FilePath $env:GODOT_BIN `
+            -ArgumentList @('--path', $project, '--editor', '--headless', '--audio-driver', 'Dummy') `
             -RedirectStandardOutput $stdoutLog `
             -RedirectStandardError $stderrLog `
             -PassThru
@@ -223,49 +261,23 @@ jobs:
             $importDone = $false
 
             while ((Get-Date) -lt $deadline) {
-
               if ($process.HasExited) {
-                Write-Host "Godot exited with code: $($process.ExitCode)"
-
-                if (Test-Path -LiteralPath $stdoutLog) {
-                  Write-Host "========== Godot STDOUT =========="
-                  Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue
-                }
-
-                if (Test-Path -LiteralPath $stderrLog) {
-                  Write-Host "========== Godot STDERR =========="
-                  Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue
-                }
-
-                if ($process.ExitCode -ne 0) {
-                  throw "Godot exited with a non-zero exit code: $($process.ExitCode)"
-                }
-
-                throw "Godot exited before resource import completed."
+                Write-Host 'Godot stdout:'
+                if (Test-Path $stdoutLog) { Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue }
+                Write-Host 'Godot stderr:'
+                if (Test-Path $stderrLog) { Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue }
+                Write-Error "Godot exited before resource import completed. Exit code: $($process.ExitCode)"
               }
 
-              if (Test-Path -LiteralPath $importDir) {
-
-                $files = @(
-                  Get-ChildItem `
-                    -LiteralPath $importDir `
-                    -File `
-                    -Recurse `
-                    -ErrorAction SilentlyContinue |
-                  Where-Object {
-                    $_.Name -ne '.gdignore' -and
-                    $_.Name -notlike '*.md5'
-                  }
-                )
-
-                $count = $files.Count
+              if (Test-Path $importDir) {
+                $files = Get-ChildItem -LiteralPath $importDir -File -Recurse |
+                  Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
+                $count = @($files).Count
 
                 if ($count -gt 0) {
-
                   if ($count -eq $lastCount) {
                     $stableChecks++
-                  }
-                  else {
+                  } else {
                     $lastCount = $count
                     $stableChecks = 0
                   }
@@ -283,62 +295,27 @@ jobs:
             }
 
             if (-not $importDone) {
-
-              Write-Host "========== Godot STDOUT =========="
-
-              if (Test-Path -LiteralPath $stdoutLog) {
-                Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue
-              }
-
-              Write-Host "========== Godot STDERR =========="
-
-              if (Test-Path -LiteralPath $stderrLog) {
-                Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue
-              }
-
-              throw "Timed out waiting for Godot resource import to complete."
+              Write-Host 'Godot stdout:'
+              if (Test-Path $stdoutLog) { Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue }
+              Write-Host 'Godot stderr:'
+              if (Test-Path $stderrLog) { Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue }
+              Write-Error 'Timed out waiting for Godot resource import to complete.'
             }
-
           }
           finally {
-
             if (-not $process.HasExited) {
-              Stop-Process `
-                -Id $process.Id `
-                -Force `
-                -ErrorAction SilentlyContinue
+              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
             }
           }
 
-          $realImports = @(
-            Get-ChildItem `
-              -LiteralPath $importDir `
-              -File `
-              -Recurse `
-              -ErrorAction SilentlyContinue |
-            Where-Object {
-              $_.Name -ne '.gdignore' -and
-              $_.Name -notlike '*.md5'
-            }
-          )
+          $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse |
+            Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
 
-          if ($realImports.Count -eq 0) {
-            throw 'No imported resources were generated.'
+          if (@($realImports).Count -eq 0) {
+            Write-Error 'No imported resources were generated.'
           }
 
-          Write-Host "Godot generated $($realImports.Count) imported resource files."
-
-          Write-Host "========== Godot import STDOUT =========="
-
-          if (Test-Path -LiteralPath $stdoutLog) {
-            Get-Content -LiteralPath $stdoutLog -Raw -ErrorAction SilentlyContinue
-          }
-
-          Write-Host "========== Godot import STDERR =========="
-
-          if (Test-Path -LiteralPath $stderrLog) {
-            Get-Content -LiteralPath $stderrLog -Raw -ErrorAction SilentlyContinue
-          }
+          Write-Host "Godot generated $(@($realImports).Count) imported resource files."
 
       - name: Build ModLoader ZIP with 7-Zip
         env:
