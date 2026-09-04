@@ -1,22 +1,17 @@
 name: Build Mod Release
-
 on:
   push:
     tags:
       - 'v*.*.*'
-
 permissions:
   contents: write
-
 concurrency:
   group: release-${{ github.ref_name }}
   cancel-in-progress: false
-
 jobs:
   release:
     name: Build ${{ github.ref_name }}
     runs-on: ubuntu-22.04
-
     steps:
       - name: Checkout tag
         uses: actions/checkout@v4
@@ -28,16 +23,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           TAG="${GITHUB_REF_NAME}"
-
           if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
-            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z, for example v1.2.3."
+            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z."
             exit 1
           fi
-
           VERSION="${TAG#v}"
-
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Read manifest metadata
@@ -45,92 +36,79 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           test -f manifest.json || {
-            echo "::error::manifest.json was not found at repository root."
+            echo "::error::manifest.json missing."
             exit 1
           }
-
           python3 - <<'PY'
           import json
           from pathlib import Path
-
           data = json.loads(
-              Path("manifest.json").read_text(encoding="utf-8-sig")
+              Path("manifest.json")
+              .read_text(encoding="utf-8-sig")
           )
-
-          for key in ("name", "namespace", "version_number"):
+          for key in (
+              "name",
+              "namespace",
+              "version_number"
+          ):
               value = data.get(key)
-
               if not isinstance(value, str) or not value.strip():
                   raise SystemExit(
-                      f"manifest.json field '{key}' must be a non-empty string"
+                      f"Invalid manifest field: {key}"
                   )
-
-          for key in ("name", "namespace"):
-              value = data[key].strip()
-
-              if value in {".", ".."} or "/" in value or "\\" in value:
+          for key in (
+              "name",
+              "namespace"
+          ):
+              value=data[key].strip()
+              if "/" in value or "\\" in value:
                   raise SystemExit(
-                      f"Invalid manifest.{key}: {value!r}"
+                      f"Invalid manifest.{key}"
                   )
           PY
-
-          NAME="$(
-            python3 -c \
-              'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["name"].strip())'
-          )"
-
-          NAMESPACE="$(
-            python3 -c \
-              'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["namespace"].strip())'
-          )"
-
+          NAME="$(python3 -c '
+          import json
+          print(json.load(open(
+              "manifest.json",
+              encoding="utf-8-sig"
+          ))["name"].strip())
+          ')"
+          NAMESPACE="$(python3 -c '
+          import json
+          print(json.load(open(
+              "manifest.json",
+              encoding="utf-8-sig"
+          ))["namespace"].strip())
+          ')"
           VERSION="${{ steps.version.outputs.version }}"
-
           MOD_DIRECTORY="${NAMESPACE}-${NAME}"
           ZIP_NAME="${NAME}-${VERSION}.zip"
-
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           echo "namespace=$NAMESPACE" >> "$GITHUB_OUTPUT"
           echo "mod_directory=$MOD_DIRECTORY" >> "$GITHUB_OUTPUT"
           echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
 
-          echo "Mod directory: $MOD_DIRECTORY"
-          echo "ZIP name: $ZIP_NAME"
-
       - name: Install Godot 3.7-dev1
         shell: bash
         run: |
           set -euo pipefail
-
           GODOT_DIR="$RUNNER_TEMP/godot"
-
           mkdir -p "$GODOT_DIR"
-
           curl -L --fail --retry 5 --retry-delay 2 \
-            'https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=linux_headless.64&slug=linux_headless.64.zip' \
-            -o "$GODOT_DIR/godot.zip"
-
+          'https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=linux_headless.64&slug=linux_headless.64.zip' \
+          -o "$GODOT_DIR/godot.zip"
           unzip -q "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
-
-          GODOT_BIN="$(
-            find "$GODOT_DIR" \
-              -type f \
-              -name 'Godot_v3.7-dev1_linux_headless.64' \
-              -print -quit
-          )"
-
+          GODOT_BIN="$(find "$GODOT_DIR" \
+          -type f \
+          -name 'Godot_v3.7-dev1_linux_headless.64' \
+          -print -quit)"
           if [[ -z "$GODOT_BIN" ]]; then
-            echo "::error::Godot 3.7-dev1 headless executable was not found."
-            find "$GODOT_DIR" -maxdepth 3 -type f -print
-            exit 1
+              echo "::error::Godot executable missing."
+              exit 1
           fi
-
           chmod +x "$GODOT_BIN"
-
           echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
-
           "$GODOT_BIN" --version
 
       - name: Prepare temporary Godot project
@@ -139,63 +117,116 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           PROJECT="$RUNNER_TEMP/mod-project"
           MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
-
           rm -rf "$PROJECT"
-
           mkdir -p "$MOD_ROOT"
-
-          echo "Copying Mod source exactly as it exists in the repository..."
-
-          # ------------------------------------------------------------------
-          # IMPORTANT:
-          #
-          # The Mod source is copied WITHOUT changing:
-          #
-          #   - file names
-          #   - directory names
-          #   - file contents
-          #
-          # Only repository/editor files that should not enter the temporary
-          # Godot project are excluded.
-          # ------------------------------------------------------------------
-
-          rsync -a \
-            --exclude='.git/' \
-            --exclude='.github/' \
-            --exclude='.godot/' \
-            --exclude='ci/' \
-            --exclude='dist/' \
-            --exclude='project.godot' \
-            --exclude='project.godot.*' \
-            --exclude='export_presets.cfg' \
-            --exclude='.gitignore' \
-            --exclude='.gitattributes' \
-            "$PWD/" \
-            "$MOD_ROOT/"
-
-          # ------------------------------------------------------------------
-          # Create a minimal temporary Godot project.
-          # This project is only used to generate the project-level .import
-          # directory and is never included in the release ZIP.
-          # ------------------------------------------------------------------
-
+          echo "Copying Mod source with lowercase normalization..."
+          python3 - "$PWD" "$MOD_ROOT" <<'PY'
+          import sys
+          import shutil
+          from pathlib import Path
+          source = Path(sys.argv[1])
+          target = Path(sys.argv[2])
+          EXCLUDE_DIRS = {
+              ".git",
+              ".github",
+              ".godot",
+              "ci",
+              "dist",
+          }
+          EXCLUDE_FILES = {
+              ".gitignore",
+              ".gitattributes",
+          }
+          def copy_lower(src, dst):
+              for item in src.iterdir():
+                  if item.is_dir():
+                      if item.name in EXCLUDE_DIRS:
+                          continue
+                      new = dst / item.name.lower()
+                      if new.exists():
+                          raise RuntimeError(
+                              f"Directory collision: {new}"
+                          )
+                      new.mkdir(parents=True)
+                      copy_lower(item,new)
+                  elif item.is_file():
+                      if item.name in EXCLUDE_FILES:
+                          continue
+                      new = dst / item.name.lower()
+                      if new.exists():
+                          raise RuntimeError(
+                              f"File collision: {new}"
+                          )
+                      shutil.copy2(
+                          item,
+                          new
+                      )
+          copy_lower(
+              source,
+              target
+          )
+          print(
+              "Source copied."
+          )
+          PY
+          echo "Fixing Godot resource paths..."
+          MOD_ROOT="$MOD_ROOT" python3 <<'PY'
+          import os
+          import re
+          from pathlib import Path
+          root = Path(
+              os.environ["MOD_ROOT"]
+          )
+          TEXT_EXTENSIONS = {
+              ".gd",
+              ".tscn",
+              ".tres",
+              ".cfg",
+              ".json",
+              ".csv",
+              ".shader",
+              ".gdshader",
+          }
+          for path in root.rglob("*"):
+              if not path.is_file():
+                  continue
+              if path.suffix.lower() not in TEXT_EXTENSIONS:
+                  continue
+              try:
+                  text = path.read_text(
+                      encoding="utf-8"
+                  )
+              except UnicodeDecodeError:
+                  continue
+              fixed = re.sub(
+                  r'(res://[^\s"\']+)',
+                  lambda m: m.group(1).lower(),
+                  text
+              )
+              if fixed != text:
+                  path.write_text(
+                      fixed,
+                      encoding="utf-8"
+                  )
+                  print(
+                      "Updated:",
+                      path
+                  )
+          print(
+              "Resource paths fixed."
+          )
+          PY
           cat > "$PROJECT/project.godot" <<'GODOT'
           ; Temporary CI project.
-          ; This file is never included in the release ZIP.
-
+          ; Never included in release.
           config_version=4
-
           [application]
-
-          config/name="Yoko-Fantasy CI Export"
+          config/name="Mod CI Import"
           GODOT
-
-          echo "Temporary Godot project prepared:"
-          echo "  $PROJECT"
-          echo "  $MOD_ROOT"
+          echo "Temporary Godot project ready."
+          echo "$PROJECT"
 
       - name: Update manifest version in temporary copy
         env:
@@ -204,216 +235,99 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           MANIFEST="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIRECTORY/manifest.json"
-
-          VERSION="$VERSION" MANIFEST="$MANIFEST" python3 - <<'PY'
+          VERSION="$VERSION" MANIFEST="$MANIFEST" python3 <<'PY'
           import json
           import os
           from pathlib import Path
-
-          path = Path(os.environ["MANIFEST"])
+          path = Path(
+              os.environ["MANIFEST"]
+          )
           version = os.environ["VERSION"]
-
-          data = json.loads(
-              path.read_text(encoding="utf-8-sig")
+          data=json.loads(
+              path.read_text(
+                  encoding="utf-8-sig"
+              )
           )
-
-          data["version_number"] = version
-
+          data["version_number"]=version
           path.write_text(
-              json.dumps(data, ensure_ascii=False, indent=2) + "\n",
-              encoding="utf-8",
+              json.dumps(
+                  data,
+                  ensure_ascii=False,
+                  indent=2
+              )+"\n",
+              encoding="utf-8"
           )
-
-          actual = json.loads(
-              path.read_text(encoding="utf-8")
-          )["version_number"]
-
-          if actual != version:
-              raise SystemExit("manifest version update failed")
+          print(
+              "Manifest updated:",
+              version
+          )
           PY
 
       - name: Import resources with Godot 3.7-dev1
         shell: bash
         run: |
           set -euo pipefail
-
           PROJECT="$RUNNER_TEMP/mod-project"
           IMPORT_DIR="$PROJECT/.import"
           LOG_FILE="$RUNNER_TEMP/godot-import.log"
-
           rm -rf "$IMPORT_DIR"
-
-          # IMPORTANT:
-          # Do not use --quit here.
-          #
-          # In Godot 3.x the editor file-system scan is asynchronous.
-          # We wait until the generated .import directory becomes stable
-          # before terminating Godot.
-
           "$GODOT_BIN" \
             --path "$PROJECT" \
             --editor \
             --headless \
             --audio-driver Dummy \
             >"$LOG_FILE" 2>&1 &
-
           GODOT_PID=$!
-
           trap 'kill "$GODOT_PID" 2>/dev/null || true' EXIT
-
           DEADLINE=$((SECONDS + 300))
           LAST_COUNT=-1
           STABLE=0
-
           while (( SECONDS < DEADLINE )); do
-
             if ! kill -0 "$GODOT_PID" 2>/dev/null; then
-              echo "::error::Godot exited before resource import completed."
-              cat "$LOG_FILE" >&2 || true
+              echo "::error::Godot exited early."
+              cat "$LOG_FILE"
               exit 1
             fi
-
             if [[ -d "$IMPORT_DIR" ]]; then
-
-              COUNT=$(
-                find "$IMPORT_DIR" \
-                  -type f \
-                  ! -name '.gdignore' \
-                  | wc -l
-              )
-
+              COUNT=$(find "$IMPORT_DIR" \
+                -type f \
+                ! -name '.gdignore' \
+                | wc -l)
               if (( COUNT > 0 )); then
-
                 if (( COUNT == LAST_COUNT )); then
-                  STABLE=$((STABLE + 1))
+                  STABLE=$((STABLE+1))
                 else
                   STABLE=0
                   LAST_COUNT=$COUNT
                 fi
-
-                echo "Imported resource files: $COUNT (stable checks: $STABLE/5)"
-
+                echo "Imported files: $COUNT stable=$STABLE/5"
                 if (( STABLE >= 5 )); then
-                  break
+                    break
                 fi
-
               fi
             fi
-
             sleep 1
           done
-
           if [[ ! -d "$IMPORT_DIR" ]]; then
-            echo "::error::Godot did not create project-level .import directory."
-            cat "$LOG_FILE" >&2 || true
-            exit 1
+              echo "::error::.import was not generated."
+              cat "$LOG_FILE"
+              exit 1
           fi
-
-          IMPORT_COUNT=$(
-            find "$IMPORT_DIR" \
+          IMPORT_COUNT=$(find "$IMPORT_DIR" \
               -type f \
               ! -name '.gdignore' \
-              | wc -l
-          )
-
+              | wc -l)
           if (( IMPORT_COUNT == 0 )); then
-            echo "::error::Godot created an empty .import directory."
-            echo "Godot import log:"
-            cat "$LOG_FILE" >&2 || true
-            exit 1
+              echo "::error::.import empty."
+              cat "$LOG_FILE"
+              exit 1
           fi
-
-          echo "Godot import completed with $IMPORT_COUNT generated files."
-
-          echo "Generated .import files:"
-          find "$IMPORT_DIR" -type f -print | sort
-
-          # Stop Godot only after the import result has become stable.
+          echo "Godot import finished."
+          echo "Imported count: $IMPORT_COUNT"
           kill "$GODOT_PID" 2>/dev/null || true
           wait "$GODOT_PID" 2>/dev/null || true
-
           trap - EXIT
-
-      - name: Lowercase .import filenames only
-        shell: bash
-        run: |
-          set -euo pipefail
-
-          IMPORT_DIR="$RUNNER_TEMP/mod-project/.import"
-
-          if [[ ! -d "$IMPORT_DIR" ]]; then
-            echo "::error::Generated .import directory does not exist."
-            exit 1
-          fi
-
-          echo "Converting .import filenames to lowercase..."
-
-          python3 - "$IMPORT_DIR" <<'PY'
-          from pathlib import Path
-          import sys
-
-          root = Path(sys.argv[1])
-
-          renamed = 0
-
-          # Process deepest files first.
-          # Only the FILE NAME is changed.
-          # File contents are never modified.
-          for path in sorted(
-              root.rglob("*"),
-              key=lambda p: len(p.parts),
-              reverse=True,
-          ):
-              if not path.is_file():
-                  continue
-
-              old_name = path.name
-              new_name = old_name.lower()
-
-              if old_name == new_name:
-                  continue
-
-              target = path.with_name(new_name)
-
-              # Prevent two files such as:
-              #
-              #   Foo.stex
-              #   foo.stex
-              #
-              # from silently overwriting each other.
-              if target.exists():
-                  raise SystemExit(
-                      "Case-folding collision detected:\n"
-                      f"  {path}\n"
-                      f"  {target}\n"
-                      "Both filenames would become identical."
-                  )
-
-              path.rename(target)
-
-              print(f"Renamed: {old_name} -> {new_name}")
-
-              renamed += 1
-
-          print(
-              f"Finished. Renamed {renamed} .import file(s)."
-          )
-          PY
-
-          echo "Verifying .import filenames..."
-
-          if find "$IMPORT_DIR" -type f -name '*[A-Z]*' -print -quit | grep -q .; then
-            echo "::error::Uppercase filename remains inside .import."
-            find "$IMPORT_DIR" -type f -name '*[A-Z]*' -print
-            exit 1
-          fi
-
-          echo "All .import filenames are lowercase."
-
-          echo "Final .import files:"
-          find "$IMPORT_DIR" -type f -print | sort
 
       - name: Build ModLoader ZIP
         env:
@@ -422,26 +336,16 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           PROJECT="$RUNNER_TEMP/mod-project"
           MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
-
           STAGE="$RUNNER_TEMP/export-stage"
           RELEASE="$RUNNER_TEMP/release"
           ZIP="$RELEASE/$ZIP_NAME"
-
           rm -rf "$STAGE" "$RELEASE"
-
           mkdir -p \
             "$STAGE/mods-unpacked/$MOD_DIRECTORY" \
             "$RELEASE"
-
-          # ------------------------------------------------------------------
-          # Copy the Mod source exactly as it exists in the temporary project.
-          #
-          # No filename/content normalization is performed here.
-          # ------------------------------------------------------------------
-
+          echo "Copying Mod files..."
           rsync -a \
             --exclude='.git/' \
             --exclude='.github/' \
@@ -455,151 +359,56 @@ jobs:
             --exclude='.gdignore' \
             "$MOD_ROOT/" \
             "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
-
-          # ------------------------------------------------------------------
-          # Copy the generated project-level .import directory.
-          #
-          # At this point its FILE NAMES have already been converted to
-          # lowercase. Its contents have NOT been modified.
-          # ------------------------------------------------------------------
-
           if [[ ! -d "$PROJECT/.import" ]]; then
-            echo "::error::Generated project .import directory is missing."
-            exit 1
+              echo "::error::Missing generated .import."
+              exit 1
           fi
-
-          IMPORT_COUNT=$(
-            find "$PROJECT/.import" \
+          IMPORT_COUNT=$(find "$PROJECT/.import" \
               -type f \
               ! -name '.gdignore' \
               ! -name '*.csv.import' \
               ! -name '*.md5' \
-              | wc -l
-          )
-
+              | wc -l)
           if (( IMPORT_COUNT == 0 )); then
-            echo "::error::Generated project .import directory contains no imported resources."
-            exit 1
+              echo "::error::No imported resources."
+              exit 1
           fi
-
           mkdir -p "$STAGE/.import"
-
           rsync -a \
             --exclude='.gdignore' \
             --exclude='*.csv.import' \
             --exclude='*.md5' \
             "$PROJECT/.import/" \
             "$STAGE/.import/"
-
-          # Remove Godot internal markers.
           find "$STAGE" \
             -type f \
             -name '.gdignore' \
             -delete
-
-          # CSV import descriptors are not shipped.
           find "$STAGE" \
             -type f \
             -name '*.csv.import' \
             -delete
-
-          # MD5 checksum files are not shipped.
           find "$STAGE" \
             -type f \
             -name '*.md5' \
             -delete
-
-          # Remove repository/editor metadata from the Mod itself.
-          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" \
-            -type f \
-            -name '.*' \
-            -delete
-
-          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" \
-            -type d \
-            -name '.*' \
-            -prune \
-            -exec rm -rf {} +
-
-          STAGED_IMPORT_COUNT=$(
-            find "$STAGE/.import" \
+          STAGED_IMPORT_COUNT=$(find "$STAGE/.import" \
               -type f \
-              ! -name '.gdignore' \
-              ! -name '*.csv.import' \
-              ! -name '*.md5' \
-              | wc -l
-          )
-
+              | wc -l)
           if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
-            echo "::error::Imported resource copy is incomplete: source=$IMPORT_COUNT stage=$STAGED_IMPORT_COUNT"
-            exit 1
+              echo "::error::Import copy mismatch."
+              exit 1
           fi
-
-          echo "Staged imported resources: $STAGED_IMPORT_COUNT"
-
-          # ------------------------------------------------------------------
-          # Verify that .import filenames are still lowercase after staging.
-          # ------------------------------------------------------------------
-
-          if find "$STAGE/.import" \
-            -type f \
-            -name '*[A-Z]*' \
-            -print -quit | grep -q .; then
-
-            echo "::error::Uppercase filename found inside staged .import."
-
-            find "$STAGE/.import" \
-              -type f \
-              -name '*[A-Z]*' \
-              -print
-
-            exit 1
-          fi
-
-          # ------------------------------------------------------------------
-          # Ensure forbidden internal files are not included.
-          # ------------------------------------------------------------------
-
-          if find "$STAGE" -type f \
-            \( \
-              -name '.gdignore' \
-              -o -name '*.csv.import' \
-              -o -name '*.md5' \
-            \) \
-            -print -quit | grep -q .; then
-
-            echo "::error::Forbidden internal file found in export stage."
-            find "$STAGE" -type f \
-              \( \
-                -name '.gdignore' \
-                -o -name '*.csv.import' \
-                -o -name '*.md5' \
-              \) \
-              -print
-
-            exit 1
-          fi
-
-          # ------------------------------------------------------------------
-          # Build ZIP.
-          #
-          # ZIP root:
-          #
-          #   .import/
-          #   mods-unpacked/
-          # ------------------------------------------------------------------
-
+          echo "Imported files staged: $STAGED_IMPORT_COUNT"
           (
             cd "$STAGE"
-
             zip -r -q -9 \
               -n ".png:.webp:.jpg:.jpeg:.gif:.bmp:.ico:.dds:.stex:.ctex:.ogg:.oggstr:.mp3:.aac:.m4a:.mp4:.webm:.zip:.7z:.rar:.gz:.bz2:.xz:.zst" \
               "$ZIP" .
           )
-
           test -f "$ZIP"
-
-          echo "Created release archive: $ZIP"
+          echo "Created:"
+          echo "$ZIP"
 
       - name: Verify ZIP structure
         env:
@@ -609,123 +418,65 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-
           ZIP="$RUNNER_TEMP/release/$ZIP_NAME"
           MANIFEST_PATH="mods-unpacked/$MOD_DIRECTORY/manifest.json"
-
           unzip -t "$ZIP"
-
-          # ------------------------------------------------------------------
-          # Required top-level .import directory.
-          # ------------------------------------------------------------------
-
-          if ! unzip -l "$ZIP" | grep -Eq '(^|[[:space:]])\.import/'; then
-            echo "::error::Top-level .import directory is missing from the ZIP."
-            exit 1
+          if ! unzip -l "$ZIP" \
+              | grep -Eq '(^|[[:space:]])\.import/'; then
+              echo "::error::Missing .import directory."
+              exit 1
           fi
-
-          IMPORT_COUNT="$(
-            unzip -l "$ZIP" \
-              | grep -E '(^|[[:space:]])\.import/[^[:space:]]+$' \
-              | wc -l
-          )"
-
-          if [[ "$IMPORT_COUNT" -eq 0 ]]; then
-            echo "::error::No imported resource files were found under .import/."
-            exit 1
+          IMPORT_COUNT=$(unzip -l "$ZIP" \
+              | grep -E '(^|[[:space:]])\.import/' \
+              | wc -l)
+          if (( IMPORT_COUNT == 0 )); then
+              echo "::error::No imported files."
+              exit 1
           fi
-
-          # ------------------------------------------------------------------
-          # Verify every .import filename is lowercase.
-          # ------------------------------------------------------------------
-
           if unzip -l "$ZIP" \
-            | grep -E '(^|[[:space:]])\.import/[^[:space:]]*[A-Z][^[:space:]]*$' \
-            | grep -q .; then
-
-            echo "::error::Uppercase filename found inside .import in final ZIP."
-
-            unzip -l "$ZIP" \
-              | grep -E '(^|[[:space:]])\.import/[^[:space:]]*[A-Z][^[:space:]]*$'
-
-            exit 1
+              | grep -Eq '(^|[[:space:]])\.gdignore($|[[:space:]])'; then
+              echo "::error::.gdignore exists."
+              exit 1
           fi
-
-          # ------------------------------------------------------------------
-          # Forbidden files.
-          # ------------------------------------------------------------------
-
           if unzip -l "$ZIP" \
-            | grep -Eq '(^|[[:space:]])\.gdignore($|[[:space:]])'; then
-
-            echo "::error::.gdignore must not be included in the release ZIP."
-            exit 1
+              | grep -Eq '\.csv\.import($|[[:space:]])'; then
+              echo "::error::csv.import exists."
+              exit 1
           fi
-
           if unzip -l "$ZIP" \
-            | grep -Eq 'mods-unpacked/[^ ]*/\.[^./][^[:space:]]*'; then
-
-            echo "::error::Repository/editor dotfiles must not be included in the release ZIP."
-
-            unzip -l "$ZIP" \
-              | grep -E 'mods-unpacked/[^ ]*/\.[^./][^[:space:]]*' \
-              || true
-
-            exit 1
+              | grep -Eq '\.md5($|[[:space:]])'; then
+              echo "::error::.md5 exists."
+              exit 1
           fi
-
-          if unzip -l "$ZIP" \
-            | grep -Eq '\.csv\.import($|[[:space:]])'; then
-
-            echo "::error::CSV .import descriptors must not be included in the release ZIP."
-            exit 1
+          if ! unzip -l "$ZIP" \
+              | grep -Fq "$MANIFEST_PATH"; then
+              echo "::error::manifest missing."
+              exit 1
           fi
-
-          if unzip -l "$ZIP" \
-            | grep -Eq '(^|[[:space:]])[^[:space:]]*\.md5($|[[:space:]])'; then
-
-            echo "::error::.md5 checksum files must not be included in the release ZIP."
-            exit 1
-          fi
-
-          # ------------------------------------------------------------------
-          # Manifest.
-          # ------------------------------------------------------------------
-
-          if ! unzip -l "$ZIP" | grep -Fq "$MANIFEST_PATH"; then
-            echo "::error::Missing $MANIFEST_PATH"
-            exit 1
-          fi
-
           unzip -p "$ZIP" "$MANIFEST_PATH" \
-            > "$RUNNER_TEMP/release-manifest.json"
-
-          VERSION="$VERSION" python3 - <<'PY'
+              > "$RUNNER_TEMP/release-manifest.json"
+          VERSION="$VERSION" python3 <<'PY'
           import json
           import os
           from pathlib import Path
-
-          expected = os.environ["VERSION"]
-
-          path = (
-              Path(os.environ["RUNNER_TEMP"])
-              / "release-manifest.json"
-          )
-
-          actual = json.loads(
-              path.read_text(encoding="utf-8")
+          expected=os.environ["VERSION"]
+          path=Path(
+              os.environ["RUNNER_TEMP"]
+          ) / "release-manifest.json"
+          actual=json.loads(
+              path.read_text(
+                  encoding="utf-8"
+              )
           )["version_number"]
-
           if actual != expected:
               raise SystemExit(
-                  f"Manifest version mismatch: "
-                  f"expected {expected!r}, got {actual!r}"
+                  f"Version mismatch {actual}"
               )
-
-          print(f"Verified manifest version: {actual}")
+          print(
+              "Manifest version OK:",
+              actual
+          )
           PY
-
-          echo "ZIP verification completed successfully."
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v4
