@@ -121,7 +121,7 @@ jobs:
           MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
           rm -rf "$PROJECT"
           mkdir -p "$MOD_ROOT"
-          echo "Copying Mod source while lowercasing file names only..."
+          echo "Copying Mod source while lowercasing imported asset filenames only..."
 
           python3 - "$PWD" "$MOD_ROOT" <<'PY'
           import sys
@@ -144,27 +144,48 @@ jobs:
               ".gitattributes",
           }
 
-          def copy_files_lowercase_only(src, dst):
-              for item in src.iterdir():
+          # Only files that Godot imports into .import are renamed.
+          # Directory names and Godot text resources are NEVER modified.
+          IMPORT_FILE_EXTENSIONS = {
+              ".png",
+              ".jpg",
+              ".jpeg",
+              ".webp",
+              ".bmp",
+              ".gif",
+              ".ico",
+              ".dds",
+              ".wav",
+              ".ogg",
+              ".mp3",
+              ".m4a",
+              ".aac",
+              ".ttf",
+              ".otf",
+              ".svg",
+          }
 
+          def copy_tree(src, dst):
+              for item in src.iterdir():
                   if item.is_dir():
                       if item.name in EXCLUDE_DIRS:
                           continue
 
-                      # IMPORTANT:
-                      # Directory names are NEVER modified.
+                      # Keep directory name exactly unchanged.
                       new_dir = dst / item.name
                       new_dir.mkdir(parents=True, exist_ok=True)
-                      copy_files_lowercase_only(item, new_dir)
+                      copy_tree(item, new_dir)
 
                   elif item.is_file():
                       if item.name in EXCLUDE_FILES:
                           continue
 
-                      # IMPORTANT:
-                      # Only file names are lowercased.
-                      # File contents are copied byte-for-byte.
-                      new_file = dst / item.name.lower()
+                      if item.suffix.lower() in IMPORT_FILE_EXTENSIONS:
+                          new_file = dst / item.name.lower()
+                      else:
+                          # Scripts, scenes, resources, json, csv, etc.
+                          # keep their original filename.
+                          new_file = dst / item.name
 
                       if new_file.exists():
                           raise RuntimeError(
@@ -173,68 +194,8 @@ jobs:
 
                       shutil.copy2(item, new_file)
 
-          copy_files_lowercase_only(source, target)
-
-          print("Source copied.")
-          PY
-
-          echo "Updating Godot resource file names only..."
-
-          MOD_ROOT="$MOD_ROOT" python3 <<'PY'
-          import os
-          import re
-          from pathlib import Path
-
-          root = Path(os.environ["MOD_ROOT"])
-
-          TEXT_EXTENSIONS = {
-              ".gd",
-              ".tscn",
-              ".tres",
-              ".cfg",
-              ".json",
-              ".csv",
-              ".shader",
-              ".gdshader",
-          }
-
-          # Change only the final filename part of res:// paths.
-          # Example:
-          # res://Characters/BlackHole.PNG
-          # ->
-          # res://Characters/blackhole.png
-          #
-          # Directory names remain untouched.
-          pattern = re.compile(
-              r'(res://[^\\s"\']*/)([^/\\s"\']+)$',
-              re.MULTILINE,
-          )
-
-          for path in root.rglob("*"):
-              if not path.is_file():
-                  continue
-
-              if path.suffix.lower() not in TEXT_EXTENSIONS:
-                  continue
-
-              try:
-                  text = path.read_text(encoding="utf-8")
-              except UnicodeDecodeError:
-                  continue
-
-              def fix(match):
-                  return match.group(1) + match.group(2).lower()
-
-              fixed = re.sub(pattern, fix, text)
-
-              if fixed != text:
-                  path.write_text(
-                      fixed,
-                      encoding="utf-8",
-                  )
-                  print("Updated:", path)
-
-          print("Resource filenames fixed.")
+          copy_tree(source, target)
+          print("Imported asset filenames normalized. Other files unchanged.")
           PY
 
           cat > "$PROJECT/project.godot" <<'GODOT'
