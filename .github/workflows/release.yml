@@ -18,7 +18,7 @@ env:
 jobs:
   release:
     name: Build ${{ github.ref_name }}
-    runs-on: windows-2022
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout tagged commit
@@ -26,370 +26,440 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cache Godot binary
+      - name: Cache Godot headless binary
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/.ci/godot
-          key: godot-${{ runner.os }}-${{ env.GODOT_VERSION }}
+          path: ${{ runner.temp }}/godot
+          key: godot-headless-${{ runner.os }}-${{ env.GODOT_VERSION }}
 
       - name: Validate tag
         id: version
-        shell: pwsh
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
-
-          $tag = $env:GITHUB_REF_NAME
-          if ($tag -notmatch '^v[0-9]+\.[0-9]+\.[0-9]+$') {
-            Write-Error "Invalid tag '$tag'. Expected vX.Y.Z, for example v1.2.3."
-          }
-
-          $version = $tag.Substring(1)
-          "version=$version" >> $env:GITHUB_OUTPUT
-          "tag=$tag" >> $env:GITHUB_OUTPUT
+          set -euo pipefail
+          TAG="$GITHUB_REF_NAME"
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid tag '$TAG'. Expected vX.Y.Z, for example v1.2.3."
+            exit 1
+          fi
+          VERSION="${TAG#v}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Read manifest metadata
         id: manifest
-        shell: pwsh
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
-
-          if (-not (Test-Path -LiteralPath 'manifest.json')) {
-            Write-Error 'manifest.json was not found at repository root.'
+          set -euo pipefail
+          test -f manifest.json || {
+            echo "::error::manifest.json was not found at repository root."
+            exit 1
           }
 
-          $manifest = Get-Content -LiteralPath 'manifest.json' -Raw -Encoding UTF8 | ConvertFrom-Json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
 
-          foreach ($key in @('name', 'namespace')) {
-            if (-not $manifest.PSObject.Properties.Name.Contains($key)) {
-              Write-Error "manifest.json is missing '$key'."
-            }
+          data = json.loads(Path("manifest.json").read_text(encoding="utf-8-sig"))
+          for key in ("name", "namespace"):
+              value = data.get(key)
+              if not isinstance(value, str) or not value.strip():
+                  raise SystemExit(f"manifest.json field '{key}' must be a non-empty string")
+              value = value.strip()
+              if value in {".", ".."} or "/" in value or "\\" in value:
+                  raise SystemExit(f"Invalid manifest.{key}: {value!r}")
+          PY
 
-            if ([string]::IsNullOrWhiteSpace([string]$manifest.$key)) {
-              Write-Error "manifest.json '$key' must not be empty."
-            }
-          }
+          NAME="$(python3 -c 'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["name"].strip())')"
+          NAMESPACE="$(python3 -c 'import json; print(json.load(open("manifest.json", encoding="utf-8-sig"))["namespace"].strip())')"
+          VERSION="${{ steps.version.outputs.version }}"
+          MOD_DIRECTORY="${NAMESPACE}-${NAME}"
+          ZIP_NAME="${NAME}-${VERSION}.zip"
 
-          $name = [string]$manifest.name
-          $namespace = [string]$manifest.namespace
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
+          echo "namespace=$NAMESPACE" >> "$GITHUB_OUTPUT"
+          echo "mod_directory=$MOD_DIRECTORY" >> "$GITHUB_OUTPUT"
+          echo "zip_name=$ZIP_NAME" >> "$GITHUB_OUTPUT"
 
-          foreach ($pair in @(
-            @{ Key = 'name'; Value = $name },
-            @{ Key = 'namespace'; Value = $namespace }
-          )) {
-            if ($pair.Value -in @('.', '..') -or $pair.Value.Contains('/') -or $pair.Value.Contains('\')) {
-              Write-Error "manifest.$($pair.Key) contains an invalid path component: '$($pair.Value)'."
-            }
-          }
+          echo "Mod directory: $MOD_DIRECTORY"
+          echo "ZIP name: $ZIP_NAME"
 
-          # Git tag is the single source of truth for release version.
-          $version = '${{ steps.version.outputs.version }}'
-          $modDirectory = "$namespace-$name"
-          $zipName = "$name-$version.zip"
-
-          "name=$name" >> $env:GITHUB_OUTPUT
-          "namespace=$namespace" >> $env:GITHUB_OUTPUT
-          "mod_directory=$modDirectory" >> $env:GITHUB_OUTPUT
-          "zip_name=$zipName" >> $env:GITHUB_OUTPUT
-
-          Write-Host "Mod directory: $modDirectory"
-          Write-Host "Release ZIP  : $zipName"
-
-      - name: Install Godot 3.7-dev1
-        shell: pwsh
+      - name: Install Godot 3.7-dev1 headless
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $godotDir = Join-Path $env:GITHUB_WORKSPACE '.ci\godot'
-          $godotExe = Join-Path $godotDir 'Godot_v3.7-dev1_win64.exe'
+          GODOT_DIR="$RUNNER_TEMP/godot"
+          GODOT_BIN="$GODOT_DIR/Godot_v3.7-dev1_linux_headless.64"
+          DOWNLOAD_URL='https://downloads.godotengine.org/?version=3.7&flavor=dev1&platform=linux_headless.64&slug=linux_headless.64.zip'
 
-          if (-not (Test-Path -LiteralPath $godotExe)) {
-            $archive = Join-Path $env:RUNNER_TEMP 'Godot_v3.7-dev1_win64.exe.zip'
-            $downloadUrl = 'https://github.com/godotengine/godot-builds/releases/download/3.7-dev1/Godot_v3.7-dev1_win64.exe.zip'
+          if [[ ! -x "$GODOT_BIN" ]]; then
+            rm -rf "$GODOT_DIR"
+            mkdir -p "$GODOT_DIR"
 
-            New-Item -ItemType Directory -Force -Path $godotDir | Out-Null
+            echo "Godot cache miss; downloading Godot 3.7-dev1 headless."
+            curl -L --fail --retry 5 --retry-delay 2 --retry-all-errors \
+              "$DOWNLOAD_URL" \
+              -o "$GODOT_DIR/godot.zip"
 
-            Write-Host 'Godot cache miss; downloading Godot 3.7-dev1.'
-            & curl.exe `
-              --fail --location `
-              --retry 5 --retry-delay 3 --retry-all-errors `
-              --connect-timeout 20 --max-time 600 `
-              --output $archive `
-              $downloadUrl
+            unzip -q "$GODOT_DIR/godot.zip" -d "$GODOT_DIR"
+            FOUND="$(find "$GODOT_DIR" -type f -name 'Godot_v3.7-dev1_linux_headless.64' -print -quit)"
+            if [[ -z "$FOUND" ]]; then
+              echo "::error::Godot_v3.7-dev1_linux_headless.64 was not found after extraction."
+              find "$GODOT_DIR" -maxdepth 3 -type f -print
+              exit 1
+            fi
 
-            if ($LASTEXITCODE -ne 0) {
-              Write-Error "Godot download failed. curl exit code: $LASTEXITCODE"
-            }
+            if [[ "$FOUND" != "$GODOT_BIN" ]]; then
+              mv "$FOUND" "$GODOT_BIN"
+            fi
+            chmod +x "$GODOT_BIN"
+            rm -f "$GODOT_DIR/godot.zip"
+          else
+            echo 'Godot cache hit; skipping download.'
+          fi
 
-            Expand-Archive -LiteralPath $archive -DestinationPath $godotDir -Force
+          echo "GODOT_BIN=$GODOT_BIN" >> "$GITHUB_ENV"
+          "$GODOT_BIN" --version
 
-            $found = Get-ChildItem -LiteralPath $godotDir -Filter 'Godot_v3.7-dev1_win64.exe' -File -Recurse | Select-Object -First 1
-            if ($null -eq $found) {
-              Write-Error 'Godot_v3.7-dev1_win64.exe was not found after extraction.'
-            }
-
-            if ($found.FullName -ne $godotExe) {
-              Copy-Item -LiteralPath $found.FullName -Destination $godotExe -Force
-            }
-          } else {
-            Write-Host 'Godot cache hit; skipping download.'
-          }
-
-          "GODOT_BIN=$godotExe" >> $env:GITHUB_ENV
-          & $godotExe --version
-          if ($LASTEXITCODE -ne 0) {
-            Write-Error "Godot --version failed with exit code $LASTEXITCODE"
-          }
-
-      - name: Prepare isolated Godot project
-        id: prepare
-        shell: pwsh
+      - name: Prepare temporary Godot project
         env:
           MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $project = Join-Path $env:RUNNER_TEMP 'mod-project'
-          $modRoot = Join-Path $project "mods-unpacked\$env:MOD_DIRECTORY"
+          PROJECT="$RUNNER_TEMP/mod-project"
+          MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
+          rm -rf "$PROJECT"
+          mkdir -p "$MOD_ROOT"
 
-          if (Test-Path $project) {
-            Remove-Item -LiteralPath $project -Recurse -Force
-          }
+          # Build the exact ModLoader development layout while keeping the
+          # repository free of generated .import files.
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.godot/' \
+            --exclude='.ci/' \
+            --exclude='ci/' \
+            --exclude='dist/' \
+            --exclude='.*' \
+            --exclude='project.godot' \
+            --exclude='project.godot.*' \
+            --exclude='export_presets.cfg' \
+            --exclude='*.csv.import' \
+            --exclude='*.md5' \
+            --exclude='.gdignore' \
+            ./ "$MOD_ROOT/"
 
-          New-Item -ItemType Directory -Force -Path $modRoot | Out-Null
-
-          # Copy the repository without Git/editor metadata.
-          robocopy $env:GITHUB_WORKSPACE $modRoot /E `
-            /XD '.git' '.github' '.godot' '.ci' 'ci' 'dist' `
-            /XF '.editorconfig' '.gitattributes' '.gitignore' `
-                'project.godot' 'project.godot.*' 'export_presets.cfg' `
-                '.gdignore' '*.csv.import' '*.md5'
-
-          $robocopyExitCode = $LASTEXITCODE
-          if ($robocopyExitCode -gt 7) {
-            Write-Error "robocopy failed with exit code $robocopyExitCode"
-          }
-
-          # Robocopy uses exit codes 0-7 for successful/non-fatal outcomes.
-          # Explicitly reset the PowerShell step to success before continuing.
-          $global:LASTEXITCODE = 0
-
-          # This is only the host project used to run Godot's importer.
-          # It is never copied into the Mod ZIP.
-          @'
-          ; Temporary CI host project.
+          cat > "$PROJECT/project.godot" <<'GODOT'
+          ; Temporary CI project. Never included in the release ZIP.
           config_version=4
 
           [application]
           config/name="Mod Build CI"
-          '@ | Set-Content -LiteralPath (Join-Path $project 'project.godot') -Encoding UTF8
-
-          "project=$project" >> $env:GITHUB_OUTPUT
-          "mod_root=$modRoot" >> $env:GITHUB_OUTPUT
+          GODOT
 
       - name: Sync manifest version in temporary copy
         env:
           VERSION: ${{ steps.version.outputs.version }}
-          MOD_ROOT: ${{ steps.prepare.outputs.mod_root }}
-        shell: pwsh
+          MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $manifestPath = Join-Path $env:MOD_ROOT 'manifest.json'
-          $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
-          $manifest.version_number = $env:VERSION
+          MANIFEST="$RUNNER_TEMP/mod-project/mods-unpacked/$MOD_DIRECTORY/manifest.json"
+          VERSION="$VERSION" MANIFEST="$MANIFEST" python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
 
-          $json = $manifest | ConvertTo-Json -Depth 100
-          $json | Set-Content -LiteralPath $manifestPath -Encoding UTF8
+          path = Path(os.environ["MANIFEST"])
+          version = os.environ["VERSION"]
+          data = json.loads(path.read_text(encoding="utf-8-sig"))
+          data["version_number"] = version
+          path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-          $check = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
-          if ([string]$check.version_number -ne $env:VERSION) {
-            Write-Error "Failed to synchronize manifest version."
-          }
+          check = json.loads(path.read_text(encoding="utf-8"))
+          if check.get("version_number") != version:
+              raise SystemExit("manifest version update failed")
+          PY
 
       - name: Import resources with Godot 3.7-dev1
-        timeout-minutes: 3
-        env:
-          PROJECT: ${{ steps.prepare.outputs.project }}
-        shell: pwsh
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $project = $env:PROJECT
-          $importDir = Join-Path $project '.import'
-          $logFile = Join-Path $env:RUNNER_TEMP 'godot-import.log'
+          PROJECT="$RUNNER_TEMP/mod-project"
+          IMPORT_DIR="$PROJECT/.import"
+          LOG_FILE="$RUNNER_TEMP/godot-import.log"
 
-          if (Test-Path $importDir) {
-            Remove-Item -LiteralPath $importDir -Recurse -Force
-          }
-          if (Test-Path $logFile) {
-            Remove-Item -LiteralPath $logFile -Force
-          }
+          rm -rf "$IMPORT_DIR"
 
-          Write-Host '=== Godot import diagnostics ==='
-          Write-Host "Godot:   $env:GODOT_BIN"
-          Write-Host "Project: $project"
-          Write-Host "Import:  $importDir"
-          & $env:GODOT_BIN --version
+          echo "Starting Godot resource import..."
+          set +e
+          "$GODOT_BIN" \
+            --path "$PROJECT" \
+            --import \
+            >"$LOG_FILE" 2>&1
+          GODOT_EXIT=$?
+          set -e
 
-          $sourceFiles = @(Get-ChildItem -LiteralPath (Join-Path $project 'mods-unpacked') -File -Recurse -ErrorAction Stop)
-          Write-Host "Source files in mods-unpacked: $($sourceFiles.Count)"
+          cat "$LOG_FILE"
 
-          # Do NOT use Start-Process + redirected stdout/stderr here.
-          # That made the GitHub Actions log appear completely blank while
-          # Godot was running. Run Godot directly so its diagnostics are
-          # visible in real time.
-          #
-          # --import is the Godot command specifically intended to start the
-          # editor, wait for resource imports, and then quit.
-          # --headless prevents a GUI/editor window from being spawned.
-          $arguments = @(
-            '--headless',
-            '--path', $project,
-            '--import',
-            '--audio-driver', 'Dummy',
-            '--verbose'
-          )
+          if (( GODOT_EXIT != 0 )); then
+            echo "::error::Godot resource import failed with exit code $GODOT_EXIT."
+            exit "$GODOT_EXIT"
+          fi
 
-          Write-Host '=== Starting Godot resource import ==='
-          Write-Host "$env:GODOT_BIN $($arguments -join ' ')"
+          if [[ ! -d "$IMPORT_DIR" ]]; then
+            echo "::error::Godot did not create project-level .import directory."
+            exit 1
+          fi
 
-          & $env:GODOT_BIN @arguments 2>&1 | Tee-Object -FilePath $logFile
-          $godotExitCode = $LASTEXITCODE
+          IMPORT_COUNT="$(find "$IMPORT_DIR" -type f ! -name '.gdignore' ! -name '*.md5' | wc -l)"
+          if (( IMPORT_COUNT == 0 )); then
+            echo "::error::Godot created an empty .import directory."
+            exit 1
+          fi
 
-          Write-Host "=== Godot exited with code $godotExitCode ==="
+          echo "Godot generated $IMPORT_COUNT imported resource files."
 
-          if ($godotExitCode -ne 0) {
-            Write-Error "Godot resource import failed with exit code $godotExitCode. Full log: $logFile"
-          }
-
-          if (-not (Test-Path $importDir)) {
-            Write-Error "Godot exited successfully but did not create .import: $importDir"
-          }
-
-          $realImports = @(Get-ChildItem -LiteralPath $importDir -File -Recurse -ErrorAction Stop |
-            Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' })
-
-          if ($realImports.Count -eq 0) {
-            Write-Error 'Godot exited successfully but generated no imported resources.'
-          }
-
-          Write-Host "Godot generated $($realImports.Count) imported resource files."
-          Write-Host '=== First imported files ==='
-          $realImports | Select-Object -First 20 -ExpandProperty FullName | ForEach-Object { Write-Host $_ }
-
-          # Keep the import log as a diagnostic artifact on failed runs too.
-          # The artifact upload below runs even when this step fails.
-          Write-Host "Godot import log saved to: $logFile"
-
-      - name: Upload Godot import log
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: godot-import-log-${{ github.run_id }}
-          path: ${{ runner.temp }}/godot-import.log
-          if-no-files-found: warn
-          retention-days: 7
-
-      - name: Build ModLoader ZIP with 7-Zip
+      - name: Build ModLoader ZIP
         env:
           MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
           ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
-          PROJECT: ${{ steps.prepare.outputs.project }}
-          MOD_ROOT: ${{ steps.prepare.outputs.mod_root }}
-        shell: pwsh
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $release = Join-Path $env:RUNNER_TEMP 'release'
-          $zip = Join-Path $release $env:ZIP_NAME
-          $packageRoot = Join-Path $env:PROJECT 'mods-unpacked'
+          PROJECT="$RUNNER_TEMP/mod-project"
+          MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
+          STAGE="$RUNNER_TEMP/export-stage"
+          RELEASE="$RUNNER_TEMP/release"
+          ZIP="$RELEASE/$ZIP_NAME"
 
-          if (Test-Path $release) { Remove-Item $release -Recurse -Force }
-          New-Item -ItemType Directory -Force -Path $release | Out-Null
+          rm -rf "$STAGE" "$RELEASE"
+          mkdir -p "$STAGE/mods-unpacked/$MOD_DIRECTORY" "$STAGE/.import" "$RELEASE"
 
-          # The Mod was already copied once into mods-unpacked during project
-          # preparation. Reuse that tree directly instead of copying it again.
-          # The temporary host project.godot is excluded from the archive.
-          if (-not (Test-Path (Join-Path $packageRoot $env:MOD_DIRECTORY))) {
-            Write-Error 'Prepared mod directory is missing.'
+          # Copy only the Mod source tree. Hidden files and editor metadata are
+          # intentionally excluded from the release package.
+          rsync -a \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='.godot/' \
+            --exclude='.ci/' \
+            --exclude='ci/' \
+            --exclude='dist/' \
+            --exclude='.*' \
+            --exclude='project.godot' \
+            --exclude='project.godot.*' \
+            --exclude='export_presets.cfg' \
+            --exclude='*.csv.import' \
+            --exclude='*.md5' \
+            --exclude='.gdignore' \
+            "$MOD_ROOT/" \
+            "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
+
+          test -d "$PROJECT/.import" || {
+            echo "::error::Generated project .import directory is missing."
+            exit 1
           }
-          if (-not (Test-Path (Join-Path $env:PROJECT '.import'))) {
-            Write-Error 'Generated project .import directory is missing.'
-          }
 
-          $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
-          if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
-          if (-not (Test-Path $sevenZip)) { Write-Error '7z.exe was not found on the Windows runner.' }
+          # IMPORTANT:
+          # Do not blindly copy the entire project-level .import directory.
+          # Godot Mod Loader documentation requires the ZIP to contain only
+          # the Mod's custom imported assets, not unrelated/vanilla imports.
+          #
+          # Godot 3.x writes the generated destination paths into each source
+          # asset's .import descriptor. Read those dest_files entries and copy
+          # only the generated files referenced by this Mod.
+          python3 - "$MOD_ROOT" "$PROJECT/.import" "$STAGE/.import" <<'PY'
+          import re
+          import shutil
+          import sys
+          from pathlib import Path
 
-          & $sevenZip a -tzip -mx=1 -mm=Deflate -mfb=32 -mpass=1 -mmt=on $zip (Join-Path $env:PROJECT '*') `
-            -xr!project.godot -xr!project.godot.* -xr!export_presets.cfg `
-            -xr!.git -xr!.github -xr!.godot -xr!.ci -xr!ci -xr!dist `
-            -xr!.editorconfig -xr!.gitattributes -xr!.gitignore -xr!.gdignore `
-            -xr!*.csv.import -xr!*.md5
+          mod_root = Path(sys.argv[1])
+          import_root = Path(sys.argv[2])
+          stage_import = Path(sys.argv[3])
 
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          if (-not (Test-Path $zip)) { Write-Error "Release ZIP was not created: $zip" }
-          Write-Host "Created release archive: $zip"
+          project_prefix = f"res://mods-unpacked/{mod_root.name}/"
+          dest_re = re.compile(r'"(res://\.import/[^"]+)"')
 
-      - name: Verify ZIP
+          descriptors = []
+          wanted = set()
+
+          for descriptor in mod_root.rglob("*.import"):
+              if descriptor.name.endswith(".csv.import"):
+                  continue
+
+              descriptors.append(descriptor)
+
+              text = descriptor.read_text(encoding="utf-8-sig", errors="replace")
+
+              # Only copy destinations belonging to the project-level .import
+              # directory. This handles importers producing multiple outputs.
+              for match in dest_re.finditer(text):
+                  rel = match.group(1)[len("res://.import/"):]
+                  rel_path = Path(rel)
+
+                  # Prevent traversal out of .import.
+                  if any(part == ".." for part in rel_path.parts):
+                      raise SystemExit(
+                          f"Invalid imported destination in {descriptor}: {rel!r}"
+                      )
+
+                  wanted.add(rel)
+
+          if not descriptors:
+              raise SystemExit(
+                  "No .import descriptors were found in the Mod source tree."
+              )
+
+          if not wanted:
+              raise SystemExit(
+                  "Mod .import descriptors did not reference any generated "
+                  "res://.import/* destinations."
+              )
+
+          copied = 0
+          missing = []
+
+          for rel in sorted(wanted):
+              source = import_root / rel
+              if not source.is_file():
+                  missing.append(rel)
+                  continue
+
+              target = stage_import / rel
+              target.parent.mkdir(parents=True, exist_ok=True)
+              shutil.copy2(source, target)
+              copied += 1
+
+          if missing:
+              print("Missing generated import files:", file=sys.stderr)
+              for rel in missing:
+                  print(f"  {rel}", file=sys.stderr)
+              raise SystemExit(
+                  f"{len(missing)} generated import file(s) referenced by the "
+                  "Mod were not found."
+              )
+
+          print(f"Mod import descriptors: {len(descriptors)}")
+          print(f"Staged custom imported resources: {copied}")
+          for rel in sorted(wanted):
+              print(f"  .import/{rel}")
+          PY
+
+          IMPORT_COUNT="$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' ! -name '*.md5' | wc -l)"
+          if (( IMPORT_COUNT == 0 )); then
+            echo "::error::No Mod-specific imported resources were staged."
+            exit 1
+          fi
+
+          # Remove forbidden/internal files defensively.
+          find "$STAGE" -type f \
+            \( -name '.gdignore' -o -name '*.csv.import' -o -name '*.md5' \) \
+            -delete
+
+          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" -type d -name '.*' -prune -exec rm -rf {} +
+          find "$STAGE/mods-unpacked/$MOD_DIRECTORY" -type f -name '.*' -delete
+
+          # Make sure the staged .import contains only files we intentionally
+          # selected and that every staged resource really exists.
+          if find "$STAGE" -type f \
+            \( -name '.gdignore' -o -name '*.csv.import' -o -name '*.md5' \) \
+            -print -quit | grep -q .; then
+            echo "::error::Forbidden internal file found in export stage."
+            exit 1
+          fi
+
+          STAGED_IMPORT_COUNT="$(find "$STAGE/.import" -type f ! -name '.gdignore' ! -name '*.csv.import' ! -name '*.md5' | wc -l)"
+          if (( STAGED_IMPORT_COUNT != IMPORT_COUNT )); then
+            echo "::error::Unexpected change in staged import count: before=$IMPORT_COUNT after=$STAGED_IMPORT_COUNT"
+            exit 1
+          fi
+
+          echo "Staged custom imported resources: $STAGED_IMPORT_COUNT"
+
+          # Keep the proven Linux release path and normal ZIP compression.
+          # .stex/.ctex are intentionally compressed rather than stored.
+          # Common already-compressed formats remain stored.
+          (
+            cd "$STAGE"
+            zip -r -q -6 \
+              -n '.png:.webp:.jpg:.jpeg:.gif:.bmp:.ico:.dds:.ogg:.oggstr:.mp3:.aac:.m4a:.mp4:.webm:.zip:.7z:.rar:.gz:.bz2:.xz:.zst' \
+              "$ZIP" .
+          )
+
+          test -f "$ZIP"
+          echo "Created release archive: $ZIP"
+      - name: Verify ZIP structure
         env:
           MOD_DIRECTORY: ${{ steps.manifest.outputs.mod_directory }}
           ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
           VERSION: ${{ steps.version.outputs.version }}
-        shell: pwsh
+        shell: bash
         run: |
-          $ErrorActionPreference = 'Stop'
+          set -euo pipefail
 
-          $zip = Join-Path $env:RUNNER_TEMP "release\$env:ZIP_NAME"
-          if (-not (Test-Path $zip)) {
-            Write-Error "Missing ZIP: $zip"
+          ZIP="$RUNNER_TEMP/release/$ZIP_NAME"
+          MANIFEST_PATH="mods-unpacked/$MOD_DIRECTORY/manifest.json"
+          test -f "$ZIP" || {
+            echo "::error::Missing ZIP: $ZIP"
+            exit 1
           }
 
-          $sevenZip = (Get-Command 7z.exe -ErrorAction SilentlyContinue).Source
-          if (-not $sevenZip) { $sevenZip = "$env:ProgramFiles\7-Zip\7z.exe" }
+          LISTING="$(unzip -l "$ZIP")"
 
-          # One metadata listing is enough for structural verification.
-          # Avoid a full ZIP integrity scan here: creating the archive already
-          # completed successfully, and re-reading every member was a major
-          # source of avoidable Windows runner time.
-          $listing = & $sevenZip l -slt $zip | Out-String
-
-          $requiredManifest = "mods-unpacked\$env:MOD_DIRECTORY\manifest.json"
-          if ($listing -notmatch [regex]::Escape($requiredManifest)) {
-            Write-Error "Required manifest missing from ZIP: $requiredManifest"
+          grep -Eq '(^|[[:space:]])\.import/' <<< "$LISTING" || {
+            echo "::error::Top-level .import directory is missing from the ZIP."
+            exit 1
           }
 
-          if ($listing -match '(?im)^Path = \.import\\') {
-            Write-Host 'Top-level .import directory detected.'
-          } else {
-            Write-Error 'Top-level .import directory is missing from ZIP.'
+          grep -Eq '(^|[[:space:]])\.import/[^[:space:]]+$' <<< "$LISTING" || {
+            echo "::error::No imported resource files were found under .import/."
+            exit 1
           }
 
-          foreach ($pattern in @(
-            '(?im)^Path = .*\.gdignore$',
-            '(?im)^Path = .*\.csv\.import$',
-            '(?im)^Path = .*\.md5$'
-          )) {
-            if ($listing -match $pattern) {
-              Write-Error 'Forbidden internal cache file detected in the release ZIP.'
-            }
+          ! grep -Eq '(^|[[:space:]])\.gdignore($|[[:space:]])' <<< "$LISTING" || {
+            echo "::error::.gdignore must not be included in the release ZIP."
+            exit 1
           }
 
-          foreach ($dotfile in @('.editorconfig', '.gitattributes', '.gitignore')) {
-            if ($listing -match ('(?im)^Path = .*' + [regex]::Escape($dotfile) + '$')) {
-              Write-Error "$dotfile must not be included in the release ZIP."
-            }
+          ! grep -Eq '\.csv\.import($|[[:space:]])' <<< "$LISTING" || {
+            echo "::error::CSV .import descriptors must not be included in the release ZIP."
+            exit 1
           }
 
-          $tempManifest = Join-Path $env:RUNNER_TEMP 'release-manifest.json'
-          & $sevenZip e $zip $requiredManifest -so | Set-Content -LiteralPath $tempManifest -Encoding UTF8
-
-          $releaseManifest = Get-Content -LiteralPath $tempManifest -Raw -Encoding UTF8 | ConvertFrom-Json
-          if ([string]$releaseManifest.version_number -ne $env:VERSION) {
-            Write-Error "Release manifest version mismatch: expected $env:VERSION, got $($releaseManifest.version_number)."
+          ! grep -Eq '(^|[[:space:]])[^[:space:]]*\.md5($|[[:space:]])' <<< "$LISTING" || {
+            echo "::error::.md5 checksum files must not be included in the release ZIP."
+            exit 1
           }
 
-          Write-Host "Verified release version: $($releaseManifest.version_number)"
+          ! grep -Eq 'mods-unpacked/[^ ]*/\.[^./][^[:space:]]*' <<< "$LISTING" || {
+            echo "::error::Repository/editor dotfiles must not be included in the release ZIP."
+            exit 1
+          }
+
+          grep -Fq "$MANIFEST_PATH" <<< "$LISTING" || {
+            echo "::error::Missing $MANIFEST_PATH"
+            exit 1
+          }
+
+          unzip -p "$ZIP" "$MANIFEST_PATH" > "$RUNNER_TEMP/release-manifest.json"
+          VERSION="$VERSION" python3 - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          expected = os.environ["VERSION"]
+          path = Path(os.environ["RUNNER_TEMP"]) / "release-manifest.json"
+          actual = json.loads(path.read_text(encoding="utf-8"))["version_number"]
+          if actual != expected:
+              raise SystemExit(f"Manifest version mismatch: expected {expected!r}, got {actual!r}")
+          print(f"Verified manifest version: {actual}")
+          PY
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
