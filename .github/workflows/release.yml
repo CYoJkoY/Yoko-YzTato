@@ -121,13 +121,16 @@ jobs:
           MOD_ROOT="$PROJECT/mods-unpacked/$MOD_DIRECTORY"
           rm -rf "$PROJECT"
           mkdir -p "$MOD_ROOT"
-          echo "Copying Mod source with lowercase normalization..."
+          echo "Copying Mod source while lowercasing file names only..."
+
           python3 - "$PWD" "$MOD_ROOT" <<'PY'
           import sys
           import shutil
           from pathlib import Path
+
           source = Path(sys.argv[1])
           target = Path(sys.argv[2])
+
           EXCLUDE_DIRS = {
               ".git",
               ".github",
@@ -135,50 +138,55 @@ jobs:
               "ci",
               "dist",
           }
+
           EXCLUDE_FILES = {
               ".gitignore",
               ".gitattributes",
           }
-          def copy_lower(src, dst):
+
+          def copy_files_lowercase_only(src, dst):
               for item in src.iterdir():
+
                   if item.is_dir():
                       if item.name in EXCLUDE_DIRS:
                           continue
-                      new = dst / item.name.lower()
-                      if new.exists():
-                          raise RuntimeError(
-                              f"Directory collision: {new}"
-                          )
-                      new.mkdir(parents=True)
-                      copy_lower(item,new)
+
+                      # IMPORTANT:
+                      # Directory names are NEVER modified.
+                      new_dir = dst / item.name
+                      new_dir.mkdir(parents=True, exist_ok=True)
+                      copy_files_lowercase_only(item, new_dir)
+
                   elif item.is_file():
                       if item.name in EXCLUDE_FILES:
                           continue
-                      new = dst / item.name.lower()
-                      if new.exists():
+
+                      # IMPORTANT:
+                      # Only file names are lowercased.
+                      # File contents are copied byte-for-byte.
+                      new_file = dst / item.name.lower()
+
+                      if new_file.exists():
                           raise RuntimeError(
-                              f"File collision: {new}"
+                              f"Filename collision: {new_file}"
                           )
-                      shutil.copy2(
-                          item,
-                          new
-                      )
-          copy_lower(
-              source,
-              target
-          )
-          print(
-              "Source copied."
-          )
+
+                      shutil.copy2(item, new_file)
+
+          copy_files_lowercase_only(source, target)
+
+          print("Source copied.")
           PY
-          echo "Fixing Godot resource paths..."
+
+          echo "Updating Godot resource file names only..."
+
           MOD_ROOT="$MOD_ROOT" python3 <<'PY'
           import os
           import re
           from pathlib import Path
-          root = Path(
-              os.environ["MOD_ROOT"]
-          )
+
+          root = Path(os.environ["MOD_ROOT"])
+
           TEXT_EXTENSIONS = {
               ".gd",
               ".tscn",
@@ -189,35 +197,46 @@ jobs:
               ".shader",
               ".gdshader",
           }
+
+          # Change only the final filename part of res:// paths.
+          # Example:
+          # res://Characters/BlackHole.PNG
+          # ->
+          # res://Characters/blackhole.png
+          #
+          # Directory names remain untouched.
+          pattern = re.compile(
+              r'(res://[^\\s"\']*/)([^/\\s"\']+)$',
+              re.MULTILINE,
+          )
+
           for path in root.rglob("*"):
               if not path.is_file():
                   continue
+
               if path.suffix.lower() not in TEXT_EXTENSIONS:
                   continue
+
               try:
-                  text = path.read_text(
-                      encoding="utf-8"
-                  )
+                  text = path.read_text(encoding="utf-8")
               except UnicodeDecodeError:
                   continue
-              fixed = re.sub(
-                  r'(res://[^\s"\']+)',
-                  lambda m: m.group(1).lower(),
-                  text
-              )
+
+              def fix(match):
+                  return match.group(1) + match.group(2).lower()
+
+              fixed = re.sub(pattern, fix, text)
+
               if fixed != text:
                   path.write_text(
                       fixed,
-                      encoding="utf-8"
+                      encoding="utf-8",
                   )
-                  print(
-                      "Updated:",
-                      path
-                  )
-          print(
-              "Resource paths fixed."
-          )
+                  print("Updated:", path)
+
+          print("Resource filenames fixed.")
           PY
+
           cat > "$PROJECT/project.godot" <<'GODOT'
           ; Temporary CI project.
           ; Never included in release.
