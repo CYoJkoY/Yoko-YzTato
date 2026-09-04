@@ -207,6 +207,7 @@ jobs:
           }
 
       - name: Import resources with Godot 3.7-dev1
+        timeout-minutes: 3
         env:
           PROJECT: ${{ steps.prepare.outputs.project }}
         shell: pwsh
@@ -215,64 +216,79 @@ jobs:
 
           $project = $env:PROJECT
           $importDir = Join-Path $project '.import'
-          $stdoutLog = Join-Path $env:RUNNER_TEMP 'godot-import.stdout.log'
-          $stderrLog = Join-Path $env:RUNNER_TEMP 'godot-import.stderr.log'
+          $logFile = Join-Path $env:RUNNER_TEMP 'godot-import.log'
 
           if (Test-Path $importDir) {
             Remove-Item -LiteralPath $importDir -Recurse -Force
           }
-          if (Test-Path $stdoutLog) { Remove-Item $stdoutLog -Force }
-          if (Test-Path $stderrLog) { Remove-Item $stderrLog -Force }
+          if (Test-Path $logFile) {
+            Remove-Item -LiteralPath $logFile -Force
+          }
 
-          # Godot 3.x has a dedicated --import mode. It starts the editor,
-          # waits for the resource import scan to finish, and then quits.
-          # This is safer and faster than polling .import file counts.
-          $process = Start-Process -FilePath $env:GODOT_BIN `
-            -ArgumentList @('--path', $project, '--import', '--audio-driver', 'Dummy') `
-            -RedirectStandardOutput $stdoutLog `
-            -RedirectStandardError $stderrLog `
-            -PassThru
+          Write-Host '=== Godot import diagnostics ==='
+          Write-Host "Godot:   $env:GODOT_BIN"
+          Write-Host "Project: $project"
+          Write-Host "Import:  $importDir"
+          & $env:GODOT_BIN --version
 
-          $timeoutSeconds = 300
-          try {
-            if (-not $process.WaitForExit($timeoutSeconds * 1000)) {
-              Write-Host 'Godot import exceeded 300 seconds.'
-              if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-              if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
-              Write-Error 'Godot resource import timed out.'
-            }
+          $sourceFiles = @(Get-ChildItem -LiteralPath (Join-Path $project 'mods-unpacked') -File -Recurse -ErrorAction Stop)
+          Write-Host "Source files in mods-unpacked: $($sourceFiles.Count)"
 
-            if ($process.ExitCode -ne 0) {
-              Write-Host '--- Godot STDOUT ---'
-              if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-              Write-Host '--- Godot STDERR ---'
-              if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-              Write-Error "Godot resource import failed with exit code $($process.ExitCode)."
-            }
-          } finally {
-            if (-not $process.HasExited) {
-              Stop-Process -Id $process.Id -Force -ErrorAction SilentlyContinue
-            }
+          # Do NOT use Start-Process + redirected stdout/stderr here.
+          # That made the GitHub Actions log appear completely blank while
+          # Godot was running. Run Godot directly so its diagnostics are
+          # visible in real time.
+          #
+          # --import is the Godot command specifically intended to start the
+          # editor, wait for resource imports, and then quit.
+          # --headless prevents a GUI/editor window from being spawned.
+          $arguments = @(
+            '--headless',
+            '--path', $project,
+            '--import',
+            '--audio-driver', 'Dummy',
+            '--verbose'
+          )
+
+          Write-Host '=== Starting Godot resource import ==='
+          Write-Host "$env:GODOT_BIN $($arguments -join ' ')"
+
+          & $env:GODOT_BIN @arguments 2>&1 | Tee-Object -FilePath $logFile
+          $godotExitCode = $LASTEXITCODE
+
+          Write-Host "=== Godot exited with code $godotExitCode ==="
+
+          if ($godotExitCode -ne 0) {
+            Write-Error "Godot resource import failed with exit code $godotExitCode. Full log: $logFile"
           }
 
           if (-not (Test-Path $importDir)) {
-            Write-Host '--- Godot STDOUT ---'
-            if (Test-Path $stdoutLog) { Get-Content $stdoutLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-            Write-Host '--- Godot STDERR ---'
-            if (Test-Path $stderrLog) { Get-Content $stderrLog -Raw -ErrorAction SilentlyContinue | Write-Host }
-            Write-Error 'Godot did not create project-level .import directory.'
+            Write-Error "Godot exited successfully but did not create .import: $importDir"
           }
 
-          $realImports = Get-ChildItem -LiteralPath $importDir -File -Recurse |
-            Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' }
+          $realImports = @(Get-ChildItem -LiteralPath $importDir -File -Recurse -ErrorAction Stop |
+            Where-Object { $_.Name -ne '.gdignore' -and $_.Name -notlike '*.md5' })
 
-          if (@($realImports).Count -eq 0) {
-            Write-Error 'No imported resources were generated.'
+          if ($realImports.Count -eq 0) {
+            Write-Error 'Godot exited successfully but generated no imported resources.'
           }
 
-          Write-Host "Godot generated $(@($realImports).Count) imported resource files."
+          Write-Host "Godot generated $($realImports.Count) imported resource files."
+          Write-Host '=== First imported files ==='
+          $realImports | Select-Object -First 20 -ExpandProperty FullName | ForEach-Object { Write-Host $_ }
 
+          # Keep the import log as a diagnostic artifact on failed runs too.
+          # The artifact upload below runs even when this step fails.
+          Write-Host "Godot import log saved to: $logFile"
+
+      - name: Upload Godot import log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: godot-import-log-${{ github.run_id }}
+          path: ${{ runner.temp }}/godot-import.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Build ModLoader ZIP with 7-Zip
         env:
