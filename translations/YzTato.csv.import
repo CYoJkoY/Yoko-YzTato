@@ -1,0 +1,16 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+
+[deps]
+
+files=[ "res://mods-unpacked/Yoko-YzTato/translations/YzTato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.fr.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ja.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ko.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh_TW.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ru.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.pl.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.es.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.pt.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.de.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.tr.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.it.translation" ]
+
+source_file="res://mods-unpacked/Yoko-YzTato/translations/YzTato.csv"
+dest_files=[ "res://mods-unpacked/Yoko-YzTato/translations/YzTato.en.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.fr.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ja.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ko.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.zh_TW.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.ru.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.pl.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.es.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.pt.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.de.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.tr.translation", "res://mods-unpacked/Yoko-YzTato/translations/YzTato.it.translation" ]
+
+[params]
+
+compress=true
+delimiter=0
