@@ -172,22 +172,37 @@ jobs:
 
           expected = set()
           metadata_count = 0
+          destination_pattern = re.compile(r'"(res://\.import/[^"\\]+)"')
+
           for meta in mod_root.rglob("*.import"):
               metadata_count += 1
               text = meta.read_text(encoding="utf-8", errors="replace")
-              expected.update(re.findall(r'res://\\.import/[^"\\s\\]]+', text))
 
+              # Godot 3.x .import files normally expose generated resources through
+              # path= and/or dest_files=[ "res://.import/..." ]. Accept both forms.
+              for match in destination_pattern.findall(text):
+                  expected.add(match)
+
+              for line in text.splitlines():
+                  stripped = line.strip()
+                  if stripped.startswith("path="):
+                      match = re.search(r'path="(res://\.import/[^"\\]+)"', stripped)
+                      if match:
+                          expected.add(match.group(1))
+
+          print(f"Import metadata files: {metadata_count}")
+          print(f"Declared generated artifacts: {len(expected)}")
+          print(f"Actual .import cache files: {sum(1 for p in import_dir.rglob('*') if p.is_file())}")
+
+          if metadata_count == 0:
+              raise SystemExit("No *.import metadata files were found in the Mod source tree")
           if not expected:
-              raise SystemExit("No generated import artifacts were declared by *.import metadata")
+              raise SystemExit("No generated import artifacts were declared by the Mod's *.import metadata")
 
           missing = sorted(
               path for path in expected
               if not (project / path.removeprefix("res://")).is_file()
           )
-
-          print(f"Import metadata files: {metadata_count}")
-          print(f"Expected generated artifacts: {len(expected)}")
-          print(f"Actual generated artifacts: {len(list(import_dir.iterdir()))}")
 
           if missing:
               print("Missing generated import artifacts:")
@@ -198,7 +213,7 @@ jobs:
           print("All declared Godot import artifacts are present.")
           PY
 
-          echo "Godot import completed; script errors from missing Brotato base-game classes are not treated as import failures."
+          echo "Godot import completed; script errors caused by missing Brotato base-game classes are not treated as import failures."
           if [[ "$GODOT_STATUS" -ne 0 ]]; then
             echo "::warning::Godot returned status $GODOT_STATUS, but all declared import artifacts were generated successfully."
           fi
