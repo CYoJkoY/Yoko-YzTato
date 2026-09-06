@@ -262,19 +262,17 @@ jobs:
 
           expected = set()
           metadata_count = 0
-          destination_pattern = re.compile(r'"(res://\\.import/[^"\\]+)"')
+          destination_pattern = re.compile(r'"(res://\.import/[^"\\]+)"')
+          path_pattern = re.compile(r'path="(res://\.import/[^"\\]+)"')
 
           for meta in mod_root.rglob("*.import"):
               metadata_count += 1
               text = meta.read_text(encoding="utf-8", errors="replace")
-              for match in destination_pattern.findall(text):
-                  expected.add(match)
+              expected.update(destination_pattern.findall(text))
               for line in text.splitlines():
-                  stripped = line.strip()
-                  if stripped.startswith("path="):
-                      match = re.search(r'path="(res://\\.import/[^"\\]+)"', stripped)
-                      if match:
-                          expected.add(match.group(1))
+                  match = path_pattern.search(line.strip())
+                  if match:
+                      expected.add(match.group(1))
 
           print(f"Import metadata files: {metadata_count}")
           print(f"Declared generated artifacts: {len(expected)}")
@@ -376,26 +374,26 @@ jobs:
               raise SystemExit(f"Release manifest version mismatch: {actual!r} != {expected!r}")
           print(f"Manifest version verified: {actual}")
           PY
-          echo "ZIP structure verified successfully."
-          echo "File count: $(wc -l < "$LISTING")"
 
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+      - name: Upload release assets
+        uses: actions/upload-artifact@v4
         with:
-          name: ${{ steps.manifest.outputs.name }}-${{ steps.version.outputs.version }}
+          name: release-${{ steps.manifest.outputs.name }}-${{ steps.version.outputs.version }}
           path: |
-            ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}
-            ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}.sha256
+            ${{ runner.temp }}/release/*.zip
+            ${{ runner.temp }}/release/*.sha256
           if-no-files-found: error
-          compression-level: 0
-          retention-days: 30
 
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: ${{ steps.manifest.outputs.name }} ${{ steps.version.outputs.version }}
-          generate_release_notes: true
-          files: |
-            ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}
-            ${{ runner.temp }}/release/${{ steps.manifest.outputs.zip_name }}.sha256
+      - name: Create GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          ZIP_NAME: ${{ steps.manifest.outputs.zip_name }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "$TAG" \
+            "$RUNNER_TEMP/release/$ZIP_NAME" \
+            "$RUNNER_TEMP/release/$ZIP_NAME.sha256" \
+            --title "$ZIP_NAME" \
+            --generate-notes
