@@ -199,6 +199,10 @@ jobs:
             exit 1
           fi
 
+          if kill -0 "$GODOT_PID" 2>/dev/null; then
+            echo 'Import cache validation complete; stopping Godot.'
+            kill "$GODOT_PID" 2>/dev/null || true
+          fi
           wait "$GODOT_PID" 2>/dev/null || true
           PROJECT="$PROJECT" MOD_ROOT="$MOD_ROOT" python3 - <<'PY'
           import os, re
