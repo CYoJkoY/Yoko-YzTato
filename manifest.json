@@ -1,7 +1,7 @@
 {
   "name": "YzTato",
   "namespace": "Yoko",
-  "version_number": "1.1.0",
+  "version_number": "1.1.1",
   "description": "A content-heavy Brotato expansion adding custom characters, weapons, items, enemies, challenges, maps, effects, and gameplay systems.",
   "website_url": "",
   "dependencies": [
