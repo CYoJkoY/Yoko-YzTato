@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="assets/header.svg" alt="Yoko-YzTato" width="100%">
+</div>
+
 # Yoko-YzTato
 
 [![Release](https://img.shields.io/github/v/release/CYoJkoY/Yoko-YzTato?display_name=tag&sort=semver)](https://github.com/CYoJkoY/Yoko-YzTato/releases)
