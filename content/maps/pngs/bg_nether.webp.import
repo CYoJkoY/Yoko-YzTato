@@ -9,7 +9,7 @@ metadata={
 
 [deps]
 
-source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/BG_Nether.webp"
+source_file="res://mods-unpacked/Yoko-YzTato/content/maps/pngs/bg_nether.webp"
 dest_files=[ "res://.import/bg_nether.webp-d2abc4d3afeb9493ec077f88852851e8.stex" ]
 
 [params]
