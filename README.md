@@ -86,7 +86,7 @@ This lets a content resource remain declarative while deeper gameplay mechanics 
 
 ### Requirements
 
-- Brotato
+- Brotato **1.15.4**
 - **Brotato Mod Loader 6.3.0**
 - [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader)
 
@@ -94,7 +94,7 @@ Yoko-NewContentLoader is the required dependency declared by `manifest.json`.
 
 ### Release installation
 
-1. Install Brotato with Mod Loader 6.3.0.
+1. Install Brotato 1.15.4 with Mod Loader 6.3.0.
 2. Install the matching Yoko-NewContentLoader release.
 3. Download the latest `YzTato-*.zip` from [Releases](https://github.com/CYoJkoY/Yoko-YzTato/releases).
 4. Place the ZIP in the Mod Loader `mods` directory.
@@ -131,7 +131,7 @@ New feature
 
 ## Release pipeline
 
-Releases are created from semantic version tags. The workflow now requires the repository manifest and the release tag to match exactly:
+Releases are created from semantic version tags. The workflow requires the repository manifest and the release tag to match exactly:
 
 ```text
 manifest.json: 1.1.0
@@ -150,10 +150,10 @@ The pipeline also imports Godot resources, preserves generated `.import` data, b
 | Mod Loader | **6.3.0** |
 | Mod version | **1.1.0** |
 | Dependency | Yoko-NewContentLoader |
-| Brotato game version | Not specified |
+| Brotato game version | **1.15.4** |
 | License | MIT |
 
-Because YzTato depends on NewContentLoader, compatibility should be considered at the full stack level rather than from one manifest entry alone.
+Because YzTato depends on NewContentLoader, compatibility should be considered at the full stack level.
 
 ## Project structure
 
