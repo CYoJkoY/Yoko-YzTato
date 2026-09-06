@@ -152,12 +152,55 @@ jobs:
         run: |
           set -euo pipefail
           LOG_FILE="$RUNNER_TEMP/godot-import.log"
+          IMPORT_DIR="$PROJECT/.import"
           rm -f "$LOG_FILE"
-          set +e
-          "$GODOT_BIN" --path "$PROJECT" --editor --headless --audio-driver Dummy --quit >"$LOG_FILE" 2>&1
-          GODOT_STATUS=$?
-          set -e
-          echo "Godot import process exited with status: $GODOT_STATUS"
+          "$GODOT_BIN" --path "$PROJECT" --editor --headless --audio-driver Dummy >"$LOG_FILE" 2>&1 &
+          GODOT_PID=$!
+
+          cleanup() {
+            kill "$GODOT_PID" 2>/dev/null || true
+            wait "$GODOT_PID" 2>/dev/null || true
+          }
+          trap cleanup EXIT
+
+          DEADLINE=$((SECONDS + 300))
+          LAST_COUNT=-1
+          STABLE=0
+          IMPORT_STARTED=0
+
+          while (( SECONDS < DEADLINE )); do
+            if ! kill -0 "$GODOT_PID" 2>/dev/null; then
+              echo "::error::Godot exited before resource import reached a stable state."
+              cat "$LOG_FILE" >&2 || true
+              exit 1
+            fi
+
+            if [[ -d "$IMPORT_DIR" ]]; then
+              COUNT="$(find "$IMPORT_DIR" -type f ! -name '.gdignore' | wc -l)"
+              IMPORT_STARTED=1
+              if (( COUNT == LAST_COUNT )); then
+                STABLE=$((STABLE + 1))
+              else
+                LAST_COUNT="$COUNT"
+                STABLE=0
+              fi
+              echo "Imported cache files: $COUNT; stable checks: $STABLE"
+
+              # Do not finish merely because the import directory exists. Godot 3
+              # imports resources asynchronously, so wait until the generated cache
+              # has stopped changing for several consecutive checks.
+              if (( COUNT > 1 && STABLE >= 8 )); then
+                break
+              fi
+            fi
+            sleep 1
+          done
+
+          if (( IMPORT_STARTED != 1 || STABLE < 8 )); then
+            echo "::error::Godot resource import did not reach a stable state within 300 seconds."
+            cat "$LOG_FILE" >&2 || true
+            exit 1
+          fi
 
           PROJECT="$PROJECT" MOD_ROOT="$MOD_ROOT" python3 <<'PY'
           import os
@@ -172,21 +215,19 @@ jobs:
 
           expected = set()
           metadata_count = 0
-          destination_pattern = re.compile(r'"(res://\.import/[^"\\]+)"')
+          destination_pattern = re.compile(r'"(res://\\.import/[^"\\]+)"')
 
           for meta in mod_root.rglob("*.import"):
               metadata_count += 1
               text = meta.read_text(encoding="utf-8", errors="replace")
 
-              # Godot 3.x .import files normally expose generated resources through
-              # path= and/or dest_files=[ "res://.import/..." ]. Accept both forms.
               for match in destination_pattern.findall(text):
                   expected.add(match)
 
               for line in text.splitlines():
                   stripped = line.strip()
                   if stripped.startswith("path="):
-                      match = re.search(r'path="(res://\.import/[^"\\]+)"', stripped)
+                      match = re.search(r'path="(res://\\.import/[^"\\]+)"', stripped)
                       if match:
                           expected.add(match.group(1))
 
@@ -213,10 +254,7 @@ jobs:
           print("All declared Godot import artifacts are present.")
           PY
 
-          echo "Godot import completed; script errors caused by missing Brotato base-game classes are not treated as import failures."
-          if [[ "$GODOT_STATUS" -ne 0 ]]; then
-            echo "::warning::Godot returned status $GODOT_STATUS, but all declared import artifacts were generated successfully."
-          fi
+          echo "Godot import completed; script errors from missing Brotato base-game classes are not treated as import failures."
 
       - name: Build ModLoader package
         env:
@@ -235,15 +273,22 @@ jobs:
             --exclude='project.godot' --exclude='project.godot.*' --exclude='export_presets.cfg' \
             --exclude='.DS_Store' --exclude='desktop.ini' --exclude='.gitignore' --exclude='.gitattributes' \
             "$MOD_ROOT/" "$STAGE/mods-unpacked/$MOD_DIRECTORY/"
-          if [[ ! -d "$PROJECT/.import" ]]; then echo "::error::Godot did not generate the .import cache."; exit 1; fi
+          if [[ ! -d "$PROJECT/.import" ]]; then
+            echo "::error::Godot did not generate the .import cache."
+            exit 1
+          fi
           IMPORT_COUNT="$(find "$PROJECT/.import" -type f ! -name '.gdignore' | wc -l)"
-          if (( IMPORT_COUNT == 0 )); then echo "::error::Generated .import cache is empty."; exit 1; fi
+          if (( IMPORT_COUNT == 0 )); then
+            echo "::error::Generated .import cache is empty."
+            exit 1
+          fi
           mkdir -p "$STAGE/.import"
           rsync -a --exclude='.gdignore' "$PROJECT/.import/" "$STAGE/.import/"
           find "$STAGE" -type f \( -name '.gdignore' -o -name '*.md5' -o -name '*.csv.import' \) -delete
           (cd "$STAGE" && zip -r -q -9 -n '.png:.webp:.jpg:.jpeg:.gif:.bmp:.ico:.dds:.stex:.ctex:.ogg:.oggstr:.mp3:.aac:.m4a:.mp4:.webm:.zip:.7z:.rar:.gz:.bz2:.xz:.zst' "$ZIP" .)
           test -s "$ZIP"
           sha256sum "$ZIP" > "$ZIP.sha256"
+          ls -lh "$ZIP" "$ZIP.sha256"
 
       - name: Verify release package
         env:
@@ -258,10 +303,22 @@ jobs:
           unzip -t "$ZIP" >/dev/null
           LISTING="$RUNNER_TEMP/zip-list.txt"
           unzip -Z1 "$ZIP" > "$LISTING"
-          if ! grep -Fxq "$MANIFEST_PATH" "$LISTING"; then echo "::error::manifest.json is missing from the expected ModLoader path."; exit 1; fi
-          if grep -Eq '(^|/)(\.git|\.github|\.godot)(/|$)' "$LISTING"; then echo "::error::Development directories leaked into the release package."; exit 1; fi
-          if grep -Eq '(^|/)(\.gdignore|.*\.md5|.*\.csv\.import)$' "$LISTING"; then echo "::error::Forbidden generated files leaked into the release package."; exit 1; fi
-          if ! grep -Eq '^\.import/[^/]+$|^\.import/.+/.+$' "$LISTING"; then echo "::error::Generated .import cache is missing from the release package."; exit 1; fi
+          if ! grep -Fxq "$MANIFEST_PATH" "$LISTING"; then
+            echo "::error::manifest.json is missing from the expected ModLoader path."
+            exit 1
+          fi
+          if grep -Eq '(^|/)(\.git|\.github|\.godot)(/|$)' "$LISTING"; then
+            echo "::error::Development directories leaked into the release package."
+            exit 1
+          fi
+          if grep -Eq '(^|/)(\.gdignore|.*\.md5|.*\.csv\.import)$' "$LISTING"; then
+            echo "::error::Forbidden generated files leaked into the release package."
+            exit 1
+          fi
+          if ! grep -Eq '^\.import/[^/]+$|^\.import/.+/.+$' "$LISTING"; then
+            echo "::error::Generated .import cache is missing from the release package."
+            exit 1
+          fi
           unzip -p "$ZIP" "$MANIFEST_PATH" > "$RUNNER_TEMP/release-manifest.json"
           VERSION="$VERSION" MANIFEST="$RUNNER_TEMP/release-manifest.json" python3 <<'PY'
           import json
@@ -275,6 +332,7 @@ jobs:
           print(f"Manifest version verified: {actual}")
           PY
           echo "ZIP structure verified successfully."
+          echo "File count: $(wc -l < "$LISTING")"
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
