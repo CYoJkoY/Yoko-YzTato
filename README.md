@@ -1,43 +1,45 @@
 <div align="center">
+  <img src="assets/hero.svg" alt="Yoko-YzTato — Brotato content expansion" width="1200" style="max-width: 100%; height: auto;">
 
-# Yoko-YzTato
+  <h1>Yoko-YzTato</h1>
+  <p><strong>A content-first Brotato expansion built around new content and focused runtime extensions.</strong></p>
+  <p>Characters · Weapons · Items · Enemies · Worlds · Systems</p>
 
-**A content-heavy Brotato expansion for new characters, weapons, worlds, enemies, and custom gameplay systems.**
+  <p>
+    <a href="https://github.com/CYoJkoY/Yoko-YzTato/releases"><img src="https://img.shields.io/github/v/release/CYoJkoY/Yoko-YzTato?display_name=tag&sort=semver&style=flat-square&label=release" alt="Latest release"></a>
+    <a href="https://github.com/CYoJkoY/Yoko-YzTato/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/CYoJkoY/Yoko-YzTato/release.yml?style=flat-square&label=build" alt="Build status"></a>
+    <img src="https://img.shields.io/badge/Brotato-1.15.4-478CBF?style=flat-square" alt="Brotato 1.15.4">
+    <img src="https://img.shields.io/badge/Mod%20Loader-6.3.0-5965FF?style=flat-square" alt="Mod Loader 6.3.0">
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/CYoJkoY/Yoko-YzTato?style=flat-square" alt="MIT License"></a>
+  </p>
 
-<p>
-  <a href="https://github.com/CYoJkoY/Yoko-YzTato/releases"><img src="https://img.shields.io/github/v/release/CYoJkoY/Yoko-YzTato?display_name=tag&sort=semver&style=flat-square&label=release" alt="Latest release"></a>
-  <a href="https://github.com/CYoJkoY/Yoko-YzTato/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/CYoJkoY/Yoko-YzTato/release.yml?style=flat-square&label=build" alt="Build status"></a>
-  <img src="https://img.shields.io/badge/Brotato-1.15.4-478CBF?style=flat-square" alt="Brotato 1.15.4">
-  <img src="https://img.shields.io/badge/Mod%20Loader-6.3.0-5965FF?style=flat-square" alt="Mod Loader 6.3.0">
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/CYoJkoY/Yoko-YzTato?style=flat-square" alt="MIT License"></a>
-</p>
-
-<p>
-  <a href="#content">Content</a> ·
-  <a href="#runtime-systems">Runtime systems</a> ·
-  <a href="#installation">Installation</a> ·
-  <a href="#development">Development</a>
-</p>
-
+  <p><a href="#content-map">Content</a> · <a href="#runtime-model">Runtime</a> · <a href="#installation">Install</a> · <a href="#development">Develop</a></p>
 </div>
+
+> **Core boundary:** structured Godot resources describe content; `Yoko-NewContentLoader` handles shared registration; `extensions/` contains only behavior that needs deeper Brotato integration.
 
 ## What it is
 
-Yoko-YzTato is the content and gameplay layer of the Yoko Brotato mod stack. It combines Godot resource data with focused runtime extensions, using [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader) to register structured content without forcing every content type into custom registration code.
-
-The project is designed around a simple boundary:
+Yoko-YzTato is a large Brotato content expansion for the Yoko mod stack. It combines resource-driven content with focused runtime extensions instead of turning every new mechanic into custom registration code.
 
 ```text
-Content data → shared registration → targeted runtime extension → Brotato
+content data
+    │
+    ▼
+NewContentDataDLC1.tres
+    │
+    ▼
+Yoko-NewContentLoader
+    │
+    ▼
+Brotato services ← targeted extensions
 ```
 
-That separation lets a new weapon, character, map, or effect remain inspectable as game data while mechanics that need deeper integration can attach to the Brotato system that owns them.
+This separation keeps content inspectable in Godot while allowing complex mechanics to hook into the subsystem that owns them.
 
-## Content
+## Content map
 
-The repository organizes content into explicit categories:
-
-| Category | Location |
+| Category | Repository location |
 | :--- | :--- |
 | Characters | `content/characters/` |
 | Weapons | `content/weapons/` |
@@ -51,23 +53,24 @@ The repository organizes content into explicit categories:
 | Structures | `content/structures/` |
 | Zones | `content/zones/` |
 | Scenes | `content/scenes/` |
+| Localization | `translations/` |
 
-`NewContentDataDLC1.tres` aggregates the content resources consumed by the loader. Localization remains under `translations/`.
+`NewContentDataDLC1.tres` is the aggregate content resource consumed by the loader.
 
-## Runtime systems
+## Runtime model
 
-Resource data is not enough for every mechanic, so YzTato adds narrow extensions around Brotato systems.
+Resource data handles most content. Runtime extensions are reserved for behavior that needs access to Brotato services.
 
 | Area | Examples |
 | :--- | :--- |
-| Combat | Melee and ranged weapon behavior, projectiles, hit effects, custom effects |
-| Entities | Enemy behavior, targeting, spawning, and entity-specific logic |
+| Combat | Weapon behavior, projectiles, hit effects, custom effects |
+| Entities | Enemy behavior, targeting, spawning, special entities |
 | Run / player | Player data and run-state integration |
-| Waves | Wave management and entity spawning |
-| Shop / upgrades | Shop and upgrade UI behavior, item and weapon service hooks |
-| Content services | Item, weapon, effect, and lookup support |
+| Waves | Wave logic and entity spawning |
+| Shop / upgrades | Shop and upgrade hooks, item and weapon services |
+| Content services | Lookups and shared item, weapon, and effect support |
 
-The rule is to extend the owning service rather than create a parallel gameplay system.
+The architectural rule is simple: extend the owner of the behavior instead of creating a parallel gameplay system.
 
 ## Installation
 
@@ -77,7 +80,7 @@ The rule is to extend the owning service rather than create a parallel gameplay 
 - **Brotato Mod Loader 6.3.0**
 - [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader)
 
-The dependency on NewContentLoader is declared in `manifest.json`.
+The dependency is declared in `manifest.json`.
 
 ### Release installation
 
@@ -85,7 +88,7 @@ The dependency on NewContentLoader is declared in `manifest.json`.
 2. Install the matching Yoko-NewContentLoader release.
 3. Download the latest `YzTato-*.zip` from [Releases](https://github.com/CYoJkoY/Yoko-YzTato/releases).
 4. Place the ZIP in the Mod Loader `mods` directory.
-5. Launch Brotato and verify that both the dependency and YzTato load correctly.
+5. Launch Brotato and confirm both the dependency and YzTato load successfully.
 
 Keep the release ZIP compressed for normal installation.
 
@@ -97,9 +100,9 @@ mods-unpacked/
 └── Yoko-YzTato/
 ```
 
-See the [Godot Mod Loader documentation](https://wiki.godotmodding.com/) for current installation conventions.
+See the [Godot Mod Loader documentation](https://wiki.godotmodding.com/) for current conventions.
 
-## How content reaches the game
+## Content flow
 
 ```text
 content/*
@@ -110,58 +113,58 @@ NewContentDataDLC1.tres
    ▼
 Yoko-NewContentLoader
    │
-   ▼
-Brotato services
-   │
-   ├── item / weapon pools
+   ├── items / weapons
    ├── entities / effects
    ├── challenges / zones
    └── translations
+           │
+           ▼
+     Brotato runtime
 ```
 
-When resource data alone cannot express a mechanic, the corresponding implementation lives under `extensions/` and hooks into the existing Brotato system rather than replacing it wholesale.
+When a mechanic cannot be expressed through resources alone, its narrow implementation belongs in `extensions/`.
 
 ## Development
 
-The main entry point is `mod_main.gd`; content registration is centered around `NewContentDataDLC1.tres`.
+`mod_main.gd` is the runtime entry point and `NewContentDataDLC1.tres` is the central DLC content registration resource.
 
-For a new feature, keep the responsibilities separated:
+For a new feature, keep responsibilities explicit:
 
 ```text
 New feature
-   ├── Resource data    → content/
-   ├── Runtime hook     → extensions/
-   ├── Registration     → NewContentDataDLC1.tres
-   └── Localization     → translations/
+   ├── Resource data   → content/
+   ├── Runtime hook    → extensions/
+   ├── Registration    → NewContentDataDLC1.tres
+   └── Localization    → translations/
 ```
 
-Changes to shared runtime behavior should be tested with Yoko-NewContentLoader and the complete mod stack because a loader-facing change can affect every dependent project.
+Changes to shared runtime behavior should be tested with Yoko-NewContentLoader and the complete mod stack.
 
-## Release pipeline
+## Release model
 
-The release workflow uses semantic version tags and treats `manifest.json` as authoritative.
+`manifest.json` is authoritative. Release tags must match the declared version exactly.
 
 ```text
 manifest.json: 1.1.0
         │
-        ├── tag v1.1.0  → build allowed
-        └── tag v1.2.0  → build rejected
+        ├── v1.1.0     → build allowed
+        └── v1.2.0     → build rejected
 ```
 
-The workflow imports Godot resources, preserves generated `.import` data, builds the Mod Loader ZIP, validates the archive, and checks that the packaged manifest matches the release tag.
+The workflow imports Godot resources, preserves generated `.import` data, packages the Mod Loader ZIP, validates its contents, and verifies the packaged manifest.
 
 ## Compatibility
 
-| Component | Declared target |
+| Component | Version |
 | :--- | :--- |
-| Game | **Brotato 1.15.4** |
-| Engine | Godot 3.x / GDScript |
+| Brotato | **1.15.4** |
+| Godot | 3.x / GDScript |
 | Mod Loader | **6.3.0** |
-| Mod version | **1.1.0** |
+| YzTato | **1.1.0** |
 | Required dependency | Yoko-NewContentLoader |
 | License | MIT |
 
-The manifest is the source of truth for compatibility and dependencies.
+Compatibility and dependency declarations live in `manifest.json`.
 
 ## Project structure
 
@@ -169,18 +172,6 @@ The manifest is the source of truth for compatibility and dependencies.
 Yoko-YzTato/
 ├── .github/workflows/release.yml
 ├── content/
-│   ├── challenges/
-│   ├── characters/
-│   ├── entities/
-│   ├── items/
-│   ├── maps/
-│   ├── particles/
-│   ├── projectiles/
-│   ├── scenes/
-│   ├── sets/
-│   ├── structures/
-│   ├── weapons/
-│   └── zones/
 ├── extensions/
 ├── translations/
 ├── NewContentDataDLC1.tres
@@ -193,18 +184,18 @@ Yoko-YzTato/
 ## Related projects
 
 - [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader) — shared content registration and runtime integration.
-- [Yoko-MoreStatsContainer](https://github.com/CYoJkoY/Yoko-MoreStatsContainer) — paginated Brotato stats UI.
+- [Yoko-MoreStatsContainer](https://github.com/CYoJkoY/Yoko-MoreStatsContainer) — paginated Brotato statistics UI.
 - [Yoko-DebugMenu](https://github.com/CYoJkoY/Yoko-DebugMenu) — in-game testing and debugging tools.
 
 ## Contributing
 
-Useful contributions include new content, concrete bug fixes, compatibility improvements, balance observations, and narrowly scoped runtime changes.
+Contributions are most useful when they add coherent content, fix a concrete defect, improve compatibility, or make a runtime extension narrower and easier to audit.
 
-For bug reports, include the Brotato version, Mod Loader version, YzTato version, dependency versions, reproduction steps, and relevant logs or screenshots.
+For bug reports, include Brotato, Mod Loader, YzTato, and dependency versions together with reproduction steps and relevant logs.
 
 ## Support
 
-If YzTato improves your Brotato experience or helps with mod development, support is available through the deployed payment page:
+Development support is available through the deployed payment page:
 
 **https://cyojkoy.github.io/Payment/**
 
