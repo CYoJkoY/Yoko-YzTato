@@ -1,6 +1,4 @@
 <div align="center">
-  <img src="assets/hero.svg" alt="Yoko-YzTato — Brotato content expansion" width="1200" style="max-width: 100%; height: auto;">
-
   <h1>Yoko-YzTato</h1>
   <p><strong>A content-first Brotato expansion built around new content and focused runtime extensions.</strong></p>
   <p>Characters · Weapons · Items · Enemies · Worlds · Systems</p>
