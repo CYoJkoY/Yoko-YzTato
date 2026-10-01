@@ -88,6 +88,6 @@ Development support: **https://cyojkoy.github.io/Payment/**
 
 ## License
 
-Yoko-YzTato is licensed under the [MIT License](LICENSE).
+Yoko-YzTato is licensed under the [Custom License](LICENSE).
 
 <div align="center"><sub>Yoko-YzTato · Brotato content expansion by Yoko.</sub></div>
