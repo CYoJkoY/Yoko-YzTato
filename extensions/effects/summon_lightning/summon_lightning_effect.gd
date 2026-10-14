@@ -3,6 +3,8 @@ extends StructureEffect
 export(int) var lightning_count: int = 1
 export(int) var chance: int = 100
 
+const DotStructureWeaponStats = preload("res://mods-unpacked/Yoko-YzTato/content/structures/dot_structure_stats.gd")
+
 var weapon_pos: int = -1
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
