@@ -23,25 +23,38 @@ func on_levelled_up(player_index: int) -> void:
     _yztato_stats_chance_on_level_up(player_index)
 
 func clean_up_room() -> void:
-    for timer in YzTimers: timer.stop()
+    for timer in YzTimers:
+        timer.stop()
     .clean_up_room()
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_init_trigger_subeffect_on_specific_stat_over_check_timer() -> void:
     for player_index in range(RunData.players_data.size()):
-        var triggers: Array = RunData.get_player_effect(Utils.yztato_trigger_subeffect_on_specific_stat_over_hash, player_index)
-        if triggers.empty(): continue
+        var triggers: Array = RunData.get_player_effect(
+            Utils.yztato_trigger_subeffect_on_specific_stat_over_hash,
+            player_index
+        )
+        if triggers.empty():
+            continue
 
         var timer: Timer = Timer.new()
         timer.wait_time = 0.5
         timer.autostart = true
-        timer.connect("timeout", self, "yz_trigger_subeffect_on_specific_stat_over", [triggers, player_index])
+        timer.connect(
+            "timeout",
+            self,
+            "yz_trigger_subeffect_on_specific_stat_over",
+            [triggers, player_index]
+        )
         add_child(timer)
         YzTimers.append(timer)
 
 func _yztato_destory_weapons() -> void:
     for player_index in RunData.players_data.size():
-        var yztato_destory_weapon: Array = RunData.get_player_effect(Utils.yztato_destory_weapons_hash, player_index)
+        var yztato_destory_weapon: Array = RunData.get_player_effect(
+            Utils.yztato_destory_weapons_hash,
+            player_index
+        )
         if yztato_destory_weapon.size() > 0:
             for weapon_id in yztato_destory_weapon:
                 for i in weapon_id[1]:
@@ -63,7 +76,10 @@ func _yztato_set_stat() -> void:
                 RunData.players_data[player_index].effects[stat_id[0]] = stat_id[1]
 
 func _yztato_special_picked_up_change_stat(consumable: Node, player_index: int) -> void:
-    var special_picked_up_change_stat: Array = RunData.get_player_effect(Utils.yztato_special_picked_up_change_stat_hash, player_index)
+    var special_picked_up_change_stat: Array = RunData.get_player_effect(
+        Utils.yztato_special_picked_up_change_stat_hash,
+        player_index
+    )
     if special_picked_up_change_stat.size() > 0:
         for change in special_picked_up_change_stat:
             if consumable.consumable_data.my_id_hash == change[0]:
@@ -84,7 +100,10 @@ func _yztato_stats_chance_on_level_up(player_index: int) -> void:
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func yz_trigger_subeffect_on_specific_stat_over(triggers: Array, player_index: int) -> void:
-    var triggered_subeffects: Array = RunData.get_player_effect(Utils.yztato_triggered_subeffects, player_index)
+    var triggered_subeffects: Array = RunData.get_player_effect(
+        Utils.yztato_triggered_subeffects,
+        player_index
+    )
 
     for trigger in triggers:
         var specific_stat: int = trigger.key_hash
@@ -108,28 +127,112 @@ func yz_trigger_subeffect_on_specific_stat_over(triggers: Array, player_index: i
             match over_type:
                 0: # Equal
                     match (stat_num == stat_over_value or stat_over_value == Utils.LARGE_NUMBER):
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
                 1: # Up_E
                     match stat_num >= stat_over_value:
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
                 2: # Down_E
                     match stat_num <= stat_over_value:
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
                 3: # Up
                     match stat_num > stat_over_value:
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
                 4: # Down
                     match stat_num < stat_over_value:
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
                 5: # Equal_Multi
                     match stat_num % stat_over_value == 0 or stat_over_value == Utils.LARGE_NUMBER:
-                        true: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, true)
-                        false: yz_process_trigger_subeffect([sub_effect], player_index, triggered_subeffects, sub_effect_unid, false)
+                        true:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                true
+                            )
+                        false:
+                            yz_process_trigger_subeffect(
+                                [sub_effect],
+                                player_index,
+                                triggered_subeffects,
+                                sub_effect_unid,
+                                false
+                            )
 
 func yz_process_trigger_subeffect(
     sub_effect: Array,

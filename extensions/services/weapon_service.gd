@@ -8,13 +8,16 @@ var _burning_particle_pool_id: int = Keys.generate_hash(BURNING_PARTICLE_TSCN.re
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _apply_weapon_scaling_stat_effects(scaling_stats: Array, player_index: int) -> Array:
-    var new_stats: Array = ._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
+    var new_stats: Array =._apply_weapon_scaling_stat_effects(scaling_stats, player_index)
     new_stats = _yztato_apply_damage_scaling(new_stats, player_index)
     return new_stats
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_apply_damage_scaling(new_stats: Array, player_index: int) -> Array:
-    var damage_scaling_effects: Array = RunData.get_player_effect(Utils.yztato_damage_scaling_hash, player_index)
+    var damage_scaling_effects: Array = RunData.get_player_effect(
+        Utils.yztato_damage_scaling_hash,
+        player_index
+    )
     if damage_scaling_effects.empty():
         return new_stats
 
@@ -80,7 +83,13 @@ func _yztato_recycle_burning_particle(particle: CPUParticles2D) -> void:
     main.add_node_to_pool(particle, _burning_particle_pool_id)
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
-func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt: int, player_index: int) -> void:
+func yz_multi_hit(
+    effects: Array,
+    weapon_pos: int,
+    thing_hit: Node,
+    damage_dealt: int,
+    player_index: int
+) -> void:
     if not thing_hit:
         return
 
@@ -95,7 +104,10 @@ func yz_multi_hit(effects: Array, weapon_pos: int, thing_hit: Node, damage_dealt
             return
 
     # Player effects
-    var effect_multi_hit: Array = RunData.get_player_effect(Utils.yztato_multi_hit_hash, player_index)
+    var effect_multi_hit: Array = RunData.get_player_effect(
+        Utils.yztato_multi_hit_hash,
+        player_index
+    )
     for effect in effect_multi_hit:
         var dmg_percent: float = effect[1] / 100.0
         for _i in effect[0]:
@@ -125,7 +137,10 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
                 break
 
     # Player effects
-    var vine_trap_effects: Array = RunData.get_player_effect(Utils.yztato_vine_trap_hash, player_index)
+    var vine_trap_effects: Array = RunData.get_player_effect(
+        Utils.yztato_vine_trap_hash,
+        player_index
+    )
     for effect_data in vine_trap_effects:
         if Utils.get_chance_success(effect_data[1] / 100.0):
             var vine_trap: StructureEffect = effect_data[2]
@@ -150,7 +165,10 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
             return
 
     # Player effects
-    var effect_leave_fire: Array = RunData.get_player_effect(Utils.yztato_leave_fire_hash, player_index)
+    var effect_leave_fire: Array = RunData.get_player_effect(
+        Utils.yztato_leave_fire_hash,
+        player_index
+    )
     for fire in effect_leave_fire:
         var particle: CPUParticles2D = _yztato_get_burning_particle(main)
         if particle != null:
@@ -159,7 +177,12 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
             particle.activate(thing_hit.global_position, thing_hit._burning)
             main._on_emit_fire_particle(particle)
 
-func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, player_index: int) -> void:
+func yz_summon_lightning(
+    effects: Array,
+    weapon_pos: int,
+    thing_hit: Node,
+    player_index: int
+) -> void:
     if not thing_hit:
         return
     var spawner: EntitySpawner = Utils.get_scene_node()._entity_spawner
@@ -179,7 +202,10 @@ func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, playe
                 break
 
     # Player effects
-    var summon_lightning_effects: Array = RunData.get_player_effect(Utils.yztato_summon_lightning_hash, player_index)
+    var summon_lightning_effects: Array = RunData.get_player_effect(
+        Utils.yztato_summon_lightning_hash,
+        player_index
+    )
     for effect_data in summon_lightning_effects:
         if Utils.get_chance_success(effect_data[1] / 100.0):
             var lightning: StructureEffect = effect_data[2]
@@ -188,24 +214,41 @@ func yz_summon_lightning(effects: Array, weapon_pos: int, thing_hit: Node, playe
                 var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 30)
                 queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
 
-func yz_gain_stat_when_killed_scaling_single(effects: Array, kill_count_dict: Dictionary, player: Player, player_index: int) -> void:
+func yz_gain_stat_when_killed_scaling_single(
+    effects: Array,
+    kill_count_dict: Dictionary,
+    player: Player,
+    player_index: int
+) -> void:
     for effect_index in range(effects.size()):
         var effect = effects[effect_index]
         if effect.get_id() != "yztato_gain_stat_when_killed_single_scaling":
             continue
 
         kill_count_dict[effect_index] = kill_count_dict.get(effect_index, 0) + 1
-        var scaling_value: int = effect.value + Utils.get_stat(effect.scaling_stat_hash, player_index) * effect.scaling_percent as int
+        var scaling_value: int = effect.value + Utils.get_stat(
+            effect.scaling_stat_hash,
+            player_index
+        ) * effect.scaling_percent as int
         if scaling_value <= 0 or kill_count_dict[effect_index] % scaling_value != 0:
             continue
 
         kill_count_dict[effect_index] = 0
         RunData.add_stat(effect.stat_hash, effect.stat_nb, player_index)
-        RunData.ncl_add_effect_tracking_value(effect.tracking_key_hash, effect.stat_nb, player_index)
+        RunData.ncl_add_effect_tracking_value(
+            effect.tracking_key_hash,
+            effect.stat_nb,
+            player_index
+        )
         if effect.stat_hash == Keys.hit_protection_hash:
             player._hit_protection += effect.stat_nb
 
-func yz_upgrade_when_killed_enemies(effects: Array, enemies_killed_this_wave_count: int, weapon_pos: int, player_index: int) -> void:
+func yz_upgrade_when_killed_enemies(
+    effects: Array,
+    enemies_killed_this_wave_count: int,
+    weapon_pos: int,
+    player_index: int
+) -> void:
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash:
             continue

@@ -40,7 +40,7 @@ func on_lifesteal_effect(value: int) -> void:
     .on_lifesteal_effect(value)
 
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
-    var result: Array = .take_damage(value, args)
+    var result: Array =.take_damage(value, args)
     _yztato_heal_on_damage_taken(result)
     _yztato_temp_stats_per_interval_reset_on_hit(result)
     _yztato_projectiles_on_hurt(result)
@@ -59,7 +59,7 @@ func die(args := Utils.default_die_args) -> void:
     .die(args)
 
 func heal(value: int, is_from_torture: bool = false) -> int:
-    var healed: int = .heal(value, is_from_torture)
+    var healed: int =.heal(value, is_from_torture)
     if _is_dying and current_stats.health > 0 and not dead:
         _yztato_cancel_delayed_death()
 
@@ -113,7 +113,12 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     attack_speed_multiplier = clamp(attack_speed_multiplier, 0.5, 5.0)
 
     # Final Calculation
-    var speed_rpm: float = (1.0 / BASE_STORM_DURATION) * health_multiplier * weapon_multiplier * attack_speed_multiplier
+    var speed_rpm: float = (
+        (1.0 / BASE_STORM_DURATION)
+        * health_multiplier
+        * weapon_multiplier
+        * attack_speed_multiplier
+    )
     var storm_duration: float = 1.0 / speed_rpm
 
     var is_standing: bool = (_current_movement == Vector2.ZERO)
@@ -211,7 +216,10 @@ func _yztato_temp_stats_per_interval_reset_on_hit(result: Array) -> void:
         _hit_protection -= _remove_temp_stats_on_hit[stat]
 
 func _yztato_heal_on_damage_taken(result: Array) -> void:
-    var heal_on_damage_taken: Array = RunData.get_player_effect(Utils.yztato_heal_on_damage_taken_hash, player_index)
+    var heal_on_damage_taken: Array = RunData.get_player_effect(
+        Utils.yztato_heal_on_damage_taken_hash,
+        player_index
+    )
     _last_damage_taken = result[1]
     for effect in heal_on_damage_taken:
         var tracking_key_hash: int = effect[0]
@@ -228,7 +236,10 @@ func _yztato_projectiles_on_hurt(result: Array) -> void:
     if not hurt_bool:
         return
 
-    var projs_on_hurt: Array = RunData.get_player_effect(Utils.yztato_projectiles_on_hurt_hash, player_index)
+    var projs_on_hurt: Array = RunData.get_player_effect(
+        Utils.yztato_projectiles_on_hurt_hash,
+        player_index
+    )
     var entity_spawner: EntitySpawner = Utils.get_scene_node()._entity_spawner
     for proj in projs_on_hurt:
         var stats_caches: RangedWeaponStats = null
@@ -260,15 +271,27 @@ func _yztato_chal_ready() -> void:
 
     if RunData.current_wave >= 20 and \
     RunData.get_player_character(player_index).my_id == "character_multitasker":
-        ChallengeService.try_complete_challenge(Utils.chal_more_than_enough_hash, RunData.get_free_weapon_slots(player_index))
+        ChallengeService.try_complete_challenge(
+            Utils.chal_more_than_enough_hash,
+            RunData.get_free_weapon_slots(player_index)
+        )
 
 func _yztato_chal_on_consumable_picked_up() -> void:
     var player_data = RunData.players_data[player_index]
-    consumables_picked_up_this_wave = player_data.consumables_picked_up_this_run - consumables_picked_up_last_wave
-    ChallengeService.try_complete_challenge(Utils.chal_only_in_hash, consumables_picked_up_this_wave)
+    consumables_picked_up_this_wave = (
+        player_data.consumables_picked_up_this_run
+        - consumables_picked_up_last_wave
+    )
+    ChallengeService.try_complete_challenge(
+        Utils.chal_only_in_hash,
+        consumables_picked_up_this_wave
+    )
 
 func _yztato_lose_hp_per_second_min_hp() -> bool:
-    var lose_hp_per_second_min_hp: int = RunData.get_player_effect(Utils.yztato_lose_hp_per_second_min_hp_hash, player_index)
+    var lose_hp_per_second_min_hp: int = RunData.get_player_effect(
+        Utils.yztato_lose_hp_per_second_min_hp_hash,
+        player_index
+    )
     if lose_hp_per_second_min_hp <= 0:
         return false
 
@@ -277,7 +300,10 @@ func _yztato_lose_hp_per_second_min_hp() -> bool:
     _take_damage_args.bypass_invincibility = true
     _take_damage_args.from = self
 
-    var lose_hp_per_second: int = RunData.get_player_effect(Keys.lose_hp_per_second_hash, player_index)
+    var lose_hp_per_second: int = RunData.get_player_effect(
+        Keys.lose_hp_per_second_hash,
+        player_index
+    )
     if current_stats.health - lose_hp_per_second <= lose_hp_per_second_min_hp:
         lose_hp_per_second = current_stats.health - lose_hp_per_second_min_hp
 

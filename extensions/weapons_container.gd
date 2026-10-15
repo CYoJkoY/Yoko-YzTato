@@ -98,7 +98,10 @@ func _yztato_blade_storm_positions(weapons: Array) -> bool:
         var angle_step: float = TAU / count
         for i in count:
             var angle: float = i * angle_step
-            var pos: Vector2 = Vector2(radius * cos(angle) * attack_range, radius * sin(angle) * attack_range)
+            var pos: Vector2 = Vector2(
+                radius * cos(angle) * attack_range,
+                radius * sin(angle) * attack_range
+            )
             weapons[i].attach(pos, angle)
             weapons[i].enable_hitbox()
         return true

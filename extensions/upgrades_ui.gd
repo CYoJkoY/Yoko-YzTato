@@ -7,20 +7,27 @@ func _on_choose_button_pressed(upgrade_data: UpgradeData, player_index: int) -> 
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_extra_upgrade(player_index: int) -> void:
-    var extra_upgrades: Array = RunData.get_player_effect(Utils.yztato_extra_upgrade_hash, player_index)
-    if extra_upgrades.empty(): return
+    var extra_upgrades: Array = RunData.get_player_effect(
+        Utils.yztato_extra_upgrade_hash,
+        player_index
+    )
+    if extra_upgrades.empty():
+        return
 
     for extra_upgrade in extra_upgrades:
         var tracking_key_hash: int = extra_upgrade[0]
         var extra_upgrade_chance: float = extra_upgrade[1] / 100.0
 
-        if !Utils.get_chance_success(extra_upgrade_chance): continue
+        if !Utils.get_chance_success(extra_upgrade_chance):
+            continue
 
         RunData.add_tracked_value(player_index, tracking_key_hash, 1)
 
         var level: int = RunData.get_player_level(player_index)
         var main: Node = Utils.get_scene_node()
-        var upgrades: BoxContainer = main._things_to_process_player_containers[player_index].upgrades
+        var upgrades: BoxContainer = (
+            main._things_to_process_player_containers[player_index].upgrades
+        )
 
         upgrades.add_element(ItemService.get_icon(Keys.icon_upgrade_to_process_hash), level)
 

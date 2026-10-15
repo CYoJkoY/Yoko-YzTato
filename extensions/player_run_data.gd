@@ -27,8 +27,8 @@ static func init_effects() -> Dictionary:
             Utils.yztato_melee_erase_bullets_hash: 0,
             Utils.yztato_melee_bounce_bullets_hash: [],
             Utils.yztato_flying_sword_hash: {
-                0: -1,
-                1: -1
+                0: - 1,
+                1: - 1
             },
             Utils.yztato_blade_storm_hash: 0,
             Utils.yztato_leave_fire_hash: [],
@@ -56,7 +56,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_summon_lightning_hash: [],
             Utils.yztato_old_specific_tag_item_bonus_hash: {},
             Utils.yztato_specific_tag_item_bonus_hash: [],
-            Utils.yztato_triggered_subeffects:[],
+            Utils.yztato_triggered_subeffects: [],
             Utils.yztato_trigger_subeffect_on_specific_stat_over_hash: [],
             Utils.yztato_projectiles_on_hurt_hash: [],
             Utils.yztato_delayed_death_hash: 0,

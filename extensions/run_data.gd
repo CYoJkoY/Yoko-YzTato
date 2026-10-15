@@ -2,7 +2,8 @@ extends "res://singletons/run_data.gd"
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func manage_life_steal(weapon_stats: WeaponStats, player_index: int) -> void:
-    if _yztato_life_steal(weapon_stats, player_index): return
+    if _yztato_life_steal(weapon_stats, player_index):
+        return
 
     .manage_life_steal(weapon_stats, player_index)
 
@@ -13,7 +14,8 @@ func update_item_related_effects(player_index: int) -> void:
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_life_steal(weapon_stats: WeaponStats, player_index: int) -> bool:
     var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
-    if life_steal == 0: return false
+    if life_steal == 0:
+        return false
 
     var true_lifesteal: float = max(weapon_stats.damage * (life_steal / 100), 1.0)
     if Utils.get_chance_success(weapon_stats.lifesteal):
@@ -40,13 +42,15 @@ func _yztato_update_specific_tag_item_bonuses(player_index: int) -> void:
     for effect in effects[Utils.yztato_specific_tag_item_bonus_hash]:
         var tag: String = effect[2]
         var tag_count: int = specific_tag_item_bonuses.get(tag, 0)
-        if tag_count == 0: continue
+        if tag_count == 0:
+            continue
 
         var stat: int = effect[0]
         var stat_value: int = effect[1]
         var nb_scaled: int = effect[3]
         var bonus: int = stat_value * tag_count / nb_scaled
-        if bonus == 0: continue
+        if bonus == 0:
+            continue
 
         old_specific_tag_item_bonus[stat] = old_specific_tag_item_bonus.get(stat, 0) + bonus
         effects[stat] += bonus

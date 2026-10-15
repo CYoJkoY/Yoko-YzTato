@@ -13,7 +13,8 @@ func take_damage(value: int, args: TakeDamageArgs) -> Array:
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_extrusion_attack_ready() -> void:
     for player_index in RunData.get_player_count():
-        if !RunData.get_player_effect_bool(Utils.yztato_extrusion_attack_hash, player_index): continue
+        if !RunData.get_player_effect_bool(Utils.yztato_extrusion_attack_hash, player_index):
+            continue
 
         _hurtbox.collision_mask = Utils.ENEMIES_BIT + \
                                 Utils.PLAYER_PROJECTILES_BIT + \
@@ -21,9 +22,11 @@ func _yztato_extrusion_attack_ready() -> void:
                                 Utils.PET_PROJECTILES_BIT
 
 func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
-    if dead: return
+    if dead:
+        return
 
-    if enemy_id == "evil_mob": return
+    if enemy_id == "evil_mob":
+        return
 
     if args.hitbox and args.hitbox.from and (
         !(
@@ -37,6 +40,9 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     ): return
 
     if !args.hitbox or !is_instance_valid(args.hitbox) or !is_loot or \
-    !RunData.get_player_effect_bool(Utils.yztato_one_shot_loot_hash, args.hitbox.from.player_index): return
+    !RunData.get_player_effect_bool(
+        Utils.yztato_one_shot_loot_hash,
+        args.hitbox.from.player_index
+    ): return
 
     die()

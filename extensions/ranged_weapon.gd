@@ -42,11 +42,21 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
-    WeaponService.yz_gain_stat_when_killed_scaling_single(effects, _yztato_kill_count_scaling, _parent, player_index)
-    WeaponService.yz_upgrade_when_killed_enemies(effects, _enemies_killed_this_wave_count, weapon_pos, player_index)
+    WeaponService.yz_gain_stat_when_killed_scaling_single(
+        effects,
+        _yztato_kill_count_scaling,
+        _parent,
+        player_index
+    )
+    WeaponService.yz_upgrade_when_killed_enemies(
+        effects,
+        _enemies_killed_this_wave_count,
+        weapon_pos,
+        player_index
+    )
 
 func should_shoot() -> bool:
-    var should_shoot: bool = .should_shoot()
+    var should_shoot: bool =.should_shoot()
     should_shoot = WeaponService.yz_cant_attack_while_moving(effects, _parent, should_shoot)
 
     return should_shoot
@@ -127,7 +137,10 @@ func _yztato_boomerang_shoot() -> void:
         _current_cooldown = get_next_cooldown()
         _yztato_is_returning = true
 
-    if stats.custom_on_cooldown_sprite != null and (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == -1):
+    if (
+        stats.custom_on_cooldown_sprite != null
+        and (is_big_reload_active() or current_stats.additional_cooldown_every_x_shots == -1)
+    ):
         update_sprite(stats.custom_on_cooldown_sprite)
 
     if original_stats:

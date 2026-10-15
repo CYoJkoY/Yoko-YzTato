@@ -60,7 +60,11 @@ func is_manual_aim(player_index: int) -> bool:
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_blade_storm_manual_aim(is_manual: bool, player_index: int) -> bool:
-    var is_blade_storm: int = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
-    if is_blade_storm: is_manual = false
+    var is_blade_storm: int = RunData.get_player_effect_bool(
+        Utils.yztato_blade_storm_hash,
+        player_index
+    )
+    if is_blade_storm:
+        is_manual = false
 
     return is_manual

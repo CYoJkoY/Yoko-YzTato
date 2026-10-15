@@ -37,8 +37,18 @@ func on_weapon_hit_something(thing_hit: Node, damage_dealt: int, hitbox: Hitbox)
 
 func on_killed_something(_thing_killed: Node, hitbox: Hitbox) -> void:
     .on_killed_something(_thing_killed, hitbox)
-    WeaponService.yz_gain_stat_when_killed_scaling_single(effects, _yztato_kill_count_scaling, _parent, player_index)
-    WeaponService.yz_upgrade_when_killed_enemies(effects, _enemies_killed_this_wave_count, weapon_pos, player_index)
+    WeaponService.yz_gain_stat_when_killed_scaling_single(
+        effects,
+        _yztato_kill_count_scaling,
+        _parent,
+        player_index
+    )
+    WeaponService.yz_upgrade_when_killed_enemies(
+        effects,
+        _enemies_killed_this_wave_count,
+        weapon_pos,
+        player_index
+    )
 
 func update_sprite_flipv() -> void:
     if _yztato_blade_storm_enabled:
@@ -57,20 +67,23 @@ func get_direction() -> float:
     if _yztato_blade_storm_enabled:
         return _current_idle_angle
 
-    return .get_direction()
+    return.get_direction()
 
 func get_direction_and_calculate_target() -> float:
     if _yztato_blade_storm_enabled:
         return _current_idle_angle
 
-    return .get_direction_and_calculate_target()
+    return.get_direction_and_calculate_target()
 
 func shoot() -> void:
     if _yztato_blade_storm_enabled:
         return
 
     if _yztato_flying_sword_enabled:
-        var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+        var flying_sword_dict: Dictionary = RunData.get_player_effect(
+            Utils.yztato_flying_sword_hash,
+            player_index
+        )
         if not flying_sword_dict.empty():
             var qi_value: float = flying_sword_dict.get(0, -1.0)
             var array_value: float = flying_sword_dict.get(1, -1.0)
@@ -83,7 +96,7 @@ func shoot() -> void:
     .shoot()
 
 func should_shoot() -> bool:
-    var should_shoot: bool = .should_shoot()
+    var should_shoot: bool =.should_shoot()
     should_shoot = WeaponService.yz_cant_attack_while_moving(effects, _parent, should_shoot)
 
     return should_shoot
@@ -113,7 +126,10 @@ func _yztato_setup_melee_effects() -> void:
                 _yztato_init_bounce_resources()
 
 func _yztato_setup_flying_sword() -> void:
-    var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    var flying_sword_dict: Dictionary = RunData.get_player_effect(
+        Utils.yztato_flying_sword_hash,
+        player_index
+    )
     _yztato_flying_sword_enabled = not flying_sword_dict.empty()
 
 func _yztato_set_blade_storm_angle(angle: float) -> void:
@@ -121,7 +137,10 @@ func _yztato_set_blade_storm_angle(angle: float) -> void:
     _current_idle_angle = angle
 
 func _yztato_setup_blade_storm() -> void:
-    _yztato_blade_storm_enabled = RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index)
+    _yztato_blade_storm_enabled = RunData.get_player_effect_bool(
+        Utils.yztato_blade_storm_hash,
+        player_index
+    )
     if not _yztato_blade_storm_enabled:
         return
 
@@ -148,7 +167,10 @@ func _yztato_setup_blade_storm() -> void:
     scale = Vector2(max_range_ratio, max_range_ratio)
 
 func _yztato_process_flying_sword(player_index: int) -> void:
-    var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    var flying_sword_dict: Dictionary = RunData.get_player_effect(
+        Utils.yztato_flying_sword_hash,
+        player_index
+    )
     if flying_sword_dict.empty():
         return
 
@@ -165,7 +187,10 @@ func _yztato_process_flying_sword(player_index: int) -> void:
         _yztato_process_sword_array_mode(player_level)
 
 func _yztato_flying_sword_on_hit(thing_hit: Node) -> void:
-    var flying_sword_dict: Dictionary = RunData.get_player_effect(Utils.yztato_flying_sword_hash, player_index)
+    var flying_sword_dict: Dictionary = RunData.get_player_effect(
+        Utils.yztato_flying_sword_hash,
+        player_index
+    )
     if flying_sword_dict.empty():
         return
 
@@ -258,7 +283,12 @@ func _yztato_create_sword_projectile(target: Node) -> void:
         WeaponServiceSpawnProjectileArgs.new()
     )
     if not sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
-        sword_array_projectile.connect("hit_something", self, "on_weapon_hit_something", [sword_array_projectile._hitbox])
+        sword_array_projectile.connect(
+            "hit_something",
+            self,
+            "on_weapon_hit_something",
+            [sword_array_projectile._hitbox]
+        )
 
 func _yztato_move_to_target(target: Node) -> void:
     var dist_to_player: float = global_position.distance_squared_to(target.global_position)
@@ -312,7 +342,10 @@ func _yztato_connect_melee_signals(effect_type: String) -> void:
         "bounce":
             var tracking_key_hashes: Array = []
             var bounce_values: Array = []
-            var melee_bounces: Array = RunData.get_player_effect(Utils.yztato_melee_bounce_bullets_hash, player_index)
+            var melee_bounces: Array = RunData.get_player_effect(
+                Utils.yztato_melee_bounce_bullets_hash,
+                player_index
+            )
             for melee_bounce in melee_bounces:
                 tracking_key_hashes.append(melee_bounce[0])
                 bounce_values.append(melee_bounce[1])
@@ -321,7 +354,12 @@ func _yztato_connect_melee_signals(effect_type: String) -> void:
                     tracking_key_hashes.append(effect.key_hash)
                     bounce_values.append(effect.value)
             if not node_hit_box.is_connected("area_entered", self, "_yztato_on_Hitbox_area_entered_bounce"):
-                node_hit_box.connect("area_entered", self, "_yztato_on_Hitbox_area_entered_bounce", [tracking_key_hashes, bounce_values, node_hit_box])
+                node_hit_box.connect(
+                    "area_entered",
+                    self,
+                    "_yztato_on_Hitbox_area_entered_bounce",
+                    [tracking_key_hashes, bounce_values, node_hit_box]
+                )
 
 func _yztato_on_Range_area_entered(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
@@ -335,7 +373,12 @@ func _yztato_on_Hitbox_area_entered_erase(area: Area2D) -> void:
     if area.get_parent() is EnemyProjectile:
         area.hit_something(self, 0)
 
-func _yztato_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Array, bounce_values: Array, hitbox: Hitbox) -> void:
+func _yztato_on_Hitbox_area_entered_bounce(
+    area: Area2D,
+    tracking_key_hashes: Array,
+    bounce_values: Array,
+    hitbox: Hitbox
+) -> void:
     if not (area.get_parent() is EnemyProjectile):
         return
 
@@ -371,7 +414,12 @@ func _yztato_on_Hitbox_area_entered_bounce(area: Area2D, tracking_key_hashes: Ar
     for projectile in new_projectiles:
         projectile.call_deferred("set_sprite_material", _yztato_bounced_projectile_shader)
         if not projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
-            projectile.connect("hit_something", self, "on_weapon_hit_something", [projectile._hitbox])
+            projectile.connect(
+                "hit_something",
+                self,
+                "on_weapon_hit_something",
+                [projectile._hitbox]
+            )
 
     if hitbox == null:
         return

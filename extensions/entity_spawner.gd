@@ -21,7 +21,10 @@ func on_enemy_charmed(enemy: Entity) -> void:
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
     for player_index in RunData.players_data.size():
-        var effect_items: Array = RunData.get_player_effect(Utils.yztato_gain_stat_when_killed_single_scaling_hash, player_index)
+        var effect_items: Array = RunData.get_player_effect(
+            Utils.yztato_gain_stat_when_killed_single_scaling_hash,
+            player_index
+        )
         var player_killed_count: Dictionary = gain_stat_when_killed_single_scaling_killed_count[player_index]
         for effect_index in effect_items.size():
             player_killed_count[effect_index] = player_killed_count.get(effect_index, 0) + 1
@@ -34,7 +37,8 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
             var tracking_key: int = effect[5]
 
             var scaling_value = value + Utils.get_stat(scaling_stat, player_index) * scaling_percent
-            if scaling_value <= 0 or player_killed_count[effect_index] % int(scaling_value) != 0: continue
+            if scaling_value <= 0 or player_killed_count[effect_index] % int(scaling_value) != 0:
+                continue
 
             player_killed_count[effect_index] = 0 # For dynamic scaling_value
             RunData.add_stat(stat, stat_nb, player_index)
@@ -51,9 +55,13 @@ func _yztato_blood_rage_on_enemy_died() -> void:
 
 func _yztato_chal_on_enemy_died(enemy: Entity) -> void:
     ### hellfire ###
-    if enemy._is_burning: enemies_killed_is_burning += 1
+    if enemy._is_burning:
+        enemies_killed_is_burning += 1
     ChallengeService.try_complete_challenge(Utils.chal_hellfire_hash, enemies_killed_is_burning)
 
 func _yztato_chal_on_enemy_charmed(charmed_enemies: Array) -> void:
     ### dark_forest_rule ###
-    ChallengeService.try_complete_challenge(Utils.chal_dark_forest_rule_hash, charmed_enemies.size())
+    ChallengeService.try_complete_challenge(
+        Utils.chal_dark_forest_rule_hash,
+        charmed_enemies.size()
+    )
