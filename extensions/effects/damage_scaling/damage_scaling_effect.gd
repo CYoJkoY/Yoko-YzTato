@@ -3,7 +3,7 @@ extends Effect
 export(Array, Array) var scaling_stats: Array = [["stat_max_hp", 0.5]]
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func duplicate(subresources:=false) -> Resource:
+func duplicate(subresources := false) -> Resource:
     var duplication: Resource =.duplicate(subresources)
     if !scaling_stats.empty():
         scaling_stats = Utils.convert_to_hash_array(scaling_stats)
@@ -20,13 +20,15 @@ func _generate_hashes() -> void:
     scaling_stats = Utils.convert_to_hash_array(scaling_stats)
 
 func apply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([key_hash, value, scaling_stats])
 
 func unapply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, scaling_stats])
@@ -34,9 +36,17 @@ func unapply(player_index: int) -> void:
 func get_text(_player_index: int, _colored: bool = true) -> String:
     var w = 15 * ProgressData.settings.font_size
     var small_icon: Texture = ItemService.get_stat_small_icon(key_hash)
-    var str_key: String = "%s([img=%sx%s]%s[/img])" % [tr(key.to_upper()), w, w, small_icon.resource_path]
+    var str_key: String = "%s([img=%sx%s]%s[/img])" % [
+        tr(key.to_upper()),
+        w,
+        w,
+        small_icon.resource_path,
+    ]
 
-    var value_col: String = ProgressData.settings.color_positive if value > 0 else ProgressData.settings.color_negative
+    var value_col: String = (
+        ProgressData.settings.color_positive if value > 0
+        else ProgressData.settings.color_negative
+    )
     var value_text: String = str(value) if value > 0 else "-%s" % [str(value)]
     var str_value: String = "[color=%s]%s[/color]" % [value_col, value_text]
 

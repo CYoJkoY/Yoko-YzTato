@@ -5,7 +5,7 @@
   <p>
     <a href="https://github.com/CYoJkoY/Yoko-YzTato/releases"><img src="https://img.shields.io/github/v/release/CYoJkoY/Yoko-YzTato?display_name=tag&sort=semver&style=flat-square&label=release" alt="Latest release"></a>
     <a href="https://github.com/CYoJkoY/Yoko-YzTato/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/CYoJkoY/Yoko-YzTato/release.yml?style=flat-square&label=build" alt="Build status"></a>
-    <img src="https://img.shields.io/badge/Brotato-1.1.15.4-478CBF?style=flat-square" alt="Brotato 1.1.15.4">
+    <img src="https://img.shields.io/badge/Brotato-1.2.0.0-478CBF?style=flat-square" alt="Brotato 1.2.0.0">
     <img src="https://img.shields.io/badge/Mod%20Loader-6.3.0-5965FF?style=flat-square" alt="Mod Loader 6.3.0">
     <a href="LICENSE"><img src="https://img.shields.io/github/license/CYoJkoY/Yoko-YzTato?style=flat-square" alt="MIT License"></a>
   </p>
@@ -60,7 +60,7 @@ Runtime extensions remain organized around the system that owns the behavior.
 
 ## <img src="assets/readme/icons/installation.svg" width="20" height="20" alt=""> Installation
 
-Requirements: **Brotato 1.1.15.4**, **Brotato Mod Loader 6.3.0**, and [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader).
+Requirements: **Brotato 1.2.0.0**, **Brotato Mod Loader 6.3.0**, and [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader).
 
 1. Install the required game and loader versions.
 2. Install the matching NewContentLoader release.
@@ -80,7 +80,7 @@ mods-unpacked/
 
 For new content, separate resource data, runtime hooks, registration, and localization. Changes to shared runtime behavior should be tested with the complete dependency stack.
 
-`manifest.json` is authoritative for version `1.1.0`, dependencies, and the declared Brotato / Mod Loader compatibility.
+`manifest.json` is authoritative for version `1.2.0`, dependencies, and the declared Brotato / Mod Loader compatibility.
 
 <a href="https://cyojkoy.github.io/Payment/"><img src="assets/readme/support-cta.svg" alt="Support Yoko-YzTato" width="900" style="max-width:100%;height:auto;"></a>
 

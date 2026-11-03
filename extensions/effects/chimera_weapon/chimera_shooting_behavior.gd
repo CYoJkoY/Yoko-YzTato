@@ -1,17 +1,26 @@
 extends RangedWeaponShootingBehavior
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
+func shoot_projectile(
+    rotation: float = _parent.rotation,
+    knockback: Vector2 = Vector2.ZERO
+) -> Node:
     var projectile = _yztato_chimera_shoot_projectile(rotation, knockback)
 
     return projectile
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func _yztato_chimera_shoot_projectile(rotation: float = _parent.rotation, knockback: Vector2 = Vector2.ZERO) -> Node:
+func _yztato_chimera_shoot_projectile(
+    rotation: float = _parent.rotation,
+    knockback: Vector2 = Vector2.ZERO
+) -> Node:
     var projectile_index: int
     var projectile_stats: RangedWeaponStats = _parent.current_stats
     if _parent.current_chimera_projs.size() != 0:
-        projectile_index = max(0, _parent._nb_shots_taken - 1) % _parent.current_chimera_projs.size()
+        projectile_index = max(
+            0,
+            _parent._nb_shots_taken - 1
+        ) % _parent.current_chimera_projs.size()
         projectile_stats = _parent.current_chimera_projs[projectile_index]
 
     var args = WeaponServiceSpawnProjectileArgs.new()
@@ -38,13 +47,22 @@ func _yztato_chimera_shoot_projectile(rotation: float = _parent.rotation, knockb
     return projectile
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
-func _yztato_modify_projectile(projectile_stats: RangedWeaponStats, args: WeaponServiceSpawnProjectileArgs) -> Array:
+func _yztato_modify_projectile(
+    projectile_stats: RangedWeaponStats,
+    args: WeaponServiceSpawnProjectileArgs
+) -> Array:
     for effect in _parent.effects:
         if effect.get_id() == "yztato_chimera_weapon":
-            var projectile_index = (_parent._nb_shots_taken - 1) % _parent.current_chimera_projs.size()
+            var projectile_index = (
+                (_parent._nb_shots_taken - 1)
+                % _parent.current_chimera_projs.size()
+            )
             var chimera_texture_sets = _parent.current_chimera_texture_sets
             if projectile_index >= _parent.current_chimera_projs_textures_paths.size():
-                projectile_index = projectile_index % _parent.current_chimera_projs_textures_paths.size()
+                projectile_index = (
+                    projectile_index
+                    % _parent.current_chimera_projs_textures_paths.size()
+                )
             if _parent.current_chimera_projs_textures_paths.empty():
                 return [projectile_stats, args]
             var texture_path = _parent.current_chimera_projs_textures_paths[projectile_index]

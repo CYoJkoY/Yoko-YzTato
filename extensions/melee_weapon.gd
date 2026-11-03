@@ -1,5 +1,10 @@
 extends "res://weapons/melee/melee_weapon.gd"
 
+const YZTATO_PROJECTILE_STATS = preload("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres")
+const YZTATO_PROJECTILE_SCENE: PackedScene = preload("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
+const YZTATO_SWORD_ARRAY_TEXTURE: Texture = preload("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sword_array/sword_array.webp")
+const YZTATO_HUE_SHIFT_SHADER: ShaderMaterial = preload("res://resources/shaders/hue_shift_shadermat.tres")
+
 # ══════════════════════════════════════════ Variables ══════════════════════════════════════════ #
 var _yztato_blade_storm_enabled: bool = false
 var _yztato_flying_sword_enabled: bool = false
@@ -203,17 +208,17 @@ func _yztato_init_bounce_resources() -> void:
     if _yztato_bounced_projectile_stats != null:
         return
 
-    _yztato_bounced_projectile_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres").duplicate()
-    _yztato_bounced_projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
+    _yztato_bounced_projectile_stats = YZTATO_PROJECTILE_STATS.duplicate()
+    _yztato_bounced_projectile_scene = YZTATO_PROJECTILE_SCENE.duplicate()
     _yztato_bounced_projectile_stats.can_bounce = false
     _yztato_bounced_projectile_stats.piercing = 99
     _yztato_bounced_projectile_stats.max_range = Utils.LARGE_NUMBER
     _yztato_bounced_projectile_stats.projectile_speed = 2000
-    _yztato_bounced_projectile_stats.projectile_scene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn")
+    _yztato_bounced_projectile_stats.projectile_scene = YZTATO_PROJECTILE_SCENE
     _yztato_bounce_args = WeaponServiceSpawnProjectileArgs.new()
     _yztato_bounce_args.from_player_index = player_index
     _yztato_bounce_args.deferred = true
-    _yztato_bounced_projectile_shader = load("res://resources/shaders/hue_shift_shadermat.tres")
+    _yztato_bounced_projectile_shader = YZTATO_HUE_SHIFT_SHADER.duplicate()
     _yztato_bounced_projectile_shader.set_shader_param("hue", 0.55)
     _yztato_bounced_projectile_shader.set_shader_param("desaturation", 0.0)
 
@@ -262,7 +267,7 @@ func _yztato_create_sword_projectile(target: Node) -> void:
     var direction_to_target: float = (target.global_position - project_position).angle()
 
     if _yztato_sword_array_stats == null:
-        _yztato_sword_array_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres").duplicate()
+        _yztato_sword_array_stats = YZTATO_PROJECTILE_STATS.duplicate()
         _yztato_sword_array_stats.damage = current_stats.damage
         _yztato_sword_array_stats.crit_chance = current_stats.crit_chance
         _yztato_sword_array_stats.crit_damage = current_stats.crit_damage
@@ -271,8 +276,8 @@ func _yztato_create_sword_projectile(target: Node) -> void:
         _yztato_sword_array_stats.max_range = 300
         _yztato_sword_array_stats.can_bounce = false
 
-        var modified_scene: PackedScene = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_projectile.tscn").duplicate()
-        modified_scene._bundled["variants"][2] = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/sword_array/sword_array.webp")
+        var modified_scene: PackedScene = YZTATO_PROJECTILE_SCENE.duplicate()
+        modified_scene._bundled["variants"][2] = YZTATO_SWORD_ARRAY_TEXTURE
         _yztato_sword_array_stats.projectile_scene = modified_scene
 
     var sword_array_projectile: Node = WeaponService.spawn_projectile(
@@ -325,7 +330,7 @@ func _yztato_get_idle_position() -> Vector2:
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func _yztato_connect_melee_signals(effect_type: String) -> void:
     var node_range: Area2D = $Range
-    node_range.collision_mask += Utils.ENEMY_PROJECTILES_BIT
+    node_range.collision_mask |= Utils.ENEMY_PROJECTILES_BIT
     if not node_range.is_connected("area_entered", self, "_yztato_on_Range_area_entered"):
         node_range.connect("area_entered", self, "_yztato_on_Range_area_entered")
     if not node_range.is_connected("area_exited", self, "_yztato_on_Range_area_exited"):
@@ -333,7 +338,7 @@ func _yztato_connect_melee_signals(effect_type: String) -> void:
 
     var node_hit_box: Hitbox = $Sprite/Hitbox
     node_hit_box.monitoring = true
-    node_hit_box.collision_mask += Utils.ENEMY_PROJECTILES_BIT
+    node_hit_box.collision_mask |= Utils.ENEMY_PROJECTILES_BIT
 
     match effect_type:
         "erase":

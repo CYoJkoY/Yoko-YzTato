@@ -1,6 +1,9 @@
 extends Effect
 
-enum ModeType {Qi, SwordArray}
+enum ModeType {
+    Qi,
+    SwordArray,
+}
 
 export(ModeType) var mode_type = ModeType.Qi
 
@@ -9,13 +12,15 @@ static func get_id() -> String:
     return "yztato_flying_sword"
 
 func apply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash][mode_type] = value
 
 func unapply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash][mode_type] = -1

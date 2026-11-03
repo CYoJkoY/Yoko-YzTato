@@ -25,7 +25,8 @@ func _process(delta):
         distortion_intensity = lerp(distortion_intensity, 0.0, fade_speed * delta)
         material.set_shader_param("distortion_intensity", distortion_intensity)
 
-        if distortion_intensity < 0.01: visible = false
+        if distortion_intensity < 0.01:
+            visible = false
 
 func start_blood_rage(intensity: float = 0.5):
     active = true

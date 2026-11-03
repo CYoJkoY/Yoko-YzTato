@@ -11,6 +11,7 @@ var _yztato_is_boomerang: bool = false
 var _yztato_is_returning: bool = false
 var _yztato_knockback_only_back: bool = false
 var _yztato_wait_until_return: bool = true
+var _yztato_chimera_visuals_initialized: bool = false
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready() -> void:
@@ -63,19 +64,27 @@ func should_shoot() -> bool:
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_init_chimera_stats() -> void:
+    _yztato_chimera_projs.clear()
+
     for effect in effects:
         if effect.get_id() != "yztato_chimera_weapon":
             continue
 
+        if not _yztato_chimera_visuals_initialized:
+            for proj_stats in effect.chimera_projectile_stats:
+                var projectile_instance = proj_stats.projectile_scene.instance()
+                var sprite_node = projectile_instance.get_node_or_null("Sprite")
+                if sprite_node != null and sprite_node.texture != null:
+                    _yztato_chimera_texture_paths.append(sprite_node.texture.resource_path)
+                projectile_instance.queue_free()
+
+            for proj_texture_set in effect.chimera_texture_sets:
+                _yztato_chimera_texture_sets.append(proj_texture_set)
+
+            _yztato_chimera_visuals_initialized = true
+
         for proj_stats in effect.chimera_projectile_stats:
-            var projectile_instance = proj_stats.projectile_scene.instance()
-            var sprite_node = projectile_instance.get_node_or_null("Sprite")
-            if sprite_node:
-                _yztato_chimera_texture_paths.append(sprite_node.texture.resource_path)
-            projectile_instance.queue_free()
             _yztato_chimera_projs.append(WeaponService.init_ranged_stats(proj_stats, player_index))
-        for proj_texture_set in effect.chimera_texture_sets:
-            _yztato_chimera_texture_sets.append(proj_texture_set)
 
         break
 

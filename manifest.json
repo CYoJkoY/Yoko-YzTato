@@ -1,31 +1,19 @@
 {
   "name": "YzTato",
   "namespace": "Yoko",
-  "version_number": "1.2.0",
+  "version_number": "1.3.0",
   "description": "A content-heavy Brotato expansion adding custom characters, weapons, items, enemies, challenges, maps, effects, and gameplay systems.",
   "website_url": "",
-  "dependencies": [
-    "Yoko-NewContentLoader"
-  ],
+  "dependencies": ["Yoko-NewContentLoader"],
   "extra": {
     "godot": {
-      "authors": [
-        "Yoko"
-      ],
+      "authors": ["Yoko"],
       "optional_dependencies": [],
-      "compatible_game_version": [
-        "1.1.15.4"
-      ],
-      "compatible_mod_loader_version": [
-        "6.3.0"
-      ],
+      "compatible_game_version": ["1.2.0.0"],
+      "compatible_mod_loader_version": ["6.3.0"],
       "incompatibilities": [],
       "load_before": [],
-      "tags": [
-        "content-expansion",
-        "gameplay",
-        "brotato"
-      ],
+      "tags": ["content-expansion", "gameplay", "brotato"],
       "config_schema": {},
       "description_rich": "A content-heavy Brotato expansion adding custom characters, weapons, items, enemies, challenges, maps, effects, and gameplay systems.",
       "image": null

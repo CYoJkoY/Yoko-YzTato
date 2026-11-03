@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://items/all/ritual/ritual_icon.png" type="Texture" id=1]
+[ext_resource path="res://items/all/00_base_game/ritual/ritual_icon.png" type="Texture" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/jiangchen/jiangchen_data.tres" type="Resource" id=2]
 [ext_resource path="res://challenges/global/challenge_data.gd" type="Script" id=3]
 

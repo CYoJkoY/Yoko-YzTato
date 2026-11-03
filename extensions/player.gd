@@ -19,6 +19,10 @@ var _death_blink_phase: float = 0.0
 
 var _yztato_blade_storm_initialized: bool = false
 var _yztato_blade_storm_angle_offset: float = 0.0
+var _yztato_blade_storm_enabled: bool = false
+var _yztato_blade_storm_attack_speed: float = 0.0
+var _yztato_blade_storm_refresh_timer: float = 0.0
+var _yztato_blade_storm_weapon_count: int = -1
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func _ready() -> void:
@@ -29,7 +33,7 @@ func _process(delta: float) -> void:
     _yztato_delayed_death_process(delta)
 
 func _physics_process(delta: float) -> void:
-    _yztato_blade_storm_attack_speed(delta)
+    _yztato_calculate_blade_storm_attack_speed(delta)
 
 func on_lifesteal_effect(value: int) -> void:
     var life_steal: int = RunData.get_player_effect(Utils.yztato_life_steal_hash, player_index)
@@ -41,6 +45,9 @@ func on_lifesteal_effect(value: int) -> void:
 
 func take_damage(value: int, args: TakeDamageArgs) -> Array:
     var result: Array =.take_damage(value, args)
+    if result.size() < 2 or result[1] <= 0:
+        return result
+
     _yztato_heal_on_damage_taken(result)
     _yztato_temp_stats_per_interval_reset_on_hit(result)
     _yztato_projectiles_on_hurt(result)
@@ -80,14 +87,31 @@ func on_consumable_picked_up(consumable_data: ConsumableData) -> void:
     _yztato_chal_on_consumable_picked_up()
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func _yztato_blade_storm_attack_speed(delta: float) -> void:
+func _yztato_calculate_blade_storm_attack_speed(delta: float) -> void:
     if dead:
         return
 
-    if !RunData.get_player_effect_bool(Utils.yztato_blade_storm_hash, player_index):
+    var weapon_count: int = current_weapons.size()
+    _yztato_blade_storm_refresh_timer -= delta
+    if (
+        _yztato_blade_storm_refresh_timer <= 0.0
+        or weapon_count != _yztato_blade_storm_weapon_count
+    ):
+        _yztato_blade_storm_refresh_timer = 0.25
+        _yztato_blade_storm_weapon_count = weapon_count
+        _yztato_blade_storm_enabled = RunData.get_player_effect_bool(
+            Utils.yztato_blade_storm_hash,
+            player_index
+        )
+        if _yztato_blade_storm_enabled:
+            _yztato_blade_storm_attack_speed = Utils.get_stat(
+                Keys.stat_attack_speed_hash,
+                player_index
+            )
+
+    if not _yztato_blade_storm_enabled:
         return
 
-    var weapon_count: int = current_weapons.size()
     if weapon_count <= 0:
         return
 
@@ -108,8 +132,7 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     var health_multiplier: float = pow(health_ratio, -0.35)
 
     # Attack Speed Factor
-    var attack_speed: float = Utils.get_stat(Keys.stat_attack_speed_hash, player_index)
-    var attack_speed_multiplier: float = max(0.5, 1.0 + attack_speed / 100.0)
+    var attack_speed_multiplier: float = max(0.5, 1.0 + _yztato_blade_storm_attack_speed / 100.0)
     attack_speed_multiplier = clamp(attack_speed_multiplier, 0.5, 5.0)
 
     # Final Calculation
@@ -136,7 +159,7 @@ func _yztato_blade_storm_attack_speed(delta: float) -> void:
     var radius: float = 100.0 if weapon_count <= 6 else 100.0 + (weapon_count - 6) * 10.0
     for i in range(weapon_count):
         var weapon: Weapon = current_weapons[i]
-        if not weapon:
+        if not is_instance_valid(weapon):
             continue
         var weapon_angle: float = _yztato_blade_storm_angle_offset + i * angle_step
         var outward: Vector2 = Vector2(cos(weapon_angle), sin(weapon_angle))

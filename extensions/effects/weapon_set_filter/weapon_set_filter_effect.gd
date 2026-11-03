@@ -4,7 +4,7 @@ export(String) var set_id: String = ""
 var set_id_hash: int = Keys.empty_hash
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func duplicate(subresources:=false) -> Resource:
+func duplicate(subresources := false) -> Resource:
     var duplication =.duplicate(subresources)
     if set_id_hash == Keys.empty_hash and set_id != "":
         set_id_hash = Keys.generate_hash(set_id)
@@ -21,13 +21,15 @@ func _generate_hashes() -> void:
     set_id_hash = Keys.generate_hash(set_id)
 
 func apply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append(set_id_hash)
 
 func unapply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase(set_id_hash)

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" load_steps=4 format=2]
 
-[ext_resource path="res://items/all/bloody_hand/bloody_hand_icon.png" type="Texture" id=1]
+[ext_resource path="res://items/all/00_base_game/bloody_hand/bloody_hand_icon.png" type="Texture" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/berserker/berserker_data.tres" type="Resource" id=2]
 [ext_resource path="res://challenges/global/challenge_data.gd" type="Script" id=3]
 

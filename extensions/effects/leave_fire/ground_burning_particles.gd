@@ -32,8 +32,10 @@ func activate(position: Vector2, data: BurningData) -> void:
     global_position = position
     burning_data = data
 
-    if burning_data != null: field_dmg = int(max(1, burning_data.damage * 0.5))
-    else: field_dmg = 1
+    if burning_data != null:
+        field_dmg = int(max(1, burning_data.damage * 0.5))
+    else:
+        field_dmg = 1
 
     is_active = true
     emitting = true
@@ -61,12 +63,15 @@ func _on_Timer_timeout() -> void:
         deactivate()
 
 func _on_RefreshTimer_timeout() -> void:
-    if burning_data == null: return
+    if burning_data == null:
+        return
 
-    if burning_data.spread > 0: burning_data.spread = 0
+    if burning_data.spread > 0:
+        burning_data.spread = 0
 
     for body in bodies:
-        if !is_instance_valid(body): continue
+        if !is_instance_valid(body):
+            continue
 
         for player_index in RunData.players_data.size():
             var args = TakeDamageArgs.new(player_index)

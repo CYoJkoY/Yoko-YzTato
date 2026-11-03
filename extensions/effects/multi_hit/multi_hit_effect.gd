@@ -7,13 +7,15 @@ static func get_id() -> String:
     return "yztato_multi_hit"
 
 func apply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([value, damage_percent])
 
 func unapply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([value, damage_percent])

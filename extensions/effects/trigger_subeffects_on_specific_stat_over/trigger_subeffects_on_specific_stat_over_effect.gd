@@ -1,6 +1,13 @@
 extends Effect
 
-enum StatOverType {EQUAL, UP_E, DOWN_E, UP, DOWN, EQUAL_MULTI}
+enum StatOverType {
+    EQUAL,
+    UP_E,
+    DOWN_E,
+    UP,
+    DOWN,
+    EQUAL_MULTI,
+}
 
 export(Array, Resource) var sub_effects
 export(Array, StatOverType) var over_types
@@ -11,12 +18,14 @@ static func get_id() -> String:
     return "yztato_trigger_subeffect_on_specific_stat_over"
 
 func apply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     RunData.get_player_effect(custom_key_hash, player_index).append(self)
 
 func unapply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     RunData.get_player_effect(custom_key_hash, player_index).erase(self)
 
@@ -31,16 +40,24 @@ func get_args(_player_index: int) -> Array:
         var str_over_type: String = ""
 
         match stat_over_value:
-            Utils.LARGE_NUMBER: str_stat_over_value = tr("YZTATO_ANY_INT")
-            _: str_stat_over_value = str(stat_over_values[i])
+            Utils.LARGE_NUMBER:
+                str_stat_over_value = tr("YZTATO_ANY_INT")
+            _:
+                str_stat_over_value = str(stat_over_values[i])
 
         match over_type:
-            0: str_over_type = tr("YZTATO_EQUAL").format([str_stat_over_value]) # Equal
-            1: str_over_type = tr("YZTATO_UP_E").format([str_stat_over_value]) # Up_E
-            2: str_over_type = tr("YZTATO_DOWN_E").format([str_stat_over_value]) # Down_E
-            3: str_over_type = tr("YZTATO_UP").format([str_stat_over_value]) # Up
-            4: str_over_type = tr("YZTATO_DOWN").format([str_stat_over_value]) # Down
-            5: str_over_type = tr("YZTATO_EQUAL_MULTI").format([str_stat_over_value]) # Equal Multi
+            0:
+                str_over_type = tr("YZTATO_EQUAL").format([str_stat_over_value]) # Equal
+            1:
+                str_over_type = tr("YZTATO_UP_E").format([str_stat_over_value]) # Up_E
+            2:
+                str_over_type = tr("YZTATO_DOWN_E").format([str_stat_over_value]) # Down_E
+            3:
+                str_over_type = tr("YZTATO_UP").format([str_stat_over_value]) # Up
+            4:
+                str_over_type = tr("YZTATO_DOWN").format([str_stat_over_value]) # Down
+            5:
+                str_over_type = tr("YZTATO_EQUAL_MULTI").format([str_stat_over_value]) # Equal Multi
 
         var w: int = 20 * ProgressData.settings.font_size
         sub_effects_text += "[img=%sx%s]%s[/img] [color=%s]%s[/color]: %s\n" % [
@@ -58,7 +75,7 @@ func serialize() -> Dictionary:
 
     var serialized_sub_effects: Array = []
     for sub_effect in sub_effects:
-        var data: Dictionary= sub_effect.serialize()
+        var data: Dictionary = sub_effect.serialize()
         data["_script"] = sub_effect.get_script().resource_path
         serialized_sub_effects.append(data)
 

@@ -11,7 +11,7 @@ export(Array, Array) var stats_change: Array = [
 var stats_change_hashes: Array = []
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func duplicate(subresources:=false) -> Resource:
+func duplicate(subresources := false) -> Resource:
     var duplication =.duplicate(subresources)
     if stats_change_hashes.empty() and !stats_change.empty():
         stats_change_hashes = Utils.convert_to_hash_array(stats_change)
@@ -28,13 +28,15 @@ func _generate_hashes() -> void:
     stats_change_hashes = Utils.convert_to_hash_array(stats_change)
 
 func apply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].append([interval, duration, stats_change_hashes])
 
 func unapply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([interval, duration, stats_change_hashes])

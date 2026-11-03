@@ -2,7 +2,7 @@
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/gluttony/gluttony_data.tres" type="Resource" id=1]
 [ext_resource path="res://challenges/global/challenge_data.gd" type="Script" id=2]
-[ext_resource path="res://items/all/broken_mouth/broken_mouth_icon.png" type="Texture" id=3]
+[ext_resource path="res://items/all/00_base_game/broken_mouth/broken_mouth_icon.png" type="Texture" id=3]
 
 [resource]
 script = ExtResource( 2 )

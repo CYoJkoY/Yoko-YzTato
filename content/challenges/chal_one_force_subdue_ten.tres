@@ -2,7 +2,7 @@
 
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/chi_sword_wielder/chi_sword_wielder_data.tres" type="Resource" id=1]
 [ext_resource path="res://challenges/global/challenge_data.gd" type="Script" id=2]
-[ext_resource path="res://items/all/giant_belt/giant_belt_icon.png" type="Texture" id=3]
+[ext_resource path="res://items/all/00_base_game/giant_belt/giant_belt_icon.png" type="Texture" id=3]
 
 [resource]
 script = ExtResource( 2 )

@@ -1,5 +1,7 @@
 extends "res://zones/wave_manager.gd"
 
+var _yztato_group_data_cache: Dictionary = {}
+
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func init(p_wave_timer: Timer, zone_data: ZoneData, wave_data: Resource) -> void:
     .init(p_wave_timer, zone_data, wave_data)
@@ -12,7 +14,13 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
         var extra_enemies_effects: Array = effects[Utils.yztato_extra_enemies_next_waves_hash]
         var remaining_effects = []
         for effect in extra_enemies_effects:
-            var group_data = load(effect[0])
+            var group_path: String = effect[0]
+            var group_data: Resource = _yztato_group_data_cache.get(group_path)
+            if group_data == null:
+                group_data = load(group_path)
+                if group_data == null:
+                    continue
+                _yztato_group_data_cache[group_path] = group_data
             var group_count = effect[1]
             var waves_remaining = effect[2]
             var tracking_key_hash = effect[3]

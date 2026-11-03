@@ -12,19 +12,25 @@ static func get_id() -> String:
     return "yztato_vine_trap"
 
 func apply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].append([trap_count, chance, self])
 
 func unapply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([trap_count, chance, self])
 
 func get_args(player_index: int) -> Array:
-    var init_stats: RangedWeaponStats = WeaponService.init_structure_stats(stats, player_index, _init_stats_args_structure)
+    var init_stats: RangedWeaponStats = WeaponService.init_structure_stats(
+        stats,
+        player_index,
+        _init_stats_args_structure
+    )
     var damage_text: String = Utils.ncl_get_dmg_text_with_scaling_stats(
         init_stats.damage, init_stats.scaling_stats,
         {

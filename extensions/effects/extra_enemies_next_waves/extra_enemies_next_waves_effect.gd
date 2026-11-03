@@ -7,7 +7,7 @@ export(String) var tracking_key = ""
 var tracking_key_hash: int = Keys.empty_hash
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func duplicate(subresources:=false) -> Resource:
+func duplicate(subresources := false) -> Resource:
     var duplication =.duplicate(subresources)
     if tracking_key_hash == Keys.empty_hash and tracking_key != "":
         tracking_key_hash = Keys.generate_hash(tracking_key)
@@ -31,7 +31,8 @@ func apply(player_index: int) -> void:
     effects[key_hash].append([extra_group_data.resource_path, value, waves, tracking_key_hash])
 
 func unapply(player_index: int) -> void:
-    if key_hash == Keys.empty_hash: return
+    if key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[key_hash].erase([extra_group_data.resource_path, value, waves, tracking_key_hash])
@@ -40,7 +41,10 @@ func get_args(_player_index: int) -> Array:
     var args: Array =.get_args(_player_index)
     var str_waves: String = "∞" if waves >= 999 else str(waves)
     var enemy_name: String = tr(name.to_upper())
-    var remaining_waves: int = RunData.ncl_get_effect_tracking_value(tracking_key_hash, _player_index)
+    var remaining_waves: int = RunData.ncl_get_effect_tracking_value(
+        tracking_key_hash,
+        _player_index
+    )
     var tracking: String = Utils.ncl_create_tracking("TRACKING_REMAINING", remaining_waves, true)
 
     args.append(str_waves)

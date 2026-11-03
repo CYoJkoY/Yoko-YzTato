@@ -8,13 +8,15 @@ static func get_id() -> String:
     return "yztato_specific_tag_item_bonus"
 
 func apply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].append([key_hash, value, tag, tag_nb])
 
 func unapply(player_index: int) -> void:
-    if custom_key_hash == Keys.empty_hash: return
+    if custom_key_hash == Keys.empty_hash:
+        return
 
     var effects: Dictionary = RunData.get_player_effects(player_index)
     effects[custom_key_hash].erase([key_hash, value, tag, tag_nb])
@@ -28,7 +30,8 @@ func get_args(_player_index: int) -> Array:
     var bonus_value: int = 0
     for item in items:
         for item_tag in item.tags:
-            if item_tag != tag: continue
+            if item_tag != tag:
+                continue
 
             nb_specific_tag_items += 1
 
