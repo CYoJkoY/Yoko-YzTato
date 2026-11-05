@@ -17,13 +17,14 @@ var knockback_only_back: bool = false
 func _physics_process(_delta: float):
     _yztato_boomerang_physics_process()
 
-func stop() -> void:
+func stop(from_screen_border: bool = false) -> void:
     if _enable_stop_delay:
         return
 
     emit_signal("returned_to_player", self)
     is_returning = false
-    .stop()
+
+    .stop(from_screen_border)
 
 func _set_time_until_max_range() -> void:
     ._set_time_until_max_range()

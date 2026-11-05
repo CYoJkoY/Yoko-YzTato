@@ -1,4 +1,4 @@
-[gd_resource type="Resource" load_steps=186 format=2]
+[gd_resource type="Resource" load_steps=188 format=2]
 
 [ext_resource path="res://mods-unpacked/Yoko-NewContentLoader/NewContent.gd" type="Script" id=1]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/characters/minotaur/minotaur_data.tres" type="Resource" id=2]
@@ -56,6 +56,8 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/bounce_device/bounce_device_data.tres" type="Resource" id=54]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/items/smaller_map/smaller_map_data.tres" type="Resource" id=55]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/1/chuchanyi_data.tres" type="Resource" id=56]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/title_screen/content_set/yztato_icon.webp" type="Texture" id=57]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/title_screen/content_set/yztato_logo.webp" type="Texture" id=58]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/3/xingyunbishou_3_data.tres" type="Resource" id=61]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/melee/xingyunbishou/4/xingyunbishou_4_data.tres" type="Resource" id=65]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/3/banbochangdi_3_data.tres" type="Resource" id=68]
@@ -188,6 +190,9 @@
 
 [resource]
 script = ExtResource( 1 )
+content_name = "YZTATO_CONTENT_NAME"
+content_icon = ExtResource( 57 )
+content_logo = ExtResource( 58 )
 my_id = ""
 groups_in_all_zones = [  ]
 music_tracks = [  ]
