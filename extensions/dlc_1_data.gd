@@ -7,23 +7,24 @@ func curse_item(
     turn_randomization_off: bool = false,
     min_modifier: float = 0.0
 ) -> ItemParentData:
-    var already_cursed: bool = item_data.is_cursed
+    var can_be_cursed: bool = ItemService.can_item_be_cursed(item_data)
     var cursed_item_data: ItemParentData =.curse_item(
         item_data,
         player_index,
         turn_randomization_off,
         min_modifier
     )
-    if already_cursed:
+    if not can_be_cursed:
         return cursed_item_data
+
     return _yztato_curse_item(cursed_item_data, player_index, turn_randomization_off, min_modifier)
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_curse_item(
     cursed_item_data: ItemParentData,
     _player_index: int,
-    turn_randomization_off: bool = false,
-    min_modifier: float = 0.0
+    turn_randomization_off: bool,
+    min_modifier: float
 ) -> ItemParentData:
     if not has_effect_yztato(cursed_item_data.effects):
         return cursed_item_data
@@ -40,7 +41,9 @@ func _yztato_curse_item(
             turn_randomization_off,
             min_modifier
         )
+
         var new_effect: Effect = effect.duplicate()
+
         var id: String = new_effect.get_id()
         var key: int = new_effect.key_hash
         var cskey: int = new_effect.custom_key_hash
@@ -192,8 +195,7 @@ func _yztato_curse_item(
 
         new_effects.append(new_effect)
     new_item_data.effects = new_effects
-
-    return new_item_data as ItemParentData
+    return new_item_data
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func has_effect_yztato(effects: Array) -> bool:
@@ -203,6 +205,8 @@ func has_effect_yztato(effects: Array) -> bool:
     return false
 
 func is_effect_yztato(effect: Effect) -> bool:
-    return effect.get_id().begins_with("yztato") or \
-    effect.key.begins_with("yztato") or \
-    effect.custom_key.begins_with("yztato")
+    return (
+        effect.get_id().begins_with("yztato")
+        or effect.key.begins_with("yztato")
+        or effect.custom_key.begins_with("yztato")
+    )
