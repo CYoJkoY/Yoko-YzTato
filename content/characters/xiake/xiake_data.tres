@@ -20,6 +20,7 @@
 
 [resource]
 script = ExtResource( 12 )
+required_item_set = "Yoko-YzTato"
 my_id = "character_yztato_xiake"
 unlocked_by_default = false
 can_be_looted = true

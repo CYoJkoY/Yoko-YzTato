@@ -58,6 +58,8 @@ Runtime extensions remain organized around the system that owns the behavior.
 
 `mod_main.gd` is the runtime entry point.
 
+All YzTato characters declare `required_item_set = "Yoko-YzTato"`, so the game applies its standard disabled-set checks to character selection. Items and weapons use the same registered set for starting-equipment availability and shop pools. Re-enabling the set preserves unlock progress.
+
 ## <img src="assets/readme/icons/installation.svg" width="20" height="20" alt=""> Installation
 
 Requirements: **Brotato 1.2.0.0**, **Brotato Mod Loader 6.3.0**, and [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader).
@@ -80,7 +82,9 @@ mods-unpacked/
 
 For new content, separate resource data, runtime hooks, registration, and localization. Changes to shared runtime behavior should be tested with the complete dependency stack.
 
-`manifest.json` is authoritative for version `1.2.0`, dependencies, and the declared Brotato / Mod Loader compatibility.
+`manifest.json` is authoritative for version `1.3.2`, dependencies, and the declared Brotato / Mod Loader compatibility.
+
+Validate registered content ownership with `python tests/check_item_set.py`. From a working Brotato project with Mod Loader, NewContentLoader and the required DLC available, run `godot --no-window --path <Brotato> --script res://mods-unpacked/Yoko-YzTato/tests/check_item_set.gd` to check enabled, disabled and re-enabled availability. The runtime check changes selection and unlock state only in memory and restores it before exiting.
 
 <a href="https://cyojkoy.github.io/Payment/"><img src="assets/readme/support-cta.svg" alt="Support Yoko-YzTato" width="900" style="max-width:100%;height:auto;"></a>
 
