@@ -55,8 +55,10 @@ func serialize() -> Dictionary:
 
 func deserialize_and_merge(serialized: Dictionary) -> void:
     .deserialize_and_merge(serialized)
-    var struct_stats = DotStructureWeaponStats.new()
-    struct_stats.deserialize_and_merge(serialized.stats)
-    stats = struct_stats
-    trap_count = serialized.trap_count as int
-    chance = serialized.chance as int
+    var serialized_stats = serialized.get("stats")
+    if serialized_stats is Dictionary and not serialized_stats.empty():
+        var struct_stats = DotStructureWeaponStats.new()
+        struct_stats.deserialize_and_merge(serialized_stats)
+        stats = struct_stats
+    trap_count = serialized.get("trap_count", trap_count) as int
+    chance = serialized.get("chance", chance) as int

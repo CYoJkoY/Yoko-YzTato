@@ -1,4 +1,3 @@
-class_name DotStructureWeaponStats
 extends RangedWeaponStats
 
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
@@ -10,4 +9,4 @@ func serialize() -> Dictionary:
 
 func deserialize_and_merge(serialized: Dictionary):
 	.deserialize_and_merge(serialized)
-	speed_percent_modifier = serialized.speed_percent_modifier as int
+	speed_percent_modifier = serialized.get("speed_percent_modifier", 0) as int

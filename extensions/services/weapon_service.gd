@@ -133,7 +133,9 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
                     var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 20)
                     var copy: StructureEffect = vine_trap.duplicate()
                     copy.weapon_pos = weapon_pos
-                    queue.append([EntityType.STRUCTURE, copy.scene, pos, copy])
+                    var request := SpawnRequest.new(EntityType.STRUCTURE, copy.scene, pos)
+                    request.data = copy
+                    queue.push_back(request)
                 break
 
     # Player effects
@@ -148,7 +150,9 @@ func yz_vine_trap(effects: Array, weapon_pos: int, thing_hit: Node, player_index
             for _i in effect_data[0]:
                 var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 20)
                 var copy: StructureEffect = vine_trap.duplicate()
-                queue.append([EntityType.STRUCTURE, copy.scene, pos, copy])
+                var request := SpawnRequest.new(EntityType.STRUCTURE, copy.scene, pos)
+                request.data = copy
+                queue.push_back(request)
 
 func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
     var main: Main = Utils.get_scene_node()
@@ -197,8 +201,11 @@ func yz_summon_lightning(
                 var queue: Array = spawner.queues_to_spawn_structures[player_index]
                 for _i in effect.lightning_count:
                     var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 30)
-                    lightning.weapon_pos = weapon_pos
-                    queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+                    var copy: StructureEffect = lightning.duplicate()
+                    copy.weapon_pos = weapon_pos
+                    var request := SpawnRequest.new(EntityType.STRUCTURE, copy.scene, pos)
+                    request.data = copy
+                    queue.push_back(request)
                 break
 
     # Player effects
@@ -212,7 +219,9 @@ func yz_summon_lightning(
             var queue: Array = spawner.queues_to_spawn_structures[player_index]
             for _i in effect_data[0]:
                 var pos: Vector2 = spawner.get_spawn_pos_in_area(spawn_pos, 30)
-                queue.append([EntityType.STRUCTURE, lightning.scene, pos, lightning])
+                var request := SpawnRequest.new(EntityType.STRUCTURE, lightning.scene, pos)
+                request.data = lightning
+                queue.push_back(request)
 
 func yz_gain_stat_when_killed_scaling_single(
     effects: Array,
