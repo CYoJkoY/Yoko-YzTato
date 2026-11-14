@@ -1,5 +1,23 @@
 extends "res://singletons/run_data.gd"
 
+var _yztato_stat_check_elapsed: float = 0.0
+
+func _physics_process(delta: float) -> void:
+    ._physics_process(delta)
+    _yztato_stat_check_elapsed += delta
+    if _yztato_stat_check_elapsed < 0.5:
+        return
+    _yztato_stat_check_elapsed = 0.0
+    for player_index in range(players_data.size()):
+        yztato_update_stat_subeffects(player_index)
+
+func yztato_update_stat_subeffects(player_index: int) -> void:
+    var triggers: Array = get_player_effect(Utils.yztato_trigger_subeffect_on_specific_stat_over_hash, player_index)
+    if triggers.empty():
+        return
+    for trigger in triggers.duplicate():
+        trigger.update_subeffects(player_index)
+
 # ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
 func manage_life_steal(weapon_stats: WeaponStats, player_index: int) -> void:
     if _yztato_life_steal(weapon_stats, player_index):
@@ -10,6 +28,7 @@ func manage_life_steal(weapon_stats: WeaponStats, player_index: int) -> void:
 func update_item_related_effects(player_index: int) -> void:
     _yztato_update_specific_tag_item_bonuses(player_index)
     .update_item_related_effects(player_index)
+    yztato_update_stat_subeffects(player_index)
 
 # ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
 func _yztato_life_steal(weapon_stats: WeaponStats, player_index: int) -> bool:
@@ -48,6 +67,8 @@ func _yztato_update_specific_tag_item_bonuses(player_index: int) -> void:
         var stat: int = effect[0]
         var stat_value: int = effect[1]
         var nb_scaled: int = effect[3]
+        if nb_scaled <= 0:
+            continue
         var bonus: int = stat_value * tag_count / nb_scaled
         if bonus == 0:
             continue

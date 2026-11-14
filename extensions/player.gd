@@ -222,7 +222,7 @@ func _yztato_temp_stats_per_interval() -> void:
             continue
 
         var interval: int = sub_effect[2]
-        if _one_second_timeouts % interval != 0:
+        if interval <= 0 or _one_second_timeouts % interval != 0:
             continue
 
         var stat_value: int = sub_effect[1]

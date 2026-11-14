@@ -35,7 +35,8 @@ func get_args(_player_index: int) -> Array:
 
             nb_specific_tag_items += 1
 
-    bonus_value = value * nb_specific_tag_items / tag_nb
+    if tag_nb > 0:
+        bonus_value = value * nb_specific_tag_items / tag_nb
 
     return [Utils.ncl_get_true_stat_name(key), str(value), tag_name, str(bonus_value), str(tag_nb)]
 

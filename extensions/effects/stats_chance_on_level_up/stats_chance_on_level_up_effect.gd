@@ -47,3 +47,15 @@ func get_args(player_index: int) -> Array:
             tracking = Utils.ncl_create_tracking("STATS_LOST", -tracking_value)
 
     return [str(value), Utils.ncl_get_true_stat_name(key), str(value2), tracking]
+
+func serialize() -> Dictionary:
+    var serialized =.serialize()
+    serialized.tracking_key = tracking_key
+    return serialized
+
+func deserialize_and_merge(serialized: Dictionary) -> void:
+    .deserialize_and_merge(serialized)
+    # The current game reads sum_strategy with an integer dictionary key.
+    sum_strategy = serialized.get("sum_strategy", SumStrategy.SUM_VALUE_1)
+    tracking_key = serialized.get("tracking_key", "")
+    tracking_key_hash = Keys.generate_hash(tracking_key)

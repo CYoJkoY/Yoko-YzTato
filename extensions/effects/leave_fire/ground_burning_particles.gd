@@ -7,6 +7,7 @@ var on_deactivate_callback: FuncRef = null
 var wait_time: float = 1.0
 var field_dmg: int = 1
 var is_active: bool = false
+var player_index: int = 0
 
 # ══════════════════════════════════════════ Method ══════════════════════════════════════════ #
 func rescale(p_scale: float = 1.0) -> void:
@@ -27,10 +28,11 @@ func rescale(p_scale: float = 1.0) -> void:
 func set_duration(duration: float = 1.0) -> void:
     wait_time = duration
 
-func activate(position: Vector2, data: BurningData) -> void:
+func activate(position: Vector2, data: BurningData, owner_index: int = 0) -> void:
     bodies.clear()
     global_position = position
-    burning_data = data
+    player_index = owner_index
+    burning_data = data.duplicate() if data != null else null
 
     if burning_data != null:
         field_dmg = int(max(1, burning_data.damage * 0.5))
@@ -73,15 +75,9 @@ func _on_RefreshTimer_timeout() -> void:
         if !is_instance_valid(body):
             continue
 
-        for player_index in RunData.players_data.size():
-            var args = TakeDamageArgs.new(player_index)
-            args.set_meta("custom_color", Color("#F94E34"))
-            args.base_effect_scale = 0.3
-            var dmg_dealt = body.take_damage(field_dmg, args)[1]
-            if not (
-                is_instance_valid(burning_data.from) and
-                burning_data.from.has_method("on_Hitbox_hit_something")
-            ):
-                continue
-
-            burning_data.from._on_Hitbox_hit_something(body, dmg_dealt)
+        # A field belongs to its creator. Replaying weapon hit callbacks here
+        # would recursively spawn fields; damage must not scale with co-op size.
+        var args = TakeDamageArgs.new(player_index)
+        args.set_meta("custom_color", Color("#F94E34"))
+        args.base_effect_scale = 0.3
+        body.take_damage(field_dmg, args)

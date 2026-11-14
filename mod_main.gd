@@ -45,7 +45,6 @@ func install_script_extensions() -> void:
         # EFFECTS: end of wave, level up
         #          special_picked_up_change_stat,
         #          stats_chance_on_level_up
-        #          trigger_subeffect_on_specific_stat_over
 
         "player_explosion.gd",
         # EFFECTS: explosion_erase_bullets
@@ -105,6 +104,7 @@ func install_script_extensions() -> void:
         "run_data.gd",
         # EFFECTS: life_steal
         #          update_specific_tag_item_bonuses
+        #          trigger_subeffect_on_specific_stat_over
 
         "player_projectile.gd",
         # EFFECTS: bounce_dmg_multiplier

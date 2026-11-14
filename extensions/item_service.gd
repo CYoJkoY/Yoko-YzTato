@@ -1,98 +1,29 @@
 extends "res://singletons/item_service.gd"
 
-# ══════════════════════════════════════════ Extension ══════════════════════════════════════════ #
-func _get_rand_item_for_wave(
-    wave: int,
-    player_index: int,
-    type: int,
-    args: GetRandItemForWaveArgs
-) -> ItemParentData:
-    var item: ItemParentData =._get_rand_item_for_wave(wave, player_index, type, args)
-    item = _yztato_weapon_set_filter(item, player_index, type, wave, args)
-    item = _yztato_weapon_set_delete(item, player_index, type, wave, args)
+# Apply set constraints to the real tier pool once. Repeated random draws can
+# never finish when vanilla bans/type restrictions exclude every matching item.
+func update_pools(pool: Array, backup_pool: Array, player_index: int, item_tier: int, type: int) -> void:
+    .update_pools(pool, backup_pool, player_index, item_tier, type)
+    if type != TierData.WEAPONS:
+        return
+    var required: Array = RunData.get_player_effect(Utils.yztato_weapon_set_filter_hash, player_index)
+    var forbidden: Array = RunData.get_player_effect(Utils.yztato_weapon_set_delete_hash, player_index)
+    if required.empty() and forbidden.empty():
+        return
+    _yztato_filter_weapon_pool(pool, required, forbidden)
+    _yztato_filter_weapon_pool(backup_pool, required, forbidden)
 
-    return item
-
-# ══════════════════════════════════════════ Custom ══════════════════════════════════════════ #
-func _yztato_weapon_set_filter(
-    item: ItemParentData,
-    player_index: int,
-    type: int,
-    wave: int,
-    args: GetRandItemForWaveArgs
-) -> ItemParentData:
-    var weapon_set_filters: Array = RunData.get_player_effect(
-        Utils.yztato_weapon_set_filter_hash,
-        player_index
-    )
-    if weapon_set_filters.empty() or type != TierData.WEAPONS:
-        return item
-
-    # Check Weapon Match Set
-    var pool = get_pool(get_tier_from_wave(wave, player_index), type)
-    var has_valid_weapons = false
-    for pool_item in pool:
-        for set in pool_item.sets:
-            if weapon_set_filters.has(set.my_id_hash):
-                has_valid_weapons = true
-                break
-        if has_valid_weapons:
-            break
-
-    # Filter Until Required Set
-    if has_valid_weapons:
-        var has_required_set = false
-        while !has_required_set:
-            for set in item.sets:
-                if weapon_set_filters.has(set.my_id_hash):
-                    has_required_set = true
-                    break
-
-            if !has_required_set:
-                item =._get_rand_item_for_wave(wave, player_index, type, args)
-
-    return item
-
-func _yztato_weapon_set_delete(
-    item: ItemParentData,
-    player_index: int,
-    type: int,
-    wave: int,
-    args: GetRandItemForWaveArgs
-) -> ItemParentData:
-    var weapon_set_deletes: Array = RunData.get_player_effect(
-        Utils.yztato_weapon_set_delete_hash,
-        player_index
-    )
-    if weapon_set_deletes.empty() or type != TierData.WEAPONS:
-        return item
-
-    # Check Weapon No Forbidden Set
-    var pool = get_pool(get_tier_from_wave(wave, player_index), type)
-    var has_valid_weapons = false
-    for pool_item in pool:
-        var has_forbidden_set = false
-        for set in pool_item.sets:
-            if weapon_set_deletes.has(set.my_id_hash):
-                has_forbidden_set = true
-                break
-        if !has_forbidden_set:
-            has_valid_weapons = true
-            break
-
-    # Filter Until No Forbidden Set
-    if has_valid_weapons:
-        var has_forbidden_set = false
-        while !has_forbidden_set:
-            for set in item.sets:
-                if weapon_set_deletes.has(set.my_id_hash):
-                    has_forbidden_set = true
-                    break
-
-            if has_forbidden_set:
-                item =._get_rand_item_for_wave(wave, player_index, type, args)
-                has_forbidden_set = false
-            else:
-                break
-
-    return item
+func _yztato_filter_weapon_pool(pool: Array, required: Array, forbidden: Array) -> void:
+    var allowed: Array = []
+    for weapon in pool:
+        var matches: bool = required.empty()
+        var excluded: bool = false
+        for weapon_set in weapon.sets:
+            matches = matches or required.has(weapon_set.my_id_hash)
+            excluded = excluded or forbidden.has(weapon_set.my_id_hash)
+        if matches and not excluded:
+            allowed.append(weapon)
+    # Preserve vanilla's fallback when the constraints cannot be satisfied.
+    if not allowed.empty():
+        pool.clear()
+        pool.append_array(allowed)

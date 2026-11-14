@@ -57,6 +57,8 @@ func unapply(player_index: int) -> void:
 	var effects: Array = RunData.get_player_effect(custom_key_hash, player_index)
 
 	for projectile in effects:
+		if projectile[0] != key_hash or projectile[4] != tracking_key_hash:
+			continue
 		var existing_proj_count: int = projectile[1]
 		var total_proj_count: int = existing_proj_count - value
 
@@ -70,6 +72,7 @@ func unapply(player_index: int) -> void:
 			projectile[2].scaling_stats,
 			true
 		)
+		return
 
 func _merge_scaling_stats(
 	existing_proj_count: int,
@@ -105,7 +108,9 @@ func _merge_scaling_stats(
 	return duplicated_scaling
 
 func get_args(player_index: int) -> Array:
-	var current_stats = WeaponService.init_ranged_stats(weapon_stats, player_index, true)
+	var current_stats = weapon_stats
+	if player_index != RunData.DUMMY_PLAYER_INDEX:
+		current_stats = WeaponService.init_ranged_stats(weapon_stats, player_index, true)
 	var scaling_text = WeaponService.get_scaling_stats_icon_text(weapon_stats.scaling_stats)
 
 	return [
@@ -123,6 +128,7 @@ func serialize() -> Dictionary:
 		serialized.weapon_stats = weapon_stats.serialize()
 
 	serialized.auto_target_enemy = auto_target_enemy
+	serialized.tracking_key = tracking_key
 
 	return serialized
 
@@ -135,3 +141,5 @@ func deserialize_and_merge(serialized: Dictionary) -> void:
 		weapon_stats = data
 
 	auto_target_enemy = serialized.auto_target_enemy as bool
+	tracking_key = serialized.get("tracking_key", tracking_key)
+	tracking_key_hash = Keys.generate_hash(tracking_key)

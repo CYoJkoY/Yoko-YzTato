@@ -26,10 +26,9 @@ func _yztato_extra_enemies_next_waves_init(current_wave_data: Resource):
             var tracking_key_hash = effect[3]
 
             for _i in group_count:
-                var new_group = group_data
-                if group_data.is_boss:
-                    new_group = init_elite_group([effect[2]])
-                current_wave_data.groups_data.append(new_group)
+                # The resource already contains its units; effect[2] is a wave
+                # duration, not an elite ID accepted by init_elite_group.
+                current_wave_data.groups_data.append(group_data)
 
             waves_remaining -= 1
             if waves_remaining <= 0:

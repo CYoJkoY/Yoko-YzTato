@@ -28,21 +28,14 @@ func _yztato_one_shot_loot_take_damage(args: TakeDamageArgs) -> void:
     if enemy_id == "evil_mob":
         return
 
-    if args.hitbox and args.hitbox.from and (
-        !(
-            args.hitbox.from is Object
-        ) or
-        (
-            args.hitbox.from is Object and (
-                !("player_index" in args.hitbox.from) or args.hitbox.from.player_index == -1
-            )
-        )
-    ): return
-
-    if !args.hitbox or !is_instance_valid(args.hitbox) or !is_loot or \
-    !RunData.get_player_effect_bool(
+    if not is_loot or not is_instance_valid(args.hitbox):
+        return
+    var owner_index: int = args.from_player_index
+    if owner_index < 0 or owner_index >= RunData.get_player_count():
+        return
+    if not RunData.get_player_effect_bool(
         Utils.yztato_one_shot_loot_hash,
-        args.hitbox.from.player_index
+        owner_index
     ): return
 
     die()

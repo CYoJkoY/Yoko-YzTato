@@ -105,9 +105,9 @@ func _yztato_boomerang_on_projectile_shot(projectile: Node2D) -> void:
         return
 
     _yztato_active_boomerangs.append(projectile)
-    _hitbox.damage *= 1 + _yztato_max_damage_mul
+    projectile._hitbox.damage *= 1 + _yztato_max_damage_mul
     if _yztato_knockback_only_back:
-        _hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
+        projectile._hitbox.set_knockback(Vector2.ZERO, 0.0, 0.0)
     if not projectile.is_connected("returned_to_player", self, "_yztato_on_projectile_returned"):
         projectile.connect("returned_to_player", self, "_yztato_on_projectile_returned")
 
@@ -161,8 +161,8 @@ func _yztato_challenge_on_hit(hitbox: Hitbox) -> void:
 
     var attack_id := hitbox.player_attack_id
     if attack_id >= 0:
-        var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0) + 1
-        _hit_count_by_attack_id[attack_id] = attack_hit_count
+        # The parent already records this hit and prunes the attack history.
+        var attack_hit_count = _hit_count_by_attack_id.get(attack_id, 0)
         ChallengeService.try_complete_challenge(Utils.chal_sudden_misfortune_hash, attack_hit_count)
         ChallengeService.try_complete_challenge(Utils.chal_one_force_subdue_ten_hash, hitbox.damage)
 

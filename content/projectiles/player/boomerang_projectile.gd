@@ -47,6 +47,8 @@ func _yztato_boomerang_set_time_until_max_range(effects: Array) -> void:
         knockback_only_back = effect.knockback_only_back
 
 func _yztato_boomerang_physics_process() -> void:
+    if not is_instance_valid(weapon_node):
+        return
     var weapon_pos = weapon_node.global_position
     var self_pos = global_position
 

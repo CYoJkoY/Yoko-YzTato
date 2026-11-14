@@ -5,7 +5,7 @@
   <p>
     <a href="https://github.com/CYoJkoY/Yoko-YzTato/releases"><img src="https://img.shields.io/github/v/release/CYoJkoY/Yoko-YzTato?display_name=tag&sort=semver&style=flat-square&label=release" alt="Latest release"></a>
     <a href="https://github.com/CYoJkoY/Yoko-YzTato/actions/workflows/release.yml"><img src="https://img.shields.io/github/actions/workflow/status/CYoJkoY/Yoko-YzTato/release.yml?style=flat-square&label=build" alt="Build status"></a>
-    <img src="https://img.shields.io/badge/Brotato-1.2.0.0-478CBF?style=flat-square" alt="Brotato 1.2.0.0">
+    <img src="https://img.shields.io/badge/Brotato-1.2.0.3-478CBF?style=flat-square" alt="Brotato 1.2.0.3">
     <img src="https://img.shields.io/badge/Mod%20Loader-6.3.0-5965FF?style=flat-square" alt="Mod Loader 6.3.0">
     <a href="LICENSE"><img src="https://img.shields.io/github/license/CYoJkoY/Yoko-YzTato?style=flat-square" alt="MIT License"></a>
   </p>
@@ -62,7 +62,7 @@ All YzTato characters declare `required_item_set = "Yoko-YzTato"`, so the game a
 
 ## <img src="assets/readme/icons/installation.svg" width="20" height="20" alt=""> Installation
 
-Requirements: **Brotato 1.2.0.0**, **Brotato Mod Loader 6.3.0**, and [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader).
+Requirements: **Brotato 1.2.0.3**, **Brotato Mod Loader 6.3.0**, and [Yoko-NewContentLoader](https://github.com/CYoJkoY/Yoko-NewContentLoader).
 
 1. Install the required game and loader versions.
 2. Install the matching NewContentLoader release.
@@ -82,7 +82,11 @@ mods-unpacked/
 
 For new content, separate resource data, runtime hooks, registration, and localization. Changes to shared runtime behavior should be tested with the complete dependency stack.
 
-`manifest.json` is authoritative for version `1.3.2`, dependencies, and the declared Brotato / Mod Loader compatibility.
+`manifest.json` is authoritative for version `1.3.4`, dependencies, and the declared Brotato / Mod Loader compatibility.
+
+Stat threshold subeffects are checked when equipped, after item bonuses change, and every half second throughout the run (including the shop). Falling below a threshold or removing its parent removes the active subeffect. Inactive threshold lines are shown entirely in gray; active lines retain their normal colors. Version 1.3.3 fixed this lifecycle and unified the comparison rules used by execution and display. Version 1.3.4 caches repeated threshold work and repairs runtime compatibility paths; see the [audit and benchmark](docs/compatibility-1.2.0.3.md) for evidence and limits.
+
+Run `godot --no-window --path <Brotato> --script res://mods-unpacked/Yoko-YzTato/tests/check_stat_threshold.gd` for threshold, cleanup, multiplayer and text regression coverage with the full mod stack.
 
 Validate registered content ownership with `python tests/check_item_set.py`. From a working Brotato project with Mod Loader, NewContentLoader and the required DLC available, run `godot --no-window --path <Brotato> --script res://mods-unpacked/Yoko-YzTato/tests/check_item_set.gd` to check enabled, disabled and re-enabled availability. The runtime check changes selection and unlock state only in memory and restores it before exiting.
 

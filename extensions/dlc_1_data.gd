@@ -60,13 +60,14 @@ func _yztato_curse_item(
                 )
 
             ["yztato_damage_scaling", _, _]:
-                var new_scaling_stats: Array = new_effect.scaling_stats.duplicate()
+                var new_scaling_stats: Array = new_effect.scaling_stats.duplicate(true)
                 for scaling in new_scaling_stats:
                     scaling[1] = Utils.ncl_curse_effect_value(
                         scaling[1],
                         effect_modifier,
                         {"process_negative": false}
                     )
+                new_effect.scaling_stats = new_scaling_stats
 
             ["yztato_gain_stat_when_killed_single_scaling", _, _]:
                 new_effect.scaling_percent = Utils.ncl_curse_effect_value(
@@ -96,13 +97,17 @@ func _yztato_curse_item(
 
             ["yztato_chimera_weapon", _, _]:
                 var new_chimera_projectile_stats: Array = new_effect.chimera_projectile_stats.duplicate()
-                for stats in new_chimera_projectile_stats:
+                for i in range(new_chimera_projectile_stats.size()):
+                    var stats = new_chimera_projectile_stats[i].duplicate()
+                    stats.scaling_stats = stats.scaling_stats.duplicate(true)
                     for scaling in stats.scaling_stats:
                         scaling[1] = Utils.ncl_curse_effect_value(
                             scaling[1],
                             effect_modifier,
                             {"process_negative": false}
                         )
+                    new_chimera_projectile_stats[i] = stats
+                new_effect.chimera_projectile_stats = new_chimera_projectile_stats
 
             ["yztato_blood_rage", _, _]:
                 new_effect.interval = Utils.ncl_curse_effect_value(
@@ -115,9 +120,11 @@ func _yztato_curse_item(
                     effect_modifier,
                     {"process_negative": false}
                 )
-                var new_stats_change: Array = new_effect.stats_change.duplicate()
+                var new_stats_change: Array = new_effect.stats_change.duplicate(true)
                 for stat in new_stats_change:
                     stat[1] = Utils.ncl_curse_effect_value(stat[1], effect_modifier, {"step": 1})
+                new_effect.stats_change = new_stats_change
+                new_effect.stats_change_hashes = Utils.convert_to_hash_array(new_stats_change)
 
             ["yztato_leave_fire", _, _]:
                 new_effect.duration = Utils.ncl_curse_effect_value(
@@ -133,6 +140,8 @@ func _yztato_curse_item(
                 new_effect.text_key += "_CURSED"
 
             ["yztato_trigger_subeffect_on_specific_stat_over", _, _]:
+                new_effect.stat_over_values = new_effect.stat_over_values.duplicate()
+                new_effect.sub_effects = new_effect.sub_effects.duplicate()
                 for i in range(new_effect.stat_over_values.size()):
                     match new_effect.over_types[i]:
                         0, 5: # Euqal / Equal Multiplier (Small chance unconditionally triggers on cursed)
@@ -153,7 +162,7 @@ func _yztato_curse_item(
                             )
 
                     var temp_item_data: ItemData = ItemData.new()
-                    temp_item_data.effects = new_effect.sub_effects[i]
+                    temp_item_data.effects = [new_effect.sub_effects[i]]
 
                     # Avoid sub effect's stat curse
                     var curse_effect = Effect.new()
@@ -168,7 +177,7 @@ func _yztato_curse_item(
                         min_modifier
                     )
 
-                    new_effect.sub_effects[i] = temp_item_data.effects.slice(1, -1)
+                    new_effect.sub_effects[i] = temp_item_data.effects[1]
 
             [_, Utils.yztato_heal_on_damage_taken_hash, _], \
             [_, Utils.yztato_random_curse_on_reroll_hash, _]:

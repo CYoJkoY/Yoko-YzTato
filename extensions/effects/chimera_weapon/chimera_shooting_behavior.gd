@@ -16,19 +16,19 @@ func _yztato_chimera_shoot_projectile(
 ) -> Node:
     var projectile_index: int
     var projectile_stats: RangedWeaponStats = _parent.current_stats
-    if _parent.current_chimera_projs.size() != 0:
+    if _parent._yztato_chimera_projs.size() != 0:
         projectile_index = max(
             0,
             _parent._nb_shots_taken - 1
-        ) % _parent.current_chimera_projs.size()
-        projectile_stats = _parent.current_chimera_projs[projectile_index]
+        ) % _parent._yztato_chimera_projs.size()
+        projectile_stats = _parent._yztato_chimera_projs[projectile_index]
 
     var args = WeaponServiceSpawnProjectileArgs.new()
     args.knockback_direction = knockback
     args.effects = _parent.effects
     args.from_player_index = _parent.player_index
 
-    if _parent.current_chimera_projs.size() != 0:
+    if _parent._yztato_chimera_projs.size() != 0:
         var projectile_stats_and_args: Array = _yztato_modify_projectile(projectile_stats, args)
         projectile_stats = projectile_stats_and_args[0]
         args = projectile_stats_and_args[1]
@@ -55,17 +55,13 @@ func _yztato_modify_projectile(
         if effect.get_id() == "yztato_chimera_weapon":
             var projectile_index = (
                 (_parent._nb_shots_taken - 1)
-                % _parent.current_chimera_projs.size()
+                % _parent._yztato_chimera_projs.size()
             )
-            var chimera_texture_sets = _parent.current_chimera_texture_sets
-            if projectile_index >= _parent.current_chimera_projs_textures_paths.size():
-                projectile_index = (
-                    projectile_index
-                    % _parent.current_chimera_projs_textures_paths.size()
-                )
-            if _parent.current_chimera_projs_textures_paths.empty():
+            var chimera_texture_sets = _parent._yztato_chimera_texture_sets
+            if _parent._yztato_chimera_texture_paths.empty():
                 return [projectile_stats, args]
-            var texture_path = _parent.current_chimera_projs_textures_paths[projectile_index]
+            projectile_index %= _parent._yztato_chimera_texture_paths.size()
+            var texture_path = _parent._yztato_chimera_texture_paths[projectile_index]
             for texture_data in chimera_texture_sets:
                 if texture_path == texture_data.texture.resource_path:
                     if texture_data.enable_flags["modify_projectile_speed"]:

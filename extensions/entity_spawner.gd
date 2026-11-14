@@ -36,8 +36,8 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
             var scaling_percent: float = effect[4]
             var tracking_key: int = effect[5]
 
-            var scaling_value = value + Utils.get_stat(scaling_stat, player_index) * scaling_percent
-            if scaling_value <= 0 or player_killed_count[effect_index] % int(scaling_value) != 0:
+            var scaling_value: int = int(value + Utils.get_stat(scaling_stat, player_index) * scaling_percent)
+            if scaling_value <= 0 or player_killed_count[effect_index] % scaling_value != 0:
                 continue
 
             player_killed_count[effect_index] = 0 # For dynamic scaling_value

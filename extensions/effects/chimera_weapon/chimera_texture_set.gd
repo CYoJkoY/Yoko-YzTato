@@ -2,6 +2,7 @@ extends Resource
 
 export(Resource) var texture = null
 export(int) var damage = 1
+export(int) var projectile_speed = 3000
 export(int, -10000, 10000) var knockback = 0
 export(float, 0.0, 1.0, 0.05) var knockback_piercing = 0.0
 export(int) var piercing = 0
@@ -30,6 +31,7 @@ func serialize() -> Dictionary:
 
     var serialized: Dictionary = {
         "damage": damage,
+        "projectile_speed": projectile_speed,
         "knockback": knockback,
         "knockback_piercing": knockback_piercing,
         "piercing": piercing,
@@ -54,6 +56,7 @@ func deserialize_and_merge(serialized: Dictionary):
             effects.append(effect)
 
     damage = serialized.damage
+    projectile_speed = serialized.get("projectile_speed", 3000)
     knockback = serialized.knockback
     knockback_piercing = serialized.knockback_piercing
     piercing = serialized.piercing

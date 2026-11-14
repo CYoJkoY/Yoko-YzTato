@@ -25,6 +25,8 @@ func _yztato_apply_damage_scaling(new_stats: Array, player_index: int) -> Array:
     for effect in damage_scaling_effects:
         var stat: float = Utils.get_stat(effect[0], player_index)
         var value: float = effect[1]
+        if value == 0.0:
+            continue
         var scaling_stats: Array = effect[2]
         var num: float = stat / value
 
@@ -164,7 +166,7 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
             if particle != null:
                 particle.set_duration(fire.duration)
                 particle.rescale(fire.scale)
-                particle.activate(thing_hit.global_position, thing_hit._burning)
+                particle.activate(thing_hit.global_position, thing_hit._burning, player_index)
                 main._on_emit_fire_particle(particle)
             return
 
@@ -178,7 +180,7 @@ func yz_leave_fire(effects: Array, thing_hit: Node, player_index: int) -> void:
         if particle != null:
             particle.set_duration(fire[2])
             particle.rescale(fire[3])
-            particle.activate(thing_hit.global_position, thing_hit._burning)
+            particle.activate(thing_hit.global_position, thing_hit._burning, player_index)
             main._on_emit_fire_particle(particle)
 
 func yz_summon_lightning(
@@ -261,7 +263,7 @@ func yz_upgrade_when_killed_enemies(
     for effect in effects:
         if effect.custom_key_hash != Utils.yztato_upgrade_when_killed_enemies_hash:
             continue
-        if enemies_killed_this_wave_count % effect.value == 0:
+        if effect.value > 0 and enemies_killed_this_wave_count % effect.value == 0:
             Utils.ncl_change_weapon_within_run(weapon_pos, effect.key_hash, player_index)
 
 func yz_cant_attack_while_moving(effects: Array, player: Player, should_shoot: bool) -> bool:

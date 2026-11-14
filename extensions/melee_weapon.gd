@@ -111,10 +111,8 @@ func _yztato_setup_melee_effects() -> void:
         var found: bool = false
 
         # Check player effects
-        for pi in RunData.players_data.size():
-            if RunData.get_player_effect(Keys.generate_hash("yztato_melee_" + effect_type + "_bullets"), pi):
-                found = true
-                break
+        if RunData.get_player_effect(Keys.generate_hash("yztato_melee_" + effect_type + "_bullets"), player_index):
+            found = true
 
         # Check weapon effects
         if not found:
@@ -133,7 +131,7 @@ func _yztato_setup_flying_sword() -> void:
         Utils.yztato_flying_sword_hash,
         player_index
     )
-    _yztato_flying_sword_enabled = not flying_sword_dict.empty()
+    _yztato_flying_sword_enabled = flying_sword_dict.get(0, -1) >= 0 or flying_sword_dict.get(1, -1) >= 0
 
 func _yztato_set_blade_storm_angle(angle: float) -> void:
     _yztato_idle_angle = angle
@@ -266,10 +264,6 @@ func _yztato_create_sword_projectile(target: Node) -> void:
 
     if _yztato_sword_array_stats == null:
         _yztato_sword_array_stats = load("res://mods-unpacked/Yoko-YzTato/content/projectiles/player/default_stats.tres").duplicate()
-        _yztato_sword_array_stats.damage = current_stats.damage
-        _yztato_sword_array_stats.crit_chance = current_stats.crit_chance
-        _yztato_sword_array_stats.crit_damage = current_stats.crit_damage
-        _yztato_sword_array_stats.lifesteal = current_stats.lifesteal
         _yztato_sword_array_stats.piercing = 99
         _yztato_sword_array_stats.max_range = 300
         _yztato_sword_array_stats.can_bounce = false
@@ -278,12 +272,18 @@ func _yztato_create_sword_projectile(target: Node) -> void:
         modified_scene._bundled["variants"][2] = YZTATO_SWORD_ARRAY_TEXTURE
         _yztato_sword_array_stats.projectile_scene = modified_scene
 
+    _yztato_sword_array_stats.damage = current_stats.damage
+    _yztato_sword_array_stats.crit_chance = current_stats.crit_chance
+    _yztato_sword_array_stats.crit_damage = current_stats.crit_damage
+    _yztato_sword_array_stats.lifesteal = current_stats.lifesteal
+    var args = WeaponServiceSpawnProjectileArgs.new()
+    args.from_player_index = player_index
     var sword_array_projectile: Node = WeaponService.spawn_projectile(
         project_position,
         _yztato_sword_array_stats,
         direction_to_target,
         self,
-        WeaponServiceSpawnProjectileArgs.new()
+        args
     )
     if not sword_array_projectile.is_connected("hit_something", self, "on_weapon_hit_something"):
         sword_array_projectile.connect(
