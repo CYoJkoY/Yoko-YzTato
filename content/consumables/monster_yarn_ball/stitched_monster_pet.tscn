@@ -1,0 +1,13 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://entities/units/pet/pet.tscn" type="PackedScene" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/consumables/monster_yarn_ball/stitched_monster_pet.gd" type="Script" id=2]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/consumables/monster_yarn_ball/monster_yarn_ball.webp" type="Texture" id=3]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/consumables/monster_yarn_ball/stitched_monster_stats.tres" type="Resource" id=4]
+
+[node name="StitchedMonsterPet" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+stats = ExtResource( 4 )
+
+[node name="Sprite" parent="Animation" index="0"]
+texture = ExtResource( 3 )

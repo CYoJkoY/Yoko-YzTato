@@ -1,0 +1,15 @@
+[gd_resource type="Resource" load_steps=2 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/monster_yarn_ball_pickup/monster_yarn_ball_pickup_effect.gd" type="Script" id=1]
+
+[resource]
+script = ExtResource( 1 )
+key = ""
+text_key = "EFFECT_YZTATO_MONSTER_YARN_BALL_PICKED_UP"
+value = 0
+custom_key = ""
+storage_method = 0
+effect_sign = 2
+custom_args = [  ]
+yarn_gain = 1
+heal = 5

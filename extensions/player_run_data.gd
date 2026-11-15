@@ -7,6 +7,7 @@ static func init_stats(all_null_values: bool = false) -> Dictionary:
         var new_stats := {
             Keys.trees_hash: 0, # Debug : Only For Assert
             Utils.stat_yztato_suture_hash: 0,
+            Utils.stat_yztato_monster_yarn_hash: 0,
 
         }
 
@@ -37,6 +38,7 @@ static func init_effects() -> Dictionary:
             Utils.yztato_upgrade_when_killed_enemies_hash: [],
             Utils.yztato_gain_stat_when_killed_single_scaling_hash: [],
             Utils.yztato_special_picked_up_change_stat_hash: [],
+            Utils.yztato_pickup_consumable_spawn_pet_hash: [],
             Utils.yztato_weapon_set_filter_hash: [],
             Utils.yztato_weapon_set_delete_hash: [],
             Utils.yztato_boomerang_weapon_hash: [],
