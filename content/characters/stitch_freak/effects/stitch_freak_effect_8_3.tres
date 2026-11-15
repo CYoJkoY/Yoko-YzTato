@@ -1,0 +1,20 @@
+[gd_resource type="Resource" load_steps=3 format=2]
+
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/extensions/effects/pickup_consumables_spawn_pet/pickup_consumables_spawn_pet_effect.gd" type="Script" id=1]
+[ext_resource path="res://mods-unpacked/Yoko-YzTato/content/consumables/monster_yarn_ball/stitched_monster_pet.tscn" type="PackedScene" id=2]
+
+[resource]
+script = ExtResource( 1 )
+key = "stat_yztato_monster_yarn"
+text_key = "EFFECT_YZTATO_PICKUP_CONSUMABLES_SPAWN_PET"
+value = 3
+custom_key = "yztato_pickup_consumable_spawn_pet"
+storage_method = 0
+effect_sign = 2
+custom_args = [  ]
+stat_to_consume = "stat_yztato_monster_yarn"
+consume_amount = 3
+pet_scene = ExtResource( 2 )
+build_from_enemies = true
+trigger_consumable_id = ""
+
