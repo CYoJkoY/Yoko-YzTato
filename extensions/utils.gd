@@ -2,6 +2,7 @@ extends "res://singletons/utils.gd"
 
 # Stats
 var stat_yztato_suture_hash: int = Keys.generate_hash("stat_yztato_suture")
+var stat_yztato_monster_yarn_hash: int = Keys.generate_hash("stat_yztato_monster_yarn")
 
 # Effects
 var yztato_destory_weapons_hash: int = Keys.generate_hash("yztato_destory_weapons")
@@ -17,6 +18,7 @@ var yztato_explosion_erase_bullets_hash: int = Keys.generate_hash("yztato_explos
 var yztato_upgrade_when_killed_enemies_hash: int = Keys.generate_hash("yztato_upgrade_when_killed_enemies")
 var yztato_gain_stat_when_killed_single_scaling_hash: int = Keys.generate_hash("yztato_gain_stat_when_killed_single_scaling")
 var yztato_special_picked_up_change_stat_hash: int = Keys.generate_hash("yztato_special_picked_up_change_stat")
+var yztato_pickup_consumable_spawn_pet_hash: int = Keys.generate_hash("yztato_pickup_consumable_spawn_pet")
 var yztato_weapon_set_filter_hash: int = Keys.generate_hash("yztato_weapon_set_filter")
 var yztato_weapon_set_delete_hash: int = Keys.generate_hash("yztato_weapon_set_delete")
 var yztato_boomerang_weapon_hash: int = Keys.generate_hash("yztato_boomerang_weapon")

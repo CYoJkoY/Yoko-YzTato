@@ -57,6 +57,7 @@ CHARACTER_YZTATO_CHI_SWORD_WIELDER,Chi Sword Wielder,Manieur d'épée de Chi,气
 CHARACTER_YZTATO_BERSERKER,Berserker,Berserker,狂战士,バーサーカー,버서커,狂戰士,Берсерк,Berserker,Berserker,Berserker,Berserker,Berserker,Berserker
 CHARACTER_YZTATO_FANATIC,Fanatic,Fanatique,狂信徒,狂信徒,광신자,狂信徒,Фанатик,Fanatyk,Fanático,Fanático,Fanatiker,Fanatik,Fanatico
 CHARACTER_YZTATO_STITCH_FREAK,Stitch Freak,Monstre de fils,缝线怪人,縫い目の怪人,봉합 괴인,縫線怪人,Чудовище со швами,Potwór z szwami,Monstruo de puntadas,Monstro de pontos,Nähfreak,Dikiş Dehşeti,Mostro delle cuciture
+CONSUMABLE_YZTATO_MONSTER_YARN_BALL,Monster Yarn Ball,Boule de laine monstrueuse,怪物线团,モンスターの毛糸玉,괴물 털실 뭉치,怪物線團,Клубок монстронити,Kłębek potwornej włóczki,Bola de lana monstruosa,Bola de lã monstruosa,Monster-Wollknäuel,Canavar Yün Yumağı,Gomitolo di lana mostruosa
 EFFECT_YZTATO_EXTRA_ENEMIES_NEXT_WAVES,"{3} will appear in {2} future waves
 {4}","{3} apparaîtra dans {2} vagues futures
 {4}","未来 {2} 波次出现{3}
@@ -193,6 +194,7 @@ TRACKING_CURSED,Cursed: {0},Maudit : {0},已诅咒: {0},呪われ: {0},저주받
 TRACKING_REMAINING,Remaining: {0},Restant : {0},剩余: {0},残り: {0},남음: {0},剩餘: {0},Осталось: {0},Pozostało: {0},Restante: {0},Restante: {0},Verbleibend: {0},Kalan: {0},Rimanente: {0}
 TRACKING_EXTRA_UPGRADES,Extra Upgraded: {0},Amélioration Supplémentaire : {0},已额外升级: {0},追加アップグレード: {0},추가 강화: {0},已額外升級: {0},Доп. Улучшено: {0},Dodatkowe Ulepszenia: {0},Mejora Extra: {0},Aprimoramento Extra: {0},Zusätzlich Aufgewertet: {0},Ekstra Yükseltildi: {0},Miglioramento Extra: {0}
 STAT_YZTATO_SUTURE,Suture,Suture,缝合,縫合,봉합,縫合,Шов,Szew,Sutura,Sutura,Naht,Dikiş,Sutura
+STAT_YZTATO_MONSTER_YARN,Monster Yarn,Laine monstrueuse,怪物线团,モンスターの毛糸,괴물 털실,怪物線團,Монстронить,Potworna włóczka,Lana monstruosa,Lã monstruosa,Monsterwolle,Canavar yünü,Lana mostruosa
 TAG_YZTATO_CONSUMABLE,Consumable,Consommable,消耗品,消耗品,소모품,消耗品,Расходуемое,Zużywalne,Consumible,Consumível,Verbrauchsgegenstand,Tüketilebilir,Consumabile
 TAG_YZTATO_ECONOMY,Economy,Économie,经济,経済,경제,經濟,Экономика,Gospodarka,Economía,Economia,Wirtschaft,Ekonomi,Economia
 TAG_YZTATO_EXPLORATION,Exploration,Exploration,探索,探索,탐험,探索,Исследование,Eksploracja,Exploración,Exploração,Erkundung,Keşif,Esplorazione
@@ -206,3 +208,5 @@ TAG_YZTATO_STRUCTURE,Structure,Structure,构筑物,構造物,구조물,構築物
 TAG_YZTATO_XP_GAIN,XP Gain,Gain d'EXP,经验获取,経験値獲得,경험치 획득,經驗獲取,Прирост опыта,Zdobywanie PD,Ganancia de EXP,Ganho de EXP,EP-Gewinn,TP Kazanma,Guadagno PE
 TAG_YZTATO_PET,Pet,Familier,宠物,ペット,펫,寵物,Питомец,Zwierzak,Mascota,Mascote,Begleiter,Evcil Hayvan,Animale domestico
 YZTATO_CONTENT_NAME,"Yztato","Yztato","亚兹托","ヤズタト","야즈타토","亞茲托","Язтато","Yztato","Yztato","Yztato","Yztato","Yztato","Yztato"
+EFFECT_YZTATO_PICKUP_CONSUMABLES_SPAWN_PET,"Consume {0} {1} to summon a temporary chimera.","Consommez {0} {1} pour invoquer une chimère temporaire.","消耗{0}个{1}，召唤一只临时嵌合宠物。","{0}個の{1}を消費して、一時的なキメラを召喚する。","{0}개의 {1}을(를) 소모하여 임시 키메라를 소환합니다.","消耗{0}個{1}，召喚一隻臨時嵌合寵物。","Потратьте {0} ед. «{1}», чтобы призвать временную химеру.","Zużyj {0} × {1}, aby przywołać tymczasową chimerę.","Consume {0} {1} para invocar una quimera temporal.","Consuma {0} {1} para invocar uma quimera temporária.","Verbrauche {0} {1}, um eine temporäre Chimäre zu beschwören.","Geçici bir kimera çağırmak için {0} {1} tüket.","Consuma {0} {1} per evocare una chimera temporanea."
+"EFFECT_YZTATO_MONSTER_YARN_BALL_PICKED_UP","On pickup: {0} {1} and restore {2} HP","Au ramassage : {0} {1} et rend {2} PV","拾取时：{0} {1}，恢复 {2} 生命","拾得時、{0} {1}、{2}HP回復","획득 시 {0} {1}, {2} HP 회복","拾取時：{0} {1}，恢復 {2} 生命","При подборе: {0} {1} и восстановление {2} HP","Przy podniesieniu: {0} {1} i odzyskanie {2} HP","Al recoger: {0} {1} y recupera {2} PS","Ao pegar: {0} {1} e recupera {2} PV","Beim Aufheben: {0} {1} und {2} HP wiederherstellen","Toplandığında: {0} {1} ve {2} can yenile","Quando raccolto: {0} {1} e recupera {2} PS"
