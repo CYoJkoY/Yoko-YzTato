@@ -20,7 +20,6 @@
 
 [resource]
 script = ExtResource( 12 )
-required_item_set = "Yoko-YzTato"
 my_id = "character_yztato_arsonist"
 unlocked_by_default = false
 can_be_looted = true
@@ -34,12 +33,17 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 max_nb = -1
 item_appearances = [ ExtResource( 11 ), ExtResource( 8 ), ExtResource( 6 ) ]
 tags = [  ]
+minimum_difficulty = 0
 wanted_tags = [ "stat_elemental_damage" ]
 banned_item_groups = [  ]
 banned_items = [  ]
 banned_upgrades = [  ]
+banned_meca_stats = [  ]
 starting_weapons = [ ExtResource( 5 ), ExtResource( 3 ), ExtResource( 7 ), ExtResource( 9 ), ExtResource( 4 ) ]
 starting_items = [  ]
+required_item_set = "Yoko-YzTato"

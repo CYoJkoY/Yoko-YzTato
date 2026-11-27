@@ -9,7 +9,6 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/1/chuchanyi_stats.tres" type="Resource" id=9]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/chuchanyi/chuchanyi_icon.webp" type="Texture" id=13]
 
-
 [resource]
 script = ExtResource( 1 )
 my_id = "weapon_yztato_chuchanyi_1"
@@ -25,10 +24,11 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 weapon_id = "weapon_yztato_chuchanyi"
 type = 1
 sets = [ ExtResource( 5 ), ExtResource( 8 ) ]
 scene = ExtResource( 4 )
 stats = ExtResource( 9 )
 upgrades_into = ExtResource( 2 )
-add_to_chars_as_starting = [  ]

@@ -6,7 +6,6 @@
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/weapons/ranged/banbochangdi/banbochangdi_icon.webp" type="Texture" id=4]
 [ext_resource path="res://mods-unpacked/Yoko-YzTato/content/sets/uncanny_instrument/uncanny_instrument_set_data.tres" type="Resource" id=6]
 
-
 [resource]
 script = ExtResource( 2 )
 my_id = "weapon_yztato_banbochangdi_4"
@@ -22,9 +21,10 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 weapon_id = "weapon_yztato_banbochangdi"
 type = 1
 sets = [ ExtResource( 6 ) ]
 scene = ExtResource( 1 )
 stats = ExtResource( 3 )
-add_to_chars_as_starting = [  ]

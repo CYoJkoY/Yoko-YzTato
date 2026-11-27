@@ -44,7 +44,6 @@
 
 [resource]
 script = ExtResource( 1 )
-required_item_set = "Yoko-YzTato"
 my_id = "character_yztato_berserker"
 unlocked_by_default = false
 can_be_looted = true
@@ -58,11 +57,17 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 max_nb = -1
 item_appearances = [ ExtResource( 4 ), ExtResource( 5 ), ExtResource( 2 ) ]
 tags = [  ]
+minimum_difficulty = 0
 wanted_tags = [  ]
 banned_item_groups = [  ]
 banned_items = [  ]
+banned_upgrades = [  ]
+banned_meca_stats = [  ]
 starting_weapons = [ ExtResource( 41 ), ExtResource( 8 ), ExtResource( 25 ), ExtResource( 19 ), ExtResource( 17 ), ExtResource( 30 ), ExtResource( 33 ), ExtResource( 16 ), ExtResource( 42 ), ExtResource( 24 ), ExtResource( 32 ), ExtResource( 34 ), ExtResource( 27 ), ExtResource( 11 ), ExtResource( 28 ), ExtResource( 9 ), ExtResource( 29 ), ExtResource( 26 ), ExtResource( 23 ), ExtResource( 35 ), ExtResource( 12 ), ExtResource( 36 ), ExtResource( 10 ), ExtResource( 14 ), ExtResource( 18 ), ExtResource( 31 ), ExtResource( 37 ), ExtResource( 15 ), ExtResource( 20 ) ]
 starting_items = [  ]
+required_item_set = "Yoko-YzTato"

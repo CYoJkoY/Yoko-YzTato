@@ -23,7 +23,6 @@
 
 [resource]
 script = ExtResource( 2 )
-required_item_set = "Yoko-YzTato"
 my_id = "character_yztato_chi_sword_wielder"
 unlocked_by_default = false
 can_be_looted = true
@@ -37,11 +36,17 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 max_nb = -1
 item_appearances = [ ExtResource( 18 ), ExtResource( 17 ), ExtResource( 16 ) ]
 tags = [  ]
+minimum_difficulty = 0
 wanted_tags = [ "stat_melee_damage", "stat_range", "stat_armor" ]
 banned_item_groups = [  ]
 banned_items = [  ]
+banned_upgrades = [  ]
+banned_meca_stats = [  ]
 starting_weapons = [ ExtResource( 10 ), ExtResource( 7 ), ExtResource( 12 ), ExtResource( 11 ), ExtResource( 4 ), ExtResource( 5 ), ExtResource( 1 ), ExtResource( 9 ), ExtResource( 6 ), ExtResource( 8 ) ]
 starting_items = [  ]
+required_item_set = "Yoko-YzTato"

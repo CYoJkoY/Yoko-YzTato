@@ -28,7 +28,6 @@
 
 [resource]
 script = ExtResource( 12 )
-required_item_set = "Yoko-YzTato"
 my_id = "character_yztato_baseball_player"
 unlocked_by_default = false
 can_be_looted = true
@@ -42,11 +41,17 @@ is_lockable = true
 unlock_codex_descr_after_get_it = 1
 is_cursed = false
 curse_factor = 0.0
+is_meca = false
+is_mutant = false
 max_nb = -1
 item_appearances = [ ExtResource( 13 ), ExtResource( 8 ), ExtResource( 11 ), ExtResource( 6 ) ]
 tags = [  ]
+minimum_difficulty = 0
 wanted_tags = [ "stat_attack_speed" ]
 banned_item_groups = [  ]
 banned_items = [  ]
+banned_upgrades = [  ]
+banned_meca_stats = [  ]
 starting_weapons = [ ExtResource( 16 ), ExtResource( 5 ), ExtResource( 14 ), ExtResource( 7 ), ExtResource( 18 ), ExtResource( 19 ), ExtResource( 9 ), ExtResource( 1 ), ExtResource( 10 ), ExtResource( 15 ), ExtResource( 4 ), ExtResource( 3 ), ExtResource( 23 ) ]
 starting_items = [  ]
+required_item_set = "Yoko-YzTato"

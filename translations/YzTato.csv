@@ -14,18 +14,6 @@ WEAPON_YZTATO_FLY_AXE,Fly Axe,Hache volante,飞斧,飛び斧,날도끼,飛斧,Л
 WEAPON_YZTATO_BAZHANDAO,Eight Cutting Broadsword,Huit Coupures Épée Large,八斩刀,八斬刀,팔참도,八斬刀,Восьмирубящий меч,Szeroka Szabla Ośmiu Cięć,Espada Ancha de Ocho Cortes,Espada Larga dos Oito Cortes,Acht-Schnitte-Breitschwert,Sekiz Kesimli Kılıç,Spada Larga delle Otto Tagli
 WEAPON_YZTATO_FOREST_WAND,Forest Wand,Baguette de Forêt,森林法杖,フォレストワンド,숲의 지팡이,森林法杖,Лесной жезл,Czarodziejska Różdżka Lasu,Varita del Bosque,Varinha da Floresta,Waldstab,Orman Asası,Bacchetta della Foresta
 WEAPON_YZTATO_PRISM,Prism,Prisme,棱镜,プリズム,프리즘,稜鏡,Призма,Pryzmat,Prisma,Prisma,Prisma,Prizma,Prisma
-WEAPON_YZTATO_GHOST_PRUNER,Ghost Pruner,Tailleur Fantôme,幽魂修剪,ゴーストプルーナー,유령 가위,幽魂修剪,Призрачный секатор,Duchowy Sekator,Poda Fantasma,Podador Fantasma,Geisterstecher,Hayalet Budayıcı,Potatore Fantasma
-WEAPON_YZTATO_GHOST_PISTOL,Ghost Pistol,Pistolet Fantôme,幽魂手枪,ゴーストピストル,유령 권총,幽魂手槍,Призрачный пистолет,Duchowy Pistolet,Pistola Fantasma,Pistola Fantasma,Geisterpistole,Hayalet Tabanca,Pistola Fantasma
-WEAPON_YZTATO_GHOST_SPIKY_SHIELD,Ghost Shield,Bouclier Fantôme,幽魂盾,ゴーストシールド,유령 방패,幽魂盾,Призрачный щит,Duchowa Tarcza,Escudo Fantasma,Escudo Fantasma,Geisterschild,Hayalet Kalkanı,Scudo Fantasma
-WEAPON_YZTATO_GHOST_WRENCH,Ghost Wrench,Clé Fantôme,幽魂扳手,ゴーストレンチ,유령 렌치,幽魂扳手,Призрачный гаечный ключ,Duchowy Klucz Płaski,Llave Inglesa Fantasma,Chave Inglesa Fantasma,Geisterschlüssel,Hayalet Anahtarı,Chiave Inglese Fantasma
-WEAPON_YZTATO_GHOST_TRIDENT,Ghost Trident,Trident Fantôme,幽魂三叉戟,ゴーストトライデント,유령 삼지창,幽魂三叉戟,Призрачный трезубец,Duchowy Trójząb,Tridente Fantasma,Tridente Fantasma,Geisterdreizack,Hayalet Üçlü Çatalı,Tridente Fantasma
-WEAPON_YZTATO_GHOST_SWORD,Ghost Sword,Épée Fantôme,幽魂剑,ゴーストソード,유령 검,幽魂劍,Призрачный меч,Duchowy Miecz,Espada Fantasma,Espada Fantasma,Geisterschwert,Hayalet Kılıcı,Spada Fantasma
-WEAPON_YZTATO_GHOST_BOW,Ghost Bow,Arc Fantôme,幽魂弓,ゴーストボウ,유령 활,幽魂弓,Призрачный лук,Duchowy Łuk,Arco Fantasma,Arco Fantasma,Geisterbogen,Hayalet Yayı,Arco Fantasma
-WEAPON_YZTATO_GHOST_JOUSTING_LANCE,Ghost Jousting Lance,Lance de Joute Fantôme,幽魂长枪,ゴーストジョスティングランス,유령 기창,幽魂長槍,Призрачная турнирная пика,Duchowa Lanca Turniejowa,Lanza de Justa Fantasma,Lança de Justa Fantasma,Geisterturnierlanze,Hayalet Müsabaka Mızrağı,Lancia da Giostra Fantasma
-WEAPON_YZTATO_GHOST_SBOW,Ghost Bow,Arc Fantôme,幽魂弓,ゴーストボウ,유령 활,幽魂弓,Призрачный лук,Duchowy Łuk,Arco Fantasma,Arco Fantasma,Geisterbogen,Hayalet Yayı,Arco Fantasma
-WEAPON_YZTATO_GHOST_ROCKET_LAUNCHER,Ghost Rocket Launcher,Lance-Roquettes Fantôme,幽魂火箭发射器,ゴーストロケットランチャー,유령 로켓 발사기,幽魂火箭發射器,Призрачный ракетомёт,Duchowy Wyrzutnia Rakiet,Lanzacohetes Fantasma,Lança-Foguetes Fantasma,Geisterraketenwerfer,Hayalet Roketatarı,Lanciarazzi Fantasma
-WEAPON_YZTATO_GHOST_TASER,Ghost Taser,Taser Fantôme,幽魂电击枪,ゴーストテイザー,유령 테이저,幽魂電擊槍,Призрачный тазер,Duchowy Paralizator,Táser Fantasma,Taser Fantasma,Geistertaser,Hayalet Taser,Taser Fantasma
-WEAPON_YZTATO_GHOST_WAND,Ghost Wand,Baguette Fantôme,幽魂魔杖,ゴーストワンド,유령 지팡이,幽魂魔杖,Призрачный жезл,Duchowa Różdżka,Varita Fantasma,Varinha Fantasma,Geisterstab,Hayalet Asası,Bacchetta Fantasma
 WEAPON_YZTATO_SNIPER_GUN,Sniper Gun,Fusil de Sniper,狙击枪,スナイパーガン,저격총,狙擊槍,Снайперская винтовка,Karabin Snajperski,Francotirador,Rifle de Precisão,Scharfschützengewehr,Keskin Nişancı Tüfeği,Fusile di Precisione
 CLASS_YZTATO_EMERGENCY,Emergency,Urgence,急救,救急,응급처치,急救,Неотложная помощь,Pogotowie,Emergencia,Emergência,Notfall,Acil,Emergenza
 CLASS_YZTATO_LUCK,Luck,Chance,幸运,幸運,행운,幸運,Удача,Szczęście,Suerte,Sorte,Glück,Şans,Fortuna
@@ -39,7 +27,6 @@ ITEM_YZTATO_PROSPERITY_RING,Prosperity Ring,Anneau de prospérité,繁荣之戒,
 ITEM_YZTATO_HAZARD_SUIT,Hazard Suit,Combinaison de protection,危险防护服,危険防護服,위험 방호복,危險防護服,Защитный костюм,Kombinezon ochronny,Traje de riesgo,Traje de proteção,Schutzanzug,Tehlikeli Koruyucu Tulum,Tuta di protezione
 ITEM_YZTATO_BLOOD_DRESS,Blood Dress,Robe de sang,血服,血の服,피의 옷,血服,Кровавое платье,Krwawa sukienka,Vestido de sangre,Vestido de sangue,Blutkleid,Kan Elbisesi,Abito di sangue
 ITEM_YZTATO_DESTINY_DICE,Destiny Dice,Dés du destin,命运骰子,運命のダイス,운명의 주사위,命運骰子,Кости судьбы,Kości przeznaczenia,Dados del destino,Dados do destino,Schicksalswürfel,Kader Zarları,Dadi del destino
-ITEM_YZTATO_GHOST_TREE,Ghost Tree,Arbre Fantôme,幽魂树,ゴーストツリー,유령 나무,幽魂樹,Дерево призраков,Duchowe Drzewo,Árbol Fantasma,Árvore Fantasma,Geisterbaum,Hayalet Ağacı,Albero Fantasma
 ITEM_YZTATO_SHIELD_GENERATOR,Shield Generator,Générateur de Bouclier,护盾生成器,シールドジェネレーター,보호막 생성기,護盾生成器,Генератор щита,Generator Tarczy,Generador de Escudos,Gerador de Escudos,Schildgenerator,Kalkan Jeneratörü,Generatore di Scudi
 ITEM_YZTATO_CURSED_BOX,Cursed Box,Boîte Maudite,诅咒盒子,呪われた箱,저주받은 상자,詛咒盒子,Проклятая коробка,Przeklęta Skrzynia,Caja Maldita,Caixa Amaldiçoada,Verfluchte Kutu,Lanetli Kutu,Scatola Maledetta
 ITEM_YZTATO_INSURANCE_POLICY,Insurance Policy,Police d'Assurance,保险单,保険証券,보험 증서,保險單,Страховой полис,Polisa Ubezpieczeniowa,Póliza de Seguro,Apólice de Seguro,Versicherungspolice,Sigorta Poliçesi,Polizza Assicurativa

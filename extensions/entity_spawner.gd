@@ -1,7 +1,7 @@
 extends "res://global/entity_spawner.gd"
 
 # EFFECT : gain_stat_when_killed_single_scaling
-var gain_stat_when_killed_single_scaling_killed_count: Array = [ {}, {}, {}, {}]
+var yz_gain_stat_when_killed_single_scaling_killed_count: Array = [ {}, {}, {}, {}]
 
 ### hellfire ###
 var enemies_killed_is_burning: int = 0
@@ -25,7 +25,7 @@ func _yztato_gain_stat_when_killed_single_scaling_on_enemy_died() -> void:
             Utils.yztato_gain_stat_when_killed_single_scaling_hash,
             player_index
         )
-        var player_killed_count: Dictionary = gain_stat_when_killed_single_scaling_killed_count[player_index]
+        var player_killed_count: Dictionary = yz_gain_stat_when_killed_single_scaling_killed_count[player_index]
         for effect_index in effect_items.size():
             player_killed_count[effect_index] = player_killed_count.get(effect_index, 0) + 1
             var effect: Array = effect_items[effect_index]
